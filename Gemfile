@@ -1,3 +1,4 @@
+ruby "2.4.2"
 source 'https://rubygems.org'
 
 git_source(:github) do |repo_name|
@@ -30,6 +31,7 @@ gem 'jbuilder', '~> 2.5'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 gem 'dotenv-rails'
+gem 'swagger-blocks'
 gem 'rubocop', '~> 0.51.0', require: false
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
