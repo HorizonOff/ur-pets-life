@@ -1,7 +1,7 @@
-class CreateAddresses < ActiveRecord::Migration[5.1]
+class CreateLocations < ActiveRecord::Migration[5.1]
   def change
-    create_table :addresses do |t|
-      t.references :user, foreign_key: true
+    create_table :locations do |t|
+      t.references :place, polymorphic: true
       t.float :latitude
       t.float :longitude
       t.string :country

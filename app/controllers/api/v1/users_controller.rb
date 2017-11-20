@@ -6,7 +6,6 @@ module Api
       def create
         @user = User.new(user_params)
         if @user.save
-          @user.send_email_confirmation_instructions
           render json: { message: 'Registration successful. Please check you\'re email to confirm your account.' }
         else
           render json: { errors: @user.errors.full_messages }, status: 422
@@ -17,8 +16,8 @@ module Api
 
       def user_params
         params.require(:user).permit(:first_name, :last_name, :email, :password, :password_confirmation,
-                                     address_attributes: [:latitude, :longitude, :country, :city, :street,
-                                                          :building_type, :building_name, :unit_number, :villa_number])
+                                     location_attributes: [:latitude, :longitude, :country, :city, :street,
+                                                           :building_type, :building_name, :unit_number, :villa_number])
       end
     end
   end

@@ -24,5 +24,19 @@ module Api
     def render_401(error = 'Not Authorized')
       render json: { error: error }, status: 401
     end
+
+    def sign_in_user
+      Session.where(device_id: params[:device_id]).destroy_all if Session.exist?(device_id: params[:device_id])
+      session = @user.sessions.new(session_params)
+      if session.save
+        session
+      else
+        render json: { errors: session.errors.full_messages }, status: 422
+      end
+    end
+
+    def session_params
+      params.permit(:device_id, :device_type, :push_token)
+    end
   end
 end

@@ -34,6 +34,7 @@ gem 'dotenv-rails'
 gem 'swagger-blocks'
 gem 'rubocop', '~> 0.51.0', require: false
 gem 'devise'
+gem 'haml-rails', '~> 1.0'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 

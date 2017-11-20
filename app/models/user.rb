@@ -5,13 +5,18 @@ class User < ApplicationRecord
          :recoverable, :confirmable, :trackable, :validatable
 
   validates :email, uniqueness: { case_sensitive: false, message: 'This email is already registered' },
-                    format: { with: Devise.email_regexp, message: 'Email address is invalid' }, length: { maximum: 50 },
+                    format: { with: Devise.email_regexp }, length: { maximum: 50 },
                     presence: true
 
   before_save :downcase_email
 
-  has_one :address
-  accepts_nested_attributes_for :address, update_only: true
+  has_many :sessions
+  has_one :location, as: :place, inverse_of: :place
+  accepts_nested_attributes_for :location, update_only: true
+
+  def name
+    first_name + ' ' + last_name
+  end
 
   private
 
