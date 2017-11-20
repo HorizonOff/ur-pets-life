@@ -3,7 +3,7 @@ class Session < ApplicationRecord
   validates_uniqueness_of :token, :device_id
   validates_presence_of :token, :device_id, :device_type, :push_token
 
-  before_validate :generate_token
+  before_validation :generate_token
 
   private
 
