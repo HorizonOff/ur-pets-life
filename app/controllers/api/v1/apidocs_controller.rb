@@ -19,6 +19,7 @@ module Api
       # A list of all classes that have swagger_* declarations.
       SWAGGERED_CLASSES = [
         Api::V1::Users,
+        Api::V1::Passwords,
         self,
       ].freeze
 
