@@ -13,12 +13,12 @@ module Api
 
         key :host, ENV['ORIGINAL_URL'] || 'localhost:3000'
         key :basePath, '/api/v1'
-        key :consumes, ['application/json']
-        key :produces, ['application/json']
+        key :consumes, %w[application/json multipart/form-data]
+        key :produces, %w[application/json multipart/form-data]
       end
       # A list of all classes that have swagger_* declarations.
       SWAGGERED_CLASSES = [
-        Api::V1::Pages,
+        Api::V1::Users,
         self,
       ].freeze
 
