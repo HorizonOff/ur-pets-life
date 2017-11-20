@@ -1,3 +1,5 @@
+require 'google/apis/plus_v1'
+
 module Api
   module V1
     class SessionsController < Api::BaseController
@@ -46,6 +48,14 @@ module Api
             end
           end
         end
+      end
+
+      def google
+        client = Signet::OAuth2::Client.new(access_token: params['token'], token_credential_uri: 'https://accounts.google.com/o/oauth2/token', expires_in: (Time.now + 1.hour).utc.to_i)
+        service = Google::Apis::PlusV1::PlusService.new
+
+        service.authorization = client
+        profile = service.get_person('me', fields: 'displayName,emails/value,image,gender,id')
       end
 
       def destroy
