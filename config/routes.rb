@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
-  devise_for :users, only: %i[confirmations passwords], controllers: { confirmations: 'confirmations',
-                                                                       passwords: 'passwords' }
+  root to: 'application#index'
+
+  devise_for :users, only: %i[confirmations passwords omniauth_callbacks], controllers: { confirmations: 'confirmations',
+                                                                       passwords: 'passwords',
+                                                                       omniauth_callbacks: 'omniauth_callbacks'}
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   namespace :api do
     namespace :v1 do
@@ -14,6 +17,8 @@ Rails.application.routes.draw do
       resources :passwords, only: [] do
         collection { post :forgot }
       end
+
+      get '/users/auth/google_oauth2/callback', to: 'application#index'
     end
   end
 end

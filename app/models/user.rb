@@ -2,7 +2,7 @@ class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :rememberable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :confirmable, :trackable, :validatable
+         :recoverable, :confirmable, :trackable, :validatable, :omniauthable, :omniauth_providers => [:facebook, :google_oauth2]
 
   validates :email, uniqueness: { case_sensitive: false, message: 'This email is already registered' },
                     format: { with: Devise.email_regexp }, length: { maximum: 50 },

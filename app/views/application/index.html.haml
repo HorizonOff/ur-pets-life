@@ -1,0 +1,9 @@
+#user-widget
+  = link_to 'Sign in with Facebook', 'users/auth/facebook', id: 'facebook-sign-in'
+  = link_to 'Sign in with Google', 'users/auth/google_oauth2', id: 'google-sign-in'
+
+  - if @facebook_token.present?
+    FB token: #{@facebook_token}
+
+  - if @google_token.present?
+    Google token: #{@google_token}

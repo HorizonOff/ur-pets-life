@@ -8,6 +8,7 @@ class DeviseCreateUsers < ActiveRecord::Migration[5.1]
       t.string :encrypted_password, null: false, default: ""
 
       t.string :facebook_id
+      t.string :google_id
       t.string :provider
       t.boolean :is_social, default: false
       ## Recoverable
