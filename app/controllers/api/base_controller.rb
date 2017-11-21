@@ -27,12 +27,16 @@ module Api
     end
 
     def sign_in_user
-      Session.where(device_id: params[:device_id]).destroy_all if Session.exists?(device_id: params[:device_id])
-      session = @user.sessions.new(session_params)
-      if session.save
-        render json: { user: @user.name, session_token: session.token }, status: :ok
+      if @user.confirmed?
+        Session.where(device_id: params[:device_id]).destroy_all if Session.exists?(device_id: params[:device_id])
+        session = @user.sessions.new(session_params)
+        if session.save
+          render json: { user: @user.name, session_token: session.token }, status: :ok
+        else
+          render json: { errors: session.errors.full_messages }, status: 422
+        end
       else
-        render json: { errors: session.errors.full_messages }, status: 422
+        render json: { error: 'Account not confirmed' }, status: 461
       end
     end
 
