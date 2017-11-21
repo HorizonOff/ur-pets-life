@@ -20,6 +20,7 @@ module Api
       SWAGGERED_CLASSES = [
         Api::V1::Users,
         Api::V1::Passwords,
+        Api::V1::Sessions,
         self,
       ].freeze
 
