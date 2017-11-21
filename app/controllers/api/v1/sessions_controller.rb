@@ -78,13 +78,7 @@ module Api
 
       def destroy
         sign_out
-        render nothing: true, status: 204
-      end
-
-      private
-
-      def login_params
-        params.permit(:email, :password)
+        render json: { nothing: true }, status: 204
       end
     end
   end

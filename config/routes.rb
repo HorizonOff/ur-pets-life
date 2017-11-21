@@ -11,13 +11,15 @@ Rails.application.routes.draw do
       resources :apidocs, only: [:index]
       resources :pages, only: :index
       resources :users, only: :create
-      resources :sessions, only: %i[create destroy] do
+      resources :sessions, only: :create do
         collection { post :facebook }
         collection { post :google }
       end
+      delete 'sessions', to: 'sessions#destroy'
       resources :passwords, only: [] do
         collection { post :forgot }
       end
+      put 'passwords', to: 'passwords#update'
 
       get '/users/auth/google_oauth2/callback', to: 'application#index'
     end

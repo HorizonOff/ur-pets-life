@@ -11,7 +11,8 @@ module Api
     end
 
     def authenticate_token
-
+      @current_session = Session.find_by_token(request.headers['Authorization'])
+      @user = @current_session.user if @current_session
     end
 
     def render_422(error = 'Unprocessable Entity')
@@ -38,6 +39,10 @@ module Api
       else
         render json: { error: 'Account not confirmed' }, status: 461
       end
+    end
+
+    def sign_out
+      @current_session.destroy
     end
 
     def session_params

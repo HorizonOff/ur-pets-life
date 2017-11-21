@@ -45,6 +45,21 @@ module Api
             key :description, 'Success response'
           end
         end
+
+        operation :delete do
+          security do
+            key :api_key, []
+          end
+          
+          key :description, 'Sign out'
+          key :produces, %w[application/json]
+          key :consumes, %w[application/json]
+          key :tags, %w[Sessions]
+
+          response 200 do
+            key :description, 'Success response'
+          end
+        end
       end
 
       swagger_path '/sessions/facebook' do
