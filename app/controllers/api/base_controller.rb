@@ -11,6 +11,7 @@ module Api
     end
 
     def authenticate_token
+
     end
 
     def render_422(error = 'Unprocessable Entity')
@@ -26,10 +27,10 @@ module Api
     end
 
     def sign_in_user
-      Session.where(device_id: params[:device_id]).destroy_all if Session.exist?(device_id: params[:device_id])
+      Session.where(device_id: params[:device_id]).destroy_all if Session.exists?(device_id: params[:device_id])
       session = @user.sessions.new(session_params)
       if session.save
-        session
+        render json: { user: @user.name, session_token: session.token }, status: :ok
       else
         render json: { errors: session.errors.full_messages }, status: 422
       end

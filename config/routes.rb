@@ -1,9 +1,10 @@
 Rails.application.routes.draw do
   root to: 'application#index'
 
-  devise_for :users, only: %i[confirmations passwords omniauth_callbacks], controllers: { confirmations: 'confirmations',
-                                                                       passwords: 'passwords',
-                                                                       omniauth_callbacks: 'omniauth_callbacks'}
+  devise_for :users, only: %i[confirmations passwords omniauth_callbacks],
+                     controllers: { confirmations: 'confirmations',
+                                    passwords: 'passwords',
+                                    omniauth_callbacks: 'omniauth_callbacks' }
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   namespace :api do
     namespace :v1 do
@@ -12,7 +13,7 @@ Rails.application.routes.draw do
       resources :users, only: :create
       resources :sessions, only: %i[create destroy] do
         collection { post :facebook }
-        collection { post :google_plus }
+        collection { post :google }
       end
       resources :passwords, only: [] do
         collection { post :forgot }

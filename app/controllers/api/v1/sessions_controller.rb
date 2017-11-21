@@ -33,13 +33,13 @@ module Api
           if @user
             sign_in_user
           else
-            confirmed_at = Time.now if fb_user.email.present?
             @user = User.new(email: fb_user.email,
                              first_name: fb_user.name.split.first,
                              last_name: fb_user.name.split.last,
                              facebook_id: fb_user.id,
+                             provider: 'facebook',
                              is_social: true,
-                             confirmed_at: confirmed_at)
+                             confirmed_at: Time.now)
             if @user.save
               sign_in_user
             else
@@ -50,7 +50,9 @@ module Api
       end
 
       def google
-        client = Signet::OAuth2::Client.new(access_token: params['token'], token_credential_uri: 'https://accounts.google.com/o/oauth2/token', expires_in: (Time.now + 1.hour).utc.to_i)
+        client = Signet::OAuth2::Client.new(access_token: params['token'],
+                                            token_credential_uri: 'https://accounts.google.com/o/oauth2/token',
+                                            expires_in: (Time.now + 1.hour).utc.to_i)
         service = Google::Apis::PlusV1::PlusService.new
 
         service.authorization = client

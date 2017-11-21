@@ -1,17 +1,20 @@
 class Session < ApplicationRecord
   belongs_to :user
-  validates_uniqueness_of :token, :device_id
-  validates_presence_of :token, :device_id, :device_type, :push_token
+  validates_uniqueness_of :device_id
+  validates_presence_of :device_id, :device_type, :push_token
 
-  before_validation :generate_token
+  before_save :set_token
 
   private
 
+  def set_token
+    self.token = generate_token
+  end
+
   def generate_token
     loop do
-      new_token = SecureRandom.urlsafe_base64(16)
-      break unless Session.exists?(token: new_token)
+      token = SecureRandom.urlsafe_base64(16)
+      break token unless Session.exists?(token: token)
     end
-    self.token = new_token
   end
 end
