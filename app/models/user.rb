@@ -7,7 +7,7 @@ class User < ApplicationRecord
   validates :email, uniqueness: { case_sensitive: false, message: 'This email is already registered' },
                     format: { with: Devise.email_regexp }, length: { maximum: 50 },
                     presence: true
-
+  validates_presence_of :first_name, :last_name
   before_save :downcase_email
 
   has_many :sessions

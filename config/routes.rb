@@ -11,6 +11,7 @@ Rails.application.routes.draw do
       resources :apidocs, only: [:index]
       resources :pages, only: :index
       resources :users, only: :create
+      put 'users', to: 'users#update'
       resources :sessions, only: :create do
         collection { post :facebook }
         collection { post :google }
