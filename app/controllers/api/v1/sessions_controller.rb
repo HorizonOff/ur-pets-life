@@ -18,7 +18,7 @@ module Api
         begin
           fb_user = FbGraph2::User.me(params[:access_token]).fetch(fields: %i[name email])
         rescue Exception => e
-          render json: { errors: [e.message] }, status: 422
+          return render json: { errors: [e.message] }, status: 422
         end
         if fb_user.email && @user = User.find_by_email(fb_user.email)
           @user.facebook_id = fb_user.id

@@ -6,38 +6,33 @@ module Api
       swagger_path '/sessions' do
         operation :post do
           key :description, 'Sign in via email'
-          key :produces, %w[multipart/form-data]
-          key :consumes, %w[multipart/form-data]
+          key :produces, 'application/json'
+          key :consumes, 'application/json'
           key :tags, %w[Sessions]
 
           parameter do
-            key :name, :email
-            key :in, :formData
+            key :name, :body
+            key :in, :body
+            key :description, "Device_type: 'ios' or 'android'.\nPush_token: optional"
             key :required, true
-            key :type, :string
-          end
-          parameter do
-            key :name, :password
-            key :in, :formData
-            key :required, true
-            key :type, :string
-          end
-          parameter do
-            key :name, :device_type
-            key :in, :formData
-            key :required, true
-            key :type, :string
-          end
-          parameter do
-            key :name, :device_id
-            key :in, :formData
-            key :required, true
-            key :type, :string
-          end
-          parameter do
-            key :name, :push_token
-            key :in, :formData
-            key :type, :string
+
+            schema do
+              property :email do
+                key :type, :string
+              end
+              property :password do
+                key :type, :string
+              end
+              property :device_type do
+                key :type, :string
+              end
+              property :device_id do
+                key :type, :string
+              end
+              property :push_token do
+                key :type, :string
+              end
+            end
           end
 
           response 200 do
@@ -64,32 +59,30 @@ module Api
       swagger_path '/sessions/facebook' do
         operation :post do
           key :description, 'Sign in via facebook'
-          key :produces, %w[multipart/form-data]
-          key :consumes, %w[multipart/form-data]
+          key :produces, 'application/json'
+          key :consumes, 'application/json'
           key :tags, %w[Sessions]
 
           parameter do
-            key :name, :access_token
-            key :in, :formData
+            key :name, :body
+            key :in, :body
+            key :description, "Device_type: 'ios' or 'android'.\nPush_token: optional"
             key :required, true
-            key :type, :string
-          end
-          parameter do
-            key :name, :device_type
-            key :in, :formData
-            key :required, true
-            key :type, :string
-          end
-          parameter do
-            key :name, :device_id
-            key :in, :formData
-            key :required, true
-            key :type, :string
-          end
-          parameter do
-            key :name, :push_token
-            key :in, :formData
-            key :type, :string
+
+            schema do
+              property :access_token do
+                key :type, :string
+              end
+              property :device_type do
+                key :type, :string
+              end
+              property :device_id do
+                key :type, :string
+              end
+              property :push_token do
+                key :type, :string
+              end
+            end
           end
 
           response 200 do
@@ -101,32 +94,30 @@ module Api
       swagger_path '/sessions/google' do
         operation :post do
           key :description, 'Sign in via google'
-          key :produces, %w[multipart/form-data]
-          key :consumes, %w[multipart/form-data]
+          key :produces, 'application/json'
+          key :consumes, 'application/json'
           key :tags, %w[Sessions]
 
           parameter do
-            key :name, :access_token
-            key :in, :formData
+            key :name, :body
+            key :in, :body
+            key :description, "Device_type: 'ios' or 'android'.\nPush_token: optional"
             key :required, true
-            key :type, :string
-          end
-          parameter do
-            key :name, :device_type
-            key :in, :formData
-            key :required, true
-            key :type, :string
-          end
-          parameter do
-            key :name, :device_id
-            key :in, :formData
-            key :required, true
-            key :type, :string
-          end
-          parameter do
-            key :name, :push_token
-            key :in, :formData
-            key :type, :string
+
+            schema do
+              property :access_token do
+                key :type, :string
+              end
+              property :device_type do
+                key :type, :string
+              end
+              property :device_id do
+                key :type, :string
+              end
+              property :push_token do
+                key :type, :string
+              end
+            end
           end
 
           response 200 do

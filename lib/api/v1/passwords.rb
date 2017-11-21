@@ -10,29 +10,26 @@ module Api
           end
 
           key :description, 'Change password'
-          key :produces, %w[multipart/form-data]
-          key :consumes, %w[multipart/form-data]
-          key :tags, %w[Psaswords]
+          key :produces, 'application/json'
+          key :consumes, 'application/json'
+          key :tags, %w[Passwords]
 
           parameter do
-            key :name, :current_password
-            key :in, :formData
+            key :name, :body
+            key :in, :body
             key :required, true
-            key :type, :string
-          end
 
-          parameter do
-            key :name, :password
-            key :in, :formData
-            key :required, true
-            key :type, :string
-          end
-
-          parameter do
-            key :name, :password_confirmation
-            key :in, :formData
-            key :required, true
-            key :type, :string
+            schema do
+              property :current_password do
+                key :type, :string
+              end
+              property :password do
+                key :type, :string
+              end
+              property :password_confirmation do
+                key :type, :string
+              end
+            end
           end
 
           response 200 do
@@ -44,15 +41,20 @@ module Api
       swagger_path '/passwords/forgot' do
         operation :post do
           key :description, 'Forgot password'
-          key :produces, %w[multipart/form-data]
-          key :consumes, %w[multipart/form-data]
-          key :tags, %w[Psaswords]
+          key :produces, 'application/json'
+          key :consumes, 'application/json'
+          key :tags, %w[Passwords]
 
           parameter do
-            key :name, :email
-            key :in, :formData
+            key :name, :body
+            key :in, :body
             key :required, true
-            key :type, :string
+
+            schema do
+              property :email do
+                key :type, :string
+              end
+            end
           end
 
           response 200 do

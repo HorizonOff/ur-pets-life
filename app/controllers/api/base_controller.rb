@@ -28,7 +28,9 @@ module Api
     end
 
     def sign_in_user
-      if @user.confirmed?
+      if @user.email.blank?
+        ender json: { set_email_link: set_email_api_v1_user_url(@user.facebook_id) }, status: 461
+      elsif @user.confirmed?
         Session.where(device_id: params[:device_id]).destroy_all if Session.exists?(device_id: params[:device_id])
         session = @user.sessions.new(session_params)
         if session.save
