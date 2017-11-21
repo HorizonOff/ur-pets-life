@@ -1,7 +1,7 @@
 class Session < ApplicationRecord
   belongs_to :user
   validates_uniqueness_of :device_id
-  validates_presence_of :device_id, :device_type, :push_token
+  validates_presence_of :device_id, :device_type
 
   before_save :set_token
 

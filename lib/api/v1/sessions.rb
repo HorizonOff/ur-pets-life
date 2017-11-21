@@ -37,7 +37,6 @@ module Api
           parameter do
             key :name, :push_token
             key :in, :formData
-            key :required, true
             key :type, :string
           end
 
@@ -90,7 +89,6 @@ module Api
           parameter do
             key :name, :push_token
             key :in, :formData
-            key :required, true
             key :type, :string
           end
 
@@ -128,7 +126,6 @@ module Api
           parameter do
             key :name, :push_token
             key :in, :formData
-            key :required, true
             key :type, :string
           end
 
