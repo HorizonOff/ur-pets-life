@@ -19,9 +19,8 @@ module Api
       end
 
       def facebook
-        # a = RestClient.get("https://graph.facebook.com/v2.5/me?access_token=#{params[:access_token]}&fields=email,first_name,last_name,name,picture"){|response, request, result| }
         begin
-          fb_user = FbGraph2::User.me(params[:access_token]).fetch(fields: [:name, :email])
+          fb_user = FbGraph2::User.me(params[:access_token]).fetch(fields: %i[name email])
         rescue Exception => e
           render json: { errors: [e.message] }, status: 422
         end
