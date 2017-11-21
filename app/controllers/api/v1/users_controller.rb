@@ -12,6 +12,14 @@ module Api
         end
       end
 
+      def update
+        if @user.update(user_params.except(:email, :password, :password_confirmation))
+          render json: { message: 'User updated successfully' }
+        else
+          render json: { errors: @user.errors.full_messages }, status: 422
+        end
+      end
+
       private
 
       def user_params

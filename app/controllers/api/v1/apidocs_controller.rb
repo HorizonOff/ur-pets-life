@@ -11,6 +11,12 @@ module Api
           key :title, 'Pets Life API'
         end
 
+        security_definition :api_key do
+          key :type, :apiKey
+          key :name, 'Authorization'
+          key :in, :header
+        end
+
         key :host, ENV['ORIGINAL_URL'] || 'localhost:3000'
         key :basePath, '/api/v1'
         key :consumes, %w[application/json multipart/form-data]

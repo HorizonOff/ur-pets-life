@@ -37,9 +37,23 @@ module Api
           parameter do
             key :name, :push_token
             key :in, :formData
-            key :required, true
             key :type, :string
           end
+
+          response 200 do
+            key :description, 'Success response'
+          end
+        end
+
+        operation :delete do
+          security do
+            key :api_key, []
+          end
+          
+          key :description, 'Sign out'
+          key :produces, %w[application/json]
+          key :consumes, %w[application/json]
+          key :tags, %w[Sessions]
 
           response 200 do
             key :description, 'Success response'
@@ -75,7 +89,6 @@ module Api
           parameter do
             key :name, :push_token
             key :in, :formData
-            key :required, true
             key :type, :string
           end
 
@@ -113,7 +126,6 @@ module Api
           parameter do
             key :name, :push_token
             key :in, :formData
-            key :required, true
             key :type, :string
           end
 
