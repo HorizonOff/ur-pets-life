@@ -4,7 +4,7 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :confirmable, :trackable, :validatable, :omniauthable, :omniauth_providers => [:facebook, :google_oauth2]
 
-  validates :email, uniqueness: { case_sensitive: false, message: 'This email is already registered' }, length: { maximum: 50 },
+  validates :email, uniqueness: { case_sensitive: false, message: 'This email is already registered' },
                     format: { with: Devise.email_regexp }, length: { maximum: 50 }, unless: ->(user) { user.email.blank? }
   validates_presence_of :email, if: :email_required?
   validates_presence_of :first_name, :last_name

@@ -40,6 +40,7 @@ gem 'swagger-blocks'
 gem 'rubocop', '~> 0.51.0', require: false
 gem 'devise'
 gem 'haml-rails', '~> 1.0'
+gem 'active_model_serializers'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 

@@ -21,6 +21,18 @@ module Api
         end
       end
 
+      swagger_schema :UserFields do
+        property :first_name do
+          key :type, :string
+        end
+        property :last_name do
+          key :type, :string
+        end
+        property :email do
+          key :type, :email
+        end
+      end
+
       swagger_schema :Location do
         property :latitude do
           key :type, :float
@@ -58,6 +70,19 @@ module Api
             property :user do
               key :'$ref', :User
 
+              property :location_attributes do
+                key :'$ref', :Location
+              end
+            end
+          end
+        end
+      end
+
+      swagger_schema :UserResponse do
+        allOf do
+          schema do
+            property :user do
+              key :'$ref', :UserFields
               property :location_attributes do
                 key :'$ref', :Location
               end
@@ -124,6 +149,26 @@ module Api
         end
       end
 
+      swagger_path '/users/profile' do
+        operation :get do
+          key :description, "Get user's profile info"
+          key :consumes, %w[application/json]
+          key :consumes, %w[application/json]
+          key :tags, %w[Users]
+
+          security do
+            key :api_key, []
+          end
+
+          response 200 do
+            key :description, 'Success response'
+            schema do
+              key :'$ref', :UserResponse
+            end
+          end
+        end
+      end
+
       swagger_path '/users/{token}/set_email' do
         operation :put do
           key :description, 'Set email for facebook users without email'
@@ -141,7 +186,7 @@ module Api
             key :name, :body
             key :in, :body
             key :required, true
-            key :description, "Push_token: optional"
+            key :description, 'Push_token: optional'
 
             schema do
               property :email do
