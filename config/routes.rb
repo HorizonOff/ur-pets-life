@@ -10,7 +10,9 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :apidocs, only: [:index]
       resources :pages, only: :index
-      resources :users, only: :create
+      resources :users, only: :create do
+        member { put :set_email }
+      end
       put 'users', to: 'users#update'
       resources :sessions, only: :create do
         collection { post :facebook }
