@@ -4,11 +4,12 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :confirmable, :trackable, :validatable, :omniauthable, :omniauth_providers => [:facebook, :google_oauth2]
 
-  validates :email, uniqueness: { case_sensitive: false, message: 'This email is already registered' },
-                    format: { with: Devise.email_regexp }, length: { maximum: 50 },
-                    presence: true
+  validates :email, uniqueness: { case_sensitive: false, message: 'This email is already registered' }, length: { maximum: 50 },
+                    format: { with: Devise.email_regexp }, length: { maximum: 50 }, unless: ->(user) { user.email.blank? }
+  validates_presence_of :email, if: :email_required?
   validates_presence_of :first_name, :last_name
-  before_save :downcase_email
+
+  before_save :downcase_email, unless: ->(user) { user.email.blank? }
 
   has_many :sessions
   has_one :location, as: :place, inverse_of: :place
@@ -26,7 +27,8 @@ class User < ApplicationRecord
   end
 
   def email_required?
-    facebook_id.nil?
+    return false if facebook_id.present? && new_record?
+    super
   end
 
   def downcase_email

@@ -28,13 +28,17 @@ module Api
     end
 
     def sign_in_user
-      if @user.confirmed?
+      if @user.email.blank?
+        render json: { set_email_link: set_email_api_v1_user_url(@user.facebook_id) }, status: 461
+      elsif @user.confirmed?
         Session.where(device_id: params[:device_id]).destroy_all if Session.exists?(device_id: params[:device_id])
         session = @user.sessions.new(session_params)
         if session.save
-          render json: { user: @user.name, session_token: session.token }, status: :ok
+          @user.update_attribute(:sign_in_count, @user.sign_in_count + 1)
+          is_first_login = @user.sign_in_count == 1
+          render json: { user: @user.name, session_token: session.token, first_login: is_first_login }, status: :ok
         else
-          render json: { errors: session.errors.full_messages }, status: 422
+          render_422(session.errors.full_messages)
         end
       else
         render json: { error: 'Account not confirmed' }, status: 461
