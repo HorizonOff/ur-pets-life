@@ -1,7 +1,11 @@
 module Api
   module V1
     class UsersController < Api::BaseController
-      skip_before_action :authenticate_user, except: :update
+      skip_before_action :authenticate_user, only: [:create, :set_email]
+
+      def profile
+        render json: @user, adapter: :json
+      end
 
       def create
         @user = User.new(user_params)

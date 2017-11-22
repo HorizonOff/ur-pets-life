@@ -12,6 +12,7 @@ Rails.application.routes.draw do
       resources :pages, only: :index
       resources :users, only: :create do
         member { put :set_email }
+        collection { get :profile }
       end
       put 'users', to: 'users#update'
       resources :sessions, only: :create do

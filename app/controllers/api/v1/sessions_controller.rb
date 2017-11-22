@@ -52,8 +52,11 @@ module Api
         service = Google::Apis::PlusV1::PlusService.new
 
         service.authorization = client
-        profile = service.get_person('me', fields: 'displayName,emails/value,image,gender,id')
-
+        begin
+          profile = service.get_person('me', fields: 'displayName,emails/value,image,gender,id')
+        rescue Google::Apis::AuthorizationError => e
+          return render json: { errors: [e.message] }, status: 422
+        end
         email = profile.emails.first.value
 
         if @user = User.find_by_email(email)
