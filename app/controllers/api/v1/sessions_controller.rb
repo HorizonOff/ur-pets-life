@@ -35,7 +35,7 @@ module Api
       def google
         begin
           url = "https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=#{params[:access_token]}"
-          client = RestClient.get url
+          client = RestClient.get(url)
         rescue RestClient::Exception => e
           return render_422(message: e.message)
         end
