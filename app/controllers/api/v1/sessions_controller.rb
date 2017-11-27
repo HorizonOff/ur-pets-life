@@ -10,7 +10,7 @@ module Api
         if @user && @user.valid_password?(params[:password])
           sign_in_user
         else
-          render json: { errors: ['Wrong login/password combination.'] }, status: 422
+          render_422(message: 'Wrong login/password combination.')
         end
       end
 
@@ -18,64 +18,39 @@ module Api
         begin
           fb_user = FbGraph2::User.me(params[:access_token]).fetch(fields: %i[name email])
         rescue Exception => e
-          return render json: { errors: [e.message] }, status: 422
+          return render_422(message: e.message)
         end
-        if fb_user.email && @user = User.find_by_email(fb_user.email)
+        if @user = User.find_by_facebook_id(fb_user.id)
+          sign_in_user
+        elsif @user = User.find_by_email(fb_user.email)
           @user.facebook_id = fb_user.id
           @user.save
           sign_in_user
         else
-          @user = User.find_by_facebook_id(fb_user.id)
-          if @user
-            sign_in_user
-          else
-            @user = User.new(email: fb_user.email,
-                             first_name: fb_user.name.split.first,
-                             last_name: fb_user.name.split.last,
-                             facebook_id: fb_user.id,
-                             provider: 'facebook',
-                             is_social: true,
-                             confirmed_at: Time.now)
-            if @user.save
-              sign_in_user
-            else
-              render json: { errors: @user.errors.full_messages }, status: 422
-            end
-          end
+          render json: { email: fb_user.email, first_name: fb_user.name.split.first,
+                         last_name: fb_user.name.split.last, facebook_id: fb_user.id }, status: 426
         end
       end
 
       def google
-        client = Signet::OAuth2::Client.new(access_token: params[:access_token],
-                                            token_credential_uri: 'https://accounts.google.com/o/oauth2/token',
-                                            expires_in: (Time.now + 1.hour).utc.to_i)
-        service = Google::Apis::PlusV1::PlusService.new
-
-        service.authorization = client
         begin
-          profile = service.get_person('me', fields: 'displayName,emails/value,image,gender,id')
-        rescue Google::Apis::AuthorizationError => e
-          return render json: { errors: [e.message] }, status: 422
+          url = "https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=#{params[:access_token]}"
+          client = RestClient.get(url)
+        rescue RestClient::Exception => e
+          return render_422(message: e.message)
         end
-        email = profile.emails.first.value
-
-        if @user = User.find_by_email(email)
-          @user.google_id = profile.id
+        response = JSON.parse(client.body)
+        if response['error_description'].present?
+          render_422(message: 'Token is invalid')
+        elsif @user = User.find_by_google_id(response['sub'])
+          sign_in_user
+        elsif @user = User.find_by_email(response['email'])
+          @user.google_id = response['sub']
           @user.save
           sign_in_user
         else
-          @user = User.new(email: email,
-                           first_name: profile.display_name.split.first,
-                           last_name: profile.display_name.split.last,
-                           google_id: profile.id,
-                           provider: 'google',
-                           is_social: true,
-                           confirmed_at: Time.now)
-          if @user.save
-            sign_in_user
-          else
-            render json: { errors: @user.errors.full_messages }, status: 422
-          end
+          render json: { email: response['email'], first_name: response['given_name'],
+                         last_name: response['family_name'], google_id: response['sub'] }, status: 426
         end
       end
 

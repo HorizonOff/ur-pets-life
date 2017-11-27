@@ -4,8 +4,8 @@ class CreateLocations < ActiveRecord::Migration[5.1]
       t.references :place, polymorphic: true
       t.float :latitude
       t.float :longitude
-      t.string :country
       t.string :city
+      t.string :area
       t.string :street
       t.integer :building_type
       t.string :building_name
