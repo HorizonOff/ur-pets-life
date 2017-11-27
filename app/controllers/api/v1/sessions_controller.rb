@@ -27,8 +27,9 @@ module Api
           @user.save
           sign_in_user
         else
-          render json: { email: fb_user.email, first_name: fb_user.name.split.first,
-                         last_name: fb_user.name.split.last, facebook_id: fb_user.id }, status: 426
+          render json: { errors: {},
+                         user: { email: fb_user.email, first_name: fb_user.name.split.first,
+                                 last_name: fb_user.name.split.last, facebook_id: fb_user.id } }, status: 426
         end
       end
 
@@ -49,8 +50,9 @@ module Api
           @user.save
           sign_in_user
         else
-          render json: { email: response['email'], first_name: response['given_name'],
-                         last_name: response['family_name'], google_id: response['sub'] }, status: 426
+          render json: { errors: {},
+                         user: { email: response['email'], first_name: response['given_name'],
+                                 last_name: response['family_name'], google_id: response['sub'] } }, status: 426
         end
       end
 
