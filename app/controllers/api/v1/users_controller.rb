@@ -1,17 +1,18 @@
 module Api
   module V1
     class UsersController < Api::BaseController
-      skip_before_action :authenticate_user, only: [:create, :set_email]
+      skip_before_action :authenticate_user, only: %i[create set_email]
 
       def profile
         render json: @user, adapter: :json
       end
 
       def create
+        bidinding.pry
         @user = User.new(user_params)
         @user.confirmed_at = Time.now
         if @user.save
-          render json: { message: 'Registration successful.' }
+          sign_in_user
         else
           render_422(parse_errors_messages(@user))
         end
@@ -30,8 +31,8 @@ module Api
       def user_params
         params.require(:user).permit(:first_name, :last_name, :email, :phone_number, :password, :password_confirmation,
                                      :google_id, :facebook_id,
-                                     location_attributes: [:latitude, :longitude, :city, :area, :street,
-                                                           :building_type, :building_name, :unit_number, :villa_number])
+                                     location_attributes: %i[latitude longitude city area street \\n
+                                                             building_type building_name unit_number villa_number])
       end
     end
   end

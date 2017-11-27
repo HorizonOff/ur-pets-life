@@ -13,6 +13,8 @@ Rails.application.routes.draw do
       resources :users, only: :create do
         collection { get :profile }
       end
+      resources :pets, only: %i[get create update destroy] do
+      end
       put 'users', to: 'users#update'
       resources :sessions, only: :create do
         collection { post :facebook }

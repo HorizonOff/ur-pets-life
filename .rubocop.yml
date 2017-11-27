@@ -1,2 +1,16 @@
 Metrics/LineLength:
   Max: 120
+Documentation:
+ Enabled: false
+AllCops:
+ Excludes:
+   - Gemfile
+   - bin/yarn
+   - config/application.rb
+   - config/puma.rb
+   - db/schema.rb
+   - db/migrate/*
+   - bin/setup
+   - lib/api/v1/*
+Style/FrozenStringLiteralComment:
+  Enabled: false
