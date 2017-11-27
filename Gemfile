@@ -12,6 +12,7 @@ gem 'omniauth-google-oauth2'
 gem 'google-api-client', '~> 0.11'
 
 gem 'fb_graph2'
+gem 'rest-client'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.1.4'
 # Use postgresql as the database for Active Record

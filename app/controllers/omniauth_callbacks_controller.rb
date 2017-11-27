@@ -6,7 +6,7 @@ class OmniauthCallbacksController < Devise::OmniauthCallbacksController
 
   def google_oauth2
     google_request = request.env['omniauth.auth']
-    redirect_to root_path(google_token: google_request['credentials']['token'])
+    redirect_to root_path(google_token: google_request[:extra][:id_token])
   end
 
   def failure

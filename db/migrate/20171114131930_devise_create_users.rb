@@ -4,13 +4,12 @@ class DeviseCreateUsers < ActiveRecord::Migration[5.1]
       t.string :first_name
       t.string :last_name
       ## Database authenticatable
-      t.string :email,              default: ""
-      t.string :encrypted_password, null: false, default: ""
+      t.string :email
+      t.string :phone_number
+      t.string :encrypted_password, null: false, default: ''
 
       t.string :facebook_id
       t.string :google_id
-      t.string :provider
-      t.boolean :is_social, default: false
       ## Recoverable
       t.string   :reset_password_token
       t.datetime :reset_password_sent_at
@@ -29,5 +28,6 @@ class DeviseCreateUsers < ActiveRecord::Migration[5.1]
     add_index :users, :reset_password_token, unique: true
     add_index :users, :confirmation_token,   unique: true
     add_index :users, :facebook_id,          unique: true
+    add_index :users, :google_id,            unique: true
   end
 end

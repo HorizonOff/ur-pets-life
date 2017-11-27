@@ -13,6 +13,15 @@ module Api
         property :email do
           key :type, :email
         end
+        property :phone_number do
+          key :type, :string
+        end
+        property :facebook_id do
+          key :type, :string
+        end
+        property :google_id do
+          key :type, :string
+        end
         property :password do
           key :type, :string
         end
@@ -31,6 +40,9 @@ module Api
         property :email do
           key :type, :email
         end
+        property :phone_number do
+          key :type, :string
+        end
       end
 
       swagger_schema :Location do
@@ -40,11 +52,10 @@ module Api
         property :longitude do
           key :type, :float
         end
-
-        property :country do
+        property :city do
           key :type, :string
         end
-        property :city do
+        property :area do
           key :type, :string
         end
         property :street do
@@ -69,7 +80,6 @@ module Api
           schema do
             property :user do
               key :'$ref', :User
-
               property :location_attributes do
                 key :'$ref', :Location
               end
@@ -136,6 +146,12 @@ module Api
                 property :last_name do
                   key :type, :string
                 end
+                property :email do
+                  key :type, :email
+                end
+                property :phone_number do
+                  key :type, :string
+                end
                 property :location_attributes do
                   key :'$ref', :Location
                 end
@@ -165,47 +181,6 @@ module Api
             schema do
               key :'$ref', :UserResponse
             end
-          end
-        end
-      end
-
-      swagger_path '/users/{token}/set_email' do
-        operation :put do
-          key :description, 'Set email for facebook users without email'
-          key :consumes, %w[application/json]
-          key :consumes, %w[application/json]
-          key :tags, %w[Users]
-
-          parameter do
-            key :name, :token
-            key :in, :path
-            key :required, true
-          end
-
-          parameter do
-            key :name, :body
-            key :in, :body
-            key :required, true
-            key :description, 'Push_token: optional'
-
-            schema do
-              property :email do
-                key :type, :string
-              end
-              property :device_type do
-                key :type, :string
-              end
-              property :device_id do
-                key :type, :string
-              end
-              property :push_token do
-                key :type, :string
-              end
-            end
-          end
-
-          response 200 do
-            key :description, 'Success response'
           end
         end
       end
