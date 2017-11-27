@@ -17,10 +17,10 @@ module Api
           if @user.update(password: params[:password], password_confirmation: params[:password_confirmation])
             render json: { message: 'Password updated successfully' }
           else
-            render_422(@user.errors.full_messages)
+            render_422(parse_errors_messages(@user))
           end
         else
-          render_422('Current password doesn\'t match')
+          render_422(current_password: "doesn't match")
         end
       end
     end

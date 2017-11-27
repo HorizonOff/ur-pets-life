@@ -9,8 +9,9 @@ module Api
 
       def create
         @user = User.new(user_params)
+        @user.confirmed_at = Time.now
         if @user.save
-          render json: { message: 'Registration successful. Please check you\'re email to confirm your account.' }
+          render json: { message: 'Registration successful.' }
         else
           render_422(parse_errors_messages(@user))
         end
