@@ -7,7 +7,7 @@ module Api
 
       def create
         @user = User.find_by_email(params[:email])
-        if @user && @user.valid_password?(params[:password])
+        if @user&.valid_password?(params[:password])
           sign_in_user
         else
           render_422(message: 'Incorrect email or Password. Please try again.')

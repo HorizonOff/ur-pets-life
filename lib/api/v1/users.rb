@@ -73,6 +73,9 @@ module Api
         property :villa_number do
           key :type, :string
         end
+        property :comment do
+          key :type, :string
+        end
       end
 
       swagger_schema :UserInput do
@@ -83,6 +86,15 @@ module Api
               property :location_attributes do
                 key :'$ref', :Location
               end
+            end
+            property :device_type do
+              key :type, :string
+            end
+            property :device_id do
+              key :type, :string
+            end
+            property :push_token do
+              key :type, :string
             end
           end
         end

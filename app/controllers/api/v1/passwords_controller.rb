@@ -4,7 +4,8 @@ module Api
       skip_before_action :authenticate_user, only: :forgot
 
       def forgot
-        if @user = User.find_by_email(params[:email])
+        @user = User.find_by_email(params[:email])
+        if @user
           @user.send_reset_password_instructions
           render json: { message: 'Resent password link was sent on your email' }, status: :ok
         else

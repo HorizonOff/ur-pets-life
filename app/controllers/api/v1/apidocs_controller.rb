@@ -27,7 +27,8 @@ module Api
         Api::V1::Users,
         Api::V1::Passwords,
         Api::V1::Sessions,
-        self,
+        Api::V1::Pets,
+        self
       ].freeze
 
       def index

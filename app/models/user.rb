@@ -2,7 +2,7 @@ class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :rememberable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :confirmable, :trackable, :omniauthable, :omniauth_providers => [:facebook, :google_oauth2]
+         :recoverable, :confirmable, :trackable, :omniauthable, omniauth_providers: %i[facebook google_oauth2]
 
   validates :email, uniqueness: { case_sensitive: false, message: 'Email address is already registered' },
                     format: { with: Devise.email_regexp, message: 'Email address is invalid' },
@@ -37,6 +37,7 @@ class User < ApplicationRecord
   attr_accessor :skip_password_validation
 
   has_many :sessions
+  has_many :pets
   has_one :location, as: :place, inverse_of: :place
   accepts_nested_attributes_for :location, update_only: true
 
