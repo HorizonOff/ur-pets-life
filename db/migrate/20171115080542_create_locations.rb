@@ -11,6 +11,7 @@ class CreateLocations < ActiveRecord::Migration[5.1]
       t.string :building_name
       t.string :unit_number
       t.string :villa_number
+      t.string :comment
 
       t.timestamps
     end

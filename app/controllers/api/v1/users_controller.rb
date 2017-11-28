@@ -8,7 +8,6 @@ module Api
       end
 
       def create
-        bidinding.pry
         @user = User.new(user_params)
         @user.confirmed_at = Time.now
         if @user.save
@@ -19,7 +18,9 @@ module Api
       end
 
       def update
-        if @user.update(user_params.except(:password, :password_confirmation))
+        @user.assign_attributes(user_params.except(:password, :password_confirmation))
+        @user.skip_password_validation = true
+        if @user.save
           render json: { message: 'User updated successfully' }
         else
           render_422(parse_errors_messages(@user))
@@ -31,8 +32,8 @@ module Api
       def user_params
         params.require(:user).permit(:first_name, :last_name, :email, :phone_number, :password, :password_confirmation,
                                      :google_id, :facebook_id,
-                                     location_attributes: %i[latitude longitude city area street \\n
-                                                             building_type building_name unit_number villa_number])
+                                     location_attributes: %i[latitude longitude city area street building_type \/n
+                                                             building_name unit_number villa_number comment])
       end
     end
   end

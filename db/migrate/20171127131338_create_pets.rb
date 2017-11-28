@@ -8,7 +8,7 @@ class CreatePets < ActiveRecord::Migration[5.1]
       t.integer :sex
       t.integer :category
       t.float :weight
-      t.text :comment
+      t.string :comment
 
       t.timestamps
     end

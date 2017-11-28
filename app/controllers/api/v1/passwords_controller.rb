@@ -21,7 +21,7 @@ module Api
             render_422(parse_errors_messages(@user))
           end
         else
-          render_422(current_password: "doesn't match")
+          render_422(current_password: "Current password doesn't match")
         end
       end
     end
