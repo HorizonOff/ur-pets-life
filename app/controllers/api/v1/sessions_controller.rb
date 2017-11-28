@@ -10,7 +10,7 @@ module Api
         if @user && @user.valid_password?(params[:password])
           sign_in_user
         else
-          render_422(message: 'Wrong login/password combination.')
+          render_422(message: 'Incorrect email or Password. Please try again.')
         end
       end
 

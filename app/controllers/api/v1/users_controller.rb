@@ -18,7 +18,9 @@ module Api
       end
 
       def update
-        if @user.update(user_params.except(:password, :password_confirmation))
+        @user.assign_attributes(user_params.except(:password, :password_confirmation))
+        @user.skip_password_validation = true
+        if @user.save
           render json: { message: 'User updated successfully' }
         else
           render_422(parse_errors_messages(@user))
