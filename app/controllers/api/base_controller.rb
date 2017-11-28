@@ -20,11 +20,11 @@ module Api
     end
 
     def render_404(error = 'Not Found')
-      render json: { error: error }, status: 404
+      render json: { errors: { error: error } }, status: 404
     end
 
     def render_401(error = 'Not Authorized')
-      render json: { error: error }, status: 401
+      render json: { errors: { error: error } }, status: 401
     end
 
     def sign_in_user
