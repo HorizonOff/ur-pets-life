@@ -14,7 +14,7 @@ Rails.application.routes.draw do
         collection { get :profile }
       end
       put 'users', to: 'users#update'
-      resources :pets, only: %i[get create update destroy]
+      resources :pets, except: %i[new edit]
       resources :breeds, only: :index
       resources :sessions, only: :create do
         collection { post :facebook }
