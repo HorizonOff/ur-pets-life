@@ -28,6 +28,7 @@ module Api
         Api::V1::Passwords,
         Api::V1::Sessions,
         Api::V1::Pets,
+        Api::V1::Breeds,
         self
       ].freeze
 

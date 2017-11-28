@@ -4,6 +4,21 @@ module Api
       include Swagger::Blocks
 
       swagger_path '/pets' do
+        operation :get do
+          key :description, 'Get all pets'
+          key :consumes, %w[application/json]
+          key :consumes, %w[application/json]
+          key :tags, %w[Pets]
+
+          security do
+            key :api_key, []
+          end
+
+          response 200 do
+            key :description, 'Success response'
+          end
+        end
+
         operation :post do
           key :description, 'Create pet'
           key :consumes, %w[application/json]
@@ -56,6 +71,27 @@ module Api
       end
 
       swagger_path '/pets/{id}' do
+        operation :get do
+          key :description, 'Show pet'
+          key :consumes, %w[application/json]
+          key :consumes, %w[application/json]
+          key :tags, %w[Pets]
+
+          security do
+            key :api_key, []
+          end
+          parameter do
+            key :name, :id
+            key :in, :path
+            key :type, :integer
+            key :required, true
+          end
+
+          response 200 do
+            key :description, 'Success response'
+          end
+        end
+
         operation :put do
           key :description, 'Update pet'
           key :consumes, %w[application/json]

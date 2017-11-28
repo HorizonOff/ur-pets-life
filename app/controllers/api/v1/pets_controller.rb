@@ -1,8 +1,15 @@
 module Api
   module V1
     class PetsController < Api::BaseController
-      before_action :set_pet, except: :create
-      def get
+      before_action :set_pet, except: %i[index create]
+
+      def index
+        pets = @user.pets
+        render json: pets, each_serializer: PetIndexSerializer, adapter: :json
+      end
+
+      def show
+        render json: @pet, adapter: :json
       end
 
       def create

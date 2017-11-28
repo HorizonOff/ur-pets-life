@@ -8,14 +8,14 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   namespace :api do
     namespace :v1 do
-      resources :apidocs, only: [:index]
+      resources :apidocs, only: :index
       resources :pages, only: :index
       resources :users, only: :create do
         collection { get :profile }
       end
-      resources :pets, only: %i[get create update destroy] do
-      end
       put 'users', to: 'users#update'
+      resources :pets, except: %i[new edit]
+      resources :breeds, only: :index
       resources :sessions, only: :create do
         collection { post :facebook }
         collection { post :google }

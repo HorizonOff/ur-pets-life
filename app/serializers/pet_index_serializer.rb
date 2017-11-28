@@ -1,0 +1,9 @@
+class PetIndexSerializer < ActiveModel::Serializer
+  type 'pet'
+
+  attributes :name, :birthday
+
+  def birthday
+    object.birthday.utc.iso8601
+  end
+end

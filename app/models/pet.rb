@@ -1,7 +1,7 @@
 class Pet < ApplicationRecord
-  TYPE_OPTIONS = %i[cat dog other].freeze
+  CATEGORY_OPTIONS = %i[cat dog other].freeze
   SEX_OPTIONS = %i[male female].freeze
-  enum category: TYPE_OPTIONS
+  enum category: CATEGORY_OPTIONS
   enum sex: SEX_OPTIONS
 
   belongs_to :user, optional: true
@@ -50,7 +50,7 @@ class Pet < ApplicationRecord
   end
 
   def breed_should_be_valid
-    return if breed_id.nil?
+    return if breed_id.nil? && category == 'other'
     errors.add(:breed_id, 'Breed is invalid') unless Breed.exists?(pet_category: category, id: breed_id)
   end
 end
