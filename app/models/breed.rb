@@ -1,3 +1,3 @@
 class Breed < ApplicationRecord
-  enum status: %i[cat dog]
+  enum pet_category: %i[cat dog]
 end

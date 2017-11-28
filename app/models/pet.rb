@@ -9,7 +9,7 @@ class Pet < ApplicationRecord
   validates_presence_of :name, message: 'Name is required'
   validates_presence_of :birthday, message: 'Birthday is required'
   validates_presence_of :category, message: "Pet's category is required"
-  validates_presence_of :category, :sex, message: 'Sex is required'
+  validates_presence_of :sex, message: 'Sex is required'
 
   validate :sex_should_be_valid, :category_should_be_valid, :breed_should_be_valid
 
