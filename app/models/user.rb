@@ -5,7 +5,7 @@ class User < ApplicationRecord
          :recoverable, :confirmable, :trackable, :omniauthable, :omniauth_providers => [:facebook, :google_oauth2]
 
   validates :email, uniqueness: { case_sensitive: false, message: 'Email address is already registered' },
-                    format: { with: Devise.email_regexp },
+                    format: { with: Devise.email_regexp, message: 'Email address is invalid' },
                     length: { maximum: 50, message: 'Email address should contain not more than 50 symbols' },
                     presence: { message: 'Email adress is required' }
 
@@ -15,7 +15,7 @@ class User < ApplicationRecord
   validates_confirmation_of :password, message: "Password confirmation doesn't match Password", if: :password_required?
   validates_presence_of :password, :password_confirmation, message: 'Password is required', if: :password_required?
 
-  validates :last_name, format: { with: /\A[a-z\-A-Z\s,']+\z/ },
+  validates :last_name, format: { with: /\A[a-z\-A-Z\s,']+\z/, message: 'Last name is invalid' },
                         length: { within: 2..64,
                                   too_short: 'Last name should contain at least 2 symbols',
                                   too_long: 'Last name should contain not more than 64 symbols' },
