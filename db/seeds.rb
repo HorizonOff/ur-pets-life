@@ -73,11 +73,25 @@ cat_breeds = %W[Abyssinian American\ Bobtail American\ Curl American\ Shorthair 
                 Japanese\ Bobtail Javanese Korat LaPerm Maine\ Coon Manx Nebelung Norwegian\ Forest Ocicat Oriental
                 Persian Pixie-Bob Ragamuffin Ragdoll\ Cats Russian\ Blue Savannah Scottish\ Fold Selkirk\ Rex
                 Siamese\ Cat Siberian Singapura Snowshoe Somali Sphynx Tonkinese Turkish\ Angora Turkish\ Van]
+cat = 'cat'
+dog = 'dog'
+other = 'other'
 if Breed.count.zero?
   dog_breeds.each do |breed|
-    Breed.create(pet_category: 'dog', name: breed)
+    Breed.create(pet_category: dog, name: breed)
   end
   cat_breeds.each do |breed|
-    Breed.create(pet_category: 'cat', name: breed)
+    Breed.create(pet_category: cat, name: breed)
   end
+end
+
+if VaccineType.count.zero?
+  VaccineType.create(name: 'Neutered / spayed', pet_categories: [cat, dog, other])
+  VaccineType.create(name: 'DHPPI', pet_categories: [dog, other])
+  VaccineType.create(name: 'Leptospirosis', pet_categories: [dog, other])
+  VaccineType.create(name: 'Rhinotracheitis / Tricat', pet_categories: [cat])
+  VaccineType.create(name: 'Rabies', pet_categories: [cat, dog, other])
+  VaccineType.create(name: 'Kennel Cough', pet_categories: [dog, other])
+  VaccineType.create(name: 'Leukemia', pet_categories: [cat])
+  VaccineType.create(name: 'Deworming', pet_categories: [cat, dog, other])
 end

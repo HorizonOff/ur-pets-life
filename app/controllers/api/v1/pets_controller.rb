@@ -22,7 +22,7 @@ module Api
       end
 
       def update
-        if @pet.update(pets_params)
+        if @pet.update(pets_params.except(:category))
           render json: { message: 'Pet updated successfully' }
         else
           render_422(parse_errors_messages(@pet))
@@ -42,7 +42,8 @@ module Api
       end
 
       def pets_params
-        params.require(:pet).permit(:name, :birthday, :sex, :category, :breed_id, :weight, :comment)
+        params.require(:pet).permit(:name, :birthday, :sex, :category, :breed_id, :weight, :comment,
+                                    vaccinations_attributes: %i[id vaccine_type_id done_at _destroy])
       end
     end
   end
