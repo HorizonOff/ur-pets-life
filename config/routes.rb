@@ -16,6 +16,7 @@ Rails.application.routes.draw do
       put 'users', to: 'users#update'
       resources :pets, except: %i[new edit]
       resources :breeds, only: :index
+      resources :vaccine_types, only: :index
       resources :sessions, only: :create do
         collection { post :facebook }
         collection { post :google }

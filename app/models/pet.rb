@@ -6,6 +6,10 @@ class Pet < ApplicationRecord
 
   belongs_to :user, optional: true
   belongs_to :breed, optional: true
+  has_many :vaccinations
+
+  accepts_nested_attributes_for :vaccinations, allow_destroy: true
+
   validates_presence_of :name, message: 'Name is required'
   validates_presence_of :birthday, message: 'Birthday is required'
   validates_presence_of :category, message: "Pet's category is required"

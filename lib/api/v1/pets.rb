@@ -3,6 +3,29 @@ module Api
     class Pets < ActionController::Base
       include Swagger::Blocks
 
+      swagger_schema :VaccinationInput do
+        property :vaccine_type_id do
+          key :type, :integer
+        end
+        property :done_at do
+          key :type, :integer
+        end
+      end
+      swagger_schema :VaccinationUpdate do
+        property :id do
+          key :type, :integer
+        end
+        property :vaccine_type_id do
+          key :type, :integer
+        end
+        property :done_at do
+          key :type, :integer
+        end
+        property :_destroy do
+          key :type, :boolean
+        end
+      end
+
       swagger_path '/pets' do
         operation :get do
           key :description, 'Get all pets'
@@ -59,6 +82,11 @@ module Api
                 end
                 property :comment do
                   key :type, :text
+                end
+                property :vaccinations_attributes do
+                  items do
+                    key :'$ref', :VaccinationInput
+                  end
                 end
               end
             end
@@ -123,10 +151,6 @@ module Api
                 property :birthday do
                   key :type, :datetime
                 end
-                property :category do
-                  key :type, :string
-                end
-
                 property :sex do
                   key :type, :string
                 end
@@ -138,6 +162,12 @@ module Api
                 end
                 property :comment do
                   key :type, :text
+                end
+
+                property :vaccinations_attributes do
+                  items do
+                    key :'$ref', :VaccinationUpdate
+                  end
                 end
               end
             end

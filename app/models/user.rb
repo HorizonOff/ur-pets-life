@@ -26,11 +26,14 @@ class User < ApplicationRecord
                                    too_long: 'First name should contain not more than 64 symbols' },
                          presence: { message: 'First name is required' }
 
-  validates :phone_number, format: { with: /\A\+\d+\z/, message: 'Phone number is invalid' },
+  validates :phone_number, uniqueness: { case_sensitive: false, message: 'This Mobile Number is already registered' },
+                           format: { with: /\A\+\d+\z/, message: 'Mobile Number is invalid' },
                            length: { within: 11..13,
-                                     too_short: 'Phone number should contain at least 10 symbols',
-                                     too_long: 'Phone number should contain not more than 12 symbols' },
+                                     too_short: 'Mobile number should contain at least 10 symbols',
+                                     too_long: 'Mobile number should contain not more than 12 symbols' },
                            allow_blank: true
+
+  validates :facebook_id, :google_id, uniqueness: true, allow_blank: true
 
   before_save :downcase_email, unless: ->(user) { user.email.blank? }
 
@@ -39,6 +42,7 @@ class User < ApplicationRecord
   has_many :sessions
   has_many :pets
   has_one :location, as: :place, inverse_of: :place
+
   accepts_nested_attributes_for :location, update_only: true
 
   def name
