@@ -9,7 +9,7 @@ module Api
           @user.send_reset_password_instructions
           render json: { message: 'Resent password link was sent on your email' }, status: :ok
         else
-          render_404
+          render_404("Such email address isn't registered. Try again")
         end
       end
 
