@@ -34,7 +34,7 @@ class Pet < ApplicationRecord
   end
 
   def pet_type_is_additional?
-    pet_type.is_additional_type?
+    @pet_type_is_additional ||= pet_type.is_additional_type?
   end
 
   def sex_should_be_valid
