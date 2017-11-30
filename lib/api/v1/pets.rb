@@ -19,7 +19,7 @@ module Api
           key :type, :integer
         end
         property :done_at do
-          key :type, :integer
+          key :type, :datetime
         end
         property :_destroy do
           key :type, :boolean
@@ -56,8 +56,9 @@ module Api
             key :name, :pet
             key :in, :body
             key :required, true
-            key :description, "Name, birthday, category, sex: required.\n" + \
-                              "Category: 'cat/dog/other'.\n Sex: 'male/female'.\n Breed_id: 'null/valid_id'"
+            key :description, "Name, birthday, pet_type_id, sex: required.\n" + \
+                              "Sex: 'male' or 0, 'female' or 1.\n Breed_id: 'null/valid_id'" + \
+                              "Additional_type required if Pet type is Other"
 
             schema do
               property :pet do
@@ -67,10 +68,12 @@ module Api
                 property :birthday do
                   key :type, :datetime
                 end
-                property :category do
+                property :pet_type_id do
+                  key :type, :integer
+                end
+                property :additional_type do
                   key :type, :string
                 end
-
                 property :sex do
                   key :type, :string
                 end
@@ -139,9 +142,9 @@ module Api
             key :name, :pet
             key :in, :body
             key :required, true
-            key :description, "Name, birthday, category, sex: required.\n" + \
-                              "Category: 'cat/dog/other'.\n Sex: 'male/female'.\n Breed_id: 'null/valid_id'"
-
+            key :description, "Name, birthday, pet_type_id, sex: required.\n" + \
+                              "Sex: 'male' or 0, 'female' or 1.\n Breed_id: 'null/valid_id'" + \
+                              "Additional_type required if Pet type is Other"
 
             schema do
               property :pet do
@@ -150,6 +153,9 @@ module Api
                 end
                 property :birthday do
                   key :type, :datetime
+                end
+                property :additional_type do
+                  key :type, :string
                 end
                 property :sex do
                   key :type, :string
