@@ -5,7 +5,7 @@ class DeviseCreateUsers < ActiveRecord::Migration[5.1]
       t.string :last_name
       ## Database authenticatable
       t.string :email
-      t.string :phone_number
+      t.string :mobile_number
       t.string :encrypted_password, null: false, default: ''
 
       t.string :facebook_id

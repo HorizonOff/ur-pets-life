@@ -1,3 +1,4 @@
 class Breed < ApplicationRecord
-  enum pet_category: %i[cat dog]
+  belongs_to :pet_type
+  has_many :pets
 end

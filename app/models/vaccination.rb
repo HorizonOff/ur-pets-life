@@ -7,6 +7,6 @@ class Vaccination < ApplicationRecord
   private
 
   def vaccine_type_should_be_valid
-    errors.add(:vaccie_type_id, 'Vaccine type is invalid') unless pet.category.in?(vaccine_type.pet_categories)
+    errors.add(:vaccine_type_id, 'Vaccine type is invalid') unless pet.vaccine_type_ids.include?(vaccine_type_id)
   end
 end

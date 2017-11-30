@@ -9,7 +9,8 @@ module Api
       end
 
       def show
-        render json: @pet, adapter: :json
+        render json: @pet, include: 'vaccine_types,vaccinations,vaccine_types.vaccinations',
+               scope: { pet_vaccinations: pet_vaccinations }, adapter: :json
       end
 
       def create
@@ -22,7 +23,7 @@ module Api
       end
 
       def update
-        if @pet.update(pets_params.except(:category))
+        if @pet.update(pets_params.except(:pet_type_id))
           render json: { message: 'Pet updated successfully' }
         else
           render_422(parse_errors_messages(@pet))
@@ -42,8 +43,12 @@ module Api
       end
 
       def pets_params
-        params.require(:pet).permit(:name, :birthday, :sex, :category, :breed_id, :weight, :comment,
+        params.require(:pet).permit(:name, :birthday, :sex, :pet_type_id, :breed_id, :weight, :comment,
                                     vaccinations_attributes: %i[id vaccine_type_id done_at _destroy])
+      end
+
+      def pet_vaccinations
+        @pet.vaccinations.group_by(&:vaccine_type_id)
       end
     end
   end

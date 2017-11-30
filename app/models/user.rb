@@ -12,7 +12,7 @@ class User < ApplicationRecord
   validates_length_of :password, within: Devise.password_length,
                                  too_short: 'Password should contain at least 6 symbols',
                                  too_long: 'Password should contain not more than 32 symbols', allow_blank: true
-  validates_confirmation_of :password, message: "Password confirmation doesn't match Password", if: :password_required?
+  validates_confirmation_of :password, message: "Passwords don't match", if: :password_required?
   validates_presence_of :password, :password_confirmation, message: 'Password is required', if: :password_required?
 
   validates :last_name, format: { with: /\A[a-z\-A-Z\s,']+\z/, message: 'Last name is invalid' },
@@ -26,12 +26,12 @@ class User < ApplicationRecord
                                    too_long: 'First name should contain not more than 64 symbols' },
                          presence: { message: 'First name is required' }
 
-  validates :phone_number, uniqueness: { case_sensitive: false, message: 'This Mobile Number is already registered' },
-                           format: { with: /\A\+\d+\z/, message: 'Mobile Number is invalid' },
-                           length: { within: 11..13,
-                                     too_short: 'Mobile number should contain at least 10 symbols',
-                                     too_long: 'Mobile number should contain not more than 12 symbols' },
-                           allow_blank: true
+  validates :mobile_number, uniqueness: { case_sensitive: false, message: 'This Mobile Number is already registered' },
+                            format: { with: /\A\+\d+\z/, message: 'Mobile Number is invalid' },
+                            length: { within: 11..13,
+                                      too_short: 'Mobile number should contain at least 10 symbols',
+                                      too_long: 'Mobile number should contain not more than 12 symbols' },
+                            allow_blank: true
 
   validates :facebook_id, :google_id, uniqueness: true, allow_blank: true
 

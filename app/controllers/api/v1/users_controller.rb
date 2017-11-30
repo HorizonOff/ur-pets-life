@@ -30,9 +30,9 @@ module Api
       private
 
       def user_params
-        params.require(:user).permit(:first_name, :last_name, :email, :phone_number, :password, :password_confirmation,
+        params.require(:user).permit(:first_name, :last_name, :email, :mobile_number, :password, :password_confirmation,
                                      :google_id, :facebook_id,
-                                     location_attributes: %i[latitude longitude city area street building_type \/n
+                                     location_attributes: %i[latitude longitude city area street building_type
                                                              building_name unit_number villa_number comment])
       end
     end

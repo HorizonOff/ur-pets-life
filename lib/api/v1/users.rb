@@ -13,7 +13,7 @@ module Api
         property :email do
           key :type, :email
         end
-        property :phone_number do
+        property :mobile_nuber do
           key :type, :string
         end
         property :facebook_id do
@@ -40,7 +40,7 @@ module Api
         property :email do
           key :type, :email
         end
-        property :phone_number do
+        property :mobile_nuber do
           key :type, :string
         end
       end
@@ -161,7 +161,7 @@ module Api
                 property :email do
                   key :type, :email
                 end
-                property :phone_number do
+                property :mobile_nuber do
                   key :type, :string
                 end
                 property :location_attributes do

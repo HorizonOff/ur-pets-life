@@ -1,21 +1,21 @@
 class Pet < ApplicationRecord
-  CATEGORY_OPTIONS = %i[cat dog other].freeze
   SEX_OPTIONS = %i[male female].freeze
-  enum category: CATEGORY_OPTIONS
   enum sex: SEX_OPTIONS
 
   belongs_to :user, optional: true
   belongs_to :breed, optional: true
+  belongs_to :pet_type
+  has_many :vaccine_types, through: :pet_type
   has_many :vaccinations
 
   accepts_nested_attributes_for :vaccinations, allow_destroy: true
 
   validates_presence_of :name, message: 'Name is required'
   validates_presence_of :birthday, message: 'Birthday is required'
-  validates_presence_of :category, message: "Pet's category is required"
   validates_presence_of :sex, message: 'Sex is required'
+  validates_presence_of :additional_type, message: 'Type is required', if: :additiona_type_required?
 
-  validate :sex_should_be_valid, :category_should_be_valid, :breed_should_be_valid
+  validate :sex_should_be_valid, :breed_should_be_valid
 
   def sex=(value)
     super value
@@ -27,17 +27,15 @@ class Pet < ApplicationRecord
     self[:sex] = nil
   end
 
-  def category=(value)
-    super value
-    @category_backup = nil
-  rescue ArgumentError => exception
-    error_message = 'is not a valid category'
-    raise unless exception.message.include?(error_message)
-    @category_backup = value
-    self[:category] = nil
+  private
+
+  def additiona_type_required?
+    pet_type_is_additional?
   end
 
-  private
+  def pet_type_is_additional?
+    @pet_type_is_additional ||= pet_type.is_additional_type?
+  end
 
   def sex_should_be_valid
     return unless @sex_backup
@@ -46,15 +44,8 @@ class Pet < ApplicationRecord
     errors.add(:sex, error_message)
   end
 
-  def category_should_be_valid
-    return unless @category_backup
-    self.category ||= @category_backup
-    error_message = 'Category is invalid'
-    errors.add(:category, error_message)
-  end
-
   def breed_should_be_valid
-    return if breed_id.nil? && category == 'other'
-    errors.add(:breed_id, 'Breed is invalid') unless Breed.exists?(pet_category: category, id: breed_id)
+    return if breed_id.nil? && pet_type_is_additional?
+    errors.add(:breed_id, 'Breed is invalid') unless Breed.exists?(pet_type_id: pet_type_id, id: breed_id)
   end
 end

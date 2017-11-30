@@ -17,6 +17,7 @@ Rails.application.routes.draw do
       resources :pets, except: %i[new edit]
       resources :breeds, only: :index
       resources :vaccine_types, only: :index
+      resources :pet_types, only: :index
       resources :sessions, only: :create do
         collection { post :facebook }
         collection { post :google }
