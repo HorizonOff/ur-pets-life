@@ -1,7 +1,9 @@
 module Api
   module V1
     class UsersController < Api::BaseController
+      include ParamsCleanerHelper
       skip_before_action :authenticate_user, only: %i[create set_email]
+      before_action :clear_user_params, only: %i[create update]
 
       def profile
         render json: @user, adapter: :json
