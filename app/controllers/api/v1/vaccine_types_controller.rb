@@ -3,7 +3,7 @@ module Api
     class VaccineTypesController < Api::V1::PetTypesController
       before_action :set_pet_type
       def index
-        render json: @pet_type.vaccine_types, adapter: :json
+        render json: @pet_type.vaccine_types
       end
     end
   end

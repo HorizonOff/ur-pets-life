@@ -6,7 +6,7 @@ module Api
       before_action :clear_user_params, only: %i[create update]
 
       def profile
-        render json: @user, adapter: :json
+        render json: @user
       end
 
       def create

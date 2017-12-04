@@ -1,10 +1,15 @@
 class PetSerializer < ActiveModel::Serializer
-  attributes :id, :avatar, :name, :sex, :weight, :birthday, :comment
+  attributes :id, :avatar, :name, :sex, :weight, :birthday, :comment, :pet_type_id, :is_lost, :is_for_adoption
 
-  belongs_to :breed
+  belongs_to :breed, unless: -> { object.pet_type_is_additional? }
+  attribute :additional_type, if: -> { object.pet_type_is_additional? }
   has_many :vaccine_types
   has_many :pictures do
     object.pictures || []
+  end
+
+  def sex
+    Pet.sexes[object.sex]
   end
 
   def avatar
