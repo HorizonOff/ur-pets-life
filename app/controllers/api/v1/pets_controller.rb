@@ -25,7 +25,7 @@ module Api
       end
 
       def update
-        if @pet.update(pets_params.except(:category))
+        if @pet.update(pets_params.except(:pet_type_id))
           render json: { message: 'Pet updated successfully' }
         else
           render_422(parse_errors_messages(@pet))
@@ -48,6 +48,10 @@ module Api
         params.require(:pet).permit(:name, :birthday, :sex, :pet_type_id, :breed_id, :weight, :comment, :avatar,
                                     vaccinations_attributes: %i[id vaccine_type_id done_at picture _destroy],
                                     pictures_attributes: %i[id attachment _destroy])
+      end
+
+      def pet_vaccinations
+        @pet.vaccinations.group_by(&:vaccine_type_id)
       end
     end
   end

@@ -15,11 +15,12 @@ module Api
           end
 
           parameter do
-            key :name, :pet_category
+            key :name, :pet_type_id
             key :in, :query
             key :required, true
-            key :description, "cat/dog/other"
-            key :type, :string
+            key :description, "Available pet_types look pet_types documantation.\n" +
+                               'cat = 1 dog = 2 other= 3'
+            key :type, :integer
           end
 
           response 200 do

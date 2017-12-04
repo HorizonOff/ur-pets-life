@@ -19,7 +19,7 @@ module Api
           key :type, :integer
         end
         property :done_at do
-          key :type, :integer
+          key :type, :datetime
         end
         property :_destroy do
           key :type, :boolean

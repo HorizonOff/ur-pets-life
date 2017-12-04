@@ -1,10 +1,9 @@
 module Api
   module V1
-    class VaccineTypesController < Api::BaseController
+    class VaccineTypesController < Api::V1::PetTypesController
+      before_action :set_pet_type
       def index
-        return render_404 unless params[:pet_category].in?(%w[cat dog other])
-        vaccine_types = VaccineType.where("'#{params[:pet_category]}' = ANY (pet_categories)")
-        render json: vaccine_types, adapter: :json
+        render json: @pet_type.vaccine_types, adapter: :json
       end
     end
   end
