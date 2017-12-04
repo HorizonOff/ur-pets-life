@@ -4,6 +4,8 @@ class Vaccination < ApplicationRecord
   validates_presence_of :done_at, message: 'Date is required'
   validate :vaccine_type_should_be_valid
 
+  mount_uploader :picture, PhotoUploader
+
   private
 
   def vaccine_type_should_be_valid

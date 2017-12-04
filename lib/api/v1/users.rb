@@ -13,7 +13,7 @@ module Api
         property :email do
           key :type, :email
         end
-        property :mobile_nuber do
+        property :mobile_number do
           key :type, :string
         end
         property :facebook_id do
@@ -40,7 +40,7 @@ module Api
         property :email do
           key :type, :email
         end
-        property :mobile_nuber do
+        property :mobile_number do
           key :type, :string
         end
       end
@@ -124,6 +124,8 @@ module Api
             key :name, :user
             key :in, :body
             key :required, true
+            key :description, "facebook_id, google_id, mobile_number, location_attributes - optional\n" +
+                              "building_type: 0 for building(or 'building'), 1 for villa (or 'villa')"
 
             schema do
               key :'$ref', :UserInput
@@ -149,6 +151,7 @@ module Api
             key :name, :user
             key :in, :body
             key :required, true
+            key :description, "building_type: 0 for building(or 'building'), 1 for villa (or 'villa')"
 
             schema do
               property :user do
@@ -161,7 +164,7 @@ module Api
                 property :email do
                   key :type, :email
                 end
-                property :mobile_nuber do
+                property :mobile_number do
                   key :type, :string
                 end
                 property :location_attributes do

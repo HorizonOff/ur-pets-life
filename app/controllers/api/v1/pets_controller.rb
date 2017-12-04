@@ -1,7 +1,9 @@
 module Api
   module V1
     class PetsController < Api::BaseController
+      include ParamsCleanerHelper
       before_action :set_pet, except: %i[index create]
+      before_action :clear_pet_params, only: %i[create update]
 
       def index
         pets = @user.pets
@@ -9,7 +11,7 @@ module Api
       end
 
       def show
-        render json: @pet, include: 'vaccine_types,vaccinations,vaccine_types.vaccinations',
+        render json: @pet, include: 'vaccine_types,vaccinations,pictures,vaccine_types.vaccinations',
                scope: { pet_vaccinations: pet_vaccinations }, adapter: :json
       end
 
@@ -43,8 +45,9 @@ module Api
       end
 
       def pets_params
-        params.require(:pet).permit(:name, :birthday, :sex, :pet_type_id, :breed_id, :weight, :comment,
-                                    vaccinations_attributes: %i[id vaccine_type_id done_at _destroy])
+        params.require(:pet).permit(:name, :birthday, :sex, :pet_type_id, :breed_id, :weight, :comment, :avatar,
+                                    vaccinations_attributes: %i[id vaccine_type_id done_at picture _destroy],
+                                    pictures_attributes: %i[id attachment _destroy])
       end
 
       def pet_vaccinations

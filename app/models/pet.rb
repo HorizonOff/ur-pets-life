@@ -7,8 +7,10 @@ class Pet < ApplicationRecord
   belongs_to :pet_type
   has_many :vaccine_types, through: :pet_type
   has_many :vaccinations
+  has_many :pictures
 
   accepts_nested_attributes_for :vaccinations, allow_destroy: true
+  accepts_nested_attributes_for :pictures, allow_destroy: true
 
   validates_presence_of :name, message: 'Name is required'
   validates_presence_of :birthday, message: 'Birthday is required'
@@ -17,7 +19,10 @@ class Pet < ApplicationRecord
 
   validate :sex_should_be_valid, :breed_should_be_valid
 
+  mount_uploader :avatar, PhotoUploader
+
   def sex=(value)
+    value = value.to_i if value.in?(%w[0 1])
     super value
     @sex_backup = nil
   rescue ArgumentError => exception
