@@ -41,6 +41,8 @@ RSpec.configure do |config|
 
   config.include Warden::Test::Helpers
 
+  config.include Helpers
+
   # Use Devise test helpers in controller specs
   # config.include Devise::TestHelpers, type: :controller
   config.include Devise::Test::ControllerHelpers, type: :controller
