@@ -29,13 +29,15 @@ RSpec.describe Api::V1::UsersController, type: :controller do
 
         parsed_response = JSON.parse(response.body)
 
-        expect(parsed_response).to eq({"user"=>parsed_response['user'], "session_token"=> parsed_response['session_token'], "first_login"=>parsed_response['first_login']})
+        expect(parsed_response).to eq({ 'user' => parsed_response['user'],
+                                        'session_token' => parsed_response['session_token'],
+                                        'first_login' => parsed_response['first_login'] })
       end
     end
 
     context 'when user was not created' do
       let(:error_response_message) do
-        { "errors" => { "email" => "Email address is invalid" } }
+        { 'errors' => { 'email' => 'Email address is invalid' } }
       end
 
       before { user_params[:user].delete(:email) }
