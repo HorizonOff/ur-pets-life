@@ -3,7 +3,7 @@ module Api
     class PetTypesController < Api::BaseController
       def index
         pet_types = PetType.all
-        render json: pet_types, adapter: :json
+        render json: pet_types
       end
 
       private

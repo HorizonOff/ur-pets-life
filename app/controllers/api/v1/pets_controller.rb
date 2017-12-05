@@ -7,12 +7,12 @@ module Api
 
       def index
         pets = @user.pets
-        render json: pets, each_serializer: PetIndexSerializer, adapter: :json
+        render json: pets, each_serializer: PetIndexSerializer
       end
 
       def show
-        render json: @pet, include: 'vaccine_types,vaccinations,pictures,vaccine_types.vaccinations',
-               scope: { pet_vaccinations: pet_vaccinations }, adapter: :json
+        render json: @pet, include: 'breed,vaccine_types,vaccinations,pictures,vaccine_types.vaccinations',
+               scope: { pet_vaccinations: pet_vaccinations }
       end
 
       def create
@@ -37,6 +37,10 @@ module Api
         render json: { nothing: true }, status: 204
       end
 
+      def weight_history
+        render json: @pet.versions
+      end
+
       private
 
       def set_pet
@@ -45,9 +49,10 @@ module Api
       end
 
       def pets_params
-        params.require(:pet).permit(:name, :birthday, :sex, :pet_type_id, :breed_id, :weight, :comment, :avatar,
-                                    vaccinations_attributes: %i[id vaccine_type_id done_at picture _destroy],
-                                    pictures_attributes: %i[id attachment _destroy])
+        params.require(:pet).permit(:avatar, :name, :birthday, :sex, :pet_type_id, :breed_id, :additional_type, :weight,
+                                    :comment, :is_lost, :is_for_adoption,
+                                    pictures_attributes: %i[id attachment _destroy],
+                                    vaccinations_attributes: %i[id vaccine_type_id done_at picture _destroy])
       end
 
       def pet_vaccinations

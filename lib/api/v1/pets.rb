@@ -190,7 +190,7 @@ module Api
 
         operation :put do
           key :description, 'Update pet'
-          key :consumes, %w[application/json]
+          key :consumes, %w[multipart/form-data]
           key :produces, %w[application/json]
           key :tags, %w[Pets]
 
@@ -335,6 +335,48 @@ module Api
           end
         end
 
+        operation :patch do
+          key :description, 'Update pet lost and adoption statuses'
+          key :consumes, %w[application/json]
+          key :produces, %w[application/json]
+          key :tags, %w[Pets]
+
+          security do
+            key :api_key, []
+          end
+
+          parameter do
+            key :name, :id
+            key :in, :path
+            key :type, :integer
+            key :required, true
+          end
+
+          parameter do
+            key :name, :pet
+            key :in, :body
+            key :required, true
+            key :description, "You can send only 1 pair of attributes\n" +
+                              'is_lost true/false, is_for_adoption:: true/false'
+
+            schema do
+              property :pet do
+                property :is_lost do
+                  key :type, :boolean
+                end
+                property :is_for_adoption do
+                  key :type, :boolean
+                end
+              end
+            end
+          end
+
+
+          response 200 do
+            key :description, 'Success response'
+          end
+        end
+
         operation :delete do
           key :description, 'Delete pet'
           key :consumes, %w[application/json]
@@ -350,6 +392,29 @@ module Api
             key :type, :integer
             key :required, true
           end
+          response 200 do
+            key :description, 'Success response'
+          end
+        end
+      end
+
+      swagger_path '/pets/{id}/weight_history' do
+        operation :get do
+          key :description, 'Show pet weight history'
+          key :consumes, %w[application/json]
+          key :produces, %w[application/json]
+          key :tags, %w[Pets]
+
+          security do
+            key :api_key, []
+          end
+          parameter do
+            key :name, :id
+            key :in, :path
+            key :type, :integer
+            key :required, true
+          end
+
           response 200 do
             key :description, 'Success response'
           end
