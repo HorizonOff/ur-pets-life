@@ -21,6 +21,8 @@ class Pet < ApplicationRecord
 
   mount_uploader :avatar, PhotoUploader
 
+  has_paper_trail only: [:weight], skip: [:avatar]
+
   def sex=(value)
     value = value.to_i if value.in?(%w[0 1])
     super value
@@ -32,14 +34,14 @@ class Pet < ApplicationRecord
     self[:sex] = nil
   end
 
+  def pet_type_is_additional?
+    @pet_type_is_additional ||= pet_type.is_additional_type?
+  end
+
   private
 
   def additiona_type_required?
     pet_type_is_additional?
-  end
-
-  def pet_type_is_additional?
-    @pet_type_is_additional ||= pet_type.is_additional_type?
   end
 
   def sex_should_be_valid

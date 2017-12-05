@@ -47,6 +47,7 @@ gem 'carrierwave', '~> 1.0'
 gem "mini_magick"
 gem "fog-aws"
 
+gem 'paper_trail', '~> 7.1'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 

@@ -4,7 +4,7 @@ module Api
       before_action :set_pet_type
 
       def index
-        render json: @pet_type.breeds, adapter: :json
+        render json: @pet_type.breeds
       end
     end
   end

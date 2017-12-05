@@ -9,12 +9,13 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       resources :apidocs, only: :index
-      resources :pages, only: :index
       resources :users, only: :create do
         collection { get :profile }
       end
       put 'users', to: 'users#update'
-      resources :pets, except: %i[new edit]
+      resources :pets, except: %i[new edit] do
+        member { get :weight_history }
+      end
       resources :breeds, only: :index
       resources :vaccine_types, only: :index
       resources :pet_types, only: :index
