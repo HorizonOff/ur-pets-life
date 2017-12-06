@@ -9,6 +9,10 @@ if PetType.count.zero?
   cat = PetType.create(name: 'Cat')
   dog = PetType.create(name: 'Dog')
   other = PetType.create(name: 'Other', is_additional_type: true)
+else
+  cat = PetType.find_by(name: 'Cat')
+  dog = PetType.find_by(name: 'Dog')
+  other = PetType.find_by(is_additional_type: true)
 end
 
 dog_breeds = %W[Airedale\ Terrier Affenpinscher,\ Toy Afghan\ Hound,\ Hound Airedale\ Terrier,\ Terrier Akita,\ Working
@@ -98,4 +102,63 @@ if VaccineType.count.zero?
   VaccineType.create(name: 'Kennel Cough', pet_types: [dog, other])
   VaccineType.create(name: 'Leukemia', pet_types: [cat])
   VaccineType.create(name: 'Deworming', pet_types: [cat, dog, other])
+end
+
+if User.count.zero?
+  User.create(first_name: 'Bruce', last_name: 'Wayne', email: 'wayne@enterprise.com',
+              password: '111111', password_confirmation: '111111', confirmed_at: Time.now)
+  User.create(first_name: 'Barry', last_name: 'Allen', email: 'barry@enterprise.com',
+              password: '111111', password_confirmation: '111111', confirmed_at: Time.now)
+end
+
+specializations = %W[Anesthesia Animal\ Welfare Behavior Dentistry Dermatology Emergency\ and\ Critical\ Care
+                     Internal\ Medicine:\ Cardiology,\ Neurology,\ Oncology Laboratory\ Animal\ Medicine Microbiology
+                     Nutrition Ophthalmology Pathology Pharmacology Poultry\ Veterinarians Preventive\ Medicine
+                     Radiology Sports\ Medicine\ and\ Rehabilitation
+                     Surgery:\ e.g.,\ Orthopedics,\ Soft\ Tissue\ surgery Theriogenology Toxicology]
+
+if Specialization.count.zero?
+  specializations.each do |s|
+    Specialization.create(name: s)
+  end
+end
+
+schedule_attributes = { monday_start_at: '10:00', monday_end_at: '19:30',
+                        tuesday_start_at: '10:00', tuesday_end_at: '19:30',
+                        wednesday_start_at: '10:00', wednesday_end_at: '19:30',
+                        thursday_start_at: '10:00', thursday_end_at: '19:30',
+                        friday_start_at: '10:00', friday_end_at: '19:30',
+                        saturday_start_at: '10:00', saturday_end_at: '19:30',
+                        sunday_start_at: '10:00', sunday_end_at: '19:30' }
+if Clinic.count.zero?
+  Clinic.create(name: 'Clininc 1', email: 'clinic1@mail.com', mobile_number: '+805050505050',
+                location_attributes: { longitude: 48.6208, latitude: 22.287883, city: 'Somewhere in Afrika' },
+                schedule_attributes: schedule_attributes, consultation_fee: [10, 50, 100].sample)
+  Clinic.create(name: 'Clininc 2', email: 'clinic2@mail.com', mobile_number: '+805050505051',
+                location_attributes: { longitude: 22.711711, latitude: 48.449306, city: 'Mukachevo' },
+                schedule_attributes: schedule_attributes, consultation_fee: [10, 50, 100].sample)
+end
+
+if Vet.count.zero?
+  Clinic.all.each do |c|
+    3.times do
+      c.vets.create(name: Faker::Name.name, email: Faker::Internet.email, consultation_fee: [10, 50, 100].sample,
+                    experience: [2, 4, 6, 8].sample)
+    end
+  end
+end
+
+pet_types = [[cat, dog], [cat], [cat, dog, other], [dog], [other]]
+specializations = Specialization.all
+Vet.all.each do |v|
+  if v.qualifications.count.zero?
+    [1, 2].sample.times do
+      v.qualifications.create(diploma: 'Cardiolog Diploma', university: 'Mumbai Universuty')
+    end
+  end
+  v.pet_types = pet_types.sample if v.pet_types.count.zero?
+  next unless v.specializations.count.zero?
+  [1, 2].sample.times do
+    v.specializations << specializations.sample
+  end
 end

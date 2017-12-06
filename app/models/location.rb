@@ -5,6 +5,13 @@ class Location < ApplicationRecord
 
   validate :building_type_should_be_valid
 
+  def address
+    address_fields = [city, area, street]
+    address_fields += building? ? [building_name, unit_number] : [villa_number]
+    address_fields.reject!(&:blank?)
+    address_fields.compact.join(', ')
+  end
+
   def building_type=(value)
     value = value.to_i if value.in?(%w[0 1])
     super value

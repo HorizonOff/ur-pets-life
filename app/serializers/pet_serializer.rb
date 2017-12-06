@@ -1,4 +1,6 @@
 class PetSerializer < ActiveModel::Serializer
+  type 'pet'
+
   attributes :id, :avatar, :name, :sex, :weight, :birthday, :comment, :pet_type_id, :is_lost, :is_for_adoption
 
   belongs_to :breed, unless: -> { object.pet_type_is_additional? }
@@ -10,10 +12,6 @@ class PetSerializer < ActiveModel::Serializer
 
   def sex
     Pet.sexes[object.sex]
-  end
-
-  def avatar
-    object.avatar.try(:url)
   end
 
   def birthday
