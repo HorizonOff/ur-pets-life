@@ -2,6 +2,24 @@ Metrics/LineLength:
   Max: 120
 Documentation:
  Enabled: false
+Metrics/BlockLength:
+ Enabled: true
+ Exclude:
+   - config/routes.rb
+   - config/environments/*.rb
+Metrics/AbcSize:
+ Enabled: true
+ Exclude:
+   - app/controllers/api/v1/sessions_controller.rb
+   - app/controllers/api/base_controller.rb
+   - app/helpers/params_cleaner_helper.rb
+   - app/services/api/v1/user_services/social_auth_service.rb
+Metrics/MethodLength:
+  Enabled: true
+  Exclude:
+    - app/services/api/v1/user_services/social_auth_service.rb
+    - app/helpers/params_cleaner_helper.rb
+    - app/controllers/api/base_controller.rb
 AllCops:
  Excludes:
    - Gemfile
@@ -12,5 +30,7 @@ AllCops:
    - db/migrate/*
    - bin/setup
    - lib/api/v1/*
+   - spec/**/*
+   - config/initializers/devise.rb
 Style/FrozenStringLiteralComment:
   Enabled: false
