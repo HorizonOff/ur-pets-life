@@ -12,7 +12,7 @@ module Api
           begin
             fb_user = FbGraph2::User.me(access_token).fetch(fields: %i[name email])
           rescue StandardError => e
-            set_error(e.message)
+            add_error(e.message)
             return
           end
 
@@ -35,12 +35,12 @@ module Api
             client = RestClient.get(url)
             response = JSON.parse(client.body)
           rescue RestClient::Exception => e
-            set_error(e.message)
+            add_error(e.message)
             return
           end
 
           if response['error_description'].present?
-            set_error('Access token is invalid')
+            add_error('Access token is invalid')
             return @error
           end
 
@@ -60,7 +60,7 @@ module Api
 
         attr_reader :access_token
 
-        def set_error(msg)
+        def add_error(msg)
           @error = { message: msg }
         end
       end
