@@ -142,7 +142,7 @@ end
 if Vet.count.zero?
   Clinic.all.each do |c|
     3.times do
-      x = c.vets.create(name: Faker::Name.name, email: Faker::Internet.email, consultation_fee: [10, 50, 100].sample,
+      c.vets.create(name: Faker::Name.name, email: Faker::Internet.email, consultation_fee: [10, 50, 100].sample,
                     experience: [2, 4, 6, 8].sample)
     end
   end
