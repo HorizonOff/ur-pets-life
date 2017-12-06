@@ -12,5 +12,6 @@ AllCops:
    - db/migrate/*
    - bin/setup
    - lib/api/v1/*
+   - spec/**/*
 Style/FrozenStringLiteralComment:
   Enabled: false
