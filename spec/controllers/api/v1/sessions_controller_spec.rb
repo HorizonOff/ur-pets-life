@@ -96,7 +96,6 @@ RSpec.describe Api::V1::SessionsController, type: :controller do
   describe '#facebook' do
     subject { post :facebook, params: { access_token: access_token } }
 
-
     context 'when Api::V1::UserServices::SocialAuthService returns User object' do
       before do
         allow(social_auth_service).to receive(:facebook_auth).and_return(user)
@@ -130,6 +129,37 @@ RSpec.describe Api::V1::SessionsController, type: :controller do
         expect(JSON.parse(response.body)).to eq(prefield_response)
       end
     end
+
+    context 'when Api::V1::UserServices::SocialAuthService returns error' do
+      let(:received_error) do
+        { message: 'error happened' }
+      end
+      let(:error_response) {
+        { 'errors' => { 'message' => 'error happened' } }
+      }
+
+      before do
+        allow(social_auth_service).to receive(:error).and_return(received_error)
+      end
+
+      it 'returns error response' do
+        subject
+
+        expect(response).to_not be_success
+      end
+
+      it 'returns proper success status 422' do
+        subject
+
+        expect(response.status).to eq(422)
+      end
+
+      it 'returns proper format' do
+        subject
+
+        expect(JSON.parse(response.body)).to eq(error_response)
+      end
+    end
   end
 
   describe '#google' do
@@ -147,7 +177,6 @@ RSpec.describe Api::V1::SessionsController, type: :controller do
 
         allow(controller).to receive(:sign_in_user).once
       end
-
     end
 
     context 'when Api::V1::UserServices::SocialAuthService does not return a User object' do

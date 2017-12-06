@@ -51,6 +51,23 @@ describe Api::V1::UserServices::SocialAuthService do
         end
       end
     end
+
+    context 'when some error raised' do
+      before do
+        allow(FbGraph2::User).to receive_message_chain(
+              :me, :fetch).with(fields: %i[name email]).and_raise(StandardError, 'error happened')
+      end
+
+      let(:expected_error) do
+        { message: 'error happened' }
+      end
+
+      it 'returns error' do
+        subject
+
+        expect(described_object.error).to eq(expected_error)
+      end
+    end
   end
 
   describe '#google_auth' do

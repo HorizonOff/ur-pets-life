@@ -17,7 +17,7 @@ module Api
       def facebook
         social_user = social_auth_service.facebook_auth
 
-        return render_422(message: social_auth_service.error.message) if social_auth_service.error.present?
+        return render_422(message: social_auth_service.error[:message]) if social_auth_service.error.present?
 
         if social_user.is_a?(User)
           @user = social_user
@@ -32,7 +32,7 @@ module Api
       def google
         social_user = social_auth_service.google_auth
 
-        return render_422(message: social_auth_service.error.message) if social_auth_service.error.present?
+        return render_422(message: social_auth_service.error[:message]) if social_auth_service.error.present?
 
         if social_user.is_a?(User)
           @user = social_user
