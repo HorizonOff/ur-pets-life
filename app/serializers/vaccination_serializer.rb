@@ -4,8 +4,4 @@ class VaccinationSerializer < ActiveModel::Serializer
   def done_at
     object.done_at.utc.iso8601
   end
-
-  def picture
-    object.picture.try(:url)
-  end
 end

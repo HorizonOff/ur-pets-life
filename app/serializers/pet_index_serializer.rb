@@ -6,8 +6,4 @@ class PetIndexSerializer < ActiveModel::Serializer
   def birthday
     object.birthday.utc.iso8601
   end
-
-  def avatar
-    object.avatar.try(:url)
-  end
 end

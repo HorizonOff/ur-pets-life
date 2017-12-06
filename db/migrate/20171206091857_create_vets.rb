@@ -1,15 +1,15 @@
-class CreateClinics < ActiveRecord::Migration[5.1]
+class CreateVets < ActiveRecord::Migration[5.1]
   def change
-    create_table :clinics do |t|
+    create_table :vets do |t|
+      t.references :clinic, foreign_key: true
       t.string :name
       t.string :email
-      t.string :picture
       t.string :mobile_number
-      t.float :consultation_fee
-      t.string :website
-      t.text :description
+      t.string :avatar
       t.boolean :is_active, default: false
       t.boolean :is_emergency, default: false
+      t.float :consultation_fee
+      t.integer :experience
 
       t.timestamps
     end

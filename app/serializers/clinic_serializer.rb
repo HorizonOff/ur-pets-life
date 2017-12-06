@@ -2,9 +2,8 @@ class ClinicSerializer < ActiveModel::Serializer
   type 'clinic'
 
   attributes :id, :name, :picture, :address, :distance, :consultation_fee, :working_hours, :website
-
-  def picture
-    object.picture.try(:url)
+  has_many :vets do
+    object.vets.includes(:pet_types)
   end
 
   def address
@@ -18,5 +17,9 @@ class ClinicSerializer < ActiveModel::Serializer
 
   def distance
     [nil, '15km', '2km'].sample
+  end
+
+  class VetSerializer < ActiveModel::Serializer
+    attributes :id, :name, :avatar, :experience, :consultation_fee, :pet_type_ids
   end
 end

@@ -3,10 +3,6 @@ class ClinicIndexSerializer < ActiveModel::Serializer
 
   attributes :id, :name, :picture, :address, :distance, :consultation_fee, :working_hours
 
-  def picture
-    object.picture.try(:url)
-  end
-
   def address
     object.location.try(:address)
   end
