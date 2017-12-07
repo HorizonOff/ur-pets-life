@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  root to: 'application#index'
+  root 'application#login'
 
   devise_for :users, only: %i[confirmations passwords omniauth_callbacks],
                      controllers: { confirmations: 'confirmations',
@@ -34,5 +34,11 @@ Rails.application.routes.draw do
 
       get '/users/auth/google_oauth2/callback', to: 'application#index'
     end
+  end
+
+  devise_for :admins, path: 'admin_panel/admins', except: :registrations
+  namespace :admin_panel do
+    root 'dashboard#index'
+    get '/', to: 'dashboard#index'
   end
 end

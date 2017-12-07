@@ -17,7 +17,7 @@ class Location < ApplicationRecord
     super value
     @building_type_backup = nil
   rescue ArgumentError => exception
-    error_message = 'is not a valid building type'
+    error_message = 'is not a valid building_type'
     raise unless exception.message.include?(error_message)
     @building_type_backup = value
     self[:building_type] = nil

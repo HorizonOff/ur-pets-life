@@ -48,6 +48,9 @@ gem "mini_magick"
 gem "fog-aws"
 
 gem 'paper_trail', '~> 7.1'
+
+gem 'jquery-rails'
+gem "font-awesome-rails"
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
