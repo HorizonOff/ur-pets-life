@@ -162,3 +162,7 @@ Vet.all.each do |v|
     v.specializations << specializations.sample
   end
 end
+
+if Admin.count.zero?
+  Admin.create(email: 'ur.pets.life.project@gmail.com', password: '111111', password_confirmation: '111111')
+end
