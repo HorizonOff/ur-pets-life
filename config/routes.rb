@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  root 'application#index'
+  root 'application#login'
 
   devise_for :users, only: %i[confirmations passwords omniauth_callbacks],
                      controllers: { confirmations: 'confirmations',
