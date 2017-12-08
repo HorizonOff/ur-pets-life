@@ -1,5 +1,5 @@
 class DayCareCentreSerializer < ActiveModel::Serializer
-  type 'day_Ccre_centre'
+  type 'day_care_centre'
 
   attributes :id, :name, :picture, :address, :distance, :working_hours, :website, :service_options
   has_many :service_types do
