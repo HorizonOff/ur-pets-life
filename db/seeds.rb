@@ -123,26 +123,29 @@ if Specialization.count.zero?
   end
 end
 
-schedule_attributes = { monday_start_at: '10:00', monday_end_at: '19:30',
-                        tuesday_start_at: '10:00', tuesday_end_at: '19:30',
-                        wednesday_start_at: '10:00', wednesday_end_at: '19:30',
-                        thursday_start_at: '10:00', thursday_end_at: '19:30',
-                        friday_start_at: '10:00', friday_end_at: '19:30',
-                        saturday_start_at: '10:00', saturday_end_at: '19:30',
-                        sunday_start_at: '10:00', sunday_end_at: '19:30' }
+schedule_attributes = { monday_start_at: '11:00', monday_end_at: '19:30',
+                        tuesday_start_at: '12:00', tuesday_end_at: '19:30',
+                        wednesday_start_at: '13:00', wednesday_end_at: '19:30',
+                        thursday_start_at: '14:00', thursday_end_at: '19:30',
+                        friday_start_at: '15:00', friday_end_at: '19:30',
+                        saturday_start_at: '16:00', saturday_end_at: '19:30',
+                        sunday_start_at: '17:00', sunday_end_at: '19:30' }
 if Clinic.count.zero?
-  Clinic.create(name: 'Clininc 1', email: 'clinic1@mail.com', mobile_number: '+805050505050',
+  Clinic.create(name: 'Clinic 1', email: Faker::Internet.email, mobile_number: '+805050505050',
                 location_attributes: { longitude: 48.6208, latitude: 22.287883, city: 'Somewhere in Afrika' },
-                schedule_attributes: schedule_attributes, consultation_fee: [10, 50, 100].sample)
-  Clinic.create(name: 'Clininc 2', email: 'clinic2@mail.com', mobile_number: '+805050505051',
+                schedule_attributes: schedule_attributes, consultation_fee: rand(500))
+  Clinic.create(name: 'Clinic 2', email: Faker::Internet.email, mobile_number: '+805050505051',
                 location_attributes: { longitude: 22.711711, latitude: 48.449306, city: 'Mukachevo' },
-                schedule_attributes: schedule_attributes, consultation_fee: [10, 50, 100].sample)
+                schedule_attributes: schedule_attributes, consultation_fee: rand(500))
+  Clinic.create(name: 'Clinic 3', email: Faker::Internet.email, mobile_number: '+805050505052',
+                location_attributes: { longitude: 22.287883, latitude: 48.6208, city: 'Uzhgorod' },
+                schedule_attributes: schedule_attributes, consultation_fee: rand(500))
 end
 
 if Vet.count.zero?
   Clinic.all.each do |c|
     3.times do
-      c.vets.create(name: Faker::Name.name, email: Faker::Internet.email, consultation_fee: [10, 50, 100].sample,
+      c.vets.create(name: Faker::Name.name, email: Faker::Internet.email, consultation_fee: rand(500),
                     experience: [2, 4, 6, 8].sample)
     end
   end
@@ -165,4 +168,68 @@ end
 
 if Admin.count.zero?
   Admin.create(email: 'ur.pets.life.project@gmail.com', password: '111111', password_confirmation: '111111')
+end
+
+if ServiceOption.count.zero?
+  pick_up = ServiceOption.create(name: 'Pick Up')
+  drop_off = ServiceOption.create(name: 'Drop Off')
+else
+  pick_up = ServiceOption.find_by(name: 'Pick Up')
+  drop_off = ServiceOption.find_by(name: 'Drop Off')
+end
+
+service_options = [[pick_up], [drop_off], [pick_up, drop_off]]
+pet_types = [[dog], [cat], [cat, dog]]
+
+if GroomingCentre.count.zero?
+  GroomingCentre.create(name: 'GroomingCentre 1', email: Faker::Internet.email, mobile_number: '+805050505050',
+                        location_attributes: { longitude: 48.6208, latitude: 22.287883, city: 'Somewhere in Afrika' },
+                        schedule_attributes: schedule_attributes)
+  GroomingCentre.create(name: 'GroomingCentre 2', email: Faker::Internet.email, mobile_number: '+805050505051',
+                        location_attributes: { longitude: 22.711711, latitude: 48.449306, city: 'Mukachevo' },
+                        schedule_attributes: schedule_attributes)
+  GroomingCentre.create(name: 'GroomingCentre 3', email: Faker::Internet.email, mobile_number: '+805050505052',
+                        location_attributes: { longitude: 22.287883, latitude: 48.6208, city: 'Uzhgorod' },
+                        schedule_attributes: schedule_attributes)
+  GroomingCentre.all.each do |gs|
+    gs.service_options = service_options.sample
+    gs.pet_types = pet_types.sample
+  end
+end
+
+if DayCareCentre.count.zero?
+  DayCareCentre.create(name: 'DayCareCentre 1', email: Faker::Internet.email, mobile_number: '+805050505050',
+                       location_attributes: { longitude: 48.6208, latitude: 22.287883, city: 'Somewhere in Afrika' },
+                       schedule_attributes: schedule_attributes)
+  DayCareCentre.create(name: 'DayCareCentre 2', email: Faker::Internet.email, mobile_number: '+805050505051',
+                       location_attributes: { longitude: 22.711711, latitude: 48.449306, city: 'Mukachevo' },
+                       schedule_attributes: schedule_attributes)
+  DayCareCentre.create(name: 'DayCareCentre 3', email: Faker::Internet.email, mobile_number: '+805050505052',
+                       location_attributes: { longitude: 22.287883, latitude: 48.6208, city: 'Uzhgorod' },
+                       schedule_attributes: schedule_attributes)
+  DayCareCentre.all.each do |dcs|
+    dcs.service_options = service_options.sample
+    dcs.pet_types = pet_types.sample
+  end
+end
+
+if ServiceType.count.zero?
+  GroomingCentre.all.each do |gc|
+    gc.service_types.create(name: 'Cleaning')
+    gc.service_types.create(name: 'Hair Color')
+    gc.service_types.create(name: 'Grooming')
+  end
+  DayCareCentre.all.each do |gc|
+    gc.service_types.create(name: 'Care service 1')
+    gc.service_types.create(name: 'Care service 2')
+    gc.service_types.create(name: 'Care service 3')
+  end
+end
+
+if ServiceDetail.count.zero?
+  ServiceType.all.each do |st|
+    pet_types.sample.each do |t|
+      st.service_details.create(pet_type: t, price: rand(500))
+    end
+  end
 end

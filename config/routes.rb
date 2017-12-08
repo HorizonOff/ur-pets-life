@@ -20,6 +20,8 @@ Rails.application.routes.draw do
       resources :vaccine_types, only: :index
       resources :pet_types, only: :index
       resources :clinics, only: %i[index show]
+      resources :grooming_centres, only: %i[index show]
+      resources :day_care_centres, only: %i[index show]
       resources :vets, only: :show
 
       resources :sessions, only: :create do

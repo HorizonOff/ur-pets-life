@@ -8,7 +8,7 @@ class CreateVets < ActiveRecord::Migration[5.1]
       t.string :avatar
       t.boolean :is_active, default: false
       t.boolean :is_emergency, default: false
-      t.float :consultation_fee
+      t.integer :consultation_fee
       t.integer :experience
 
       t.timestamps

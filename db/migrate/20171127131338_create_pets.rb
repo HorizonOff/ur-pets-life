@@ -10,6 +10,9 @@ class CreatePets < ActiveRecord::Migration[5.1]
       t.integer :sex
       t.float :weight
       t.string :comment
+      t.string :avatar
+      t.boolean :is_lost, default: false
+      t.boolean :is_for_adoption, default: false
 
       t.timestamps
     end
