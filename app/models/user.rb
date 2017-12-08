@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+  include EmailCheckable
   # Include default devise modules. Others available are:
   # :rememberable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -35,8 +36,6 @@ class User < ApplicationRecord
 
   validates :facebook_id, :google_id, uniqueness: true, allow_blank: true
 
-  before_save :downcase_email, unless: ->(user) { user.email.blank? }
-
   attr_accessor :skip_password_validation
 
   has_many :sessions
@@ -50,10 +49,6 @@ class User < ApplicationRecord
   end
 
   private
-
-  def downcase_email
-    self.email = email.downcase
-  end
 
   def password_required?
     return false if skip_password_validation
