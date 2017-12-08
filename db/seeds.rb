@@ -170,6 +170,17 @@ if Admin.count.zero?
   Admin.create(email: 'ur.pets.life.project@gmail.com', password: '111111', password_confirmation: '111111')
 end
 
+if ServiceOption.count.zero?
+  pick_up = ServiceOption.create(name: 'Pick Up')
+  drop_off = ServiceOption.create(name: 'Drop Off')
+else
+  pick_up = ServiceOption.find_by(name: 'Pick Up')
+  drop_off = ServiceOption.find_by(name: 'Drop Off')
+end
+
+service_options = [[pick_up], [drop_off], [pick_up, drop_off]]
+pet_types = [[dog], [cat], [cat, dog]]
+
 if GroomingCentre.count.zero?
   GroomingCentre.create(name: 'GroomingCentre 1', email: Faker::Internet.email, mobile_number: '+805050505050',
                         location_attributes: { longitude: 48.6208, latitude: 22.287883, city: 'Somewhere in Afrika' },
@@ -180,6 +191,26 @@ if GroomingCentre.count.zero?
   GroomingCentre.create(name: 'GroomingCentre 3', email: Faker::Internet.email, mobile_number: '+805050505052',
                         location_attributes: { longitude: 22.287883, latitude: 48.6208, city: 'Uzhgorod' },
                         schedule_attributes: schedule_attributes)
+  GroomingCentre.all.each do |gs|
+    gs.service_options = service_options.sample
+    gs.pet_types = pet_types.sample
+  end
+end
+
+if DayCareCentre.count.zero?
+  DayCareCentre.create(name: 'DayCareCentre 1', email: Faker::Internet.email, mobile_number: '+805050505050',
+                       location_attributes: { longitude: 48.6208, latitude: 22.287883, city: 'Somewhere in Afrika' },
+                       schedule_attributes: schedule_attributes)
+  DayCareCentre.create(name: 'DayCareCentre 2', email: Faker::Internet.email, mobile_number: '+805050505051',
+                       location_attributes: { longitude: 22.711711, latitude: 48.449306, city: 'Mukachevo' },
+                       schedule_attributes: schedule_attributes)
+  DayCareCentre.create(name: 'DayCareCentre 3', email: Faker::Internet.email, mobile_number: '+805050505052',
+                       location_attributes: { longitude: 22.287883, latitude: 48.6208, city: 'Uzhgorod' },
+                       schedule_attributes: schedule_attributes)
+  DayCareCentre.all.each do |dcs|
+    dcs.service_options = service_options.sample
+    dcs.pet_types = pet_types.sample
+  end
 end
 
 if ServiceType.count.zero?
@@ -188,9 +219,13 @@ if ServiceType.count.zero?
     gc.service_types.create(name: 'Hair Color')
     gc.service_types.create(name: 'Grooming')
   end
+  DayCareCentre.all.each do |gc|
+    gc.service_types.create(name: 'Care service 1')
+    gc.service_types.create(name: 'Care service 2')
+    gc.service_types.create(name: 'Care service 3')
+  end
 end
 
-pet_types = [[dog], [cat], [cat, dog]]
 if ServiceDetail.count.zero?
   ServiceType.all.each do |st|
     pet_types.sample.each do |t|
@@ -198,4 +233,3 @@ if ServiceDetail.count.zero?
     end
   end
 end
-

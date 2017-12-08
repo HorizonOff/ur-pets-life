@@ -1,4 +1,4 @@
-class GroomingCentre < ApplicationRecord
+class DayCareCentre < ApplicationRecord
   validates :email, uniqueness: { case_sensitive: false, message: 'Email address is already registered' },
                     format: { with: Devise.email_regexp, message: 'Email address is invalid' },
                     length: { maximum: 50, message: 'Email address should contain not more than 50 symbols' },

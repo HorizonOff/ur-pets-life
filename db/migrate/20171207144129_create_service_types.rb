@@ -3,7 +3,7 @@ class CreateServiceTypes < ActiveRecord::Migration[5.1]
     create_table :service_types do |t|
       t.string :name
       t.text :description
-      t.references :grooming_centre, foreign_key: true
+      t.references :serviceable, polymorphic: true
 
       t.timestamps
     end
