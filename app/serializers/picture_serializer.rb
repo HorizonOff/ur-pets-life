@@ -1,5 +1,5 @@
 class PictureSerializer < ActiveModel::Serializer
-  attributes :id, :attachment_url
+  attributes :id, :picture_url
 
   def picture_url
     object.attachment.try(:url)
