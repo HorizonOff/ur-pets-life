@@ -1,22 +1,9 @@
-class ClinicSerializer < ActiveModel::Serializer
+class ClinicSerializer < ServiceCentreSerializer
   type 'clinic'
 
-  attributes :id, :name, :picture, :address, :distance, :consultation_fee, :working_hours, :website
+  attribute :consultation_fee
   has_many :vets do
     object.vets.includes(:pet_types)
-  end
-
-  def address
-    object.location.try(:address)
-  end
-
-  def working_hours
-    wday = Schedule::DAYS[Time.now.wday.to_s]
-    { open_at: object.schedule.send(wday + '_start_at'), close_at: object.schedule.send(wday + '_end_at') }
-  end
-
-  def distance
-    [nil, '15km', '2km'].sample
   end
 
   class VetSerializer < ActiveModel::Serializer
