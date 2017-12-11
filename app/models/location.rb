@@ -6,7 +6,7 @@ class Location < ApplicationRecord
   validate :building_type_should_be_valid
 
   geocoded_by :address
-  after_validation :geocode, if: ->(obj) { obj.address.present? && (obj.latitude.empty? || obj.longitude.empty?) }
+  after_validation :geocode, if: ->(obj) { obj.address.present? && (obj.latitude.blank? || obj.longitude.blank?) }
 
   def address
     address_fields = [city, area, street]

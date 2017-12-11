@@ -9,7 +9,7 @@ class VaccinationSerializer < ActiveModel::Serializer
     object.picture.try(:url)
   end
 
-  def remmove_picture
+  def remove_picture
     false
   end
 end

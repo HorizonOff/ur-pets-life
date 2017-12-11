@@ -2,7 +2,7 @@ class ServiceCentreIndexSerializer < ActiveModel::Serializer
   attributes :id, :name, :picture_url, :working_hours, :address, :distance
 
   def distance
-    object.location.distance_to([scope[:latitude], scope[:longitude]], :km).round(2) if show_distance
+    object.location.distance_to([scope[:latitude], scope[:longitude]], :km).round(2) if show_distance?
   end
 
   def working_hours
@@ -16,7 +16,7 @@ class ServiceCentreIndexSerializer < ActiveModel::Serializer
 
   private
 
-  def show_distance
+  def show_distance?
     scope[:latitude].present? && scope[:longitude].present?
   end
 end

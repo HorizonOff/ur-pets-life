@@ -19,12 +19,12 @@ class ServiceCentreSerializer < ActiveModel::Serializer
   end
 
   def distance
-    object.location.distance_to([scope[:latitude], scope[:longitude]], :km).round(2) if show_distance
+    object.location.distance_to([scope[:latitude], scope[:longitude]], :km).round(2) if show_distance?
   end
 
   private
 
-  def show_distance
+  def show_distance?
     object.location.present? && scope[:latitude].present? && scope[:longitude].present?
   end
 end

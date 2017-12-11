@@ -3,7 +3,7 @@ module Api
     class GroomingCentresController < Api::BaseController
       before_action :set_grooming_centre, only: :show
       def index
-        grooming_centres = grooming_centres_query.find_objectss(params[:latitude], params[:longitude])
+        grooming_centres = grooming_centres_query.find_objects(params[:latitude], params[:longitude])
         render json: grooming_centres, each_serializer: GroomingCentreIndexSerializer,
                scope: { latitude: params[:latitude], longitude: params[:longitude] }
       end
