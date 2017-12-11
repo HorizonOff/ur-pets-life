@@ -392,7 +392,7 @@ module Api
             key :type, :integer
             key :required, true
           end
-          response 200 do
+          response 204 do
             key :description, 'Success response'
           end
         end

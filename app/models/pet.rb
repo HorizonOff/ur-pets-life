@@ -6,8 +6,8 @@ class Pet < ApplicationRecord
   belongs_to :breed, optional: true
   belongs_to :pet_type
   has_many :vaccine_types, through: :pet_type
-  has_many :vaccinations
-  has_many :pictures
+  has_many :vaccinations, dependent: :destroy
+  has_many :pictures, dependent: :destroy
 
   accepts_nested_attributes_for :vaccinations, allow_destroy: true
   accepts_nested_attributes_for :pictures, allow_destroy: true

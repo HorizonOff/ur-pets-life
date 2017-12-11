@@ -125,6 +125,7 @@ GEM
     font-awesome-rails (4.7.0.2)
       railties (>= 3.2, < 5.2)
     formatador (0.2.5)
+    geocoder (1.4.5)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
     google-api-client (0.17.2)
@@ -404,6 +405,7 @@ DEPENDENCIES
   fb_graph2
   fog-aws
   font-awesome-rails
+  geocoder
   google-api-client (~> 0.11)
   haml-rails (~> 1.0)
   jbuilder (~> 2.5)

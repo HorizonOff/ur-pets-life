@@ -7,6 +7,10 @@ class ClinicSerializer < ServiceCentreSerializer
   end
 
   class VetSerializer < ActiveModel::Serializer
-    attributes :id, :name, :avatar, :experience, :consultation_fee, :pet_type_ids
+    attributes :id, :name, :avatar_url, :experience, :consultation_fee, :pet_type_ids
+
+    def avatar_url
+      object.avatar.try(:url)
+    end
   end
 end

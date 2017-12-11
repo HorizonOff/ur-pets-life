@@ -1,5 +1,5 @@
 class ServiceCentreSerializer < ActiveModel::Serializer
-  attributes :id, :name, :picture, :address, :distance, :working_hours, :website
+  attributes :id, :name, :picture_url, :address, :distance, :working_hours, :website
 
   def address
     object.location.try(:address)
@@ -14,7 +14,17 @@ class ServiceCentreSerializer < ActiveModel::Serializer
     { open_at: object.schedule.send(wday + '_start_at'), close_at: object.schedule.send(wday + '_end_at') }
   end
 
+  def picture_url
+    object.picture.try(:url)
+  end
+
   def distance
-    [nil, '15km', '2km'].sample
+    object.location.distance_to([scope[:latitude], scope[:longitude]], :km).round(2) if show_distance?
+  end
+
+  private
+
+  def show_distance?
+    object.location.present? && scope[:latitude].present? && scope[:longitude].present?
   end
 end
