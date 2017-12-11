@@ -30,6 +30,8 @@ module Api
         else
           render_422(parse_errors_messages(@pet))
         end
+      rescue ActiveRecord::RecordNotFound => exception
+        render_404(exception.message)
       end
 
       def destroy

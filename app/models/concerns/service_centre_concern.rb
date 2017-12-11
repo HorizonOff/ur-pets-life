@@ -27,5 +27,8 @@ module ServiceCentreConcern
     accepts_nested_attributes_for :schedule, update_only: true
 
     mount_uploader :picture, PhotoUploader
+
+    delegate :address, to: :location
+    reverse_geocoded_by 'locations.latitude', 'locations.longitude'
   end
 end
