@@ -46,6 +46,7 @@ gem 'active_model_serializers'
 gem 'carrierwave', '~> 1.0'
 gem "mini_magick"
 gem "fog-aws"
+gem 'geocoder'
 
 gem 'paper_trail', '~> 7.1'
 

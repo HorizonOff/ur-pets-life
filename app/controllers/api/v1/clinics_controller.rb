@@ -3,6 +3,7 @@ module Api
     class ClinicsController < Api::BaseController
       before_action :set_clinic, only: :show
       def index
+        binding.pry
         clinics = Clinic.all
         render json: clinics, each_serializer: ClinicIndexSerializer
       end
