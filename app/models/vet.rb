@@ -1,4 +1,5 @@
 class Vet < ApplicationRecord
+  include EmailCheckable
   validates :email, format: { with: Devise.email_regexp, message: 'Email address is invalid' },
                     length: { maximum: 50, message: 'Email address should contain not more than 50 symbols' },
                     presence: { message: 'Email adress is required' }
@@ -10,8 +11,6 @@ class Vet < ApplicationRecord
                                       too_short: 'Mobile number should contain at least 10 symbols',
                                       too_long: 'Mobile number should contain not more than 12 symbols' },
                             allow_blank: true
-  before_save :downcase_email, unless: ->(clinic) { clinic.email.blank? }
-
   has_and_belongs_to_many :specializations
   has_and_belongs_to_many :pet_types
   has_many :qualifications
@@ -20,10 +19,4 @@ class Vet < ApplicationRecord
   accepts_nested_attributes_for :qualifications, allow_destroy: true
 
   mount_uploader :avatar, PhotoUploader
-
-  private
-
-  def downcase_email
-    self.email = email.downcase
-  end
 end
