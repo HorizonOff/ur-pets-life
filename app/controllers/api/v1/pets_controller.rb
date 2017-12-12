@@ -3,7 +3,7 @@ module Api
     class PetsController < Api::BaseController
       include ParamsCleanerHelper
       before_action :set_pet, except: %i[index create]
-      before_action :clear_pet_params, only: %i[create update]
+      before_action :clear_pet_params, only: :update
 
       def index
         pets = @user.pets
