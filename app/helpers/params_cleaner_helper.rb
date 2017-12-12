@@ -9,7 +9,7 @@ module ParamsCleanerHelper
   def clear_user_params
     return unless params[:user]
     user_params = params[:user]
-    user_params.delete(:facebook_id) if user_params[:facebook_if].blank?
+    user_params.delete(:facebook_id) if user_params[:facebook_id].blank?
     user_params.delete(:google_id) if user_params[:google_id].blank?
   end
 
