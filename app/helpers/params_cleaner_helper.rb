@@ -15,7 +15,7 @@ module ParamsCleanerHelper
 
   private
 
-  def check_params(pet_params,  model)
+  def check_params(pet_params, model)
     present_ids = @pet.send(model + '_ids')
     params_ids = retrieve_ids(pet_params[model + 's_attributes'])
     ids_for_destroy = present_ids - params_ids
