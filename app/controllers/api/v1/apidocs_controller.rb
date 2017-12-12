@@ -30,6 +30,7 @@ module Api
         Api::V1::Pets,
         Api::V1::Breeds,
         Api::V1::VaccineTypes,
+        Api::V1::Emergencies,
         Api::V1::Clinics,
         Api::V1::GroomingCentres,
         Api::V1::DayCareCentres,
