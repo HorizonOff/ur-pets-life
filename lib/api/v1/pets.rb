@@ -2,29 +2,118 @@ module Api
   module V1
     class Pets < ActionController::Base
       include Swagger::Blocks
-
-      swagger_schema :VaccinationInput do
-        property :vaccine_type_id do
-          key :type, :integer
-        end
-        property :done_at do
-          key :type, :integer
-        end
-      end
-      swagger_schema :VaccinationUpdate do
+      swagger_schema :Picture do
         property :id do
           key :type, :integer
+          key :example, 10
         end
-        property :vaccine_type_id do
-          key :type, :integer
-        end
-        property :done_at do
-          key :type, :datetime
-        end
-        property :_destroy do
-          key :type, :boolean
+        property :picture_url do
+          key :type, :string
         end
       end
+
+      swagger_schema :WeightHistories do
+        property :weight_histories do
+          items do
+            property :date do
+              key :type, :string
+              key :example, '2017-12-12T11:13:40Z'
+            end
+            property :weight do
+              key :type, :number
+              key :example, 2
+            end
+          end
+        end
+      end
+      swagger_schema :Pet do
+        property :pet do
+          property :id do
+            key :type, :integer
+            key :example, 10
+          end
+          property :avatar_url do
+            key :type, :string
+          end
+          property :name do
+            key :type, :string
+            key :example, 'Pluto'
+          end
+          property :birthday do
+            key :type, :string
+            key :example, '2017-12-12T11:13:40Z'
+          end
+          property :sex do
+            key :type, :integer
+            key :example, 0
+          end
+          property :weight do
+            key :type, :number
+            key :example, 2.0
+          end
+          property :comment do
+            key :type, :string
+          end
+          property :pet_type_id do
+            key :type, :integer
+            key :example, 2
+          end
+          property :additional_type do
+            key :type, :string
+            key :description, 'If pet_type_id - 3 - other'
+          end
+          property :is_lost do
+            key :type, :boolean
+            key :example, false
+          end
+          property :is_for_adoption do
+            key :type, :boolean
+          end
+          property :breed do
+            property :id do
+              key :type, :integer
+              key :example, 1
+            end
+            property :name do
+              key :type, :string
+              key :example, 'Doberman'
+            end
+          end
+          property :vaccine_types do
+            items do
+              key :'$ref', :VaccineType
+            end
+          end
+          property :pictures do
+            items do
+              key :'$ref', :Picture
+            end
+          end
+        end
+      end
+
+      swagger_schema :Pets do
+        property :pets do
+          items do
+            property :id do
+              key :type, :integer
+              key :example, 10
+            end
+            property :avatar_url do
+              key :type, :string
+            end
+            property :name do
+              key :type, :string
+              key :example, 'Pluto'
+            end
+            property :birthday do
+              key :type, :string
+              key :example, '2017-12-12T11:13:40Z'
+            end
+          end
+        end
+      end
+
 
       swagger_path '/pets' do
         operation :get do
@@ -39,6 +128,9 @@ module Api
 
           response 200 do
             key :description, 'Success response'
+            schema do
+              key :'$ref', :Pets
+            end
           end
         end
 
@@ -64,7 +156,7 @@ module Api
             key :in, :formData
             key :required, true
             key :type, :string
-            key :example, Time.now.utc.iso8601
+            key :example, '2017-12-12T11:13:40Z'
           end
           parameter do
             key :name, 'pet[pet_type_id]'
@@ -90,15 +182,15 @@ module Api
             key :name, 'pet[sex]'
             key :in, :formData
             key :type, :string
-            key :example, 'male'
-            key :description, "male/female"
+            key :example, '0'
+            key :description, "male = 0/female = 1"
           end
           parameter do
             key :name, 'pet[weight]'
             key :in, :formData
             key :type, :number
             key :required, true
-            key :examlpe, 2.0
+            key :example, 2.0
           end
           parameter do
             key :name, 'pet[comment]'
@@ -123,7 +215,7 @@ module Api
             key :name, 'pet[vaccinations_attributes][0][done_at]'
             key :in, :formData
             key :type, :string
-            key :example, Time.now.utc.iso8601
+            key :example, '2017-12-12T11:13:40Z'
           end
           parameter do
             key :name, 'pet[vaccinations_attributes][0][picture]'
@@ -140,7 +232,7 @@ module Api
             key :name, 'pet[vaccinations_attributes][1][done_at]'
             key :in, :formData
             key :type, :string
-            key :example, Time.now.utc.iso8601
+            key :example, '2017-12-12T11:13:40Z'
           end
           parameter do
             key :name, 'pet[vaccinations_attributes][1][picture]'
@@ -185,6 +277,9 @@ module Api
 
           response 200 do
             key :description, 'Success response'
+            schema do
+              key :'$ref', :Pet
+            end
           end
         end
 
@@ -217,7 +312,7 @@ module Api
             key :in, :formData
             key :required, true
             key :type, :string
-            key :example, Time.now.utc.iso8601
+            key :example, '2017-12-12T11:13:40Z'
           end
           parameter do
             key :name, 'pet[additional_type]'
@@ -236,8 +331,8 @@ module Api
             key :name, 'pet[sex]'
             key :in, :formData
             key :type, :string
-            key :example, 'male'
-            key :description, "male/female"
+            key :example, '0'
+            key :description, "male = 0/female = 1"
           end
           parameter do
             key :name, 'pet[weight]'
@@ -276,7 +371,7 @@ module Api
             key :name, 'pet[vaccinations_attributes][0][done_at]'
             key :in, :formData
             key :type, :string
-            key :example, Time.now.utc.iso8601
+            key :example, '2017-12-12T11:13:40Z'
           end
           parameter do
             key :name, 'pet[vaccinations_attributes][0][picture]'
@@ -285,12 +380,13 @@ module Api
             key :description, 'Send file only if you need to update it'
           end
           parameter do
-            key :name, 'pet[vaccinations_attributes][0][_destroy]'
+            key :name, 'pet[vaccinations_attributes][0][remove_picture]'
             key :in, :formData
             key :type, :boolean
             key :example, false
-            key :description, 'TRUE if you want remove vaccination'
+            key :description, 'TRUE if you want remove picture'
           end
+
           parameter do
             key :name, 'pet[vaccinations_attributes][1][vaccine_type_id]'
             key :in, :formData
@@ -302,7 +398,7 @@ module Api
             key :name, 'pet[vaccinations_attributes][1][done_at]'
             key :in, :formData
             key :type, :string
-            key :example, Time.now.utc.iso8601
+            key :example, '2017-12-12T11:13:40Z'
           end
           parameter do
             key :name, 'pet[vaccinations_attributes][1][picture]'
@@ -314,16 +410,10 @@ module Api
           parameter do
             key :name, 'pet[pictures_attributes][0][id]'
             key :in, :formData
-            key :type, :file
-            key :description, 'Required if you want delete picture'
+            key :type, :integer
+            key :description, 'Required if you want leave picture'
           end
-          parameter do
-            key :name, 'pet[pictures_attributes][0][_destroy]'
-            key :in, :formData
-            key :type, :boolean
-            key :example, false
-            key :description, 'TRUE if you want delete picture'
-          end
+
           parameter do
             key :name, 'pet[pictures_attributes][1][attachment]'
             key :in, :formData
@@ -417,6 +507,9 @@ module Api
 
           response 200 do
             key :description, 'Success response'
+            schema do
+              key :'$ref', :WeightHistories
+            end
           end
         end
       end
