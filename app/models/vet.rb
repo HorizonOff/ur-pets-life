@@ -11,12 +11,19 @@ class Vet < ApplicationRecord
                                       too_short: 'Mobile number should contain at least 10 symbols',
                                       too_long: 'Mobile number should contain not more than 12 symbols' },
                             allow_blank: true
+
   has_and_belongs_to_many :specializations
   has_and_belongs_to_many :pet_types
   has_many :qualifications
+  has_one :location, as: :place, inverse_of: :place
+
   belongs_to :clinic
 
   accepts_nested_attributes_for :qualifications, allow_destroy: true
+  accepts_nested_attributes_for :location, update_only: true
 
   mount_uploader :avatar, PhotoUploader
+
+  delegate :address, to: :location
+  reverse_geocoded_by 'locations.latitude', 'locations.longitude'
 end

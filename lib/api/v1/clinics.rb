@@ -18,14 +18,14 @@ module Api
             key :name, :longitude
             key :in, :query
             key :type, :number
-            key :example, 48.6208
+            key :example, 22.287883
           end
 
           parameter do
             key :name, :latitude
             key :in, :query
             key :type, :number
-            key :example, 22.287883
+            key :example, 48.6208
           end
 
           parameter do
@@ -63,14 +63,14 @@ module Api
             key :name, :longitude
             key :in, :query
             key :type, :number
-            key :example, 48.6208
+            key :example, 22.287883
           end
 
           parameter do
             key :name, :latitude
             key :in, :query
             key :type, :number
-            key :example, 22.287883
+            key :example, 48.6208
           end
 
           parameter do
