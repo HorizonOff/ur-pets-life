@@ -14,8 +14,4 @@ class PictureUrlSerializer < ActiveModel::Serializer
   def remove_picture
     false
   end
-
-  def atachment_url
-    object.atachment.try(:url)
-  end
 end
