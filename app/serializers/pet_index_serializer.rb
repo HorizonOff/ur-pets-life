@@ -1,7 +1,7 @@
-class PetIndexSerializer < ActiveModel::Serializer
+class PetIndexSerializer < PictureUrlSerializer
   type 'pet'
 
-  attributes :id, :name, :birthday, :avatar
+  attributes :id, :name, :birthday, :avatar_url
 
   def birthday
     object.birthday.utc.iso8601

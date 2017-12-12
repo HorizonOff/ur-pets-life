@@ -1,4 +1,4 @@
-class ServiceCentreIndexSerializer < ActiveModel::Serializer
+class ServiceCentreIndexSerializer < PictureUrlSerializer
   attributes :id, :name, :picture_url, :working_hours, :address, :distance
 
   def distance
@@ -8,10 +8,6 @@ class ServiceCentreIndexSerializer < ActiveModel::Serializer
   def working_hours
     wday = Schedule::DAYS[Time.now.wday.to_s]
     { open_at: object.schedule.send(wday + '_start_at'), close_at: object.schedule.send(wday + '_end_at') }
-  end
-
-  def picture_url
-    object.picture.try(:url)
   end
 
   private

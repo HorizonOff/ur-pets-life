@@ -14,10 +14,6 @@ class ServiceCentreSerializer < ActiveModel::Serializer
     { open_at: object.schedule.send(wday + '_start_at'), close_at: object.schedule.send(wday + '_end_at') }
   end
 
-  def picture_url
-    object.picture.try(:url)
-  end
-
   def distance
     object.location.distance_to([scope[:latitude], scope[:longitude]], :km).round(2) if show_distance?
   end
