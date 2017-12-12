@@ -19,6 +19,7 @@ module ParamsCleanerHelper
     present_ids = @pet.send(model + '_ids')
     params_ids = retrieve_ids(pet_params[model + 's_attributes'])
     ids_for_destroy = present_ids - params_ids
+    pet_params[model + 's_attributes'] ||= {}
     fill_params_with_ids(ids_for_destroy, pet_params[model + 's_attributes'])
   end
 
@@ -29,7 +30,6 @@ module ParamsCleanerHelper
 
   def fill_params_with_ids(ids_for_destroy, attributes_for_destroy)
     return if ids_for_destroy.blank?
-    attributes_for_destroy ||= {}
     ids_for_destroy.each_with_index do |id, index|
       new_key = (Time.now.to_i + index).to_s
       attributes_for_destroy[new_key] = {}
