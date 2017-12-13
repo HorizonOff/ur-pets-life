@@ -1,5 +1,5 @@
 class ServiceCentreSerializer < ActiveModel::Serializer
-  attributes :id, :name, :picture_url, :address, :distance, :working_hours, :website
+  attributes :id, :name, :picture_url, :address, :distance, :working_hours, :website, :email, :mobile_number
 
   def address
     object.location.try(:address)

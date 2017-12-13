@@ -1,6 +1,7 @@
 module Api
   module V1
     class ClinicsController < Api::BaseController
+      skip_before_action :authenticate_user
       before_action :set_clinic, only: :show
 
       def index
