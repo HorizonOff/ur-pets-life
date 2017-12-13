@@ -1,7 +1,9 @@
 module Api
   module V1
     class GroomingCentresController < Api::BaseController
+      skip_before_action :authenticate_user
       before_action :set_grooming_centre, only: :show
+
       def index
         grooming_centres = grooming_centres_query.find_objects(params[:latitude], params[:longitude])
         render json: grooming_centres, each_serializer: GroomingCentreIndexSerializer,
@@ -9,7 +11,8 @@ module Api
       end
 
       def show
-        render json: @grooming_centre, include: 'service_types,service_types.service_details'
+        render json: @grooming_centre, scope: { latitude: params[:latitude], longitude: params[:longitude] },
+               include: 'service_types,service_types.service_details'
       end
 
       private

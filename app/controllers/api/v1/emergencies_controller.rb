@@ -1,6 +1,8 @@
 module Api
   module V1
     class EmergenciesController < Api::BaseController
+      skip_before_action :authenticate_user
+
       def index
         latitude = params[:latitude]
         longitude = params[:longitude]

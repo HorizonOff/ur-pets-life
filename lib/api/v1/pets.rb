@@ -26,7 +26,7 @@ module Api
           end
         end
       end
-      swagger_schema :Pet do
+      swagger_schema :PetResponse do
         property :pet do
           property :id do
             key :type, :integer
@@ -92,7 +92,7 @@ module Api
         end
       end
 
-      swagger_schema :Pets do
+      swagger_schema :PetsResponse do
         property :pets do
           items do
             property :id do
@@ -129,7 +129,7 @@ module Api
           response 200 do
             key :description, 'Success response'
             schema do
-              key :'$ref', :Pets
+              key :'$ref', :PetsResponse
             end
           end
         end
@@ -278,7 +278,7 @@ module Api
           response 200 do
             key :description, 'Success response'
             schema do
-              key :'$ref', :Pet
+              key :'$ref', :PetResponse
             end
           end
         end

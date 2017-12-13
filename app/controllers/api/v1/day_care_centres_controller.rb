@@ -1,7 +1,9 @@
 module Api
   module V1
     class DayCareCentresController < Api::BaseController
+      skip_before_action :authenticate_user
       before_action :set_day_care_centre, only: :show
+
       def index
         day_care_centres = day_care_centres_query.find_objects(params[:latitude], params[:longitude])
         render json: day_care_centres, each_serializer: DayCareCentreIndexSerializer,
@@ -9,7 +11,8 @@ module Api
       end
 
       def show
-        render json: @day_care_centre, include: 'service_types,service_types.service_details'
+        render json: @day_care_centre, scope: { latitude: params[:latitude], longitude: params[:longitude] },
+               include: 'service_types,service_types.service_details'
       end
 
       private

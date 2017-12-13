@@ -4,7 +4,7 @@ class EmergencySerializer < ActiveModel::Serializer
   attribute :distance
 
   def type
-    object.class.to_s
+    object.class.name
   end
 
   def address
