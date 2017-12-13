@@ -41,6 +41,21 @@ module Api
         end
       end
 
+      swagger_schema :VaccineTypesResponse do
+        property :vaccine_types do
+          items do
+            property :id do
+              key :type, :integer
+              key :example, 1
+            end
+            property :name do
+              key :type, :string
+              key :example, 'Leukemia'
+            end
+          end
+        end
+      end
+
       swagger_path '/vaccine_types' do
         operation :get do
           key :description, 'Get available types of vaccine for pet'
@@ -63,6 +78,9 @@ module Api
 
           response 200 do
             key :description, 'Success response'
+            schema do
+              key :'$ref', :VaccineTypesResponse
+            end
           end
         end
       end

@@ -3,16 +3,89 @@ module Api
     class GroomingCentres < ActionController::Base
       include Swagger::Blocks
 
+      swagger_schema :GroomingCentresResponse do
+        property :grooming_centres do
+          items do
+            property :id do
+              key :type, :integer
+              key :example, 1
+            end
+            property :name do
+              key :type, :string
+              key :example, 'Grooming centre 1'
+            end
+            property :picture_url do
+              key :type, :string
+            end
+            property :working_hours do
+              key :'$ref', :WorkingHours
+            end
+            property :address do
+              key :type, :string
+              key :example, 'Uzhgorod'
+            end
+            property :distance do
+              key :type, :number
+              key :example, 34
+            end
+          end
+        end
+      end
+
+      swagger_schema :GroomingCentreResponse do
+        property :grooming_centre do
+          property :id do
+            key :type, :integer
+            key :example, 1
+          end
+          property :name do
+            key :type, :string
+            key :example, 'Grooming centre 1'
+          end
+          property :picture_url do
+            key :type, :string
+          end
+          property :working_hours do
+            key :'$ref', :WorkingHours
+          end
+          property :address do
+            key :type, :string
+            key :example, 'Uzhgorod'
+          end
+          property :distance do
+            key :type, :number
+            key :example, 34
+          end
+          property :mobile_number do
+            key :type, :string
+            key :example, '+3805050505050'
+          end
+          property :email do
+            key :type, :string
+            key :example, 'grooming1@mail.com'
+          end
+          property :website do
+            key :type, :string
+            key :example, 'www.website.com'
+          end
+          property :service_options do
+            key :type, :array
+            key :example, ['Drop off']
+          end
+          property :service_types do
+            items do
+              key :'$ref', :ServiceType
+            end
+          end
+        end
+      end
+
       swagger_path '/grooming_centres' do
         operation :get do
           key :description, 'Get grooming centres'
           key :consumes, %w[application/json]
           key :produces, %w[application/json]
           key :tags, %W[Grooming\ Centres]
-
-          security do
-            key :api_key, []
-          end
 
           parameter do
             key :name, :longitude
@@ -37,6 +110,9 @@ module Api
 
           response 200 do
             key :description, 'Success response'
+            schema do
+              key :'$ref', :GroomingCentresResponse
+            end
           end
         end
       end
@@ -47,10 +123,6 @@ module Api
           key :consumes, %w[application/json]
           key :produces, %w[application/json]
           key :tags, %W[Grooming\ Centres]
-
-          security do
-            key :api_key, []
-          end
 
           parameter do
             key :name, :id
@@ -83,6 +155,9 @@ module Api
 
           response 200 do
             key :description, 'Success response'
+            schema do
+              key :'$ref', :GroomingCentreResponse
+            end
           end
         end
       end

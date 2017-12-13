@@ -3,6 +3,21 @@ module Api
     class Breeds < ActionController::Base
       include Swagger::Blocks
 
+      swagger_schema :BreedsResponse do
+        property :breeds do
+          items do
+            property :id do
+              key :type, :integer
+              key :example, 1
+            end
+            property :name do
+              key :type, :string
+              key :example, 'American Bobtail'
+            end
+          end
+        end
+      end
+
       swagger_path '/breeds' do
         operation :get do
           key :description, 'Get available pet breeds'
@@ -25,6 +40,9 @@ module Api
 
           response 200 do
             key :description, 'Success response'
+            schema do
+              key :'$ref', :BreedsResponse
+            end
           end
         end
       end
