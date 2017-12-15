@@ -40,6 +40,7 @@ class User < ApplicationRecord
 
   has_many :sessions
   has_many :pets
+  has_many :appointments
   has_one :location, as: :place, inverse_of: :place
 
   accepts_nested_attributes_for :location, update_only: true

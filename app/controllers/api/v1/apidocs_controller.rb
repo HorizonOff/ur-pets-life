@@ -35,6 +35,7 @@ module Api
         Api::V1::GroomingCentres,
         Api::V1::DayCareCentres,
         Api::V1::Vets,
+        Api::V1::Appointments,
         Api::V1::PetTypes,
         self
       ].freeze

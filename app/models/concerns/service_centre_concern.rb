@@ -17,6 +17,7 @@ module ServiceCentreConcern
                                         too_short: 'Mobile number should contain at least 10 symbols',
                                         too_long: 'Mobile number should contain not more than 12 symbols' },
                               allow_blank: true
+    has_many :appointments, as: :bookable
 
     has_and_belongs_to_many :pet_types
 
