@@ -16,7 +16,7 @@ module Api
       end
 
       def create
-        pet = @user.pets.new(pets_params)
+        pet = @user.pets.new(pet_params)
         if pet.save
           render json: { message: 'Pet created successfully' }
         else
@@ -25,7 +25,7 @@ module Api
       end
 
       def update
-        if @pet.update(pets_params.except(:pet_type_id))
+        if @pet.update(pet_params.except(:pet_type_id))
           render json: { message: 'Pet updated successfully' }
         else
           render_422(parse_errors_messages(@pet))
@@ -50,7 +50,7 @@ module Api
         return render_404 unless @pet
       end
 
-      def pets_params
+      def pet_params
         params.require(:pet).permit(:avatar, :name, :birthday, :sex, :pet_type_id, :breed_id, :additional_type, :weight,
                                     :comment, :is_lost, :is_for_adoption,
                                     pictures_attributes: %i[id attachment _destroy],

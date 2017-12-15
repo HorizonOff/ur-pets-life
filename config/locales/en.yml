@@ -30,4 +30,12 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  activerecord:
+    errors:
+      models:
+        appointment:
+          attributes:
+            bookable:
+              required: "Object for booking is required"
+            pet:
+              required: 'Pet is required'
