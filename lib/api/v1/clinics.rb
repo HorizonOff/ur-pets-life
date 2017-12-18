@@ -97,7 +97,7 @@ module Api
 
       swagger_path '/clinics' do
         operation :get do
-          key :description, 'Get clinics'
+          key :description, 'Get clinics. All params are not required'
           key :consumes, %w[application/json]
           key :produces, %w[application/json]
           key :tags, %w[Clinics]
@@ -121,6 +121,13 @@ module Api
             key :in, :query
             key :type, :integer
             key :example, 3
+          end
+
+          parameter do
+            key :name, :page
+            key :in, :query
+            key :type, :integer
+            key :example, 1
           end
 
           response 200 do

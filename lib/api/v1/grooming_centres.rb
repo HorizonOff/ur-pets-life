@@ -82,7 +82,7 @@ module Api
 
       swagger_path '/grooming_centres' do
         operation :get do
-          key :description, 'Get grooming centres'
+          key :description, 'Get grooming centres. All params are not required'
           key :consumes, %w[application/json]
           key :produces, %w[application/json]
           key :tags, %W[Grooming\ Centres]
@@ -106,6 +106,13 @@ module Api
             key :in, :query
             key :type, :integer
             key :example, 3
+          end
+
+          parameter do
+            key :name, :page
+            key :in, :query
+            key :type, :integer
+            key :example, 1
           end
 
           response 200 do

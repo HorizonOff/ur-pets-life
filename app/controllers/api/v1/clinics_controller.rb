@@ -5,9 +5,13 @@ module Api
       before_action :set_clinic, only: :show
 
       def index
-        clinics = clinics_query.find_objects(params[:latitude], params[:longitude])
-        render json: clinics, each_serializer: ClinicIndexSerializer,
-               scope: { latitude: params[:latitude], longitude: params[:longitude] }
+        clinics = clinics_query.find_objects
+        serialized_clinics = ActiveModel::Serializer::CollectionSerializer.new(
+          clinics, serializer: ClinicIndexSerializer,
+                   scope: { latitude: params[:latitude], longitude: params[:longitude] }
+        )
+
+        render json: { clinics: serialized_clinics, total_count: clinics.total_count }
       end
 
       def show
@@ -22,7 +26,7 @@ module Api
       end
 
       def clinics_query
-        @clinics_query ||= ::Api::V1::LocationBasedQuery.new(Clinic.all)
+        @clinics_query ||= ::Api::V1::LocationBasedQuery.new(Clinic.all, params)
       end
     end
   end
