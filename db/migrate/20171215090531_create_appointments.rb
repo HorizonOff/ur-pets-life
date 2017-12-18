@@ -7,6 +7,7 @@ class CreateAppointments < ActiveRecord::Migration[5.1]
       t.references :vet, foreign_key: true
       t.string :comment
       t.datetime :booked_at
+      t.integer :status
 
       t.timestamps
     end

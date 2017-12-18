@@ -4,8 +4,16 @@ module Api
       before_action :set_appointment, except: %i[index create]
 
       def index
-        appointments = @user.appointments
-        render json: appointments, each_serializer: AppointmentIndexSerializer
+        appointments = appointments_pagination_query.find_objects
+        serialized_appointments = ActiveModel::Serializer::CollectionSerializer.new(
+          appointments, serializer: AppointmentIndexSerializer,
+                        scope: { latitude: params[:latitude], longitude: params[:longitude] }
+        )
+
+        render json: {
+          appointments: serialized_appointments,
+          total_count: appointments.total_count
+        }
       end
 
       def show
@@ -37,6 +45,11 @@ module Api
 
       def appointment_params
         params.require(:appointment).permit(:bookable_type, :bookable_id, :vet_id, :booked_at, :pet_id, :comment)
+      end
+
+      def appointments_pagination_query
+        @appointments_pagination_query ||= ::Api::V1::AppointmentsPaginationQuery.new(@user.appointments,
+                                                                                      params[:page], params[:past])
       end
     end
   end

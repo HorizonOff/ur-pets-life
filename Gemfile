@@ -52,6 +52,7 @@ gem 'paper_trail', '~> 7.1'
 
 gem 'jquery-rails'
 gem "font-awesome-rails"
+gem 'kaminari'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
