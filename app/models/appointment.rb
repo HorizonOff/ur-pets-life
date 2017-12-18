@@ -7,6 +7,9 @@ class Appointment < ApplicationRecord
   validates :booked_at, presence: { message: 'Date and time are required' }
   validate :vet_id_should_be_vaild, :pet_id_should_be_valid
 
+  scope :past, -> { where('booked_at < ?', Time.now).order(booked_at: :desc) }
+  scope :upcoming, -> { where('booked_at > ?', Time.now).order(booked_at: :asc) }
+
   private
 
   def vet_id_should_be_vaild

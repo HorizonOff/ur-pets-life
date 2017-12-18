@@ -31,5 +31,7 @@ module ServiceCentreConcern
 
     delegate :address, to: :location
     reverse_geocoded_by 'locations.latitude', 'locations.longitude'
+
+    scope :alphabetical_order, -> { order(name: :asc) }
   end
 end
