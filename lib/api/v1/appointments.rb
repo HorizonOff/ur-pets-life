@@ -145,6 +145,53 @@ module Api
           end
         end
       end
+
+      swagger_path '/pets/{id}/health_history' do
+        operation :get do
+          key :description, 'Show pet health history'
+          key :consumes, %w[application/json]
+          key :produces, %w[application/json]
+          key :tags, %w[Pets]
+
+          security do
+            key :api_key, []
+          end
+          parameter do
+            key :name, :id
+            key :in, :path
+            key :type, :integer
+            key :required, true
+            key :example, 1
+          end
+          parameter do
+            key :name, :longitude
+            key :in, :query
+            key :type, :number
+            key :example, 22.287883
+          end
+
+          parameter do
+            key :name, :latitude
+            key :in, :query
+            key :type, :number
+            key :example, 48.6208
+          end
+
+          parameter do
+            key :name, :time_zone
+            key :in, :query
+            key :type, :integer
+            key :example, 3
+          end
+
+          response 200 do
+            key :description, 'Success response'
+            schema do
+              key :'$ref', :AppointmentsResponse
+            end
+          end
+        end
+      end
     end
   end
 end

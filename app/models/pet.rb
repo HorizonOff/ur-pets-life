@@ -8,6 +8,8 @@ class Pet < ApplicationRecord
   has_many :vaccine_types, through: :pet_type
   has_many :vaccinations, dependent: :destroy
   has_many :pictures, dependent: :destroy
+  has_many :appointments, dependent: :destroy
+  has_many :past_clinic_appointments, -> { where(bookable_type: 'Clinic').past }, class_name: Appointment
 
   accepts_nested_attributes_for :vaccinations, allow_destroy: true
   accepts_nested_attributes_for :pictures, allow_destroy: true
