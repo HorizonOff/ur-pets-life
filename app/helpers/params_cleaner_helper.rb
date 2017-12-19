@@ -2,6 +2,7 @@ module ParamsCleanerHelper
   def clear_pet_params
     pet_params = params[:pet]
     return unless pet_params
+    pet_params.delete(:breed_id) if pet_params[:breed_id].blank?
     check_params(pet_params, 'vaccination') if @pet.try(:vaccination_ids)
     check_params(pet_params, 'picture') if @pet.try(:picture_ids)
   end
