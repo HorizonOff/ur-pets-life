@@ -8,7 +8,7 @@ module Api
       end
 
       def find_objects
-        appointments = if past
+        appointments = if past == 'true'
                          scope.past
                        else
                          scope.upcoming

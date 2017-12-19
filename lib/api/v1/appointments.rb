@@ -63,6 +63,32 @@ module Api
         end
       end
 
+      swagger_schema :AppointmentResponse do
+        property :appointment do
+          property :id do
+            key :type, :integer
+            key :example, 10
+          end
+           property :bookable_at do
+            key :type, :string
+            key :example, "2017-12-15T14:36:44.000Z"
+          end
+          property :picture_url do
+            key :type, :string
+          end
+          property :adress do
+            key :type, :string
+          end
+          property :distance do
+            key :type, :number
+            key :example, 34.57
+          end
+          property :working_hours do
+            key :'$ref', :WorkingHours
+          end
+        end
+      end
+
       swagger_path '/appointments' do
         operation :post do
           key :description, 'Create an appointment'
@@ -183,11 +209,57 @@ module Api
             key :type, :integer
             key :example, 3
           end
+          parameter do
+            key :name, :page
+            key :in, :query
+            key :type, :integer
+            key :example, 1
+          end
 
           response 200 do
             key :description, 'Success response'
             schema do
               key :'$ref', :AppointmentsResponse
+            end
+          end
+        end
+      end
+
+      swagger_path '/appointments/{id}' do
+        operation :get do
+          key :description, 'Show appointment'
+          key :consumes, %w[application/json]
+          key :produces, %w[application/json]
+          key :tags, %w[Appointments]
+
+          security do
+            key :api_key, []
+          end
+          parameter do
+            key :name, :id
+            key :in, :path
+            key :type, :integer
+            key :required, true
+            key :example, 1
+          end
+
+          parameter do
+            key :name, :longitude
+            key :in, :query
+            key :type, :number
+            key :example, 22.287883
+          end
+          parameter do
+            key :name, :latitude
+            key :in, :query
+            key :type, :number
+            key :example, 48.6208
+          end
+
+          response 200 do
+            key :description, 'Success response'
+            schema do
+              key :'$ref', :AppointmentResponse
             end
           end
         end

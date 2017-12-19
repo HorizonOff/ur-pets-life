@@ -26,7 +26,7 @@ Rails.application.routes.draw do
       resources :day_care_centres, only: %i[index show]
       resources :emergencies, only: :index
       resources :vets, only: :show
-      resources :appointments, only: %i[index create]
+      resources :appointments, only: %i[index create show]
 
       resources :sessions, only: :create do
         collection { post :facebook }
