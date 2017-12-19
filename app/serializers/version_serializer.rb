@@ -1,5 +1,5 @@
 class VersionSerializer < ActiveModel::Serializer
-  type 'weight_history'
+  type 'weight'
   attribute :created_at, key: :date do
     object.created_at.utc.iso8601
   end

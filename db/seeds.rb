@@ -105,10 +105,12 @@ if VaccineType.count.zero?
 end
 
 if User.count.zero?
-  User.create(first_name: 'Bruce', last_name: 'Wayne', email: 'wayne@enterprise.com',
-              password: '111111', password_confirmation: '111111', confirmed_at: Time.now)
+  user = User.create(first_name: 'Bruce', last_name: 'Wayne', email: 'wayne@enterprise.com',
+                     password: '111111', password_confirmation: '111111', confirmed_at: Time.now)
   User.create(first_name: 'Barry', last_name: 'Allen', email: 'barry@enterprise.com',
               password: '111111', password_confirmation: '111111', confirmed_at: Time.now)
+else
+  user = User.first
 end
 
 specializations = %W[Anesthesia Animal\ Welfare Behavior Dentistry Dermatology Emergency\ and\ Critical\ Care
@@ -236,6 +238,49 @@ if ServiceDetail.count.zero?
   ServiceType.all.each do |st|
     pet_types.sample.each do |t|
       st.service_details.create(pet_type: t, price: rand(500))
+    end
+  end
+end
+
+pet = Pet.count.zero? ? user.pets.create(name: Tom, pet_type_id: 1, breed_id: 205) : Pet.first
+
+if Appointment.count.zero?
+  Clinic.all.each do |c|
+    11.times do
+      user.appointments.create(bookable: c, vet_id: c.vet_ids.sample, booked_at: rand(1.month.ago..1.month.since),
+                               pet: pet)
+    end
+  end
+  DayCareCentre.all.each do |c|
+    11.times do
+      user.appointments.create(bookable: c, booked_at: rand(1.month.ago..1.month.since), pet: pet)
+    end
+  end
+  DayCareCentre.all.each do |c|
+    11.times do
+      user.appointments.create(bookable: c, booked_at: rand(1.month.ago..1.month.since), pet: pet)
+    end
+  end
+end
+
+if Diagnosis.count.zero?
+  past_clinic_appointments = Appointment.for_clinic.past
+  past_clinic_appointments.each do |a|
+    a.create_diagnosis(condition: 'norm condition',
+                       message: "sdfds ef ewf ewfo kewpofkopwekfpo kpowekfpwekf pweokrpwk pwerkewpkr
+                                 pewkrpewkr pewkpewkrpwekr pwkerpewkr pwekr pekrpewkrpewkpwkr pwekrpwekr
+                                 pwekr pwerkpewkrpw kpwerpwekr",
+                       next_appointment_id: past_clinic_appointments.pluck(:id).sample)
+  end
+end
+
+if Recipe.count.zero?
+  first_instruction = 'ssdas dwewqe qwe wqe wqe qwe qwe eqe qweqweawdas qwe'
+  second_instruction = 'kfldgdfkl fkdlgmklfdmg dgdfkmg 234v erkgmferlk m'
+  resipes = [[first_instruction], [second_instruction], [first_instruction, second_instruction]]
+  Diagnosis.all.each do |d|
+    resipes.sample.each do |instr|
+      d.recipes.create(instruction: instr)
     end
   end
 end

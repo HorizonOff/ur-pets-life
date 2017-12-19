@@ -39,10 +39,6 @@ module Api
         render json: { nothing: true }, status: 204
       end
 
-      def weight_history
-        render json: @pet.versions
-      end
-
       private
 
       def set_pet

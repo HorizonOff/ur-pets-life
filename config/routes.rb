@@ -13,9 +13,11 @@ Rails.application.routes.draw do
         collection { get :profile }
       end
       put 'users', to: 'users#update'
-      resources :pets, except: %i[new edit] do
-        member { get :weight_history }
-      end
+
+      get 'pets/:id/health_history', to: 'health_history#index'
+      get 'pets/:id/weight_history', to: 'weight_history#index'
+      resources :pets, except: %i[new edit]
+
       resources :breeds, only: :index
       resources :vaccine_types, only: :index
       resources :pet_types, only: :index
@@ -24,7 +26,7 @@ Rails.application.routes.draw do
       resources :day_care_centres, only: %i[index show]
       resources :emergencies, only: :index
       resources :vets, only: :show
-      resources :appointments, only: %i[index create]
+      resources :appointments, only: %i[index create show]
 
       resources :sessions, only: :create do
         collection { post :facebook }

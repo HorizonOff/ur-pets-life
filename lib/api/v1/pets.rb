@@ -12,20 +12,6 @@ module Api
         end
       end
 
-      swagger_schema :WeightHistories do
-        property :weight_histories do
-          items do
-            property :date do
-              key :type, :string
-              key :example, '2017-12-12T11:13:40Z'
-            end
-            property :weight do
-              key :type, :number
-              key :example, 2
-            end
-          end
-        end
-      end
       swagger_schema :PetResponse do
         property :pet do
           property :id do
@@ -461,7 +447,6 @@ module Api
             end
           end
 
-
           response 200 do
             key :description, 'Success response'
           end
@@ -484,32 +469,6 @@ module Api
           end
           response 204 do
             key :description, 'Success response'
-          end
-        end
-      end
-
-      swagger_path '/pets/{id}/weight_history' do
-        operation :get do
-          key :description, 'Show pet weight history'
-          key :consumes, %w[application/json]
-          key :produces, %w[application/json]
-          key :tags, %w[Pets]
-
-          security do
-            key :api_key, []
-          end
-          parameter do
-            key :name, :id
-            key :in, :path
-            key :type, :integer
-            key :required, true
-          end
-
-          response 200 do
-            key :description, 'Success response'
-            schema do
-              key :'$ref', :WeightHistories
-            end
           end
         end
       end

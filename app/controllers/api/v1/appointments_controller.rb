@@ -17,7 +17,7 @@ module Api
       end
 
       def show
-        render json: @appointment
+        render json: @appointment, scope: { latitude: params[:latitude], longitude: params[:longitude] }
       end
 
       def create
