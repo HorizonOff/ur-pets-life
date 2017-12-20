@@ -10,7 +10,7 @@ class AppointmentIndexSerializer < ActiveModel::Serializer
   end
 
   def distance
-    object.bookable.location.distance_to([scope[:latitude], scope[:longitude]], :km).round(2) if show_distance?
+    object.bookable.location.distance_to([scope[:latitude], scope[:longitude]], :km).try(:round, 2) if show_distance?
   end
 
   def working_hours
