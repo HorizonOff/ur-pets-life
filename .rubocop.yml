@@ -27,6 +27,7 @@ AllCops:
    - config/application.rb
    - config/puma.rb
    - db/schema.rb
+   - db/seeds.rb
    - db/migrate/*
    - bin/setup
    - lib/api/v1/*
