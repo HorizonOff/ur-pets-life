@@ -40,6 +40,7 @@ gem 'dotenv-rails'
 gem 'swagger-blocks'
 gem 'rubocop', '~> 0.51.0', require: false
 gem 'devise'
+gem 'devise_invitable', '~> 1.7.0'
 gem 'haml-rails', '~> 1.0'
 gem 'active_model_serializers'
 
