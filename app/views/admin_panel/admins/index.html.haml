@@ -1,0 +1,31 @@
+%div
+  .page-title
+    .title_left
+      %h3 Admins 
+    .title_right
+      = link_to 'Invite admin', new_admin_invitation_path, class: 'btn btn-info btn-round pull-right'
+
+  .clearfix
+
+  .row
+    .col-md-.col-sm-12.col-xs-12
+      .x_panel
+        .x_content
+          %table.table
+            %thead
+              %tr
+                %th #
+                %th Name
+                %th Email
+                %th Types
+                %th Actions
+            %tbody
+              - @admins.each do |admin|
+                %tr
+                  %th{ scope: 'row' } #{admin.id}
+                  %td #{admin.name}
+                  %td #{admin.email}
+                  %td
+                    asdasdad
+                  %td
+                    sdsadsasasasas
