@@ -302,8 +302,10 @@ Vet.all.each do |v|
 end
 
 if Admin.count.zero?
-  Admin.create(email: 'ur.pets.life.project@gmail.com', password: '111111', password_confirmation: '111111')
-  Admin.create(email: 'admin@example.com', password: '111111', password_confirmation: '111111')
+  Admin.create(email: 'ur.pets.life.project@gmail.com', password: '111111', password_confirmation: '111111',
+               is_super_admin: true)
+  Admin.create(email: 'admin@example.com', password: '111111', password_confirmation: '111111',
+               is_super_admin: true)
 end
 
 if ServiceOption.count.zero?
