@@ -15,17 +15,18 @@
             %thead
               %tr
                 %th #
+                %th Avatar
                 %th Name
                 %th Email
-                %th Types
                 %th Actions
             %tbody
               - @admins.each do |admin|
                 %tr
                   %th{ scope: 'row' } #{admin.id}
+                  %td
+                    -if admin.avatar.present?
+                      =image_tag(admin.avatar.thumb.url)
                   %td #{admin.name}
                   %td #{admin.email}
-                  %td
-                    asdasdad
                   %td
                     sdsadsasasasas

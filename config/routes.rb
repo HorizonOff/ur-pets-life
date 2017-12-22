@@ -5,7 +5,6 @@ Rails.application.routes.draw do
                      controllers: { confirmations: 'confirmations',
                                     passwords: 'passwords',
                                     omniauth_callbacks: 'omniauth_callbacks' }
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   namespace :api do
     namespace :v1 do
       resources :apidocs, only: :index
@@ -45,6 +44,7 @@ Rails.application.routes.draw do
   devise_for :admins, path: 'admin_panel/admins', except: :registrations
   namespace :admin_panel do
     resources :admins, except: :create
-    get '/', to: 'dashboard#index'
+    resource :profile, only: %i[edit update]
+    resource :password, only: %i[edit update]
   end
 end
