@@ -20,7 +20,7 @@ class Pet < ApplicationRecord
   validates_presence_of :additional_type, message: 'Type is required', if: :additiona_type_required?
 
   validate :sex_should_be_valid, :breed_should_be_valid
-  validates :avatar, file_size: { less_than: 1.megabytes }
+  validates :avatar, file_size: { less_than: 1.megabyte }
   mount_uploader :avatar, PhotoUploader
 
   has_paper_trail only: [:weight], skip: [:avatar]
