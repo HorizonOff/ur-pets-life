@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
-  root 'application#login'
-
+  root 'admin_panel/dashboard#index'
+  get '/login', to: 'application#login'
   devise_for :users, only: %i[confirmations passwords omniauth_callbacks],
                      controllers: { confirmations: 'confirmations',
                                     passwords: 'passwords',
@@ -44,8 +44,7 @@ Rails.application.routes.draw do
 
   devise_for :admins, path: 'admin_panel/admins', except: :registrations
   namespace :admin_panel do
-    root 'dashboard#index'
-    resources :admins
+    resources :admins, except: :create
     get '/', to: 'dashboard#index'
   end
 end

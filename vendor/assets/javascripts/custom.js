@@ -195,12 +195,6 @@ $(document).ready(function() {
 // /Switchery
 
 
-// iCheck
-$(document).ready(function() {
-    init_icheck()
-});
-// /iCheck
-
 // Table
 $('table input').on('ifChecked', function () {
     checkState = '';
@@ -5008,11 +5002,6 @@ if (typeof NProgress != 'undefined') {
 	   
 		}  
 	   
-	   
-	$(document).ready(function() {
-		init_all_functions()
-	});	
-	
 	function init_all_functions(){
 		init_sparklines();
 		init_flot_chart();
