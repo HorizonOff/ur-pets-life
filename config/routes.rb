@@ -45,6 +45,7 @@ Rails.application.routes.draw do
   devise_for :admins, path: 'admin_panel/admins', except: :registrations
   namespace :admin_panel do
     root 'dashboard#index'
+    resources :admins
     get '/', to: 'dashboard#index'
   end
 end

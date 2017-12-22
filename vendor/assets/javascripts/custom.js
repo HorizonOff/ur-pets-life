@@ -197,14 +197,7 @@ $(document).ready(function() {
 
 // iCheck
 $(document).ready(function() {
-    if ($("input.flat")[0]) {
-        $(document).ready(function () {
-            $('input.flat').iCheck({
-                checkboxClass: 'icheckbox_flat-green',
-                radioClass: 'iradio_flat-green'
-            });
-        });
-    }
+    init_icheck()
 });
 // /iCheck
 
@@ -5017,7 +5010,10 @@ if (typeof NProgress != 'undefined') {
 	   
 	   
 	$(document).ready(function() {
-				
+		init_all_functions()
+	});	
+	
+	function init_all_functions(){
 		init_sparklines();
 		init_flot_chart();
 		init_sidebar();
@@ -5052,7 +5048,4 @@ if (typeof NProgress != 'undefined') {
 		init_CustomNotification();
 		init_autosize();
 		init_autocomplete();
-				
-	});	
-	
-
+	}

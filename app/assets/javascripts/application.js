@@ -15,6 +15,22 @@
 //= require turbolinks
 //= require bootstrap.min
 //= require custom
+//= require icheck.min
 
 //= require_self
 //= require_tree .
+
+$(document).on('turbolinks:load', function() {
+  init_all_functions()
+});
+$(document).on('turbolinks:load', function() {
+	init_icheck();
+});	
+function init_icheck(){
+  if ($("input.flat")[0]) {
+    $('input.flat').iCheck({
+      checkboxClass: 'icheckbox_flat-green',
+      radioClass: 'iradio_flat-green'
+    });
+  }
+}

@@ -1,0 +1,22 @@
+%div
+  .login_wrapper
+    .form.login_form
+      %section.login_content.invitation
+        = form_for resource, :as => resource_name, :url => invitation_path(resource_name), :html => { :method => :put } do |f|
+          %h1 Edit profile
+          = devise_error_messages!
+          = f.hidden_field :invitation_token
+
+          %div
+            = f.text_field :name, autocomplete: 'off', class: 'form-control', placeholder: 'Name', required: true
+          %div
+            = f.label :avatar
+            %br
+            = f.file_field :avatar, class: 'form-control'
+          %br
+          %div
+            = f.password_field :password, autocomplete: 'off', class: 'form-control', placeholder: 'Password', required: true
+          %div
+            = f.password_field :password_confirmation, autocomplete: 'off', class: 'form-control', placeholder: 'Password confirmation', required: true
+          %div
+            = f.submit "Finish registration", class: 'btn btn-success'
