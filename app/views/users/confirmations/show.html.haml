@@ -1,0 +1,8 @@
+%div
+  .login_wrapper
+    .form.login_form
+      %section.login_content.password
+        -if resource.persisted?
+          %h2 User is confirmed
+        -else
+          %h2 Confirmation token is invalid
