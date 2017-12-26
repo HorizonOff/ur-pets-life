@@ -1,8 +1,8 @@
 module Api
   module V1
-    class Adoptions < ActionController::Base
+    class LostAndFounds < ActionController::Base
       include Swagger::Blocks
-      swagger_schema :AdoptionResponse do
+      swagger_schema :LostAndFoundResponse do
         property :pet do
           property :id do
             key :type, :integer
@@ -15,38 +15,8 @@ module Api
             key :type, :string
             key :example, 'Pluto'
           end
-          property :birthday do
-            key :type, :string
-            key :example, '2017-12-12T11:13:40Z'
-          end
-          property :sex do
-            key :type, :integer
-            key :example, 0
-          end
-          property :weight do
-            key :type, :number
-            key :example, 2.0
-          end
           property :comment do
             key :type, :string
-          end
-          property :pet_type_id do
-            key :type, :integer
-            key :example, 2
-          end
-          property :additional_type do
-            key :type, :string
-            key :description, 'If pet_type_id - 3 - other'
-          end
-          property :breed do
-            property :id do
-              key :type, :integer
-              key :example, 1
-            end
-            property :name do
-              key :type, :string
-              key :example, 'Doberman'
-            end
           end
           property :mobile_number do
             key :type, :string
@@ -60,15 +30,10 @@ module Api
             key :type, :number
             key :example, 34
           end
-          property :vaccine_types do
-            items do
-              key :'$ref', :VaccineType
-            end
-          end
         end
       end
 
-      swagger_schema :AdoptionsResponse do
+      swagger_schema :LostAndFoundsResponse do
         property :pets do
           items do
             property :id do
@@ -82,10 +47,6 @@ module Api
               key :type, :string
               key :example, 'Pluto'
             end
-            property :birthday do
-              key :type, :string
-              key :example, '2017-12-12T11:13:40Z'
-            end
             property :pet_type_id do
               key :type, :integer
               key :example, 2
@@ -98,17 +59,25 @@ module Api
               key :type, :number
               key :example, 34
             end
+            property :lost_at do
+              key :type, :string
+              key :example, '2017-12-12T11:13:40Z'
+            end
+            property :found_at do
+              key :type, :string
+              key :example, nil
+            end
           end
         end
       end
 
 
-      swagger_path '/adoptions' do
+      swagger_path '/lost_and_founds' do
         operation :get do
-          key :description, 'Get all pets for adoption'
+          key :description, 'Get all lost or found pets'
           key :consumes, %w[application/json]
           key :produces, %w[application/json]
-          key :tags, %w[Adoptions]
+          key :tags, %W[Lost\ and\ Found]
 
           parameter do
             key :name, :longitude
@@ -125,6 +94,12 @@ module Api
           end
 
           parameter do
+            key :name, :found
+            key :in, :query
+            key :type, :boolean
+          end
+
+          parameter do
             key :name, :page
             key :in, :query
             key :type, :integer
@@ -134,19 +109,19 @@ module Api
           response 200 do
             key :description, 'Success response'
             schema do
-              key :'$ref', :AdoptionsResponse
+              key :'$ref', :LostAndFoundsResponse
             end
           end
         end
       end
 
 
-      swagger_path '/adoptions/{id}' do
+      swagger_path '/lost_and_founds/{id}' do
         operation :get do
-          key :description, 'Show pet for adoption'
+          key :description, 'Show lost or found pet'
           key :consumes, %w[application/json]
           key :produces, %w[application/json]
-          key :tags, %w[Adoptions]
+          key :tags, %W[Lost\ and\ Found]
 
           parameter do
             key :name, :id
@@ -171,18 +146,18 @@ module Api
           response 200 do
             key :description, 'Success response'
             schema do
-              key :'$ref', :AdoptionResponse
+              key :'$ref', :LostAndFoundResponse
             end
           end
         end
       end
 
-      swagger_path '/pets/can_be_adopted' do
+      swagger_path '/pets/can_be_lost' do
         operation :get do
-          key :description, 'Get list of users pets that can be given for adoption'
+          key :description, 'Get list of users pets that can be lost'
           key :consumes, %w[application/json]
           key :produces, %w[application/json]
-          key :tags, %w[Pets Adoptions]
+          key :tags, %w[Pets Lost\ and\ Found]
 
           security do
             key :api_key, []

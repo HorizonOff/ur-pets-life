@@ -104,11 +104,17 @@ if VaccineType.count.zero?
   VaccineType.create(name: 'Deworming', pet_types: [cat, dog, other])
 end
 
+afrika = { longitude: 48.6208, latitude: 22.287883, city: 'Somewhere in Afrika' }
+mukachevo = { longitude: 22.711711, latitude: 48.449306, city: 'Mukachevo' }
+uzhgorod = { longitude: 22.287883, latitude: 48.6208, city: 'Uzhgorod' }
+
 if User.count.zero?
   user = User.create(first_name: 'Bruce', last_name: 'Wayne', email: 'user1@mail.com',
-                     password: '111111', password_confirmation: '111111', confirmed_at: Time.now)
+                     password: '111111', password_confirmation: '111111', confirmed_at: Time.now,
+                     location_attributes: uzhgorod)
   User.create(first_name: 'Tony', last_name: 'Stark', email: 'user2@mail.com',
-              password: '111111', password_confirmation: '111111', confirmed_at: Time.now)
+              password: '111111', password_confirmation: '111111', confirmed_at: Time.now,
+              location_attributes: mukachevo)
 else
   user = User.first
 end
@@ -133,9 +139,6 @@ schedule_attributes = { monday_start_at: '11:00', monday_end_at: '19:30',
                         saturday_start_at: '16:00', saturday_end_at: '19:30',
                         sunday_start_at: '17:00', sunday_end_at: '19:30' }
 
-afrika = { longitude: 48.6208, latitude: 22.287883, city: 'Somewhere in Afrika' }
-mukachevo = { longitude: 22.711711, latitude: 48.449306, city: 'Mukachevo' }
-uzhgorod = { longitude: 22.287883, latitude: 48.6208, city: 'Uzhgorod' }
 clinics = [{ name: 'ABVC', email: 'info@abvc.ae', location_attributes: { city: 'Al Barsha' } },
            { name: 'Blue Oasis', mobile_number: '04-8848580', email: 'office@blueoasispetcare.com',
              location_attributes: { city: 'Dubai Investment Park (Green Community)' } },
@@ -393,7 +396,9 @@ if Trainer.count.zero?
 end
 
 pet = if Pet.count.zero?
-        user.pets.create(name: 'Tom', sex: 1, birthday: '2017-01-01T14:36:44.000Z', pet_type_id: 1, breed_id: 205)
+        user.pets.create(name: 'Tom', sex: 1, birthday: '2017-01-01T14:36:44.000Z', pet_type_id: 1, breed_id: 205, is_for_adoption: true)
+        user.pets.create(name: 'Pluto', sex: 1, birthday: '2017-01-01T14:36:44.000Z', pet_type_id: 2, breed_id: 3, is_lost: true)
+        user.pets.create(name: 'Jerry', sex: 0, birthday: '2017-01-01T14:36:44.000Z', pet_type_id: 3, additional_type: 'Mouse', is_found: true)
       else
         Pet.first
       end
