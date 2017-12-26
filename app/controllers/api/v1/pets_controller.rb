@@ -48,7 +48,7 @@ module Api
 
       def pet_params
         params.require(:pet).permit(:avatar, :name, :birthday, :sex, :pet_type_id, :breed_id, :additional_type, :weight,
-                                    :comment, :is_lost, :is_for_adoption,
+                                    :comment, :is_lost, :is_found, :is_for_adoption,
                                     pictures_attributes: %i[id attachment _destroy],
                                     vaccinations_attributes: %i[id vaccine_type_id done_at
                                                                 picture remove_picture _destroy])

@@ -11,6 +11,9 @@ class Pet < ApplicationRecord
   has_many :appointments, dependent: :destroy
   has_many :past_clinic_appointments, -> { where(bookable_type: 'Clinic').past }, class_name: Appointment
 
+  has_one :location, through: :user
+  reverse_geocoded_by 'locations.latitude', 'locations.longitude'
+
   accepts_nested_attributes_for :vaccinations, allow_destroy: true
   accepts_nested_attributes_for :pictures, allow_destroy: true
 
@@ -25,6 +28,10 @@ class Pet < ApplicationRecord
 
   has_paper_trail only: [:weight], skip: [:avatar]
 
+  scope :alphabetical_order, -> { order(name: :asc) }
+  scope :for_adoption, -> { where(is_for_adoption: true, lost_at: nil) }
+  scope :lost, -> { where.not(lost_at: nil) }
+
   def sex=(value)
     value = value.to_i if value.in?(%w[0 1])
     super value
@@ -34,6 +41,18 @@ class Pet < ApplicationRecord
     raise unless exception.message.include?(error_message)
     @sex_backup = value
     self[:sex] = nil
+  end
+
+  def is_lost=(value)
+    if value || value == 'true'
+      self.lost_at ||= Time.now
+    else
+      self.lost_at = nil
+    end
+  end
+
+  def is_lost
+    lost_at.present?
   end
 
   def pet_type_is_additional?

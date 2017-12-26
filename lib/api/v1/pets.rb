@@ -48,9 +48,9 @@ module Api
             key :type, :string
             key :description, 'If pet_type_id - 3 - other'
           end
-          property :lost_at do
-            key :type, :string
-            key :example, '2017-12-12T11:13:40Z'
+          property :is_lost do
+            key :type, :boolean
+            key :example, true
           end
           property :is_for_adoption do
             key :type, :boolean
