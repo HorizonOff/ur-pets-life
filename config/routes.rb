@@ -23,6 +23,7 @@ Rails.application.routes.draw do
       resources :clinics, only: %i[index show]
       resources :grooming_centres, only: %i[index show]
       resources :day_care_centres, only: %i[index show]
+      resources :trainers, only: %i[index show]
       resources :emergencies, only: :index
       resources :vets, only: :show
       resources :appointments, only: %i[index create show]

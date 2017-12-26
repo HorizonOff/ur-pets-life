@@ -15,6 +15,15 @@ module Api
         objects.includes(:location, :schedule).page(params[:page])
       end
 
+      def find_trainers
+        objects = if params[:latitude].present? && params[:longitude].present?
+                    objects_by_location_attributes
+                  else
+                    all_objects
+                  end
+        objects.includes(:location).page(params[:page])
+      end
+
       private
 
       attr_reader :scope, :params

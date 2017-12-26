@@ -364,6 +364,7 @@ if ServiceType.count.zero?
   end
 end
 
+
 if ServiceDetail.count.zero?
   ServiceType.all.each do |st|
     pet_types.sample.each do |t|
@@ -371,6 +372,26 @@ if ServiceDetail.count.zero?
     end
   end
 end
+
+if Trainer.count.zero?
+  Trainer.create(name: 'Trainer 1', email: Faker::Internet.email, mobile_number: '+805050505050',
+                 experience: [2, 4, 6, 8].sample, location_attributes: afrika)
+  Trainer.create(name: 'Trainer 2', email: Faker::Internet.email, mobile_number: '+805050505051',
+                 experience: [2, 4, 6, 8].sample, location_attributes: mukachevo)
+  Trainer.create(name: 'Trainer 3', email: Faker::Internet.email, mobile_number: '+805050505052',
+                 experience: [2, 4, 6, 8].sample, location_attributes: uzhgorod)
+  specialiation = Specialization.create(name: 'Dog trainer', is_for_trainer: true)
+  Trainer.all.each do |t|
+    t.pet_types = pet_types.sample
+    t.specializations << specialiation
+    [1, 2].sample.times do
+      t.qualifications.create(diploma: 'Animals Care Diploma', university: 'Mumbai Universuty')
+    end
+    t.service_types.create(name: 'Half Day training')
+    t.service_types.create(name: 'Full day training')
+  end
+end
+
 pet = if Pet.count.zero?
         user.pets.create(name: 'Tom', sex: 1, birthday: '2017-01-01T14:36:44.000Z', pet_type_id: 1, breed_id: 205)
       else

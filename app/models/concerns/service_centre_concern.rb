@@ -22,10 +22,7 @@ module ServiceCentreConcern
     has_and_belongs_to_many :pet_types
 
     has_one :location, as: :place, inverse_of: :place
-    has_one :schedule, as: :schedulable, inverse_of: :schedulable
-
     accepts_nested_attributes_for :location, update_only: true
-    accepts_nested_attributes_for :schedule, update_only: true
 
     mount_uploader :picture, PhotoUploader
 
