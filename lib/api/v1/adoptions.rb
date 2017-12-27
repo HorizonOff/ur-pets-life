@@ -65,6 +65,11 @@ module Api
               key :'$ref', :VaccineType
             end
           end
+          property :pictures do
+            items do
+              key :'$ref', :Picture
+            end
+          end
         end
       end
 
