@@ -2,7 +2,7 @@ module Api
   module V1
     class PetsController < Api::BaseController
       include ParamsCleanerHelper
-      before_action :set_pet, except: %i[index create]
+      before_action :set_pet, only: %i[show update destroy]
       before_action :clear_pet_params, only: :update
 
       def index
@@ -39,6 +39,16 @@ module Api
         render json: { nothing: true }, status: 204
       end
 
+      def can_be_lost
+        pets = @user.pets.can_be_lost
+        render json: pets, each_serializer: PetIndexSerializer
+      end
+
+      def can_be_adopted
+        pets = @user.pets.can_be_adopted
+        render json: pets, each_serializer: PetIndexSerializer
+      end
+
       private
 
       def set_pet
@@ -48,7 +58,7 @@ module Api
 
       def pet_params
         params.require(:pet).permit(:avatar, :name, :birthday, :sex, :pet_type_id, :breed_id, :additional_type, :weight,
-                                    :comment, :is_lost, :is_for_adoption,
+                                    :comment, :is_lost, :is_found, :is_for_adoption,
                                     pictures_attributes: %i[id attachment _destroy],
                                     vaccinations_attributes: %i[id vaccine_type_id done_at
                                                                 picture remove_picture _destroy])

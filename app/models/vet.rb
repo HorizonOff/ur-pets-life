@@ -14,7 +14,7 @@ class Vet < ApplicationRecord
 
   has_and_belongs_to_many :specializations
   has_and_belongs_to_many :pet_types
-  has_many :qualifications
+  has_many :qualifications, as: :skill
   has_one :location, as: :place, inverse_of: :place
 
   belongs_to :clinic

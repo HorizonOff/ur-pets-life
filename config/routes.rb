@@ -15,7 +15,10 @@ Rails.application.routes.draw do
 
       get 'pets/:id/health_history', to: 'health_history#index'
       get 'pets/:id/weight_history', to: 'weight_history#index'
-      resources :pets, except: %i[new edit]
+      resources :pets, except: %i[new edit] do
+        collection { get :can_be_lost }
+        collection { get :can_be_adopted }
+      end
 
       resources :breeds, only: :index
       resources :vaccine_types, only: :index
@@ -23,7 +26,10 @@ Rails.application.routes.draw do
       resources :clinics, only: %i[index show]
       resources :grooming_centres, only: %i[index show]
       resources :day_care_centres, only: %i[index show]
+      resources :trainers, only: %i[index show]
       resources :emergencies, only: :index
+      resources :adoptions, only: %i[index show]
+      resources :lost_and_founds, only: %i[index show]
       resources :vets, only: :show
       resources :appointments, only: %i[index create show]
 

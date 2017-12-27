@@ -34,8 +34,11 @@ module Api
         Api::V1::Clinics,
         Api::V1::GroomingCentres,
         Api::V1::DayCareCentres,
+        Api::V1::Trainers,
         Api::V1::Vets,
         Api::V1::Weights,
+        Api::V1::Adoptions,
+        Api::V1::LostAndFounds,
         Api::V1::Appointments,
         Api::V1::PetTypes,
         self

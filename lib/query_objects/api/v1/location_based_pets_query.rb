@@ -1,21 +1,12 @@
 module Api
   module V1
-    class LocationBasedQuery
+    class LocationBasedPetsQuery
       def initialize(scope, params)
         @scope = scope
         @params = params
       end
 
       def find_objects
-        objects = if params[:latitude].present? && params[:longitude].present?
-                    objects_by_location_attributes
-                  else
-                    all_objects
-                  end
-        objects.includes(:location, :schedule).page(params[:page])
-      end
-
-      def find_trainers
         objects = if params[:latitude].present? && params[:longitude].present?
                     objects_by_location_attributes
                   else

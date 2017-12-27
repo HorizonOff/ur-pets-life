@@ -35,3 +35,7 @@ AllCops:
    - config/initializers/devise.rb
 Style/FrozenStringLiteralComment:
   Enabled: false
+Style/PredicateName:
+  Enabled: true
+  Exclude:
+    - app/models/pet.rb

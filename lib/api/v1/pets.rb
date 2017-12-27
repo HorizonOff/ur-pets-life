@@ -50,7 +50,7 @@ module Api
           end
           property :is_lost do
             key :type, :boolean
-            key :example, false
+            key :example, true
           end
           property :is_for_adoption do
             key :type, :boolean

@@ -1,6 +1,10 @@
 class ServiceCentreIndexSerializer < PictureUrlSerializer
   attributes :id, :name, :picture_url, :working_hours, :address, :distance
 
+  def address
+    object.location.try(:address)
+  end
+
   def distance
     object.location.distance_to([scope[:latitude], scope[:longitude]], :km).try(:round, 2) if show_distance?
   end
