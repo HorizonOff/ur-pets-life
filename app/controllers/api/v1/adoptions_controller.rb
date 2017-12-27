@@ -16,7 +16,7 @@ module Api
 
       def show
         render json: @pet, serializer: AdoptionSerializer,
-               include: 'breed,vaccine_types,vaccinations,vaccine_types.vaccinations',
+               include: 'breed,vaccine_types,vaccinations,vaccine_types.vaccinations,pictures',
                scope: { pet_vaccinations: pet_vaccinations, latitude: params[:latitude], longitude: params[:longitude] }
       end
 
