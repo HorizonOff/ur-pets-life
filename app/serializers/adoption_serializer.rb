@@ -7,6 +7,9 @@ class AdoptionSerializer < PictureUrlSerializer
   belongs_to :breed, unless: -> { object.pet_type_is_additional? }
   attribute :additional_type, if: -> { object.pet_type_is_additional? }
   has_many :vaccine_types
+  has_many :pictures do
+    object.pictures || []
+  end
 
   def mobile_number
     object.user.mobile_number

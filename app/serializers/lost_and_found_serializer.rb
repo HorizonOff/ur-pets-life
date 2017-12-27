@@ -3,6 +3,10 @@ class LostAndFoundSerializer < PictureUrlSerializer
 
   attributes :id, :name, :avatar_url, :address, :distance, :lost_at, :found_at, :comment
 
+  has_many :pictures do
+    object.pictures || []
+  end
+
   def birthday
     object.birthday.utc.iso8601
   end

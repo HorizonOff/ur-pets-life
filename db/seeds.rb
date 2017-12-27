@@ -395,13 +395,30 @@ if Trainer.count.zero?
   end
 end
 
+pets_pictures = %w[cat_1.jpg cat_2.png dog_1.jpg dog_2.png other_1.jpg other_2.png]
+
 pet = if Pet.count.zero?
-        user.pets.create(name: 'Tom', sex: 1, birthday: '2017-01-01T14:36:44.000Z', pet_type_id: 1, breed_id: 205, is_for_adoption: true)
-        user.pets.create(name: 'Pluto', sex: 1, birthday: '2017-01-01T14:36:44.000Z', pet_type_id: 2, breed_id: 3, is_lost: true)
-        user.pets.create(name: 'Jerry', sex: 0, birthday: '2017-01-01T14:36:44.000Z', pet_type_id: 3, additional_type: 'Mouse', is_found: true)
+        user.pets.create(name: 'Tom', sex: 1, birthday: '2017-01-01T14:36:44.000Z', pet_type_id: 1, breed_id: 205,
+                         is_for_adoption: true,
+                         avatar: File.open(File.join(Rails.root, 'public', 'images', 'cat_1.jpg')))
+        user.pets.create(name: 'Pluto', sex: 1, birthday: '2017-01-01T14:36:44.000Z', pet_type_id: 2, breed_id: 3,
+                         is_lost: true,
+                         avatar: File.open(File.join(Rails.root, 'public', 'images', 'dog_1.jpg')))
+        user.pets.create(name: 'Jerry', sex: 0, birthday: '2017-01-01T14:36:44.000Z', pet_type_id: 3,
+                         additional_type: 'Bird', is_found: true,
+                         avatar: File.open(File.join(Rails.root, 'public', 'images', 'other_1.jpg')))
       else
         Pet.first
       end
+
+if Picture.count.zero?
+  Pet.all.each do |p|
+    rand(1..6).times do
+      p.pictures.create(attachment: File.open(File.join(Rails.root, 'public', 'images', pets_pictures.sample)))
+    end
+  end
+end
+
 if Appointment.count.zero?
   Clinic.all.each do |c|
     3.times do
