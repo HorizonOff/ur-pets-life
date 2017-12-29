@@ -4,7 +4,7 @@ class Appointment < ApplicationRecord
   belongs_to :pet
   belongs_to :vet, optional: true
 
-  has_one :diagnosis
+  has_one :diagnosis, dependent: :destroy
 
   validates :booked_at, presence: { message: 'Date and time are required' }
   validate :vet_id_should_be_vaild, :pet_id_should_be_valid

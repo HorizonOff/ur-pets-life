@@ -1,0 +1,16 @@
+%div
+  .page-title
+    .title_left
+      %h3 Edit clinic
+
+  .clearfix
+  
+  = form_for @clinic, url: admin_panel_clinic_path(@clinic),
+  html: { multipart: true, method: :put, class: 'form-horizontal form-label-left', autocomplete: 'off'} do |f|
+
+    = render partial: 'form', locals: { f: f }
+
+    = f.submit 'Update clinic', class: 'btn btn-success pull-right'
+
+:javascript
+  init_map();

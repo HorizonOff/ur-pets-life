@@ -1,0 +1,61 @@
+.col-md-6.col-sm-6.col-xs-12
+  .x_panel
+    .x_title
+      %h2 Working hours
+      .clearfix
+    .x_content
+      %br
+      = f.fields_for :schedule do |ff|
+        .form-group
+          = ff.label :day_and_night, 'Open 24/7', class: 'control-label col-md-3 col-sm-3 col-xs-12'
+          .col-md-9.col-sm-9.col-xs-12
+            = ff.check_box :day_and_night, class: 'flat day_and_night'
+        .form-group
+          = ff.label :monday_open_at, 'Monday open', class: 'control-label col-md-3 col-sm-3 col-xs-12'
+          .col-md-3.col-sm-3.col-xs-12
+            = ff.text_field :monday_open_at, class: 'form-control timepicker open'
+          = ff.label :monday_close_at, 'Monday close', class: 'control-label col-md-3 col-sm-3 col-xs-12'
+          .col-md-3.col-sm-3.col-xs-12
+            = ff.text_field :monday_close_at, class: 'form-control timepicker close_time'
+        .form-group
+          = ff.label :tuesday_open_at, 'Tuesday open', class: 'control-label col-md-3 col-sm-3 col-xs-12'
+          .col-md-3.col-sm-3.col-xs-12
+            = ff.text_field :tuesday_open_at, class: 'form-control timepicker open'
+          = ff.label :tuesday_close_at, 'Tuesday close', class: 'control-label col-md-3 col-sm-3 col-xs-12'
+          .col-md-3.col-sm-3.col-xs-12
+            = ff.text_field :tuesday_close_at, class: 'form-control timepicker close_time'
+        .form-group
+          = ff.label :wednesday_open_at, 'Wednesday open', class: 'control-label col-md-3 col-sm-3 col-xs-12'
+          .col-md-3.col-sm-3.col-xs-12
+            = ff.text_field :wednesday_open_at, class: 'form-control timepicker open'
+          = ff.label :wednesday_close_at, 'Wednesday close', class: 'control-label col-md-3 col-sm-3 col-xs-12'
+          .col-md-3.col-sm-3.col-xs-12
+            = ff.text_field :wednesday_close_at, class: 'form-control timepicker close_time'
+        .form-group
+          = ff.label :thursday_open_at, 'Thursday open', class: 'control-label col-md-3 col-sm-3 col-xs-12'
+          .col-md-3.col-sm-3.col-xs-12
+            = ff.text_field :thursday_open_at, class: 'form-control timepicker open'
+          = ff.label :thursday_close_at, 'Thursday close', class: 'control-label col-md-3 col-sm-3 col-xs-12'
+          .col-md-3.col-sm-3.col-xs-12
+            = ff.text_field :thursday_close_at, class: 'form-control timepicker close_time'
+        .form-group
+          = ff.label :friday_open_at, 'Friday open', class: 'control-label col-md-3 col-sm-3 col-xs-12'
+          .col-md-3.col-sm-3.col-xs-12
+            = ff.text_field :friday_open_at, class: 'form-control timepicker open'
+          = ff.label :friday_close_at, 'Friday close', class: 'control-label col-md-3 col-sm-3 col-xs-12'
+          .col-md-3.col-sm-3.col-xs-12
+            = ff.text_field :friday_close_at, class: 'form-control timepicker close_time'
+        .form-group
+          = ff.label :saturday_open_at, 'Saturday open', class: 'control-label col-md-3 col-sm-3 col-xs-12'
+          .col-md-3.col-sm-3.col-xs-12
+            = ff.text_field :saturday_open_at, class: 'form-control timepicker open'
+          = ff.label :saturday_close_at, 'Saturday close', class: 'control-label col-md-3 col-sm-3 col-xs-12'
+          .col-md-3.col-sm-3.col-xs-12
+            = ff.text_field :saturday_close_at, class: 'form-control timepicker close_time'
+        .form-group
+          = ff.label :sunday_open_at, 'Sunday open', class: 'control-label col-md-3 col-sm-3 col-xs-12'
+          .col-md-3.col-sm-3.col-xs-12
+            = ff.text_field :sunday_open_at, class: 'form-control timepicker open'
+          = ff.label :sunday_close_at, 'Sunday close', class: 'control-label col-md-3 col-sm-3 col-xs-12'
+          .col-md-3.col-sm-3.col-xs-12
+            = ff.text_field :sunday_close_at, class: 'form-control timepicker close_time'

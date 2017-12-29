@@ -24,12 +24,18 @@ module AdminPanel
     end
 
     def update
-      if @admin.valid_password?(params[:current_password])
-        update_password
+      if @clinic.update(clinic_params)
+        flash[:success] = 'Clinic was successfully updated'
+        redirect_to admin_panel_clinics_path
       else
-        flash[:error] = "Current password doesn't match"
-        redirect_to edit_admin_panel_password_path
+        render :edit
       end
+    end
+
+    def destroy
+      @clinic.destroy
+      flash[:success] = 'Clinic was successfully deleted'
+      redirect_to admin_panel_clinics_path
     end
 
     private
