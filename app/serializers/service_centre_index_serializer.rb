@@ -11,8 +11,8 @@ class ServiceCentreIndexSerializer < PictureUrlSerializer
 
   def working_hours
     wday = Schedule::DAYS[Time.now.wday.to_s]
-    { open_at: object.schedule.send(wday + '_start_at').strftime('%H:%m'),
-      close_at: object.schedule.send(wday + '_end_at').strftime('%H:%m') }
+    { open_at: object.schedule.send(wday + '_open_at').strftime('%H:%m'),
+      close_at: object.schedule.send(wday + '_close_at').strftime('%H:%m') }
   end
 
   private
