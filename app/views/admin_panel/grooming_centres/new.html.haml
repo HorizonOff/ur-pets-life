@@ -1,0 +1,16 @@
+%div
+  .page-title
+    .title_left
+      %h3 New grooming centre 
+
+  .clearfix
+  
+  = form_for @grooming_centre, url: admin_panel_grooming_centres_path,
+  html: { multipart: true, method: :post, class: 'form-horizontal form-label-left', autocomplete: 'off'} do |f|
+
+    = render partial: 'form', locals: { f: f }
+    
+    = f.submit 'Create grooming centre', class: 'btn btn-success pull-right'
+
+:javascript
+  init_map();

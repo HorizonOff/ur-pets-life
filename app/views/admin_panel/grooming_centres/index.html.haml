@@ -1,0 +1,38 @@
+%div
+  .page-title
+    .title_left
+      %h3 Grooming centres 
+    .title_right
+      = link_to 'Create grooming centre', new_admin_panel_grooming_centre_path, class: 'btn btn-info btn-round pull-right'
+
+  .clearfix
+
+  .row
+    .col-md-12.col-sm-12.col-xs-12
+      .x_panel
+        .x_content
+          %table.table
+            %thead
+              %tr
+                %th #
+                %th Name
+                %th Picture
+                %th Email
+                %th Phone
+                %th Status
+                %th Actions
+            %tbody
+              - @grooming_centres.each do |grooming_centre|
+                %tr
+                  %th{ scope: 'row' } #{grooming_centre.id}
+                  %td #{grooming_centre.name}
+                  %td
+                    -if grooming_centre.picture.present?
+                      =image_tag(grooming_centre.picture.thumb.url)
+                  %td #{grooming_centre.email}
+                  %td #{grooming_centre.mobile_number}
+                  %td #{grooming_centre.is_active}
+                  %td
+                    =link_to 'Show', admin_panel_grooming_centre_path(grooming_centre), class: 'btn btn-primary'
+                    =link_to 'Edit', edit_admin_panel_grooming_centre_path(grooming_centre), class: 'btn btn-warning'
+                    =link_to 'Delete', admin_panel_grooming_centre_path(grooming_centre), method: :delete, class: 'btn btn-danger'

@@ -1,0 +1,16 @@
+%div
+  .page-title
+    .title_left
+      %h3 Edit grooming centre
+
+  .clearfix
+  
+  = form_for @grooming_centre, url: admin_panel_clinic_path(@grooming_centre),
+  html: { multipart: true, method: :put, class: 'form-horizontal form-label-left', autocomplete: 'off'} do |f|
+
+    = render partial: 'form', locals: { f: f }
+
+    = f.submit 'Update grooming centre', class: 'btn btn-success pull-right'
+
+:javascript
+  init_map();

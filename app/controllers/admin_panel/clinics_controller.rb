@@ -60,16 +60,5 @@ module AdminPanel
          wednesday_close_at thursday_open_at thursday_close_at friday_open_at friday_close_at saturday_open_at
          saturday_close_at sunday_open_at sunday_close_at]
     end
-
-    def update_password
-      if @admin.update(password_params)
-        flash[:success] = 'Password was changed'
-        sign_in @admin, bypass: true
-        redirect_to root_path
-      else
-        flash[:error] = "Password wasn't changed"
-        redirect_to edit_admin_panel_password_path
-      end
-    end
   end
 end

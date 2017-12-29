@@ -17,8 +17,8 @@
       .form-group
         = f.label :picture, class: 'control-label col-md-3 col-sm-3 col-xs-12'
         .col-md-9.col-sm-9.col-xs-12
-          -if @clinic.picture.present?
-            =image_tag @clinic.picture.medium.url, class: 'avatar-show', style: ' display:block;margin:auto'
+          -if @grooming_centre.picture.present?
+            =image_tag @grooming_centre.picture.medium.url, class: 'avatar-show', style: ' display:block;margin:auto'
 
           = f.file_field :picture
           = f.hidden_field :picture_cache
@@ -26,20 +26,6 @@
         = f.label :mobile_number, 'Phone', class: 'control-label col-md-3 col-sm-3 col-xs-12'
         .col-md-9.col-sm-9.col-xs-12
           = f.text_field :mobile_number, class: 'form-control', required: true
-      .form-group
-        = f.label :is_emergency, 'Work for emergency', class: 'control-label col-md-3 col-sm-3 col-xs-12'
-        .col-md-9.col-sm-9.col-xs-12
-          = f.check_box :is_emergency, class: 'flat'
-      .form-group
-        = f.label :specialization_ids, 'Specializations', class: 'control-label col-md-3 col-sm-3 col-xs-12'
-        .col-md-9.col-sm-9.col-xs-12
-          = f.collection_select :specialization_ids, Specialization.for_clinic, :id, :name, {}, { multiple: true, class: 'select2' }
-      .form-group
-        = f.label :pet_type_ids, 'Pet types', class: 'control-label col-md-3 col-sm-3 col-xs-12'
-        .col-md-9.col-sm-9.col-xs-12
-          = f.collection_check_boxes :pet_type_ids, PetType.all, :id, :name do |pt|
-            = pt.check_box(id: pt.object.name.downcase, class: "check_box_picture #{pt.object.name.downcase}")
-            %label{for: pt.object.name.downcase, class: 'check_box_picture', title: pt.object.name}
       .form-group
         = f.label :description, class: 'control-label col-md-3 col-sm-3 col-xs-12'
         .col-md-9.col-sm-9.col-xs-12
