@@ -131,13 +131,13 @@ if Specialization.count.zero?
   end
 end
 
-schedule_attributes = { monday_open_at: '11:00', monday_close_at: '19:30',
-                        tuesday_open_at: '12:00', tuesday_close_at: '19:30',
-                        wednesday_open_at: '13:00', wednesday_close_at: '19:30',
-                        thursday_open_at: '14:00', thursday_close_at: '19:30',
-                        friday_open_at: '15:00', friday_close_at: '19:30',
-                        saturday_open_at: '16:00', saturday_close_at: '19:30',
-                        sunday_open_at: '17:00', sunday_close_at: '19:30' }
+schedule_attributes = { monday_open_at: '11:00 AM', monday_close_at: '7:30 PM',
+                        tuesday_open_at: '12:00 AM', tuesday_close_at: '7:30 PM',
+                        wednesday_open_at: '13:00 AM', wednesday_close_at: '7:30 PM',
+                        thursday_open_at: '14:00 AM', thursday_close_at: '7:30 PM',
+                        friday_open_at: '15:00 AM', friday_close_at: '7:30 PM',
+                        saturday_open_at: '16:00 AM', saturday_close_at: '7:30 PM',
+                        sunday_open_at: '17:00 AM', sunday_close_at: '7:30 PM' }
 
 clinics = [{ name: 'ABVC', email: 'info@abvc.ae', location_attributes: { city: 'Al Barsha' } },
            { name: 'Blue Oasis', mobile_number: '04-8848580', email: 'office@blueoasispetcare.com',
