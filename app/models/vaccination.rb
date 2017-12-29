@@ -4,7 +4,7 @@ class Vaccination < ApplicationRecord
   validates_presence_of :done_at, message: 'Date is required'
   validate :vaccine_type_should_be_valid
 
-  validates :picture, file_size: { less_than: 512.kilobytes }
+  # validates :picture, file_size: { less_than: 512.kilobytes }
   mount_uploader :picture, PhotoUploader
 
   private

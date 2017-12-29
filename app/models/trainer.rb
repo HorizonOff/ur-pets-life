@@ -7,6 +7,4 @@ class Trainer < ApplicationRecord
 
   accepts_nested_attributes_for :qualifications, allow_destroy: true
   accepts_nested_attributes_for :service_types, allow_destroy: true
-
-  scope :alphabetical_order, -> { order(name: :asc) }
 end

@@ -10,6 +10,7 @@ class CreateClinics < ActiveRecord::Migration[5.1]
       t.text :description
       t.boolean :is_active, default: false
       t.boolean :is_emergency, default: false
+      t.integer :vets_count, default: 0
 
       t.timestamps
     end

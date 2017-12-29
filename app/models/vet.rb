@@ -17,7 +17,7 @@ class Vet < ApplicationRecord
   has_many :qualifications, as: :skill
   has_one :location, as: :place, inverse_of: :place
 
-  belongs_to :clinic
+  belongs_to :clinic, counter_cache: true
 
   accepts_nested_attributes_for :qualifications, allow_destroy: true
   accepts_nested_attributes_for :location, update_only: true

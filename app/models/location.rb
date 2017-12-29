@@ -3,7 +3,9 @@ class Location < ApplicationRecord
   enum building_type: BUILDING_OPTIONS
   belongs_to :place, polymorphic: true
 
-  validate :building_type_should_be_valid
+  validate :building_type_should_be_valid, :attributes_should_be_valid
+
+  after_initialize :set_defaults
 
   geocoded_by :address
   after_validation :geocode, if: ->(obj) { obj.address.present? && (obj.latitude.blank? || obj.longitude.blank?) }
@@ -28,10 +30,19 @@ class Location < ApplicationRecord
 
   private
 
+  def set_defaults
+    return if persisted?
+    self.building_type ||= :building
+  end
+
   def building_type_should_be_valid
     return unless @building_type_backup
     self.building_type ||= @building_type_backup
     error_message = 'Building type is invalid'
     errors.add(:building_type, error_message)
+  end
+
+  def attributes_should_be_valid
+    errors.add(:city, 'Location is required') if city.blank? && area.blank? && street.blank? && building_name.blank?
   end
 end

@@ -1,0 +1,69 @@
+module AdminPanel
+  class ClinicsController < AdminPanelController
+    before_action :set_clinic, except: %i[index new create]
+    def index
+      @clinics = Clinic.all
+    end
+
+    def new
+      @clinic = Clinic.new
+      @clinic.build_location
+      @clinic.build_schedule
+    end
+
+    def edit; end
+
+    def create
+      @clinic = Clinic.new(clinic_params)
+      if @clinic.save
+        flash[:success] = 'Clinic was successfully created'
+        redirect_to admin_panel_clinics_path
+      else
+        render :new
+      end
+    end
+
+    def update
+      if @admin.valid_password?(params[:current_password])
+        update_password
+      else
+        flash[:error] = "Current password doesn't match"
+        redirect_to edit_admin_panel_password_path
+      end
+    end
+
+    private
+
+    def set_clinic
+      @clinic = Clinic.find_by(id: params[:id])
+    end
+
+    def clinic_params
+      params.require(:clinic).permit(:name, :email, :picture, :mobile_number, :consultation_fee, :website, :description,
+                                     :is_emergency, specialization_ids: [], pet_type_ids: [],
+                                                    location_attributes: location_params,
+                                                    schedule_attributes: schedule_params)
+    end
+
+    def location_params
+      %i[latitude longitude city area street building_type building_name unit_number villa_number comment]
+    end
+
+    def schedule_params
+      %i[day_and_night monday_open_at monday_close_at tuesday_open_at tuesday_close_at wednesday_open_at
+         wednesday_close_at thursday_open_at thursday_close_at friday_open_at friday_close_at saturday_open_at
+         saturday_close_at sunday_open_at sunday_close_at]
+    end
+
+    def update_password
+      if @admin.update(password_params)
+        flash[:success] = 'Password was changed'
+        sign_in @admin, bypass: true
+        redirect_to root_path
+      else
+        flash[:error] = "Password wasn't changed"
+        redirect_to edit_admin_panel_password_path
+      end
+    end
+  end
+end

@@ -14,7 +14,59 @@
  *= require custom
  *= require font-awesome
  *= require green
+ *= require select2
+ *= require bootstrap-datetimepicker.min
 
  *= require_tree
  *= require_self
  */
+
+
+input[type="checkbox"].check_box_picture{
+    display: none;
+}
+label.check_box_picture{
+  cursor: pointer;
+}
+input[type="checkbox"].check_box_picture + label {
+  height:100px;
+  width:100px;
+  border-radius: 50%;
+  background-size: 100%;
+}
+
+input[type="checkbox"].check_box_picture.cat + label{
+  background-image: url('/images/ic_cat_default@2x.png');
+}
+input[type="checkbox"].check_box_picture.dog + label{
+  background-image: url('/images/ic_dog_default@2x.png');
+}
+input[type="checkbox"].check_box_picture.other + label{
+  background-image: url('/images/ic_other_default@2x.png');
+}
+
+input[type="checkbox"].check_box_picture.cat:checked + label{
+  background-image: url('/images/ic_cat_active@2x.png');
+}
+input[type="checkbox"].check_box_picture.dog:checked + label{
+  background-image: url('/images/ic_dog_active@2x.png');
+}
+input[type="checkbox"].check_box_picture.other:checked + label{
+  background-image: url('/images/ic_other_active@2x.png');
+}
+
+td.separator {
+  border: none;
+}
+
+textarea.no-resize {
+  resize: none;
+}
+
+#geocoding_error {
+  display: none;
+  color: red;
+}
+div.error label {
+  color: red;
+}

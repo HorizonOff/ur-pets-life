@@ -1,0 +1,40 @@
+%div
+  .page-title
+    .title_left
+      %h3 Clinics 
+    .title_right
+      = link_to 'Create clinic', new_admin_panel_clinic_path, class: 'btn btn-info btn-round pull-right'
+
+  .clearfix
+
+  .row
+    .col-md-12.col-sm-12.col-xs-12
+      .x_panel
+        .x_content
+          %table.table
+            %thead
+              %tr
+                %th #
+                %th Name
+                %th Picture
+                %th Email
+                %th Phone
+                %th Number of vets
+                %th Status
+                %th Actions
+            %tbody
+              - @clinics.each do |clinic|
+                %tr
+                  %th{ scope: 'row' } #{clinic.id}
+                  %td #{clinic.name}
+                  %td
+                    -if clinic.picture.present?
+                      =image_tag(clinic.picture.thumb.url)
+                  %td #{clinic.email}
+                  %td #{clinic.mobile_number}
+                  %td #{clinic.vets.size}
+                  %td #{clinic.is_active}
+                  %td
+                    =link_to 'Show', admin_panel_clinic_path(clinic), class: 'btn btn-primary'
+                    =link_to 'Edit', edit_admin_panel_clinic_path(clinic), class: 'btn btn-warning'
+                    =link_to 'Delete', admin_panel_clinic_path(clinic), method: :delete, class: 'btn btn-danger'
