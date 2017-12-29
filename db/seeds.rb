@@ -354,16 +354,18 @@ if DayCareCentre.count.zero?
   end
 end
 
+description = 'A beauty salon is an establishment that offers a variety of cosmetic treatments and cosmetic services for men and women. Beauty salons may offer a variety of services including professional hair cutting and styling, manicures and pedicures, and often cosmetics, makeup and makeovers.'
+
 if ServiceType.count.zero?
   GroomingCentre.all.each do |gc|
-    gc.service_types.create(name: 'Cleaning')
-    gc.service_types.create(name: 'Hair Color')
-    gc.service_types.create(name: 'Grooming')
+    gc.service_types.create(name: 'Cleaning', description: description)
+    gc.service_types.create(name: 'Hair Color', description: description)
+    gc.service_types.create(name: 'Grooming', description: description)
   end
   DayCareCentre.all.each do |gc|
-    gc.service_types.create(name: 'Care service 1')
-    gc.service_types.create(name: 'Care service 2')
-    gc.service_types.create(name: 'Care service 3')
+    gc.service_types.create(name: 'Care service 1', description: description)
+    gc.service_types.create(name: 'Care service 2', description: description)
+    gc.service_types.create(name: 'Care service 3', description: description)
   end
 end
 
@@ -390,8 +392,8 @@ if Trainer.count.zero?
     [1, 2].sample.times do
       t.qualifications.create(diploma: 'Animals Care Diploma', university: 'Mumbai Universuty')
     end
-    t.service_types.create(name: 'Half Day training')
-    t.service_types.create(name: 'Full day training')
+    t.service_types.create(name: 'Half Day training', description: description)
+    t.service_types.create(name: 'Full day training', description: description)
   end
 end
 
