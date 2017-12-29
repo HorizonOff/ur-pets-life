@@ -1,0 +1,38 @@
+%div
+  .page-title
+    .title_left
+      %h3 DayCare Centres 
+    .title_right
+      = link_to 'Create day care centre', new_admin_panel_day_care_centre_path, class: 'btn btn-info btn-round pull-right'
+
+  .clearfix
+
+  .row
+    .col-md-12.col-sm-12.col-xs-12
+      .x_panel
+        .x_content
+          %table.table
+            %thead
+              %tr
+                %th #
+                %th Name
+                %th Picture
+                %th Email
+                %th Phone
+                %th Status
+                %th Actions
+            %tbody
+              - @day_care_centres.each do |day_care_centre|
+                %tr
+                  %th{ scope: 'row' } #{day_care_centre.id}
+                  %td #{day_care_centre.name}
+                  %td
+                    -if day_care_centre.picture.present?
+                      =image_tag(day_care_centre.picture.thumb.url)
+                  %td #{day_care_centre.email}
+                  %td #{day_care_centre.mobile_number}
+                  %td #{day_care_centre.is_active}
+                  %td
+                    =link_to 'Show', admin_panel_day_care_centre_path(day_care_centre), class: 'btn btn-primary'
+                    =link_to 'Edit', edit_admin_panel_day_care_centre_path(day_care_centre), class: 'btn btn-warning'
+                    =link_to 'Delete', admin_panel_day_care_centre_path(day_care_centre), method: :delete, class: 'btn btn-danger'
