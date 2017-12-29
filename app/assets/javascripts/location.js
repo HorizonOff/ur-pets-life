@@ -25,6 +25,8 @@ function init_map(){
     }
     placeMarker(e.latLng);
     map.setCenter(e.latLng)
+    $('#geocoding_error').hide();
+    set_location_params(e.latLng)
   });
 
   function check_center_for_start(){
@@ -42,9 +44,9 @@ function init_map(){
       if (responses && responses.length > 0) {
         var address_components = responses[0].address_components
         parse_response(address_components)
-        $('#geocoding_error').hide()
-        var location = responses[0].geometry.location
-        set_location_params(location)
+        // $('#geocoding_error').hide()
+        // var location = responses[0].geometry.location
+        // set_location_params(location)
       } else {
         $('#geocoding_error').show()
         remove_location_params();
