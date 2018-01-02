@@ -1,0 +1,40 @@
+%div
+  .page-title
+    .title_left
+      %h3 Vets 
+    .title_right
+      = link_to 'Create vet', new_admin_panel_vet_path, class: 'btn btn-info btn-round pull-right'
+
+  .clearfix
+
+  .row
+    .col-md-12.col-sm-12.col-xs-12
+      .x_panel
+        .x_content
+          %table.table
+            %thead
+              %tr
+                %th #
+                %th Name
+                %th Avatar
+                %th Email
+                %th Phone
+                %th Experience
+                %th Status
+                %th Actions
+            %tbody
+              - @vets.each do |vet|
+                %tr
+                  %th{ scope: 'row' } #{vet.id}
+                  %td #{vet.name}
+                  %td
+                    -if vet.avatar.present?
+                      =image_tag(vet.avatar.thumb.url)
+                  %td #{vet.email}
+                  %td #{vet.mobile_number}
+                  %td #{vet.experience}
+                  %td #{vet.is_active}
+                  %td
+                    =link_to 'Show', admin_panel_vet_path(vet), class: 'btn btn-primary'
+                    =link_to 'Edit', edit_admin_panel_vet_path(vet), class: 'btn btn-warning'
+                    =link_to 'Delete', admin_panel_vet_path(vet), method: :delete, class: 'btn btn-danger'

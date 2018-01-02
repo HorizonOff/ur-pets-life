@@ -53,6 +53,7 @@ Rails.application.routes.draw do
     resources :clinics
     resources :day_care_centres
     resources :grooming_centres
+    resources :vets
     resource :profile, only: %i[edit update]
     resource :password, only: %i[edit update]
   end
