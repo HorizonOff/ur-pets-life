@@ -54,9 +54,12 @@ Rails.application.routes.draw do
       member { get :location }
       member { get :add_vet }
     end
-    resources :day_care_centres
+    resources :day_care_centres do
+      member { get :add_service_type }
+    end
     resources :grooming_centres
     resources :vets
+    resources :service_types
     resource :profile, only: %i[edit update]
     resource :password, only: %i[edit update]
   end

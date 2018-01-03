@@ -67,10 +67,11 @@ module AdminPanel
     end
 
     def location_params
-      %i[latitude longitude city area street building_type building_name unit_number villa_number comment _destroy]
+      %i[id latitude longitude city area street building_type building_name unit_number villa_number comment _destroy]
     end
 
     def check_location
+      return @vet.location.destroy unless @vet.is_emergency
       return unless @vet.use_clinic_location?
       location = @vet.clinic.location.attributes.except('id', 'place_type', 'place_id', 'created_at',
                                                         'updated_at', 'comment')
