@@ -39,12 +39,12 @@
  * and open the template in the editor.
  */
 
-var CURRENT_URL = window.location.href.split('#')[0].split('?')[0]
 
-	
-	
+  
+  
 // Sidebar
 function init_sidebar() {
+  // var CURRENT_URL = window.location.href.split('#')[0].split('?')[0]
 // TODO: This is some kind of easy fix, maybe we can improve this
   var setContentHeight = function () {
   // reset height
@@ -61,33 +61,33 @@ function init_sidebar() {
     $('.right_col').css('min-height', contentHeight);
   };
 
-  $('#sidebar-menu').find('a').on('click', function(ev) {
-    console.log('clicked - sidebar_menu');
-    var $li = $(this).parent();
+  // $('#sidebar-menu').find('a').on('click', function(ev) {
+  //   console.log('clicked - sidebar_menu');
+  //   var $li = $(this).parent();
 
-    if ($li.is('.active')) {
-      $li.removeClass('active active-sm');
-      $('ul:first', $li).slideUp(function() {
-        setContentHeight();
-      });
-    } else {
-      // prevent closing menu if we are on child menu
-      if (!$li.parent().is('.child_menu')) {
-        $('#sidebar-menu').find('li').removeClass('active active-sm');
-        $('#sidebar-menu').find('li ul').slideUp();
-      } else {
-        if ( $('body').is( ".nav-sm" ) ) {
-          $('#sidebar-menu').find( "li" ).removeClass( "active active-sm" );
-          $('#sidebar-menu').find( "li ul" ).slideUp();
-        }
-      }
-      $li.addClass('active');
+  //   if ($li.is('.active')) {
+  //     $li.removeClass('active active-sm');
+  //     $('ul:first', $li).slideUp(function() {
+  //       setContentHeight();
+  //     });
+  //   } else {
+  //     // prevent closing menu if we are on child menu
+  //     if (!$li.parent().is('.child_menu')) {
+  //       $('#sidebar-menu').find('li').removeClass('active active-sm');
+  //       $('#sidebar-menu').find('li ul').slideUp();
+  //     } else {
+  //       if ( $('body').is( ".nav-sm" ) ) {
+  //         $('#sidebar-menu').find( "li" ).removeClass( "active active-sm" );
+  //         $('#sidebar-menu').find( "li ul" ).slideUp();
+  //       }
+  //     }
+  //     $li.addClass('active');
 
-      $('ul:first', $li).slideDown(function() {
-        setContentHeight();
-      });
-    }
-  });
+  //     $('ul:first', $li).slideDown(function() {
+  //       setContentHeight();
+  //     });
+  //   }
+  // });
 
   // toggle small or large menu 
   $('#menu_toggle').on('click', function() {
@@ -108,18 +108,17 @@ function init_sidebar() {
   });
 
 	// check active menu
-	$('#sidebar-menu').find('a[href="' + CURRENT_URL + '"]').parent('li').addClass('current-page');
+	// $('#sidebar-menu').find('a[href="' + CURRENT_URL + '"]').parent('li').addClass('current-page');
+	// $('#sidebar-menu').find('a').filter(function () {
+	// 	return this.href == CURRENT_URL;
+	// }).parent('li').addClass('current-page').parents('ul').slideDown(function() {
+	// 	setContentHeight();
+	// }).parent().addClass('active');
 
-	$('#sidebar-menu').find('a').filter(function () {
-		return this.href == CURRENT_URL;
-	}).parent('li').addClass('current-page').parents('ul').slideDown(function() {
-		setContentHeight();
-	}).parent().addClass('active');
-
-	// recompute content when resizing
-	$(window).smartresize(function(){  
-		setContentHeight();
-	});
+	// // recompute content when resizing
+	// $(window).smartresize(function(){  
+	// 	setContentHeight();
+	// });
 
 	setContentHeight();
 
@@ -1002,26 +1001,6 @@ if (typeof NProgress != 'undefined') {
 				}
 				
 		    };
-	   
-		/* SELECT2 */
-	  
-		function init_select2() {
-			 
-			if( typeof (select2) === 'undefined'){ return; }
-			console.log('init_toolbox');
-			 
-			$(".select2_single").select2({
-			  placeholder: "Select a state",
-			  allowClear: true
-			});
-			$(".select2_group").select2({});
-			$(".select2_multiple").select2({
-			  maximumSelectionLength: 4,
-			  placeholder: "With Max Selection limit 4",
-			  allowClear: true
-			});
-			
-		};
 	   
 	   /* WYSIWYG EDITOR */
 
@@ -5003,38 +4982,10 @@ if (typeof NProgress != 'undefined') {
 		}  
 	   
 	function init_all_functions(){
-		init_sparklines();
-		init_flot_chart();
 		init_sidebar();
-		init_wysiwyg();
 		init_InputMask();
-		init_JQVmap();
-		init_cropper();
-		init_knob();
-		init_IonRangeSlider();
-		init_ColorPicker();
-		init_TagsInput();
-		init_parsley();
-		init_daterangepicker();
-		init_daterangepicker_right();
-		init_daterangepicker_single_call();
-		init_daterangepicker_reservation();
-		init_SmartWizard();
-		init_EasyPieChart();
-		init_charts();
-		init_echarts();
-		init_morris_charts();
-		init_skycons();
-		// init_select2();
-		init_validator();
 		init_DataTables();
-		init_chart_doughnut();
-		init_gauge();
-		init_PNotify();
-		init_starrr();
 		init_calendar();
-		init_compose();
-		init_CustomNotification();
 		init_autosize();
 		init_autocomplete();
 	}
