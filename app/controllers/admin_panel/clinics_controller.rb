@@ -11,8 +11,6 @@ module AdminPanel
       @clinic.build_schedule
     end
 
-    def edit; end
-
     def create
       @clinic = Clinic.new(clinic_params)
       if @clinic.save
@@ -22,6 +20,10 @@ module AdminPanel
         render :new
       end
     end
+
+    def show; end
+
+    def edit; end
 
     def update
       if @clinic.update(clinic_params)
@@ -40,6 +42,13 @@ module AdminPanel
 
     def location
       render json: @clinic.location, adapter: :attributes
+    end
+
+    def add_vet
+      @vet = @clinic.vets.new
+      @vet.build_location
+      @vet.qualifications.build
+      render 'admin_panel/vets/new'
     end
 
     private

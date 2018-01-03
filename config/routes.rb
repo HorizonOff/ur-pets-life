@@ -52,6 +52,7 @@ Rails.application.routes.draw do
     resources :admins, except: :create
     resources :clinics do
       member { get :location }
+      member { get :add_vet }
     end
     resources :day_care_centres
     resources :grooming_centres
