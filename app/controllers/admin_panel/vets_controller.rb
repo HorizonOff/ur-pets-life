@@ -1,7 +1,7 @@
 module AdminPanel
   class VetsController < AdminPanelController
-    before_action :set_clinic, except: %i[index new create]
-    before_action :set_location, except: %i[new edit]
+    before_action :set_vet, only: %i[edit update destroy]
+    before_action :set_location, only: %i[new edit]
     def index
       @vets = Vet.all
     end
@@ -45,7 +45,7 @@ module AdminPanel
 
     private
 
-    def set_clinic
+    def set_vet
       @vet = Vet.find_by(id: params[:id])
     end
 
