@@ -38,6 +38,10 @@ module AdminPanel
       redirect_to admin_panel_clinics_path
     end
 
+    def location
+      render json: @clinic.location, adapter: :attributes
+    end
+
     private
 
     def set_clinic

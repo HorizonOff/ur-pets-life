@@ -5025,7 +5025,7 @@ if (typeof NProgress != 'undefined') {
 		init_echarts();
 		init_morris_charts();
 		init_skycons();
-		init_select2();
+		// init_select2();
 		init_validator();
 		init_DataTables();
 		init_chart_doughnut();

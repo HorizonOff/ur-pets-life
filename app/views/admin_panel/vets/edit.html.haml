@@ -1,16 +1,16 @@
 %div
   .page-title
     .title_left
-      %h3 Edit grooming centre
+      %h3 Edit vet 
 
   .clearfix
   
-  = form_for @grooming_centre, url: admin_panel_grooming_centre_path(@grooming_centre),
+  = form_for @vet, url: admin_panel_vet_path(@vet),
   html: { multipart: true, method: :put, class: 'form-horizontal form-label-left', autocomplete: 'off'} do |f|
 
     = render partial: 'form', locals: { f: f }
-
-    = f.submit 'Update grooming centre', class: 'btn btn-success pull-right'
+    
+    = f.submit 'Update vet', class: 'btn btn-success pull-right'
 
 :javascript
-  init_map();
+  init_vet_map();

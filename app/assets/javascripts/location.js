@@ -1,3 +1,5 @@
+use_clinic_location = false
+
 function init_map(){
   var marker
   var center_location = check_center_for_start();
@@ -196,4 +198,80 @@ function fill_inputs(city, area, street, building_name, number){
     $("input.check_geocoder[name*='unit_number']").val('')
     $("input.check_geocoder[name*='villa_number']").val('')
   }
+}
+
+function init_vet_map(){
+  if ($('input.flat[name*="is_emergency"]').prop('checked')) {
+    use_clinic_location = $('input[name*="use_clinic_location"]').iCheck('update')[0].checked
+    if (use_clinic_location){
+      disable_inputs($('.location_tab_fields'));
+    }
+    init_map();
+  }
+
+  $('input.flat[name*="is_emergency"]').on('ifToggled', function(event){
+    var destroy_location_check_box = $('input.destroy_location')
+    if ($(this).prop('checked') == true) {
+      $('.location_tab').show();
+      destroy_location_check_box.prop('checked', false);
+      init_map()
+    } else {
+      $('.location_tab').hide()
+      destroy_location_check_box.prop('checked', true)
+      $('input.flat[name*="use_clinic_location"]').iCheck('uncheck');
+    }
+  });
+};
+
+function check_clinic_location(){
+  $('input.flat[name*="use_clinic_location"]').iCheck('enable');
+  var clinic_id = $('#clinic_id').val();
+  var work_for_emergency = $('input.flat[name*="is_emergency"]').iCheck('update')[0].checked
+  if (clinic_id && use_clinic_location && work_for_emergency){
+    disable_inputs($('.location_tab_fields'))
+    retrieve_clinic_location(clinic_id)
+  }
+}
+
+function retrieve_clinic_location(clinic_id){
+  return $.ajax({
+    type: 'get',
+    url: '/admin_panel/clinics/' + clinic_id + '/location',
+    success: function(response){
+      fill_inputs_with(response)
+    }
+  });
+}
+
+function disable_inputs(element){
+  element.find('input.flat').iCheck('disable');
+  element.find('input:enabled').prop('disabled', true);
+}
+
+function enable_inputs(element){
+  element.find('input.flat').iCheck('enable');
+  element.find('input:disabled').prop('disabled', false);
+}
+
+function fill_inputs_with(location){
+  var building_type = location.building_type == 0 ?  'building' : 'villa'
+  var number = location.building_type == 0 ?  location.unit_number : location.villa_number
+  $("input.check_geocoder[name*='city']").val(location.city)
+  $("input.check_geocoder[name*='area']").val(location.area)
+  $("input.check_geocoder[name*='street']").val(location.street)
+  $("input.check_geocoder[name*='unit_number']").val(number)
+  $("input.check_geocoder[name*='villa_number']").val(number)
+  $("input[name*='longitude']").val(location.longitude)
+  $("input[name*='latitude']").val(location.latitude)
+  $('input.flat#building_type.' + building_type).iCheck('check')
+  if (building_type == 'building'){
+    $("input.check_geocoder[name*='building_name']").val(location.building_name)
+  }
+  init_map();
+}
+
+function clear_clinic_location(){
+  $('input.flat[name*="use_clinic_location"]').iCheck('uncheck');
+  $('input.flat[name*="use_clinic_location"]').iCheck('disable');
+  init_map();
 }

@@ -21,10 +21,10 @@
 //= require bootstrap-datetimepicker.min
 //= require underscore
 //= require gmaps/google
+//= require cocoon
 
 //= require_self
 //= require_tree .
-
 $(document).on('turbolinks:load', function() {
   init_all_functions()
 });
@@ -56,6 +56,15 @@ function init_icheck(){
         hide_and_disable_inputs($('div.building'))
       }
     });
+    $('input.flat[name*="use_clinic_location"]').on('ifChecked', function(){
+      use_clinic_location = true;
+      disable_inputs($('.location_tab_fields'));
+      check_clinic_location();
+    });
+    $('input.flat[name*="use_clinic_location"]').on('ifUnchecked', function(){
+      use_clinic_location = false;
+      enable_inputs($('.location_tab_fields'));
+    });
   }
 }
 
@@ -72,10 +81,12 @@ function hide_and_disable_inputs(element) {
 function init_select2(){
   if ($('.select2')[0]) {
     $('.select2').select2({
-      placeholder: 'Select specializations...',
+      placeholder: 'Select ...',
       allowClear: true,
       width: '100%'
     });
+    $('.select2.clinics_select').on('select2:select', check_clinic_location)
+    $('.select2.clinics_select').on('select2:unselect', clear_clinic_location);
   }
 }
 

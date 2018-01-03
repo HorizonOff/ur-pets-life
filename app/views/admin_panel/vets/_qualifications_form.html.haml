@@ -1,0 +1,13 @@
+.col-md-6.col-sm-6.col-xs-12
+  .x_panel
+    .x_title
+      %h2 Qualifications
+      .clearfix
+    .x_content
+      %br
+
+      #qualifications
+      = f.fields_for :qualifications do |qualification|
+        = render partial: 'qualification_fields', locals: { f: qualification } 
+      .links
+        = link_to_add_association 'Add qualification', f, :qualifications, { class: 'btn btn-info' }
