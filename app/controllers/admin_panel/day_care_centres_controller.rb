@@ -13,6 +13,8 @@ module AdminPanel
 
     def edit; end
 
+    def show; end
+
     def create
       @day_care_centre = DayCareCentre.new(day_care_centre_params)
       if @day_care_centre.save
