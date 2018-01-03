@@ -1,38 +1,38 @@
 module AdminPanel
   class VetsController < AdminPanelController
     before_action :set_clinic, except: %i[index new create]
+    before_action :set_location, except: %i[new edit]
     def index
       @vets = Vet.all
     end
 
     def new
       @vet = Vet.new
-      @vet.build_location
       @vet.qualifications.build
     end
 
-    def edit
-      @vet.qualifications.build if @vet.qualifications.blank?
-      @vet.build_location if @vet.location.blank?
-    end
+    def edit; end
 
     def create
       @vet = Vet.new(vet_params)
+      check_location
       if @vet.save
         flash[:success] = 'Vet was successfully created'
         redirect_to admin_panel_vets_path
       else
-        @vet.build_location if @vet.location.blank?
-        @vet.qualifications.build if @vet.qualifications.blank?
+        set_location
         render :new
       end
     end
 
     def update
-      if @vet.update(vet_params)
+      @vet.assign_attributes(vet_params)
+      check_location
+      if @vet.save
         flash[:success] = 'Vet was successfully updated'
         redirect_to admin_panel_vets_path
       else
+        set_location
         render :edit
       end
     end
@@ -49,11 +49,15 @@ module AdminPanel
       @vet = Vet.find_by(id: params[:id])
     end
 
+    def set_location
+      @vet.build_location if @vet.location.blank?
+    end
+
     def vet_params
       params.require(:vet).permit(:name, :email, :avatar, :mobile_number, :consultation_fee, :experience, :is_active,
-                                  :is_emergency, :clinic_id, specialization_ids: [], pet_type_ids: [],
-                                                             qualifications_attributes: qualifications_params,
-                                                             location_attributes: location_params)
+                                  :is_emergency, :use_clinic_location, :clinic_id,
+                                  specialization_ids: [], pet_type_ids: [], qualifications_attributes:
+                                  qualifications_params, location_attributes: location_params)
     end
 
     def qualifications_params
@@ -62,6 +66,13 @@ module AdminPanel
 
     def location_params
       %i[latitude longitude city area street building_type building_name unit_number villa_number comment _destroy]
+    end
+
+    def check_location
+      return unless @vet.use_clinic_location?
+      location = @vet.clinic.location.attributes.except('id', 'place_type', 'place_id', 'created_at',
+                                                        'updated_at', 'comment')
+      @vet.location.assign_attributes(location)
     end
   end
 end

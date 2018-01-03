@@ -203,7 +203,10 @@ function fill_inputs(city, area, street, building_name, number){
 function init_vet_map(){
   if ($('input.flat[name*="is_emergency"]').prop('checked')) {
     use_clinic_location = $('input[name*="use_clinic_location"]').iCheck('update')[0].checked
-    init_map()
+    if (use_clinic_location){
+      disable_inputs($('.location_tab_fields'));
+    }
+    init_map();
   }
 
   $('input.flat[name*="is_emergency"]').on('ifToggled', function(event){
