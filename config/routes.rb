@@ -50,7 +50,9 @@ Rails.application.routes.draw do
   devise_for :admins, path: 'admin_panel/admins', except: :registrations
   namespace :admin_panel do
     resources :admins, except: :create
-    resources :clinics
+    resources :clinics do
+      member { get :location }
+    end
     resources :day_care_centres
     resources :grooming_centres
     resources :vets

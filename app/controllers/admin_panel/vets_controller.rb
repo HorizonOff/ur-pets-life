@@ -8,23 +8,28 @@ module AdminPanel
     def new
       @vet = Vet.new
       @vet.build_location
-      @vet.qualification.build
+      @vet.qualifications.build
     end
 
-    def edit; end
+    def edit
+      @vet.qualifications.build if @vet.qualifications.blank?
+      @vet.build_location if @vet.location.blank?
+    end
 
     def create
-      @vet = Vet.new(vat_params)
+      @vet = Vet.new(vet_params)
       if @vet.save
         flash[:success] = 'Vet was successfully created'
         redirect_to admin_panel_vets_path
       else
+        @vet.build_location if @vet.location.blank?
+        @vet.qualifications.build if @vet.qualifications.blank?
         render :new
       end
     end
 
     def update
-      if @vet.update(vat_params)
+      if @vet.update(vet_params)
         flash[:success] = 'Vet was successfully updated'
         redirect_to admin_panel_vets_path
       else
@@ -44,11 +49,11 @@ module AdminPanel
       @vet = Vet.find_by(id: params[:id])
     end
 
-    def vat_params
+    def vet_params
       params.require(:vet).permit(:name, :email, :avatar, :mobile_number, :consultation_fee, :experience, :is_active,
-                                  :is_emergency, specialization_ids: [], pet_type_ids: [],
-                                                 qualifications_attributes: qualifications_params,
-                                                 location_attributes: location_params)
+                                  :is_emergency, :clinic_id, specialization_ids: [], pet_type_ids: [],
+                                                             qualifications_attributes: qualifications_params,
+                                                             location_attributes: location_params)
     end
 
     def qualifications_params

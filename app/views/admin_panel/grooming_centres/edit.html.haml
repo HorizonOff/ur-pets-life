@@ -5,7 +5,7 @@
 
   .clearfix
   
-  = form_for @grooming_centre, url: admin_panel_clinic_path(@grooming_centre),
+  = form_for @grooming_centre, url: admin_panel_grooming_centre_path(@grooming_centre),
   html: { multipart: true, method: :put, class: 'form-horizontal form-label-left', autocomplete: 'off'} do |f|
 
     = render partial: 'form', locals: { f: f }
