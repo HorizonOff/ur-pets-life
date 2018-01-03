@@ -1,13 +1,14 @@
 module AdminPanel
   class VetsController < AdminPanelController
     before_action :set_vet, only: %i[edit update destroy]
-    before_action :set_location, only: %i[new edit]
+    before_action :set_location, only: %i[edit]
     def index
       @vets = Vet.all
     end
 
     def new
       @vet = Vet.new
+      set_location
       @vet.qualifications.build
     end
 

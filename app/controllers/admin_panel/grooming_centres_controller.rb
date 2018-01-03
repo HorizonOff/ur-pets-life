@@ -46,7 +46,7 @@ module AdminPanel
 
     def grooming_centre_params
       params.require(:grooming_centre).permit(:name, :email, :picture, :mobile_number, :website, :description,
-                                              location_attributes: location_params,
+                                              service_option_ids: [], location_attributes: location_params,
                                               schedule_attributes: schedule_params)
     end
 

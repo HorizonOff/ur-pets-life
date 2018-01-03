@@ -7,13 +7,11 @@
       %br
       
       .form-group
-        = f.label :name, class: 'control-label col-md-3 col-sm-3 col-xs-12'
+        = f.label :name, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
+          Name
+          %span.required *
         .col-md-9.col-sm-9.col-xs-12
           = f.text_field :name, class: 'form-control', required: true
-      .form-group
-        = f.label :email, class: 'control-label col-md-3 col-sm-3 col-xs-12'
-        .col-md-9.col-sm-9.col-xs-12
-          = f.email_field :email, class: 'form-control', required: true
       .form-group
         = f.label :picture, class: 'control-label col-md-3 col-sm-3 col-xs-12'
         .col-md-9.col-sm-9.col-xs-12
@@ -23,9 +21,25 @@
           = f.file_field :picture
           = f.hidden_field :picture_cache
       .form-group
-        = f.label :mobile_number, 'Phone', class: 'control-label col-md-3 col-sm-3 col-xs-12'
+        = f.label :email, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
+          Email
+          %span.required *
+        .col-md-9.col-sm-9.col-xs-12
+          = f.email_field :email, class: 'form-control', required: true
+      .form-group
+        = f.label :website, class: 'control-label col-md-3 col-sm-3 col-xs-12'
+        .col-md-9.col-sm-9.col-xs-12
+          = f.text_field :website, class: 'form-control'
+      .form-group
+        = f.label :mobile_number, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
+          Phone
+          %span.required *
         .col-md-9.col-sm-9.col-xs-12
           = f.text_field :mobile_number, class: 'form-control', required: true
+      .form-group
+        = f.label :service_option_ids, 'Service options', class: 'control-label col-md-3 col-sm-3 col-xs-12'
+        .col-md-9.col-sm-9.col-xs-12
+          = f.collection_select :service_option_ids, ServiceOption.all, :id, :name, {}, { multiple: true, class: 'select2' }
       .form-group
         = f.label :description, class: 'control-label col-md-3 col-sm-3 col-xs-12'
         .col-md-9.col-sm-9.col-xs-12
