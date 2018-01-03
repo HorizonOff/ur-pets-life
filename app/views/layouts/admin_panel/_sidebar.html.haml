@@ -13,23 +13,23 @@
     #sidebar-menu.main_menu_side.hidden-print.main_menu
       .menu_section
         %ul.nav.side-menu
-          %li
+          %li{ class: "#{'current-page' if current_page?(admin_panel_admins_path)}" }
             = link_to admin_panel_admins_path do
               %i.fa.fa-edit
               Admins
-          %li
+          %li{ class: "#{'current-page' if current_page?(admin_panel_clinics_path)}" }
             = link_to admin_panel_clinics_path do
               %i.fa.fa-plus-square
               Clinics
-          %li
+          %li{ class: "#{'current-page' if current_page?(admin_panel_vets_path)}" }
             = link_to admin_panel_vets_path do
               %i.fa.fa-stethoscope
               Vets
-          %li
+          %li{ class: "#{'current-page' if current_page?(admin_panel_day_care_centres_path)}" }
             = link_to admin_panel_day_care_centres_path do
               %i.fa.fa-tasks
               Day Care Centres
-          %li
+          %li{ class: "#{'current-page' if current_page?(admin_panel_grooming_centres_path)}" }
             = link_to admin_panel_grooming_centres_path do
               %i.fa.fa-scissors
               Grooming Centres
