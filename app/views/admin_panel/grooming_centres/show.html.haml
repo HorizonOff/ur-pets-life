@@ -3,45 +3,45 @@
     .col-md-12.col-sm-12.col-xs-12
       .x_panel
         .x_title
-          %h2= @day_care_centre.name
+          %h2= @grooming_centre.name
           .clearfix
         .x_content
           .col-md-3.col-sm-3.col-xs-12.profile_left
             .profile_img
               #crop-avatar
-                = image_tag(@day_care_centre.picture.medium.url, class: 'img-responsive avatar-view', title: @day_care_centre.name) if @day_care_centre.picture.present?
+                = image_tag(@grooming_centre.picture.medium.url, class: 'img-responsive avatar-view', title: @grooming_centre.name) if @grooming_centre.picture.present?
 
             %ul.list-unstyled.user_data
               %li
                 %i.fa.fa-map-marker.user-profile-icon
-                = @day_care_centre.address
+                = @grooming_centre.address
               %li
                 %i.fa.fa-phone.user-profile-icon
-                = @day_care_centre.mobile_number
+                = @grooming_centre.mobile_number
               %li
                 %i.fa.fa-envelope.user-profile-icon
-                = @day_care_centre.email
+                = @grooming_centre.email
               %li.m-top-xs
                 %i.fa.fa-external-link.user-profile-icon
-                = @day_care_centre.website
+                = @grooming_centre.website
               %li
                 %i.fa.fa-user.user-profile-icon
                 Day Care centre admin
 
-            =link_to edit_admin_panel_day_care_centre_path(@day_care_centre), class: 'btn btn-warning' do
+            =link_to edit_admin_panel_grooming_centre_path(@grooming_centre), class: 'btn btn-warning' do
               %i.fa.fa-edit.m-right-xs
-              Edit DayCare Centre
+              Edit CDayCare Centre
             %br
 
           .col-md-9.col-sm-9.col-xs-12
-            -if @day_care_centre.location.longitude && @day_care_centre.location.latitude 
+            -if @grooming_centre.location.longitude && @grooming_centre.location.latitude 
               %div{ style: 'width: 100%; height: 300px; position: relative;' }
-                %img{ src: generate_static_map_url(@day_care_centre.location), style: 'max-widrth: 100%; display: block; margin: 0 auto;'}
+                %img{ src: generate_static_map_url(@grooming_centre.location), style: 'max-widrth: 100%; display: block; margin: 0 auto;'}
             .profile_title
               .col-md-6.col-sm-6.col-xs-6
-                %h2 Total count of services #{@day_care_centre.service_types.size}
+                %h2 Total count of services #{@grooming_centre.service_types.size}
               .col-md-6.col-sm-6.col-xs-6
-                =link_to 'Add a service', add_service_type_admin_panel_day_care_centre_path(@day_care_centre), class: 'btn btn-info pull-right'
+                =link_to 'Add a service', add_service_type_admin_panel_grooming_centre_path(@grooming_centre), class: 'btn btn-info pull-right'
             %table.table
               %thead
                 %tr
@@ -49,7 +49,7 @@
                   %th Name
                   %th Actions
               %tbody
-                - @day_care_centre.service_types.each do |st|
+                - @grooming_centre.service_types.each do |st|
                   %tr
                     %th{ scope: 'row' } #{st.id}
                     %td #{st.name}

@@ -57,9 +57,11 @@ Rails.application.routes.draw do
     resources :day_care_centres do
       member { get :add_service_type }
     end
-    resources :grooming_centres
+    resources :grooming_centres do
+      member { get :add_service_type }
+    end
     resources :vets
-    resources :service_types
+    resources :service_types, except: %i[new index show]
     resource :profile, only: %i[edit update]
     resource :password, only: %i[edit update]
   end
