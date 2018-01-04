@@ -132,12 +132,12 @@ if Specialization.count.zero?
 end
 
 schedule_attributes = { monday_open_at: '11:00 AM', monday_close_at: '7:30 PM',
-                        tuesday_open_at: '12:00 AM', tuesday_close_at: '7:30 PM',
-                        wednesday_open_at: '13:00 AM', wednesday_close_at: '7:30 PM',
-                        thursday_open_at: '14:00 AM', thursday_close_at: '7:30 PM',
-                        friday_open_at: '15:00 AM', friday_close_at: '7:30 PM',
-                        saturday_open_at: '16:00 AM', saturday_close_at: '7:30 PM',
-                        sunday_open_at: '17:00 AM', sunday_close_at: '7:30 PM' }
+                        tuesday_open_at: '12:00 PM', tuesday_close_at: '7:30 PM',
+                        wednesday_open_at: '1:00 PM', wednesday_close_at: '7:30 PM',
+                        thursday_open_at: '2:00 PM', thursday_close_at: '7:30 PM',
+                        friday_open_at: '3:00 PM', friday_close_at: '7:30 PM',
+                        saturday_open_at: '4:00 PM', saturday_close_at: '7:30 PM',
+                        sunday_open_at: '5:00 PM', sunday_close_at: '7:30 PM' }
 
 clinics = [{ name: 'ABVC', email: 'info@abvc.ae', location_attributes: { city: 'Al Barsha' } },
            { name: 'Blue Oasis', mobile_number: '04-8848580', email: 'office@blueoasispetcare.com',
@@ -281,10 +281,17 @@ end
 
 if Vet.count.zero?
   Clinic.all.each do |c|
-    3.times do
-      c.vets.create(name: Faker::Name.name, email: Faker::Internet.email, consultation_fee: rand(500),
+
+    rand(1..6).times do |i|
+      v = c.vets.new(name: Faker::Name.name, email: Faker::Internet.email, consultation_fee: rand(500),
                     is_emergency: [true, false].sample, experience: [2, 4, 6, 8].sample,
-                    location_attributes: [uzhgorod, mukachevo, afrika].sample)
+                    avatar: File.open(File.join(Rails.root, 'public', 'images', 'vet_' + (i + 1).to_s + '.jpg')))
+      if v.is_emergency
+        v.use_clinic_location = true
+        v.build_location(c.location.attributes.except('id', 'place_type', 'place_id', 'created_at',
+                                                           'updated_at', 'comment'))
+      end
+      v.save
     end
   end
 end
@@ -380,11 +387,14 @@ end
 
 if Trainer.count.zero?
   Trainer.create(name: 'Trainer 1', email: Faker::Internet.email, mobile_number: '+805050505050',
-                 experience: [2, 4, 6, 8].sample, location_attributes: afrika)
+                 experience: [2, 4, 6, 8].sample, location_attributes: afrika,
+                 picture: File.open(File.join(Rails.root, 'public', 'images', 'trainer_1.jpg')))
   Trainer.create(name: 'Trainer 2', email: Faker::Internet.email, mobile_number: '+805050505051',
-                 experience: [2, 4, 6, 8].sample, location_attributes: mukachevo)
+                 experience: [2, 4, 6, 8].sample, location_attributes: mukachevo,
+                 picture: File.open(File.join(Rails.root, 'public', 'images', 'trainer_2.jpg')))
   Trainer.create(name: 'Trainer 3', email: Faker::Internet.email, mobile_number: '+805050505052',
-                 experience: [2, 4, 6, 8].sample, location_attributes: uzhgorod)
+                 experience: [2, 4, 6, 8].sample, location_attributes: uzhgorod,
+                 picture: File.open(File.join(Rails.root, 'public', 'images', 'trainer_3.jpg')))
   specialiation = Specialization.create(name: 'Dog trainer', is_for_trainer: true)
   Trainer.all.each do |t|
     t.pet_types = pet_types.sample
