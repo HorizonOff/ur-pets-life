@@ -8,6 +8,6 @@
 
       #qualifications
       = f.fields_for :qualifications do |qualification|
-        = render partial: 'qualification_fields', locals: { f: qualification } 
+        = render partial: 'admin_panel/vets/qualification_fields', locals: { f: qualification } 
       .links
-        = link_to_add_association 'Add qualification', f, :qualifications, { class: 'btn btn-info' }
+        = link_to_add_association 'Add qualification', f, :qualifications, { class: 'btn btn-info', partial: 'admin_panel/vets/qualification_fields' }

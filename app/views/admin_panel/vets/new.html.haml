@@ -8,7 +8,7 @@
   = form_for @vet, url: admin_panel_vets_path,
   html: { multipart: true, method: :post, class: 'form-horizontal form-label-left', autocomplete: 'off'} do |f|
 
-    = render partial: 'form', locals: { f: f }
+    = render partial: 'admin_panel/vets/form', locals: { f: f }
     
     = f.submit 'Create vet', class: 'btn btn-success pull-right'
 

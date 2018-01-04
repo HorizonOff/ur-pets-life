@@ -13,6 +13,8 @@ module AdminPanel
 
     def edit; end
 
+    def show; end
+
     def create
       @grooming_centre = GroomingCentre.new(grooming_centre_params)
       if @grooming_centre.save
