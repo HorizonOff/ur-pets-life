@@ -1,6 +1,6 @@
 class EmergencySerializer < ActiveModel::Serializer
   type 'emergency'
-  attributes :name, :address, :mobile_number, :type, :latitude, :longotude
+  attributes :name, :address, :mobile_number, :type, :latitude, :longitude
 
   def type
     object.class.name
