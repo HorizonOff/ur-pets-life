@@ -41,7 +41,7 @@ class Appointment < ApplicationRecord
   end
 
   def set_calendar
-    return if bookable_type != 'Clinic' || calendar_id.present?
+    return if bookable_type != 'Clinic' || calendar_id.present? || vet_id.blank?
     current_vet_calendar = vet.calendars.where('start_at <= ? AND end_at >= ?', start_at, end_at).first
     self.calendar = current_vet_calendar if current_vet_calendar
   end
