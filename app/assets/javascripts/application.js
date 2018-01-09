@@ -22,6 +22,7 @@
 //= require underscore
 //= require gmaps/google
 //= require cocoon
+//= require fullcalendar
 
 //= require_self
 //= require_tree .

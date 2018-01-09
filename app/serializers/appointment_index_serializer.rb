@@ -1,5 +1,5 @@
 class AppointmentIndexSerializer < ActiveModel::Serializer
-  attributes :id, :booked_at, :picture_url, :address, :distance, :working_hours
+  attributes :id, :start_at, :picture_url, :address, :distance, :working_hours
 
   def picture_url
     object.bookable.picture.try(:url)

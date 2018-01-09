@@ -2361,7 +2361,7 @@ if (typeof NProgress != 'undefined') {
 					
 				if( typeof ($.fn.fullCalendar) === 'undefined'){ return; }
 				console.log('init_calendar');
-					
+				vet_id = $('#calendar').attr('vet-id')
 				var date = new Date(),
 					d = date.getDate(),
 					m = date.getMonth(),
@@ -2371,91 +2371,106 @@ if (typeof NProgress != 'undefined') {
 
 				var calendar = $('#calendar').fullCalendar({
 				  header: {
-					left: 'prev,next today',
+					left: 'prev,next',
 					center: 'title',
-					right: 'month,agendaWeek,agendaDay,listMonth'
+					right: ''
 				  },
+          defaultView: 'agendaWeek',
+          allDaySlot: false,
 				  selectable: true,
 				  selectHelper: true,
-				  select: function(start, end, allDay) {
-					$('#fc_create').click();
 
-					started = start;
-					ended = end;
+          eventSources: [
+            {
+                editable: true,
+                url: '/admin_panel/vets/' + vet_id + '/calendars/timeline',
+            },
+            {
+      				  editable: false,
+                url: '/admin_panel/vets/' + vet_id + '/calendars/appointments',
+                color: 'green'
+            }
+          ],
 
-					$(".antosubmit").on("click", function() {
-					  var title = $("#title").val();
-					  if (end) {
-						ended = end;
-					  }
+          select: function(start, end) {
+            data = {};
+            data.start_at = start.format()
+            data.end_at = end.format()
+            $.ajax({
+              type: 'post',
+              url: '/admin_panel/vets/' + vet_id + '/calendars',
+              data: data,
+              success: function(response){
+                calendar.fullCalendar('renderEvent', {
+                  id: response.id,
+                  start: start,
+                  end: end
+                });
+              },
+              error: function(response){
+                console.log(response.responseJSON.errors);
+              }
+            });
+            calendar.fullCalendar('unselect');
+          },
 
-					  categoryClass = $("#event_type").val();
+          eventClick: function(calEvent, jsEvent, view) {
+            if (calEvent.id){
+              $('#fc_destroy').click();
 
-					  if (title) {
-						calendar.fullCalendar('renderEvent', {
-							title: title,
-							start: started,
-							end: end,
-							allDay: allDay
-						  },
-						  true // make the event "stick"
-						);
-					  }
+              day_start = calEvent.start.format('DD MMM YYYY')
+              day_end = calEvent.end.format('DD MMM YYYY')
+              if (day_start == day_end) {
+                current_time_slot = day_start + ': ' + calEvent.start.format('h:mm A') + ' - ' + calEvent.end.format('h:mm A')
+              } else {
+                current_time_slot = day_start + ' ' + calEvent.start.format('h:mm A') + ' - ' + day_end + ' ' + calEvent.start.format('h:mm A')
+              }
+              $('p.time_slot').text(current_time_slot);
+              $('a.destroy_link').attr('href', '/admin_panel/calendars/' + calEvent.id)
+            } else {
+              return false
+            };
 
-					  $('#title').val('');
+            $('a.destroy_link').on('click', function(e) {
+              e.preventDefault();
+              $.ajax({
+                type: 'delete',
+                url: '/admin_panel/calendars/' + calEvent.id,
+                success: function(response) {
+                  calendar.fullCalendar( 'removeEvents', calEvent.id )
+                  $('.autoclose').click();
+                },
+                error: function(response){
+                  $('.autoclose').click();
+                  console.log(response.responseJSON.errors);
+                }
+              });
+            });
+          },
 
-					  calendar.fullCalendar('unselect');
+          eventDrop: function(calEvent, delta, revertFunc){
+            update_calendar(calEvent, delta, revertFunc)
+          },
 
-					  $('.antoclose').click();
-
-					  return false;
-					});
-				  },
-				  eventClick: function(calEvent, jsEvent, view) {
-					$('#fc_edit').click();
-					$('#title2').val(calEvent.title);
-
-					categoryClass = $("#event_type").val();
-
-					$(".antosubmit2").on("click", function() {
-					  calEvent.title = $("#title2").val();
-
-					  calendar.fullCalendar('updateEvent', calEvent);
-					  $('.antoclose2').click();
-					});
-
-					calendar.fullCalendar('unselect');
-				  },
-				  editable: true,
-				  events: [{
-					title: 'All Day Event',
-					start: new Date(y, m, 1)
-				  }, {
-					title: 'Long Event',
-					start: new Date(y, m, d - 5),
-					end: new Date(y, m, d - 2)
-				  }, {
-					title: 'Meeting',
-					start: new Date(y, m, d, 10, 30),
-					allDay: false
-				  }, {
-					title: 'Lunch',
-					start: new Date(y, m, d + 14, 12, 0),
-					end: new Date(y, m, d, 14, 0),
-					allDay: false
-				  }, {
-					title: 'Birthday Party',
-					start: new Date(y, m, d + 1, 19, 0),
-					end: new Date(y, m, d + 1, 22, 30),
-					allDay: false
-				  }, {
-					title: 'Click for Google',
-					start: new Date(y, m, 28),
-					end: new Date(y, m, 29),
-					url: 'http://google.com/'
-				  }]
+          eventResize: function(calEvent, delta, revertFunc){
+            update_calendar(calEvent, delta, revertFunc)
+          },
 				});
-				
+
+				function update_calendar(calEvent, delta, revertFunc){
+          data = {};
+          data.start_at = calEvent.start.format()
+          data.end_at = calEvent.end.format()
+          $.ajax({
+            type: 'put',
+            url: '/admin_panel/calendars/' + calEvent.id,
+            data: data,
+            error: function(response){
+              revertFunc();
+              console.log(response.responseJSON.errors);
+            }
+          });
+        }
 			};
 	   
 		/* DATA TABLES */

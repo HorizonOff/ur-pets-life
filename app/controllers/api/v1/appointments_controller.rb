@@ -22,6 +22,7 @@ module Api
 
       def create
         appointment = @user.appointments.new(appointment_params)
+        appointment.end_at = appointment.start_at + 30.minutes
         if appointment.save
           render json: { message: 'Appointment created successfully' }
         else
@@ -44,7 +45,7 @@ module Api
       end
 
       def appointment_params
-        params.require(:appointment).permit(:bookable_type, :bookable_id, :vet_id, :booked_at, :pet_id, :comment)
+        params.require(:appointment).permit(:bookable_type, :bookable_id, :vet_id, :start_at, :pet_id, :comment)
       end
 
       def appointments_pagination_query

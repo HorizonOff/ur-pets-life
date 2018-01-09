@@ -60,7 +60,12 @@ Rails.application.routes.draw do
     resources :grooming_centres do
       member { get :add_service_type }
     end
-    resources :vets
+    resources :vets do
+      resources :calendars, shallow: true, only: %i[index create destroy update] do
+        collection { get :timeline }
+        collection { get :appointments }
+      end
+    end
     resources :service_types, except: %i[new index show]
     resource :profile, only: %i[edit update]
     resource :password, only: %i[edit update]

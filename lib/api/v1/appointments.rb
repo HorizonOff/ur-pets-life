@@ -21,9 +21,9 @@ module Api
             key :type, :integer
             key :example, 1
           end
-          property :booked_at do
+          property :start_at do
             key :type, :string
-            key :example, Time.now.utc.iso8601
+            key :example, '09 Jan 2018 3:00 AM'
           end
           property :comment do
             key :type, :string
@@ -38,9 +38,9 @@ module Api
               key :type, :integer
               key :example, 10
             end
-             property :bookable_at do
+             property :start_at do
               key :type, :string
-              key :example, "2017-12-15T14:36:44.000Z"
+              key :example, "15 Jan 2015 1:30 PM"
             end
             property :picture_url do
               key :type, :string

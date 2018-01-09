@@ -16,6 +16,7 @@
  *= require green
  *= require select2
  *= require bootstrap-datetimepicker.min
+ *= require fullcalendar
 
  *= require_tree
  *= require_self

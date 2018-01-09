@@ -1,7 +1,7 @@
 class LostAndFoundSerializer < PictureUrlSerializer
   type 'pet'
 
-  attributes :id, :name, :avatar_url, :address, :distance, :lost_at, :found_at, :comment
+  attributes :id, :name, :avatar_url, :address, :distance, :lost_at, :found_at, :comment, :mobile_number
 
   has_many :pictures do
     object.pictures || []
@@ -25,6 +25,10 @@ class LostAndFoundSerializer < PictureUrlSerializer
 
   def found_at
     object.found_at.utc.iso8601 if object.found_at.present?
+  end
+
+  def mobile_number
+    object.user.mobile_number
   end
 
   private

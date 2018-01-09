@@ -280,17 +280,14 @@ if Clinic.count.zero?
 end
 
 if Vet.count.zero?
-  Clinic.all.each do |c|
-
-    rand(1..6).times do |i|
+  Clinic.joins(:location).where.not(locations: {latitude: nil }).all.each do |c|
+    rand(1..3).times do |i|
       v = c.vets.new(name: Faker::Name.name, email: Faker::Internet.email, consultation_fee: rand(500),
-                    is_emergency: [true, false].sample, experience: [2, 4, 6, 8].sample,
-                    avatar: File.open(File.join(Rails.root, 'public', 'images', 'vet_' + (i + 1).to_s + '.jpg')))
-      if v.is_emergency
-        v.use_clinic_location = true
-        v.build_location(c.location.attributes.except('id', 'place_type', 'place_id', 'created_at',
-                                                           'updated_at', 'comment'))
-      end
+                    is_emergency: [true, false].sample,
+                    avatar: File.open(File.join(Rails.root, 'public', 'images', 'vet_' + rand(1..6).to_s + '.jpg')),
+                    experience: [2, 4, 6, 8].sample
+                    )
+      v.use_clinic_location = true if v.is_emergency
       v.save
     end
   end
@@ -434,18 +431,18 @@ end
 if Appointment.count.zero?
   Clinic.all.each do |c|
     3.times do
-      user.appointments.create(bookable: c, vet_id: c.vet_ids.sample, booked_at: rand(1.month.ago..1.month.since),
+      user.appointments.create(bookable: c, vet_id: c.vet_ids.sample, start_at: rand(1.month.ago..1.month.since),
                                pet: pet)
     end
   end
   DayCareCentre.all.each do |c|
-    11.times do
-      user.appointments.create(bookable: c, booked_at: rand(1.month.ago..1.month.since), pet: pet)
+    3.times do
+      user.appointments.create(bookable: c, start_at: rand(1.month.ago..1.month.since), pet: pet)
     end
   end
   DayCareCentre.all.each do |c|
-    11.times do
-      user.appointments.create(bookable: c, booked_at: rand(1.month.ago..1.month.since), pet: pet)
+    3.times do
+      user.appointments.create(bookable: c, start_at: rand(1.month.ago..1.month.since), pet: pet)
     end
   end
 end

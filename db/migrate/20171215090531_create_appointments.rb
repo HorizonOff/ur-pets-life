@@ -5,8 +5,10 @@ class CreateAppointments < ActiveRecord::Migration[5.1]
       t.references :bookable, polymorphic: true
       t.references :pet, foreign_key: true
       t.references :vet, foreign_key: true
+      t.references :calendar, foreign_key: true
       t.string :comment
-      t.datetime :booked_at
+      t.datetime :start_at
+      t.datetime :end_at
       t.integer :status
 
       t.timestamps

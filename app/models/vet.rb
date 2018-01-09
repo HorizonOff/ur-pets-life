@@ -12,6 +12,7 @@ class Vet < ApplicationRecord
                                       too_long: 'Mobile number should contain not more than 12 symbols' },
                             allow_blank: true
 
+  has_many :calendars, dependent: :destroy
   has_many :appointments, dependent: :destroy
   has_and_belongs_to_many :specializations
   has_and_belongs_to_many :pet_types
@@ -37,6 +38,7 @@ class Vet < ApplicationRecord
     return unless use_clinic_location?
     location_attributes = clinic.location.attributes.except('id', 'place_type', 'place_id', 'created_at',
                                                             'updated_at', 'comment')
+    build_location unless location
     location.assign_attributes(location_attributes)
   end
 end

@@ -1,5 +1,5 @@
 class AppointmentSerializer < ActiveModel::Serializer
-  attributes :id, :booked_at, :bookable_type
+  attributes :id, :start_at, :bookable_type
 
   belongs_to :vet do
     object.vet if object.for_clinic?
