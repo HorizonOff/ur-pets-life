@@ -57,7 +57,7 @@ class Appointment < ApplicationRecord
   end
 
   def appointmet_overlaps
-    return if bookable_type != 'Clinic'
+    return if bookable_type != 'Clinic' || vet_id.blank?
     errors.add(:base, 'Appointment is overlapsing with other appointment') unless overlapsing_appointments.count.zero?
   end
 
