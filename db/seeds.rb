@@ -440,7 +440,7 @@ if Appointment.count.zero?
       user.appointments.create(bookable: c, start_at: rand(1.month.ago..1.month.since), pet: pet)
     end
   end
-  DayCareCentre.all.each do |c|
+  GroomingCentre.all.each do |c|
     3.times do
       user.appointments.create(bookable: c, start_at: rand(1.month.ago..1.month.since), pet: pet)
     end
