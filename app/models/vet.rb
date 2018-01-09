@@ -27,4 +27,16 @@ class Vet < ApplicationRecord
 
   delegate :address, to: :location
   reverse_geocoded_by 'locations.latitude', 'locations.longitude'
+
+  before_validation :check_location
+
+  private
+
+  def check_location
+    return location.destroy if !is_emergency? && location
+    return unless use_clinic_location?
+    location_attributes = clinic.location.attributes.except('id', 'place_type', 'place_id', 'created_at',
+                                                            'updated_at', 'comment')
+    location.assign_attributes(location_attributes)
+  end
 end
