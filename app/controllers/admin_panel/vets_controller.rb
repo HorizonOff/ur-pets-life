@@ -19,7 +19,6 @@ module AdminPanel
 
     def create
       @vet = Vet.new(vet_params)
-      check_location
       if @vet.save
         flash[:success] = 'Vet was successfully created'
         redirect_to admin_panel_vets_path
@@ -31,7 +30,6 @@ module AdminPanel
 
     def update
       @vet.assign_attributes(vet_params)
-      check_location
       if @vet.save
         flash[:success] = 'Vet was successfully updated'
         redirect_to admin_panel_vets_path
@@ -70,14 +68,6 @@ module AdminPanel
 
     def location_params
       %i[id latitude longitude city area street building_type building_name unit_number villa_number comment _destroy]
-    end
-
-    def check_location
-      return @vet.location.destroy unless @vet.is_emergency
-      return unless @vet.use_clinic_location?
-      location = @vet.clinic.location.attributes.except('id', 'place_type', 'place_id', 'created_at',
-                                                        'updated_at', 'comment')
-      @vet.location.assign_attributes(location)
     end
   end
 end

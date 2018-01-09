@@ -1,4 +1,4 @@
-.col-md-12.col-sm-12.col-xs-12.location_tab{style: "display:#{'none' if @vet.location.new_record?}" }
+.col-md-12.col-sm-12.col-xs-12.location_tab{style: "display:#{'none' if !@vet.is_emergency?}" }
   .x_panel
     .x_title
       %h2 Address for emergency

@@ -1,7 +1,6 @@
 class EmergencySerializer < ActiveModel::Serializer
   type 'emergency'
-  attributes :name, :address, :mobile_number, :type
-  attribute :distance
+  attributes :name, :address, :mobile_number, :type, :latitude, :longitude
 
   def type
     object.class.name
@@ -9,6 +8,14 @@ class EmergencySerializer < ActiveModel::Serializer
 
   def address
     object.location.try(:address)
+  end
+
+  def latitude
+    object.location.try(:latitude)
+  end
+
+  def longitude
+    object.location.try(:longitude)
   end
 
   def distance
