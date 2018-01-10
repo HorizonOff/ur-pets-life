@@ -9,7 +9,7 @@ class Appointment < ApplicationRecord
 
   has_and_belongs_to_many :service_details
 
-  before_validation :set_calendar, :set_end_at
+  before_validation :set_end_at, :set_calendar
   validates :start_at, presence: { message: 'Date and time are required' }
   validate :vet_id_should_be_vaild, :pet_id_should_be_valid, :service_ids_should_be_valid
   validate :time_should_be_valid, :appointmet_overlaps
@@ -74,7 +74,7 @@ class Appointment < ApplicationRecord
 
   def set_end_at
     return if vet_id.blank? || vet.nil?
-    self.end_at = appointment.start_at + vet.session_duration.minutes
+    self.end_at = start_at + vet.session_duration.minutes
   end
 
   def time_should_be_valid
