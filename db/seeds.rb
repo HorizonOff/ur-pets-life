@@ -376,9 +376,11 @@ end
 
 if ServiceDetail.count.zero?
   ServiceType.all.each do |st|
-    pet_types.sample.each do |t|
-      st.service_details.create(pet_type: t, price: rand(500))
-    end
+    # pet_types.sample.each do |t|
+    #   st.service_details.create(pet_type: t, price: rand(500))
+    # end
+    st.service_details.create(pet_type: cat, price: rand(500))
+    st.service_details.create(pet_type: dog, price: rand(500))
   end
 end
 

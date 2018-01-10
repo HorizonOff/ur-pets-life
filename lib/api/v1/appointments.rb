@@ -28,6 +28,10 @@ module Api
           property :comment do
             key :type, :string
           end
+          propert :service_detail_ids do
+            key :type, :array
+            key :example, [1]
+          end
         end
       end
 
@@ -106,7 +110,7 @@ module Api
             key :required, true
             key :description, "Bookable_type: Clinic/DayCareCentre/GroomingCentre\n" +
                               "vet_id - required if bookable_type - Clinic\n" +
-                              'bookable_type, bookable_id, booked_at, pet_id - required'
+                              'bookable_type, bookable_id, start_at, pet_id - required'
 
             schema do
               key :'$ref', :AppointmentInput
