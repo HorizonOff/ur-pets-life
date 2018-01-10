@@ -411,19 +411,19 @@ end
 
 pets_pictures = %w[cat_1.jpg cat_2.png dog_1.jpg dog_2.png other_1.jpg other_2.png]
 
-pet = if Pet.count.zero?
-        user.pets.create(name: 'Tom', sex: 1, birthday: '2017-01-01T14:36:44.000Z', pet_type_id: 1, breed_id: 205,
-                         is_for_adoption: true,
-                         avatar: File.open(File.join(Rails.root, 'public', 'images', 'cat_1.jpg')))
-        user.pets.create(name: 'Pluto', sex: 1, birthday: '2017-01-01T14:36:44.000Z', pet_type_id: 2, breed_id: 3,
-                         is_lost: true,
-                         avatar: File.open(File.join(Rails.root, 'public', 'images', 'dog_1.jpg')))
-        user.pets.create(name: 'Jerry', sex: 0, birthday: '2017-01-01T14:36:44.000Z', pet_type_id: 3,
-                         additional_type: 'Bird', is_found: true,
-                         avatar: File.open(File.join(Rails.root, 'public', 'images', 'other_1.jpg')))
-      else
-        Pet.first
-      end
+if Pet.count.zero?
+  user.pets.create(name: 'Tom', sex: 1, birthday: '2017-01-01T14:36:44.000Z', pet_type_id: 1, breed_id: 205,
+                   is_for_adoption: true,
+                   avatar: File.open(File.join(Rails.root, 'public', 'images', 'cat_1.jpg')))
+  user.pets.create(name: 'Pluto', sex: 1, birthday: '2017-01-01T14:36:44.000Z', pet_type_id: 2, breed_id: 3,
+                   is_lost: true,
+                   avatar: File.open(File.join(Rails.root, 'public', 'images', 'dog_1.jpg')))
+  user.pets.create(name: 'Jerry', sex: 0, birthday: '2017-01-01T14:36:44.000Z', pet_type_id: 3,
+                   additional_type: 'Bird', is_found: true,
+                   avatar: File.open(File.join(Rails.root, 'public', 'images', 'other_1.jpg')))
+end
+
+pet = Pet.first
 
 if Picture.count.zero?
   Pet.all.each do |p|
@@ -442,14 +442,17 @@ if Appointment.count.zero?
   end
   DayCareCentre.all.each do |c|
     3.times do
-      user.appointments.create(bookable: c, start_at: rand(1.month.ago..1.month.since), pet: pet,
+      a = user.appointments.new(bookable: c, start_at: rand(1.month.ago..1.month.since), pet: pet,
                                service_detail_ids: [c.service_details.where(pet_type_id: pet.id).first.try(:id)])
+      puts a.errors.messages unless a.save
     end
   end
   GroomingCentre.all.each do |c|
     3.times do
-      user.appointments.create(bookable: c, start_at: rand(1.month.ago..1.month.since), pet: pet,
+      a = user.appointments.new(bookable: c, start_at: rand(1.month.ago..1.month.since), pet: pet,
                                service_detail_ids: c.service_details.where(pet_type_id: pet.id).pluck(:id))
+      puts a.errors.messages unless a.save
+
     end
   end
 end

@@ -9,13 +9,12 @@ class Appointment < ApplicationRecord
 
   has_and_belongs_to_many :service_details
 
-  before_validation :set_calendar
+  before_validation :set_calendar, :set_end_at
   validates :start_at, presence: { message: 'Date and time are required' }
   validate :vet_id_should_be_vaild, :pet_id_should_be_valid, :service_ids_should_be_valid
   validate :time_should_be_valid, :appointmet_overlaps
 
   before_create :set_price
-  before_create :set_end_time
 
   scope :past, -> { where('start_at < ?', Time.current).order(start_at: :desc) }
   scope :upcoming, -> { where('start_at > ?', Time.current).order(start_at: :asc) }
@@ -73,6 +72,11 @@ class Appointment < ApplicationRecord
     self.calendar = current_vet_calendar if current_vet_calendar
   end
 
+  def set_end_at
+    return if vet_id.blank? || vet.nil?
+    self.end_at = appointment.start_at + vet.session_duration.minutes
+  end
+
   def time_should_be_valid
     return if bookable_type != 'Clinic'
     errors.add(:base, 'Vet is unavailable at this time') if calendar_id.nil? || !within_the_schedule?
@@ -95,10 +99,5 @@ class Appointment < ApplicationRecord
   def set_price
     return self.total_price = vet.consultation_fee if vet_id.present?
     self.total_price = service_details.sum(&:price)
-  end
-
-  def set_end_time
-    return if vet_id.blank? || vet.nil?
-    self.end_at = appointment.start_at + vet.session_duration.minutes
   end
 end
