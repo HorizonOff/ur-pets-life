@@ -36,9 +36,8 @@ module Api
         slot_start = working_hours.first
         last_available_slot = working_hours.last - 15.minutes
         loop do
-          slot_end = slot_start + 15.minutes
-          time_slots << { start_at: slot_start.strftime('%I:%M %p'), end_at: slot_end.strftime('%I:%M %p') }
-          slot_start = slot_end
+          time_slots << { start_at: slot_start.strftime('%I:%M %p') }
+          slot_start += 15.minutes
           break time_slots if slot_start > last_available_slot
         end
       end

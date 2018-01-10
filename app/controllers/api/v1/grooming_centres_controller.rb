@@ -1,7 +1,7 @@
 module Api
   module V1
     class GroomingCentresController < Api::BaseController
-      skip_before_action :authenticate_user
+      skip_before_action :authenticate_user, except: :schedule
       before_action :set_grooming_centre, except: :index
       before_action :parse_date, only: :schedule
 

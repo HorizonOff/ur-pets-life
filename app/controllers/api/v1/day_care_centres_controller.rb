@@ -1,8 +1,9 @@
 module Api
   module V1
     class DayCareCentresController < Api::BaseController
-      skip_before_action :authenticate_user
-      before_action :set_day_care_centre, only: :show
+      skip_before_action :authenticate_user, except: :schedule
+      before_action :set_day_care_centre, except: :index
+      before_action :parse_date, only: :schedule
 
       def index
         day_care_centres = day_care_centres_query.find_objects
@@ -19,6 +20,11 @@ module Api
                include: 'service_types,service_types.service_details'
       end
 
+      def schedule
+        time_slots = schedule_parser_service.retrieve_time_slots
+        render json: { time_slots: time_slots }
+      end
+
       private
 
       def set_day_care_centre
@@ -28,6 +34,15 @@ module Api
 
       def day_care_centres_query
         @day_care_centres_query ||= ::Api::V1::LocationBasedQuery.new(DayCareCentre.all, params)
+      end
+
+      def schedule_parser_service
+        @schedule_parser_service ||= ::Api::V1::ScheduleParserService.new(@day_care_centre.schedule, @date)
+      end
+
+      def parse_date
+        @date = Time.zone.parse(params[:date])
+        return render_422(date: 'Date is required') if params[:date].blank? || @date.blank?
       end
     end
   end
