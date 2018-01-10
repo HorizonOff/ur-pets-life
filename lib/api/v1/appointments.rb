@@ -28,7 +28,7 @@ module Api
           property :comment do
             key :type, :string
           end
-          propert :service_detail_ids do
+          property :service_detail_ids do
             key :type, :array
             key :example, [1]
           end

@@ -34,7 +34,9 @@ Rails.application.routes.draw do
       resources :emergencies, only: :index
       resources :adoptions, only: %i[index show]
       resources :lost_and_founds, only: %i[index show]
-      resources :vets, only: :show
+      resources :vets, only: :show do
+        member { get :schedule }
+      end
       resources :appointments, only: %i[index create show]
 
       resources :sessions, only: :create do

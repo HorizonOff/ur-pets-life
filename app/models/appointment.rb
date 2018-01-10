@@ -15,6 +15,7 @@ class Appointment < ApplicationRecord
   validate :time_should_be_valid, :appointmet_overlaps
 
   before_create :set_price
+  before_create :set_end_time
 
   scope :past, -> { where('start_at < ?', Time.current).order(start_at: :desc) }
   scope :upcoming, -> { where('start_at > ?', Time.current).order(start_at: :asc) }
@@ -94,5 +95,10 @@ class Appointment < ApplicationRecord
   def set_price
     return self.total_price = vet.consultation_fee if vet_id.present?
     self.total_price = service_details.sum(&:price)
+  end
+
+  def set_end_time
+    return if vet_id.blank? || vet.nil?
+    self.end_at = appointment.start_at + vet.session_duration.minutes
   end
 end

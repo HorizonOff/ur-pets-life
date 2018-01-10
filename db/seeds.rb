@@ -262,21 +262,24 @@ clinics = [{ name: 'ABVC', email: 'info@abvc.ae', location_attributes: { city: '
              picture: File.open(File.join(Rails.root, 'public', 'images', 'clinic_11.png')) }]
 
 if Clinic.count.zero?
-  clinics.each do |c|
-    Clinic.create(name: c[:name], email: c[:email], mobile_number: c[:mobile_number],
-                  is_emergency: [true, false].sample, picture: c[:picture],
-                  location_attributes: c[:location_attributes],
+  if Rails.env.development?
+    Clinic.create(name: 'Clinic 1', email: Faker::Internet.email, mobile_number: '+805050505050',
+                  is_emergency: [true, false].sample, location_attributes: afrika,
                   schedule_attributes: schedule_attributes, consultation_fee: rand(500))
+    Clinic.create(name: 'Clinic 2', email: Faker::Internet.email, mobile_number: '+805050505051',
+                  is_emergency: [true, false].sample, location_attributes: mukachevo,
+                  schedule_attributes: schedule_attributes, consultation_fee: rand(500))
+    Clinic.create(name: 'Clinic 3', email: Faker::Internet.email, mobile_number: '+805050505052',
+                  is_emergency: [true, false].sample, location_attributes: uzhgorod,
+                  schedule_attributes: schedule_attributes, consultation_fee: rand(500))
+  else
+    clinics.each do |c|
+      Clinic.create(name: c[:name], email: c[:email], mobile_number: c[:mobile_number],
+                    is_emergency: [true, false].sample, picture: c[:picture],
+                    location_attributes: c[:location_attributes],
+                    schedule_attributes: schedule_attributes, consultation_fee: rand(500))
+    end
   end
-  Clinic.create(name: 'Clinic 1', email: Faker::Internet.email, mobile_number: '+805050505050',
-                is_emergency: [true, false].sample, location_attributes: afrika,
-                schedule_attributes: schedule_attributes, consultation_fee: rand(500))
-  Clinic.create(name: 'Clinic 2', email: Faker::Internet.email, mobile_number: '+805050505051',
-                is_emergency: [true, false].sample, location_attributes: mukachevo,
-                schedule_attributes: schedule_attributes, consultation_fee: rand(500))
-  Clinic.create(name: 'Clinic 3', email: Faker::Internet.email, mobile_number: '+805050505052',
-                is_emergency: [true, false].sample, location_attributes: uzhgorod,
-                schedule_attributes: schedule_attributes, consultation_fee: rand(500))
 end
 
 if Vet.count.zero?
@@ -285,7 +288,7 @@ if Vet.count.zero?
       v = c.vets.new(name: Faker::Name.name, email: Faker::Internet.email, consultation_fee: rand(500),
                     is_emergency: [true, false].sample,
                     avatar: File.open(File.join(Rails.root, 'public', 'images', 'vet_' + rand(1..6).to_s + '.jpg')),
-                    experience: [2, 4, 6, 8].sample
+                    experience: [2, 4, 6, 8].sample, session_duration: rand(20..120)
                     )
       v.use_clinic_location = true if v.is_emergency
       v.save
@@ -439,12 +442,14 @@ if Appointment.count.zero?
   end
   DayCareCentre.all.each do |c|
     3.times do
-      user.appointments.create(bookable: c, start_at: rand(1.month.ago..1.month.since), pet: pet)
+      user.appointments.create(bookable: c, start_at: rand(1.month.ago..1.month.since), pet: pet,
+                               service_detail_ids: [c.service_details.where(pet_type_id: pet.id).first.try(:id)])
     end
   end
   GroomingCentre.all.each do |c|
     3.times do
-      user.appointments.create(bookable: c, start_at: rand(1.month.ago..1.month.since), pet: pet)
+      user.appointments.create(bookable: c, start_at: rand(1.month.ago..1.month.since), pet: pet,
+                               service_detail_ids: c.service_details.where(pet_type_id: pet.id).pluck(:id))
     end
   end
 end
