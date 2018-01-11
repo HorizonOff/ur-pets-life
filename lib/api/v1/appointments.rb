@@ -73,10 +73,18 @@ module Api
             key :type, :integer
             key :example, 10
           end
-           property :bookable_at do
+          property :start_at do
             key :type, :string
-            key :example, "2017-12-15T14:36:44.000Z"
+            key :example, "01.01.2018 3:30 PM"
           end
+          property :bookable_type do
+            key :type, :string
+            key :example, "Clinic"
+          end
+          property :vet do
+            key :'$ref', :VetResponse
+          end
+
           property :picture_url do
             key :type, :string
           end
@@ -89,6 +97,27 @@ module Api
           end
           property :working_hours do
             key :'$ref', :WorkingHours
+          end
+          property :booked_object do
+            key :'$ref', :Clinic
+          end
+          property :diagnosis do
+            property :condition do
+              key :type, :string
+              key :example, 'All good. No lockers'
+            end
+            property :message do
+              key :type, :string
+              key :example, 'sdf;sdkf lrj;wkf;wkrew;om mw;ktr;wekm;eo'
+            end
+            property :recipes do
+              key :type, :array
+              key :example, ['1st recipe', '2nd recipe']
+            end
+            property :next_appointment do
+              key :type, :string
+              key :example, "01.01.2018 3:30 PM"
+            end
           end
         end
       end

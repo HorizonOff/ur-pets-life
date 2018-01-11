@@ -1,5 +1,5 @@
 class AppointmentIndexSerializer < ActiveModel::Serializer
-  attributes :id, :start_at, :picture_url, :address, :distance, :working_hours
+  attributes :id, :start_at, :picture_url, :address, :distance, :working_hours, :bookable_type
 
   def picture_url
     object.bookable.picture.try(:url)
@@ -16,8 +16,8 @@ class AppointmentIndexSerializer < ActiveModel::Serializer
   def working_hours
     wday = Schedule::DAYS[Time.now.wday.to_s]
     bookable = object.bookable
-    { open_at: bookable.schedule.send(wday + '_start_at').strftime('%H:%m'),
-      close_at: bookable.schedule.send(wday + '_end_at').strftime('%H:%m') }
+    { open_at: bookable.schedule.send(wday + '_open_at').strftime('%H:%m'),
+      close_at: bookable.schedule.send(wday + '_close_at').strftime('%H:%m') }
   end
 
   private

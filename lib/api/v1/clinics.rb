@@ -84,6 +84,47 @@ module Api
         end
       end
 
+      swagger_schema :Clinic do
+        property :id do
+          key :type, :integer
+          key :example, 1
+        end
+        property :name do
+          key :type, :string
+          key :example, 'Clinic 1'
+        end
+        property :picture_url do
+          key :type, :string
+        end
+        property :working_hours do
+          key :'$ref', :WorkingHours
+        end
+        property :address do
+          key :type, :string
+          key :example, 'Uzhgorod'
+        end
+        property :distance do
+          key :type, :number
+          key :example, 34
+        end
+        property :consultation_fee do
+          key :type, :integer
+          key :example, 345
+        end
+        property :mobile_number do
+          key :type, :string
+          key :example, '+3805050505050'
+        end
+        property :email do
+          key :type, :string
+          key :example, 'clinis1@mail.com'
+        end
+        property :website do
+          key :type, :string
+          key :example, 'www.website.com'
+        end
+      end
+
       swagger_schema :WorkingHours do
         property :open_at do
           key :type, :string

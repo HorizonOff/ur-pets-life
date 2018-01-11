@@ -6,6 +6,6 @@ class DiagnosisSerializer < ActiveModel::Serializer
   end
 
   attribute :next_appointment do
-    object.next_appointment.booked_at unless object.next_appointment_id.nil?
+    object.next_appointment.start_at unless object.next_appointment_id.nil?
   end
 end
