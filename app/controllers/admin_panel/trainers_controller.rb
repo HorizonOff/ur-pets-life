@@ -8,6 +8,7 @@ module AdminPanel
     def new
       @trainer = Trainer.new
       @trainer.build_location
+      @trainer.qualifications.build
     end
 
     def edit; end
@@ -46,8 +47,13 @@ module AdminPanel
     end
 
     def trainer_params
-      params.require(:day_care_centre).permit(:name, :email, :picture, :mobile_number, :experience,
-                                              pet_type_ids: [], location_attributes: location_params)
+      params.require(:trainer).permit(:name, :email, :picture, :mobile_number, :experience,
+                                      pet_type_ids: [], location_attributes: location_params, specialization_ids: [],
+                                      qualifications_attributes: qualifications_params)
+    end
+
+    def qualifications_params
+      %i[id diploma university _destroy]
     end
 
     def location_params
