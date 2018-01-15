@@ -14,16 +14,16 @@ module Api
         return [] if @calendars.blank?
         @appointments = @vet.appointments.where('start_at >= :start AND end_at <= :end', start: day_start,
                                                                                          end: day_end)
-        parse_time_slots(@calendars)
+        parse_time_slots
       end
 
       private
 
-      attr_accessor :date, :vet
+      attr_accessor :vet, :date
 
-      def parse_time_slots(calendars)
+      def parse_time_slots
         @time_slots = []
-        calendars.each do |c|
+        @calendars.each do |c|
           slot_start = c.start_at
           last_available_slot = c.end_at - vet.session_duration.minutes
           parse_each_calendar(slot_start, last_available_slot)

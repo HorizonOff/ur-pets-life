@@ -7,13 +7,12 @@ module Api
       end
 
       def retrieve_time_slots
-        working_hours = parse_wday_schedule
-        parse_time_slots(working_hours)
+        parse_time_slots(parse_wday_schedule)
       end
 
       private
 
-      attr_accessor :date, :schedule
+      attr_accessor  :schedule, :date
 
       def parse_wday_schedule
         return [date.beginning_of_day, date.end_of_day] if schedule.day_and_night
