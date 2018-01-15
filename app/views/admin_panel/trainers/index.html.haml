@@ -23,18 +23,4 @@
                 %th Status
                 %th Actions
             %tbody
-              - @trainers.each do |trainer|
-                %tr
-                  %th{ scope: 'row' } #{trainer.id}
-                  %td #{trainer.name}
-                  %td
-                    -if trainer.picture.present?
-                      =image_tag(trainer.picture.thumb.url)
-                  %td #{trainer.email}
-                  %td #{trainer.mobile_number}
-                  %td #{trainer.experience}
-                  %td #{trainer.is_active}
-                  %td
-                    =link_to 'Show', admin_panel_trainer_path(trainer), class: 'btn btn-primary'
-                    =link_to 'Edit', edit_admin_panel_trainer_path(trainer), class: 'btn btn-warning'
-                    =link_to 'Delete', admin_panel_trainer_path(trainer), method: :delete, class: 'btn btn-danger'
+              =render @trainers
