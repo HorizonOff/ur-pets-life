@@ -12,7 +12,7 @@ module Api
 
       private
 
-      attr_accessor  :schedule, :date
+      attr_accessor :schedule, :date
 
       def parse_wday_schedule
         return [date.beginning_of_day, date.end_of_day] if schedule.day_and_night
