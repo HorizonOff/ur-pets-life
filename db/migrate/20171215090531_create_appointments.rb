@@ -10,8 +10,11 @@ class CreateAppointments < ActiveRecord::Migration[5.1]
       t.datetime :start_at
       t.datetime :end_at
       t.integer :status
+      t.integer :total_price
 
       t.timestamps
     end
+
+    create_join_table :appointments, :service_details
   end
 end

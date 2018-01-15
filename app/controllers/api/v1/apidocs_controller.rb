@@ -40,6 +40,7 @@ module Api
         Api::V1::Adoptions,
         Api::V1::LostAndFounds,
         Api::V1::Appointments,
+        Api::V1::Schedules,
         Api::V1::PetTypes,
         self
       ].freeze

@@ -24,13 +24,19 @@ Rails.application.routes.draw do
       resources :vaccine_types, only: :index
       resources :pet_types, only: :index
       resources :clinics, only: %i[index show]
-      resources :grooming_centres, only: %i[index show]
-      resources :day_care_centres, only: %i[index show]
+      resources :grooming_centres, only: %i[index show] do
+        member { get :schedule }
+      end
+      resources :day_care_centres, only: %i[index show] do
+        member { get :schedule }
+      end
       resources :trainers, only: %i[index show]
       resources :emergencies, only: :index
       resources :adoptions, only: %i[index show]
       resources :lost_and_founds, only: %i[index show]
-      resources :vets, only: :show
+      resources :vets, only: :show do
+        member { get :schedule }
+      end
       resources :appointments, only: %i[index create show]
 
       resources :sessions, only: :create do

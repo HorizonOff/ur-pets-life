@@ -2404,7 +2404,8 @@ if (typeof NProgress != 'undefined') {
                 calendar.fullCalendar('renderEvent', {
                   id: response.id,
                   start: start,
-                  end: end
+                  end: end,
+                  editable: true
                 });
               },
               error: function(response){

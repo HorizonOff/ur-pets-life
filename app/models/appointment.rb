@@ -7,10 +7,14 @@ class Appointment < ApplicationRecord
 
   has_one :diagnosis, dependent: :destroy
 
-  before_validation :set_calendar
+  has_and_belongs_to_many :service_details
+
+  before_validation :set_end_at, :set_calendar
   validates :start_at, presence: { message: 'Date and time are required' }
-  validate :vet_id_should_be_vaild, :pet_id_should_be_valid
+  validate :vet_id_should_be_vaild, :pet_id_should_be_valid, :service_ids_should_be_valid
   validate :time_should_be_valid, :appointmet_overlaps
+
+  before_create :set_price
 
   scope :past, -> { where('start_at < ?', Time.current).order(start_at: :desc) }
   scope :upcoming, -> { where('start_at > ?', Time.current).order(start_at: :asc) }
@@ -36,6 +40,28 @@ class Appointment < ApplicationRecord
     end
   end
 
+  def service_ids_should_be_valid
+    if bookable_type == 'Clinic'
+      self.service_detail_ids = []
+    else
+      check_services_count
+      check_services if service_detail_ids.present?
+    end
+  end
+
+  def check_services
+    services_valid = service_details.each do |sd|
+      break false if sd.pet_type_id != pet.pet_type_id
+    end
+    errors.add(:service_detail_ids, '1 of Services is invalid') unless services_valid
+  end
+
+  def check_services_count
+    errors.add(:service_detail_ids, 'Booking service is required') if service_detail_ids.empty?
+    errors.add(:service_detail_ids, 'Should be only 1 service in booking') if bookable_type == 'DayCareCenre' && \
+                                                                              service_detail_ids.size > 1
+  end
+
   def pet_id_should_be_valid
     errors.add(:pet_id, 'Pet is invalid') unless user.pet_ids.include?(pet_id)
   end
@@ -44,6 +70,11 @@ class Appointment < ApplicationRecord
     return if bookable_type != 'Clinic' || calendar_id.present? || vet_id.blank?
     current_vet_calendar = vet.calendars.where('start_at <= ? AND end_at >= ?', start_at, end_at).first
     self.calendar = current_vet_calendar if current_vet_calendar
+  end
+
+  def set_end_at
+    return if vet_id.blank? || vet.nil?
+    self.end_at = start_at + vet.session_duration.minutes
   end
 
   def time_should_be_valid
@@ -63,5 +94,10 @@ class Appointment < ApplicationRecord
 
   def overlapsing_appointments
     vet.appointments.overlapsing(id, start_at, end_at)
+  end
+
+  def set_price
+    return self.total_price = vet.consultation_fee if vet_id.present?
+    self.total_price = service_details.sum(&:price)
   end
 end
