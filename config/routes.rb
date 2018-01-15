@@ -74,6 +74,7 @@ Rails.application.routes.draw do
     end
     resources :trainers
     resources :service_types, except: %i[new index show]
+    resources :appointments, only: %i[index show]
     resource :profile, only: %i[edit update]
     resource :password, only: %i[edit update]
   end

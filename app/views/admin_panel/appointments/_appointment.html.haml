@@ -1,0 +1,13 @@
+%tr
+  %th{ scope: 'row' } #{appointment.id}
+  %td
+    = appointment.bookable_type + ': ' + appointment.bookable.name
+  %td
+    -if appointment.vet_id.present?
+      =appointment.vet.name
+  %td #{appointment.created_at.strftime('%-d %b %Y %I:%M %p')}
+  %td #{appointment.start_at.strftime('%-d %b %Y %I:%M %p')}
+  %td 
+    %span{ class: "label #{status_class(appointment)}" } #{appointment.status}
+  %td
+    =link_to 'Show', admin_panel_appointment_path(appointment), class: 'btn btn-primary'
