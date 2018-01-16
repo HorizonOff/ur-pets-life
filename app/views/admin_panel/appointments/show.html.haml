@@ -49,9 +49,7 @@
                   %li
                     %i.fa.fa-phone.user-profile-icon
                     = @appointment.pet.weight
-                  %li
-                    %i.fa.fa-envelope.user-profile-icon
-                    = @appointment.user.email
+
           .col-md-6.col-sm-6.col-xs-12
             %section.panel
               .x_title
@@ -91,5 +89,5 @@
 
                   %p= @appointment.comment
                 .text-center.mtop20
-                  %a.btn.btn-success{ href: '#' } Accept
-                  %a.btn.btn-danger{ href: '#' } Reject
+                  = link_to 'Accept', accept_admin_panel_appointment_path(@appointment), class: 'btn btn-success', method: :put
+                  = link_to 'Reject', reject_admin_panel_appointment_path(@appointment), class: 'btn btn-danger', method: :put

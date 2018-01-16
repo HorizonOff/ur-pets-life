@@ -8,6 +8,16 @@ module AdminPanel
 
     def show; end
 
+    def accept
+      @appointment.update(status: :accepted)
+      render :show
+    end
+
+    def reject
+      @appointment.update(status: :rejected)
+      render :show
+    end
+
     private
 
     def set_appointment
