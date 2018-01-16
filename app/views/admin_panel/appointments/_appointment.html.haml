@@ -1,7 +1,9 @@
 %tr
   %th{ scope: 'row' } #{appointment.id}
   %td
-    = appointment.bookable_type + ': ' + appointment.bookable.name
+    %a= appointment.bookable.name
+    %br
+    %small= appointment.bookable_type
   %td
     -if appointment.vet_id.present?
       =appointment.vet.name
@@ -10,4 +12,4 @@
   %td 
     %span{ class: "label #{status_class(appointment)}" } #{appointment.status}
   %td
-    =link_to 'Show', admin_panel_appointment_path(appointment), class: 'btn btn-primary'
+    =link_to 'Show', admin_panel_appointment_path(appointment), class: 'btn btn-primary btn-xs'
