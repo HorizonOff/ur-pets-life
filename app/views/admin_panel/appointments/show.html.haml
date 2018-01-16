@@ -89,5 +89,4 @@
 
                   %p= @appointment.comment
                 .text-center.mtop20
-                  = link_to 'Accept', accept_admin_panel_appointment_path(@appointment), class: 'btn btn-success', method: :put
-                  = link_to 'Reject', reject_admin_panel_appointment_path(@appointment), class: 'btn btn-danger', method: :put
+                  = appointment_actions(@appointment)
