@@ -72,6 +72,7 @@ Rails.application.routes.draw do
         collection { get :appointments }
       end
     end
+    resources :trainers
     resources :service_types, except: %i[new index show]
     resource :profile, only: %i[edit update]
     resource :password, only: %i[edit update]

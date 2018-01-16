@@ -1,0 +1,16 @@
+%div
+  .page-title
+    .title_left
+      %h3 Edit trainer 
+
+  .clearfix
+  
+  = form_for @trainer, url: admin_panel_trainer_path(@trainer),
+  html: { multipart: true, method: :put, class: 'form-horizontal form-label-left', autocomplete: 'off'} do |f|
+
+    = render partial: 'form', locals: { f: f }
+    
+    = f.submit 'Update trainer', class: 'btn btn-success pull-right'
+
+:javascript
+  init_map();

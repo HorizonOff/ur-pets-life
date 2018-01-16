@@ -1,9 +1,9 @@
 %div
   .page-title
     .title_left
-      %h3 DayCare Centres 
+      %h3 Trainers 
     .title_right
-      = link_to 'Create day care centre', new_admin_panel_day_care_centre_path, class: 'btn btn-info btn-round pull-right'
+      = link_to 'Create trainer', new_admin_panel_trainer_path, class: 'btn btn-info btn-round pull-right'
 
   .clearfix
 
@@ -16,10 +16,11 @@
               %tr
                 %th #
                 %th Name
-                %th Picture
+                %th Avatar
                 %th Email
                 %th Phone
+                %th Experience
                 %th Status
                 %th Actions
             %tbody
-              =render @day_care_centres
+              =render @trainers

@@ -3,45 +3,37 @@
     .col-md-12.col-sm-12.col-xs-12
       .x_panel
         .x_title
-          %h2= @vet.name
+          %h2= @trainer.name
           .clearfix
         .x_content
           .col-md-3.col-sm-3.col-xs-12.profile_left
             .profile_img
               #crop-avatar
-                = image_tag(@vet.avatar.medium.url, class: 'img-responsive avatar-view', title: @vet.name) if @vet.avatar.present?
+                = image_tag(@trainer.picture.medium.url, class: 'img-responsive avatar-view', title: @trainer.name) if @trainer.picture.present?
 
             %ul.list-unstyled.user_data
               %li
                 %i.fa.fa-briefcase.user-profile-icon
-                = @vet.specializations.pluck(:name).join("\n")
+                = @trainer.specializations.pluck(:name).join("\n")
               %li
                 %i.fa.fa-phone.user-profile-icon
-                = @vet.mobile_number
+                = @trainer.mobile_number
               %li
                 %i.fa.fa-envelope.user-profile-icon
-                = @vet.email
-              %li
-                %i.fa.fa-user.user-profile-icon
-                Clininc's admin
+                = @trainer.email
 
-            =link_to edit_admin_panel_vet_path(@vet), class: 'btn btn-warning' do
+            =link_to edit_admin_panel_trainer_path(@trainer), class: 'btn btn-warning' do
               %i.fa.fa-edit.m-right-xs
-              Edit vet
-            %br
-
-            =link_to admin_panel_vet_calendars_path(@vet), class: 'btn btn-info' do
-              %i.fa.fa-edit.m-right-xs
-              View calendar
+              Edit trainer
             %br
 
           .col-md-9.col-sm-9.col-xs-12
-            -if @vet.location&.longitude && @vet.location&.latitude 
+            -if @trainer.location&.longitude && @trainer.location&.latitude 
               %div{ style: 'width: 100%; height: 300px; position: relative;' }
-                %img{ src: generate_static_map_url(@vet.location), style: 'max-widrth: 100%; display: block; margin: 0 auto;'}
+                %img{ src: generate_static_map_url(@trainer.location), style: 'max-widrth: 100%; display: block; margin: 0 auto;'}
             .profile_title
               .col-md-6.col-sm-6.col-xs-6
-                %h2 Total count of qualifications #{@vet.qualifications.size}
+                %h2 Total count of qualifications #{@trainer.qualifications.size}
             %table.table
               %thead
                 %tr
@@ -49,7 +41,7 @@
                   %th Diploma
                   %th University
               %tbody
-                - @vet.qualifications.each do |q|
+                - @trainer.qualifications.each do |q|
                   %tr
                     %th{ scope: 'row' } #{q.id}
                     %td #{q.diploma}
