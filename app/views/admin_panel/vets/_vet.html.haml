@@ -3,13 +3,13 @@
   %td #{vet.name}
   %td
     -if vet.avatar.present?
-      =image_tag(vet.avatar.thumb.url)
+      =image_tag(vet.avatar.thumb.url, class: 'avatar')
   %td #{vet.email}
   %td #{vet.mobile_number}
   %td #{vet.experience}
   %td #{vet.is_active}
   %td
-    =link_to 'Show', admin_panel_vet_path(vet), class: 'btn btn-primary'
-    =link_to 'View calendar', admin_panel_vet_calendars_path(vet), class: 'btn btn-info'
-    =link_to 'Edit', edit_admin_panel_vet_path(vet), class: 'btn btn-warning'
-    =link_to 'Delete', admin_panel_vet_path(vet), method: :delete, class: 'btn btn-danger'
+    =link_to 'Show', admin_panel_vet_path(vet), class: 'btn btn-primary btn-xs'
+    =link_to 'View calendar', admin_panel_vet_calendars_path(vet), class: 'btn btn-info btn-xs'
+    =link_to 'Edit', edit_admin_panel_vet_path(vet), class: 'btn btn-warning btn-xs'
+    =link_to 'Delete', admin_panel_vet_path(vet), method: :delete, class: 'btn btn-danger btn-xs'

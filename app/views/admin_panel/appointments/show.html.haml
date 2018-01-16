@@ -1,0 +1,92 @@
+%div
+  .page-title
+    .title_left
+      %h3
+        Booking
+        %span{ class: "label #{status_class(@appointment)}" } #{@appointment.status}
+  .clearfix
+  .row
+    .col-md-12.col-sm-12.col-xs-12
+      .x_panel
+        .x_content
+          .col-md-3.col-sm-3.col-xs-12.profile_left
+            %section.panel
+              .x_title
+                %h4 Customer info
+                .clearfix
+
+              .panel-body
+                %ul.list-unstyled.user_data
+                  %li
+                    %i.fa.fa-map-marker.user-profile-icon
+                    = @appointment.user.name
+                  %li
+                    %i.fa.fa-phone.user-profile-icon
+                    = @appointment.user.mobile_number
+                  %li
+                    %i.fa.fa-envelope.user-profile-icon
+                    = @appointment.user.email
+          
+          .col-md-3.col-sm-3.col-xs-12.profile_left
+            %section.panel
+              .x_title
+                %h4 Pet info
+                .clearfix
+
+              .panel-body
+                .profile_img
+                  = image_tag(@appointment.pet.avatar.medium.url, class: 'img-responsive avatar-view', title:  @appointment.pet.name) if @appointment.pet.avatar.present?
+                %ul.list-unstyled.user_data
+                  %li
+                    %i.fa.fa-map-marker.user-profile-icon
+                    = @appointment.pet.name
+                  %li
+                    %i.fa.fa-map-marker.user-profile-icon
+                    = @appointment.pet.pet_type.is_additional_type? ? @appointment.pet.additional_type : @appointment.pet.breed.name
+                  %li
+                    %i.fa.fa-phone.user-profile-icon
+                    = @appointment.pet.birthday.strftime('%-d %b %Y %I:%M %p')
+                  %li
+                    %i.fa.fa-phone.user-profile-icon
+                    = @appointment.pet.weight
+
+          .col-md-6.col-sm-6.col-xs-12
+            %section.panel
+              .x_title
+                %h4 Booking info
+                .clearfix
+
+              .panel-body
+                .project_detail
+                  %p.title= @appointment.bookable.name
+                  %p= @appointment.bookable_type
+
+                  -if @appointment.bookable_type == 'Clinic'
+                    %p.title= @appointment.vet.name
+                    %p Vet
+                  -else
+                    %table.table
+                      %thead
+                        %tr
+                          %th #
+                          %th Service
+                          %th Price
+                      %tbody
+                        - @appointment.service_details.each_with_index do |s, i|
+                          %tr
+                            %td= i + 1
+                            %td= s.service_type.name
+                            %td= s.price
+                        %tr
+                          %td{ colspan: 2 } Total
+                          %td= @appointment.total_price
+
+                  %p.title Booked time
+                  %p= @appointment.created_at.strftime('%-d %b %Y %I:%M %p')
+
+                  %p.title Session start
+                  %p= @appointment.start_at.strftime('%-d %b %Y %I:%M %p')
+
+                  %p= @appointment.comment
+                .text-center.mtop20
+                  = appointment_actions(@appointment)

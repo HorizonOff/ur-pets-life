@@ -1,4 +1,7 @@
 class Appointment < ApplicationRecord
+  STATUS_OPTIONS = %i[pending accepted rejected].freeze
+  enum status: STATUS_OPTIONS
+
   belongs_to :user
   belongs_to :bookable, polymorphic: true
   belongs_to :pet
@@ -8,6 +11,8 @@ class Appointment < ApplicationRecord
   has_one :diagnosis, dependent: :destroy
 
   has_and_belongs_to_many :service_details
+
+  after_initialize :set_defaults
 
   before_validation :set_end_at, :set_calendar
   validates :start_at, presence: { message: 'Date and time are required' }
@@ -30,6 +35,11 @@ class Appointment < ApplicationRecord
   end
 
   private
+
+  def set_defaults
+    return if persisted? && status.present?
+    self.status ||= :pending
+  end
 
   def vet_id_should_be_vaild
     if bookable_type == 'Clinic' && bookable
