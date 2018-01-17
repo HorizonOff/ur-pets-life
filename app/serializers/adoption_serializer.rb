@@ -28,7 +28,7 @@ class AdoptionSerializer < PictureUrlSerializer
   end
 
   def birthday
-    object.birthday.utc.iso8601
+    object.birthday.to_i
   end
 
   class VaccineTypeSerializer < ActiveModel::Serializer

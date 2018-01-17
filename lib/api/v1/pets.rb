@@ -26,8 +26,8 @@ module Api
             key :example, 'Pluto'
           end
           property :birthday do
-            key :type, :string
-            key :example, '2017-12-12T11:13:40Z'
+            key :type, :integer
+            key :example, 1516217199
           end
           property :sex do
             key :type, :integer
@@ -49,8 +49,8 @@ module Api
             key :description, 'If pet_type_id - 3 - other'
           end
           property :lost_at do
-            key :type, :string
-            key :example, '2017-12-12T11:13:40Z'
+            key :type, :integer
+            key :example, 1516217199
           end
           property :is_for_adoption do
             key :type, :boolean
@@ -93,8 +93,8 @@ module Api
               key :example, 'Pluto'
             end
             property :birthday do
-              key :type, :string
-              key :example, '2017-12-12T11:13:40Z'
+              key :type, :integer
+              key :example, 1516217199
             end
           end
         end
@@ -141,8 +141,8 @@ module Api
             key :name, 'pet[birthday]'
             key :in, :formData
             key :required, true
-            key :type, :string
-            key :example, '2017-12-12T11:13:40Z'
+            key :type, :integer
+            key :example, 1516217199
           end
           parameter do
             key :name, 'pet[pet_type_id]'
@@ -200,8 +200,8 @@ module Api
           parameter do
             key :name, 'pet[vaccinations_attributes][0][done_at]'
             key :in, :formData
-            key :type, :string
-            key :example, '2017-12-12T11:13:40Z'
+            key :type, :integer
+            key :example, 1516217199
           end
           parameter do
             key :name, 'pet[vaccinations_attributes][0][picture]'
@@ -217,8 +217,8 @@ module Api
           parameter do
             key :name, 'pet[vaccinations_attributes][1][done_at]'
             key :in, :formData
-            key :type, :string
-            key :example, '2017-12-12T11:13:40Z'
+            key :type, :integer
+            key :example, 1516217199
           end
           parameter do
             key :name, 'pet[vaccinations_attributes][1][picture]'
@@ -297,8 +297,8 @@ module Api
             key :name, 'pet[birthday]'
             key :in, :formData
             key :required, true
-            key :type, :string
-            key :example, '2017-12-12T11:13:40Z'
+            key :type, :integer
+            key :example, 1516217199
           end
           parameter do
             key :name, 'pet[additional_type]'
@@ -356,8 +356,8 @@ module Api
           parameter do
             key :name, 'pet[vaccinations_attributes][0][done_at]'
             key :in, :formData
-            key :type, :string
-            key :example, '2017-12-12T11:13:40Z'
+            key :type, :integer
+            key :example, 1516217199
           end
           parameter do
             key :name, 'pet[vaccinations_attributes][0][picture]'
@@ -383,8 +383,8 @@ module Api
           parameter do
             key :name, 'pet[vaccinations_attributes][1][done_at]'
             key :in, :formData
-            key :type, :string
-            key :example, '2017-12-12T11:13:40Z'
+            key :type, :integer
+            key :example, 1516217199
           end
           parameter do
             key :name, 'pet[vaccinations_attributes][1][picture]'

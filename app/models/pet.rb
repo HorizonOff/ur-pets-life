@@ -64,6 +64,21 @@ class Pet < ApplicationRecord
     self.additional_comment = nil
   end
 
+  def birthday=(value)
+    value = Time.zone.at(value.to_i)
+    super
+  end
+
+  def lost_at=(value)
+    value = Time.zone.at(value.to_i)
+    super
+  end
+
+  def found_at=(value)
+    value = Time.zone.at(value.to_i)
+    super
+  end
+
   def pet_type_is_additional?
     @pet_type_is_additional ||= pet_type.is_additional_type?
   end

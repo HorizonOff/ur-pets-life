@@ -34,6 +34,11 @@ class Appointment < ApplicationRecord
     @for_clinic ||= bookable_type == 'Clinic'
   end
 
+  def start_at=(value)
+    value = Time.zone.at(value.to_i)
+    super
+  end
+
   private
 
   def set_defaults

@@ -416,11 +416,11 @@ if Pet.count.zero?
                    is_for_adoption: true,
                    avatar: File.open(File.join(Rails.root, 'public', 'images', 'cat_1.jpg')))
   user.pets.create(name: 'Pluto', sex: 1, birthday: '2017-01-01T14:36:44.000Z', pet_type_id: 2, breed_id: 3,
-                   lost_at: '2017-12-12T11:13:40Z', description: 'My favorite dog', additional_comment: 'Help me',
+                   lost_at: 1516217199, description: 'My favorite dog', additional_comment: 'Help me',
                    mobile_number: '+2342342343343', location_attributes: uzhgorod,
                    avatar: File.open(File.join(Rails.root, 'public', 'images', 'dog_1.jpg')))
   user.pets.create(description: 'Little mouse Jerry', pet_type_id: 3, additional_comment: 'Somebody, Take it away',
-                   additional_type: 'Bird', found_at: '2017-12-12T11:13:40Z', mobile_number: '+2342342343343',
+                   additional_type: 'Bird', found_at: 1516217199, mobile_number: '+2342342343343',
                    location_attributes: mukachevo,
                    avatar: File.open(File.join(Rails.root, 'public', 'images', 'other_1.jpg')))
 end

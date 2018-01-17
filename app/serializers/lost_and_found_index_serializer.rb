@@ -4,7 +4,7 @@ class LostAndFoundIndexSerializer < PictureUrlSerializer
   attributes :id, :description, :avatar_url, :address, :distance, :pet_type_id, :lost_at, :found_at
 
   def birthday
-    object.birthday.utc.iso8601
+    object.birthday.to_i
   end
 
   def address
@@ -16,11 +16,11 @@ class LostAndFoundIndexSerializer < PictureUrlSerializer
   end
 
   def lost_at
-    object.lost_at.utc.iso8601 if object.lost_at.present?
+    object.lost_at.to_i if object.lost_at.present?
   end
 
   def found_at
-    object.found_at.utc.iso8601 if object.found_at.present?
+    object.found_at.to_i if object.found_at.present?
   end
 
   private

@@ -1,5 +1,9 @@
 class AppointmentIndexSerializer < ActiveModel::Serializer
-  attributes :id, :start_at, :picture_url, :address, :distance, :working_hours, :bookable_type
+  attributes :id, :start_at, :picture_url, :address, :distance, :working_hours, :booked_object
+
+  def start_at
+    object.start_at.to_i
+  end
 
   def picture_url
     object.bookable.picture.try(:url)
@@ -18,6 +22,10 @@ class AppointmentIndexSerializer < ActiveModel::Serializer
     bookable = object.bookable
     { open_at: bookable.schedule.send(wday + '_open_at').strftime('%H:%m'),
       close_at: bookable.schedule.send(wday + '_close_at').strftime('%H:%m') }
+  end
+
+  def booked_object
+    object.bookable.name
   end
 
   private
