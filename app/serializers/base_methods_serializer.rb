@@ -1,0 +1,35 @@
+class BaseMethodsSerializer < ActiveModel::Serializer
+  def avatar_url
+    object.avatar.try(:url)
+  end
+
+  def remove_avatar
+    false
+  end
+
+  def picture_url
+    object.picture.try(:url)
+  end
+
+  def remove_picture
+    false
+  end
+
+  def birthday
+    object.birthday.to_i
+  end
+
+  def distance
+    object.location.distance_to([scope[:latitude], scope[:longitude]], :km).try(:round, 2) if show_distance?
+  end
+
+  private
+
+  def show_distance?
+    object.location.present? && scope[:latitude].present? && scope[:longitude].present?
+  end
+
+  def show_user_distance?
+    object.user.location && scope[:latitude].present? && scope[:longitude].present?
+  end
+end

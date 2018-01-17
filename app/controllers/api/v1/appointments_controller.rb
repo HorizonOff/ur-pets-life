@@ -7,7 +7,8 @@ module Api
         appointments = appointments_pagination_query.find_objects
         serialized_appointments = ActiveModel::Serializer::CollectionSerializer.new(
           appointments, serializer: AppointmentIndexSerializer,
-                        scope: { latitude: params[:latitude], longitude: params[:longitude] }
+                        scope: { latitude: params[:latitude], longitude: params[:longitude],
+                                 time_zone: params[:time_zone] }
         )
 
         render json: {

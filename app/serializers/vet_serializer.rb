@@ -1,4 +1,4 @@
-class VetSerializer < PictureUrlSerializer
+class VetSerializer < BaseMethodsSerializer
   type 'vet'
 
   attributes :id, :name, :avatar_url, :mobile_number, :consultation_fee, :clinic_picture_url, :pet_type_ids,

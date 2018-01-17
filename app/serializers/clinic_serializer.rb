@@ -6,7 +6,7 @@ class ClinicSerializer < ServiceCentreSerializer
     object.vets.includes(:pet_types)
   end
 
-  class VetSerializer < ActiveModel::Serializer
+  class VetSerializer < BaseMethodsSerializer
     attributes :id, :name, :avatar_url, :experience, :consultation_fee, :pet_type_ids
 
     def avatar_url

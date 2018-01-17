@@ -1,4 +1,4 @@
-class PetSerializer < PictureUrlSerializer
+class PetSerializer < BaseMethodsSerializer
   type 'pet'
 
   attributes :id, :avatar_url, :name, :sex, :weight, :birthday, :comment, :pet_type_id,
@@ -13,10 +13,6 @@ class PetSerializer < PictureUrlSerializer
 
   def sex
     Pet.sexes[object.sex]
-  end
-
-  def birthday
-    object.birthday.to_i
   end
 
   def lost_at

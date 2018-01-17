@@ -1,4 +1,4 @@
-class AppointmentIndexSerializer < ActiveModel::Serializer
+class AppointmentIndexSerializer < WorkingHoursSerializer
   attributes :id, :start_at, :picture_url, :address, :distance, :working_hours, :booked_object
 
   def start_at
@@ -18,19 +18,14 @@ class AppointmentIndexSerializer < ActiveModel::Serializer
   end
 
   def working_hours
-    wday = Schedule::DAYS[Time.now.wday.to_s]
-    bookable = object.bookable
-    { open_at: bookable.schedule.send(wday + '_open_at').strftime('%H:%m'),
-      close_at: bookable.schedule.send(wday + '_close_at').strftime('%H:%m') }
+    @schedule = object.bookable.schedule
+    return 'Open 24/7' if @schedule.day_and_night?
+    @time = Time.now.utc + scope[:time_zone].to_i.hours
+    retrieve_wday_schedule
+    show_message
   end
 
   def booked_object
     object.bookable.name
-  end
-
-  private
-
-  def show_distance?
-    scope[:latitude].present? && scope[:longitude].present?
   end
 end
