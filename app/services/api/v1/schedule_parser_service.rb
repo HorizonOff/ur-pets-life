@@ -20,10 +20,10 @@ module Api
 
         return [] if closed?
 
-        [change_date(schedule.send(@open_at_string)), change_date(schedule.send(@close_at_string))]
+        [change_day(schedule.send(@open_at_string)), change_day(schedule.send(@close_at_string))]
       end
 
-      def change_date(time)
+      def change_day(time)
         time.change(year: date.year, month: date.month, day: date.day)
       end
 

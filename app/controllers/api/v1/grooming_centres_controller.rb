@@ -9,14 +9,16 @@ module Api
         grooming_centres = grooming_centres_query.find_objects
         serialized_centres = ActiveModel::Serializer::CollectionSerializer.new(
           grooming_centres, serializer: GroomingCentreIndexSerializer,
-                            scope: { latitude: params[:latitude], longitude: params[:longitude] }
+                            scope: { latitude: params[:latitude], longitude: params[:longitude],
+                                     time_zone: params[:time_zone] }
         )
 
         render json: { grooming_centres: serialized_centres, total_count: grooming_centres.total_count }
       end
 
       def show
-        render json: @grooming_centre, scope: { latitude: params[:latitude], longitude: params[:longitude] },
+        render json: @grooming_centre, scope: { latitude: params[:latitude], longitude: params[:longitude],
+                                                time_zone: params[:time_zone] },
                include: 'service_types,service_types.service_details'
       end
 
