@@ -1,10 +1,6 @@
 class ServiceCentreSerializer < ActiveModel::Serializer
   attributes :id, :name, :picture_url, :address, :distance, :working_hours, :website, :email, :mobile_number
 
-  def address
-    object.location.try(:address)
-  end
-
   def service_options
     object.service_options.pluck(:name)
   end

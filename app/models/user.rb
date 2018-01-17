@@ -45,6 +45,8 @@ class User < ApplicationRecord
 
   accepts_nested_attributes_for :location, update_only: true
 
+  delegate :address, to: :location, allow_nil: true
+
   def name
     first_name + ' ' + last_name
   end

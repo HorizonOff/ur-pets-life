@@ -10,7 +10,7 @@ class AppointmentIndexSerializer < ActiveModel::Serializer
   end
 
   def address
-    object.bookable.location.try(:address)
+    object.bookable.address
   end
 
   def distance

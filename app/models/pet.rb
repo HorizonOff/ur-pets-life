@@ -14,7 +14,7 @@ class Pet < ApplicationRecord
   has_one :location, as: :place, inverse_of: :place
   reverse_geocoded_by 'locations.latitude', 'locations.longitude'
 
-  delegate :address, to: :location
+  delegate :address, to: :location, allow_nil: true
 
   accepts_nested_attributes_for :location, update_only: true
   accepts_nested_attributes_for :vaccinations, allow_destroy: true

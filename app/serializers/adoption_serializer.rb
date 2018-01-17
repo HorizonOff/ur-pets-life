@@ -16,7 +16,7 @@ class AdoptionSerializer < PictureUrlSerializer
   end
 
   def address
-    object.location.try(:address)
+    object.user.location.try(:address)
   end
 
   def distance
@@ -42,6 +42,6 @@ class AdoptionSerializer < PictureUrlSerializer
   private
 
   def show_distance?
-    object.location.present? && scope[:latitude].present? && scope[:longitude].present?
+    object.location.present? && scope[:latitude].present? && scope[:longitude].present? && object.user.location
   end
 end

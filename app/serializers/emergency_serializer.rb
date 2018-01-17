@@ -6,10 +6,6 @@ class EmergencySerializer < ActiveModel::Serializer
     object.class.name
   end
 
-  def address
-    object.location.try(:address)
-  end
-
   def latitude
     object.location.try(:latitude)
   end

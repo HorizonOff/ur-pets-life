@@ -26,7 +26,7 @@ class Vet < ApplicationRecord
 
   mount_uploader :avatar, PhotoUploader
 
-  delegate :address, to: :location
+  delegate :address, to: :location, allow_nil: true
   reverse_geocoded_by 'locations.latitude', 'locations.longitude'
 
   before_validation :check_location

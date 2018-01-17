@@ -26,7 +26,7 @@ module ServiceCentreConcern
 
     mount_uploader :picture, PhotoUploader
 
-    delegate :address, to: :location
+    delegate :address, to: :location, allow_nil: true
     reverse_geocoded_by 'locations.latitude', 'locations.longitude'
 
     scope :alphabetical_order, -> { order(name: :asc) }
