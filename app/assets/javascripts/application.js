@@ -112,3 +112,14 @@ function init_timepicker(){
     });
   }
 }
+
+$(document).on('change', 'input.service_detail_switch', function() {
+  var destroy_checkbox = $(this).siblings('.destroy_service_detail')
+  destroy_checkbox.prop('checked', !destroy_checkbox.prop('checked'))
+  var selector = $(this).parent('.control-label').siblings('.service_details_fields');
+  if (selector.css('display') == 'none') {
+    show_and_enable_inputs(selector)
+  } else {
+    hide_and_disable_inputs(selector)
+  }
+});

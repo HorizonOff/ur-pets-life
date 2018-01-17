@@ -1,0 +1,4 @@
+<% if @service_type.errors.empty? %>
+  $('table.table tbody tr#service_type<%= @service_type.id %>').replaceWith("<%= j render @service_type %>");
+  $('#Modal').modal('hide');
+<% end %>

@@ -40,6 +40,12 @@ module AdminPanel
       redirect_to admin_panel_day_care_centres_path
     end
 
+    def new_service_type
+      @service_type = @day_care_centre.service_types.new
+      @service_details = @service_type.default_set
+      render 'admin_panel/service_types/new'
+    end
+
     private
 
     def set_day_care_centre

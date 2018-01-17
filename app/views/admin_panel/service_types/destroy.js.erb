@@ -1,0 +1,3 @@
+<% if @service_type.errors.empty? %>
+  $('table.table tbody tr#service_type<%= @service_type.id %>').remove();
+<% end %>

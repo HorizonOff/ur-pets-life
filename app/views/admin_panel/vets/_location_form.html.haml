@@ -12,7 +12,7 @@
           = f.check_box :use_clinic_location, class: 'flat', disabled: f.object.clinic_id.blank?
       .form-group
         = f.fields_for :location do |ff|
-          = ff.check_box :_destroy, value: 1,  checked: ff.object.new_record?, class: 'destroy_location', style: 'display:none'
+          = ff.check_box :_destroy, value: 1, checked: ff.object.new_record?, class: 'destroy_location', style: 'display:none'
           .col-md-3.col-sm-3.col-xs-12.location_tab_fields
             = ff.hidden_field :latitude
             = ff.hidden_field :longitude

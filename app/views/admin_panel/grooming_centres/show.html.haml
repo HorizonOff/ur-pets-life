@@ -49,10 +49,4 @@
                   %th Name
                   %th Actions
               %tbody
-                - @grooming_centre.service_types.each do |st|
-                  %tr
-                    %th{ scope: 'row' } #{st.id}
-                    %td #{st.name}
-                    %td
-                      =link_to 'Edit', edit_admin_panel_service_type_path(st), class: 'btn btn-warning'
-                      =link_to 'Delete', admin_panel_service_type_path(st), method: :delete, class: 'btn btn-danger'
+                = render @grooming_centre.service_types 
