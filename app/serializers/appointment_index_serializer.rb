@@ -32,4 +32,10 @@ class AppointmentIndexSerializer < WorkingHoursSerializer
   def booked_object
     object.bookable.name
   end
+
+  private
+
+  def show_distance?
+    object.bookable.location.present? && scope[:latitude].present? && scope[:longitude].present?
+  end
 end
