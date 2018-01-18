@@ -2436,7 +2436,8 @@ if (typeof NProgress != 'undefined') {
               $('p.time_slot').text(current_time_slot);
               $('a.destroy_link').attr('href', '/admin_panel/calendars/' + calEvent.id)
             } else {
-              return false
+              window.open(calEvent.url);
+              return false;
             };
 
             $('a.destroy_link').on('click', function(e) {
