@@ -2,11 +2,12 @@ module Api
   module V1
     class PetsController < Api::BaseController
       include ParamsCleanerHelper
-      before_action :set_pet, only: %i[show update destroy]
+      before_action :set_pet, only: %i[show update destroy lost change_status]
       before_action :clear_pet_params, only: :update
+      before_action :create_pet, only: %i[create found]
 
       def index
-        pets = @user.pets
+        pets = @user.pets.owned
         render json: pets, each_serializer: PetIndexSerializer
       end
 
@@ -15,14 +16,7 @@ module Api
                scope: { pet_vaccinations: pet_vaccinations }
       end
 
-      def create
-        pet = @user.pets.new(pet_params)
-        if pet.save
-          render json: { message: 'Pet created successfully' }
-        else
-          render_422(parse_errors_messages(pet))
-        end
-      end
+      def create; end
 
       def update
         if @pet.update(pet_params.except(:pet_type_id))
@@ -37,6 +31,24 @@ module Api
       def destroy
         @pet.destroy
         render json: { nothing: true }, status: 204
+      end
+
+      def found; end
+
+      def lost
+        if @pet.update(lost_params)
+          render json: { message: 'Pet updated successfully' }
+        else
+          render_422(parse_errors_messages(@pet))
+        end
+      end
+
+      def change_status
+        if @pet.update(status_params)
+          render json: { message: 'Pet updated successfully' }
+        else
+          render_422(parse_errors_messages(@pet))
+        end
       end
 
       def can_be_lost
@@ -56,12 +68,38 @@ module Api
         return render_404 unless @pet
       end
 
+      def create_pet
+        pet = @user.pets.new(pet_params)
+        if pet.save
+          render json: { message: 'Pet created successfully' }
+        else
+          render_422(parse_errors_messages(pet))
+        end
+      end
+
       def pet_params
         params.require(:pet).permit(:avatar, :name, :birthday, :sex, :pet_type_id, :breed_id, :additional_type, :weight,
-                                    :comment, :is_lost, :is_found, :is_for_adoption,
+                                    :comment, :found_at, :additional_comment, :mobile_number, :description,
                                     pictures_attributes: %i[id attachment _destroy],
-                                    vaccinations_attributes: %i[id vaccine_type_id done_at
-                                                                picture remove_picture _destroy])
+                                    vaccinations_attributes: vaccinations_params,
+                                    location_attributes: location_params)
+      end
+
+      def lost_params
+        params.require(:pet).permit(:description, :mobile_number, :additional_comment, :lost_at,
+                                    location_attributes: location_params)
+      end
+
+      def status_params
+        params.require(:pet).permit(:is_lost, :is_for_adoption)
+      end
+
+      def vaccinations_params
+        %i[id vaccine_type_id done_at picture remove_picture _destroy]
+      end
+
+      def location_params
+        %i[latitude longitude city area street building_type building_name unit_number villa_number comment]
       end
 
       def pet_vaccinations

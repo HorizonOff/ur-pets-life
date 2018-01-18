@@ -1,7 +1,7 @@
 class LostAndFoundIndexSerializer < PictureUrlSerializer
   type 'pet'
 
-  attributes :id, :name, :avatar_url, :address, :distance, :pet_type_id, :lost_at, :found_at
+  attributes :id, :description, :avatar_url, :address, :distance, :pet_type_id, :lost_at, :found_at
 
   def birthday
     object.birthday.utc.iso8601

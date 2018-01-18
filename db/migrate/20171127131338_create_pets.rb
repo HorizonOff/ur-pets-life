@@ -11,9 +11,14 @@ class CreatePets < ActiveRecord::Migration[5.1]
       t.float :weight
       t.string :comment
       t.string :avatar
+
       t.datetime :lost_at
       t.datetime :found_at
       t.boolean :is_for_adoption, default: false
+
+      t.string :description
+      t.string :mobile_number
+      t.string :additional_comment
 
       t.timestamps
     end

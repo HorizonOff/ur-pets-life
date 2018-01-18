@@ -47,13 +47,16 @@ module Api
 
       swagger_schema :Location do
         property :latitude do
-          key :type, :float
+          key :type, :number
+          key :example, 48.6208
         end
         property :longitude do
-          key :type, :float
+          key :type, :number
+          key :example, 22.287883
         end
         property :city do
           key :type, :string
+          key :example, 'Uzhgorod'
         end
         property :area do
           key :type, :string

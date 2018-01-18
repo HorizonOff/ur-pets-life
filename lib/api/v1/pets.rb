@@ -48,9 +48,9 @@ module Api
             key :type, :string
             key :description, 'If pet_type_id - 3 - other'
           end
-          property :is_lost do
-            key :type, :boolean
-            key :example, true
+          property :lost_at do
+            key :type, :string
+            key :example, '2017-12-12T11:13:40Z'
           end
           property :is_for_adoption do
             key :type, :boolean
@@ -406,47 +406,6 @@ module Api
             key :type, :file
             key :description, 'Adding new picture'
           end
-          response 200 do
-            key :description, 'Success response'
-          end
-        end
-
-        operation :patch do
-          key :description, 'Update pet lost and adoption statuses'
-          key :consumes, %w[application/json]
-          key :produces, %w[application/json]
-          key :tags, %w[Pets]
-
-          security do
-            key :api_key, []
-          end
-
-          parameter do
-            key :name, :id
-            key :in, :path
-            key :type, :integer
-            key :required, true
-          end
-
-          parameter do
-            key :name, :pet
-            key :in, :body
-            key :required, true
-            key :description, "You can send only 1 pair of attributes\n" +
-                              'is_lost true/false, is_for_adoption:: true/false'
-
-            schema do
-              property :pet do
-                property :is_lost do
-                  key :type, :boolean
-                end
-                property :is_for_adoption do
-                  key :type, :boolean
-                end
-              end
-            end
-          end
-
           response 200 do
             key :description, 'Success response'
           end
