@@ -311,7 +311,7 @@ module Api
             key :name, 'pet[found_at]'
             key :in, :formData
             key :required, true
-            key :type, :string
+            key :type, :integer
             key :example, 1516217199
           end
           parameter do
