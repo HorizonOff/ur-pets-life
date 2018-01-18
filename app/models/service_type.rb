@@ -13,6 +13,5 @@ class ServiceType < ApplicationRecord
 
   def service_details_with_blanks
     default_set(service_details.pluck(:pet_type_id))
-    service_details
   end
 end
