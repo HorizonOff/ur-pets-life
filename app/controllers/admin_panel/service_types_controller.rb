@@ -1,10 +1,9 @@
 module AdminPanel
   class ServiceTypesController < AdminPanelController
     before_action :set_service_type, except: :create
+    before_action :set_service_details, only: :edit
 
-    def edit
-      @service_details = @service_type.service_details_with_blanks
-    end
+    def edit; end
 
     def create
       @service_type = ServiceType.new(service_type_params)
@@ -28,6 +27,10 @@ module AdminPanel
     def service_type_params
       params.require(:service_type).permit(:serviceable_type, :serviceable_id, :name, :description,
                                            service_details_attributes: %i[id pet_type_id price _destroy])
+    end
+
+    def set_service_details
+      @service_type.service_details_with_blanks
     end
   end
 end

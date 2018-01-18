@@ -42,7 +42,7 @@ module AdminPanel
 
     def new_service_type
       @service_type = @day_care_centre.service_types.new
-      @service_details = @service_type.default_set
+      @service_type.default_set
       render 'admin_panel/service_types/new'
     end
 
