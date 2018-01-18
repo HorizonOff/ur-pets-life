@@ -46,3 +46,16 @@
                     %th{ scope: 'row' } #{q.id}
                     %td #{q.diploma}
                     %td #{q.university}
+            .profile_title
+              .col-md-6.col-sm-6.col-xs-6
+                %h2 Total count of services #{@trainer.service_types.size}
+              .col-md-6.col-sm-6.col-xs-6
+                =link_to 'Add a service', new_service_type_admin_panel_trainer_path(@trainer), class: 'btn btn-info pull-right', remote: true
+            %table.table
+              %thead
+                %tr
+                  %th #
+                  %th Name
+                  %th Actions
+              %tbody
+                = render @trainer.service_types 

@@ -71,3 +71,15 @@ textarea.no-resize {
 div.error label {
   color: red;
 }
+
+.vcenter {
+  vertical-align: middle;
+}
+.service_details_fields {
+  line-height: 100px;
+  height: 100px;
+}
+.service_details_fields input,
+.service_details_fields label {
+  display: inline-block;
+}

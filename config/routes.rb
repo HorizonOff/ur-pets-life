@@ -64,10 +64,10 @@ Rails.application.routes.draw do
       member { get :add_vet }
     end
     resources :day_care_centres do
-      member { get :add_service_type }
+      member { get :new_service_type }
     end
     resources :grooming_centres do
-      member { get :add_service_type }
+      member { get :new_service_type }
     end
     resources :vets do
       resources :calendars, shallow: true, only: %i[index create destroy update] do
@@ -75,7 +75,9 @@ Rails.application.routes.draw do
         collection { get :appointments }
       end
     end
-    resources :trainers
+    resources :trainers do
+      member { get :new_service_type }
+    end
     resources :service_types, except: %i[new index show]
     resources :appointments, only: %i[index show] do
       member { put :accept }

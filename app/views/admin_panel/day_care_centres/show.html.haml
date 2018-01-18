@@ -41,7 +41,7 @@
               .col-md-6.col-sm-6.col-xs-6
                 %h2 Total count of services #{@day_care_centre.service_types.size}
               .col-md-6.col-sm-6.col-xs-6
-                =link_to 'Add a service', add_service_type_admin_panel_day_care_centre_path(@day_care_centre), class: 'btn btn-info pull-right'
+                =link_to 'Add a service', new_service_type_admin_panel_day_care_centre_path(@day_care_centre), class: 'btn btn-info pull-right', remote: true
             %table.table
               %thead
                 %tr
@@ -49,10 +49,4 @@
                   %th Name
                   %th Actions
               %tbody
-                - @day_care_centre.service_types.each do |st|
-                  %tr
-                    %th{ scope: 'row' } #{st.id}
-                    %td #{st.name}
-                    %td
-                      =link_to 'Edit', edit_admin_panel_service_type_path(st), class: 'btn btn-warning'
-                      =link_to 'Delete', admin_panel_service_type_path(st), method: :delete, class: 'btn btn-danger'
+                = render @day_care_centre.service_types 

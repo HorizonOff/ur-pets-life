@@ -40,6 +40,12 @@ module AdminPanel
       redirect_to admin_panel_grooming_centres_path
     end
 
+    def new_service_type
+      @service_type = @grooming_centre.service_types.new
+      @service_details = @service_type.default_set
+      render 'admin_panel/service_types/new'
+    end
+
     private
 
     def set_grooming_centre
