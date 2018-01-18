@@ -1,6 +1,6 @@
 class TrainerSerializer < BaseMethodsSerializer
   type 'trainer'
-  attributes :id, :name, :picture_url, :mobile_number, :pet_type_ids, :experience, :specializations, :address, :distance
+  attributes :id, :name, :picture_url, :mobile_number, :pet_type_ids, :experience, :specializations, :address
 
   has_many :qualifications
 
