@@ -22,8 +22,8 @@ module Api
             key :example, 1
           end
           property :start_at do
-            key :type, :string
-            key :example, '09 Jan 2018 3:00 AM'
+            key :type, :integer
+            key :example, 1516318200
           end
           property :comment do
             key :type, :string
@@ -43,8 +43,8 @@ module Api
               key :example, 10
             end
              property :start_at do
-              key :type, :string
-              key :example, "15 Jan 2015 1:30 PM"
+              key :type, :integer
+              key :example, 1516318200
             end
             property :picture_url do
               key :type, :string
@@ -74,8 +74,8 @@ module Api
             key :example, 10
           end
           property :start_at do
-            key :type, :string
-            key :example, "01.01.2018 3:30 PM"
+            key :type, :integer
+            key :example, 1516318200
           end
           property :bookable_type do
             key :type, :string
@@ -115,8 +115,8 @@ module Api
               key :example, ['1st recipe', '2nd recipe']
             end
             property :next_appointment do
-              key :type, :string
-              key :example, "01.01.2018 3:30 PM"
+              key :type, :integer
+              key :example, 1516318200
             end
           end
         end
