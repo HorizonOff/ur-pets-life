@@ -9,14 +9,16 @@ module Api
         day_care_centres = day_care_centres_query.find_objects
         serialized_centres = ActiveModel::Serializer::CollectionSerializer.new(
           day_care_centres, serializer: DayCareCentreIndexSerializer,
-                            scope: { latitude: params[:latitude], longitude: params[:longitude] }
+                            scope: { latitude: params[:latitude], longitude: params[:longitude],
+                                     time_zone: params[:time_zone] }
         )
 
         render json: { day_care_centres: serialized_centres, total_count: day_care_centres.total_count }
       end
 
       def show
-        render json: @day_care_centre, scope: { latitude: params[:latitude], longitude: params[:longitude] },
+        render json: @day_care_centre, scope: { latitude: params[:latitude], longitude: params[:longitude],
+                                                time_zone: params[:time_zone] },
                include: 'service_types,service_types.service_details'
       end
 
@@ -41,7 +43,7 @@ module Api
       end
 
       def parse_date
-        @date = Time.zone.parse(params[:date])
+        @date = Time.zone.at(params[:date].to_i)
         return render_422(date: 'Date is required') if params[:date].blank? || @date.blank?
       end
     end

@@ -4,6 +4,7 @@ module Api
       def initialize(schedule, date)
         self.schedule = schedule
         self.date = date
+        self.valid_start = Time.current
       end
 
       def retrieve_time_slots
@@ -12,14 +13,18 @@ module Api
 
       private
 
-      attr_accessor :schedule, :date
+      attr_accessor :schedule, :date, :valid_start
 
       def parse_wday_schedule
         return [date.beginning_of_day, date.end_of_day] if schedule.day_and_night
 
         return [] if closed?
 
-        [schedule.send(@open_at_string), schedule.send(@close_at_string)]
+        [change_day(schedule.send(@open_at_string)), change_day(schedule.send(@close_at_string))]
+      end
+
+      def change_day(time)
+        time.change(year: date.year, month: date.month, day: date.day)
       end
 
       def closed?
@@ -35,7 +40,7 @@ module Api
         slot_start = working_hours.first
         last_available_slot = working_hours.last - 15.minutes
         loop do
-          time_slots << { start_at: slot_start.strftime('%I:%M %p') }
+          time_slots << { start_at: slot_start.to_i } if slot_start >= valid_start
           slot_start += 15.minutes
           break time_slots if slot_start > last_available_slot
         end

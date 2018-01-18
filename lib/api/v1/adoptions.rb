@@ -16,8 +16,8 @@ module Api
             key :example, 'Pluto'
           end
           property :birthday do
-            key :type, :string
-            key :example, '2017-12-12T11:13:40Z'
+            key :type, :integer
+            key :example, 1516217199
           end
           property :sex do
             key :type, :integer
@@ -88,8 +88,8 @@ module Api
               key :example, 'Pluto'
             end
             property :birthday do
-              key :type, :string
-              key :example, '2017-12-12T11:13:40Z'
+              key :type, :integer
+              key :example, 1516217199
             end
             property :pet_type_id do
               key :type, :integer

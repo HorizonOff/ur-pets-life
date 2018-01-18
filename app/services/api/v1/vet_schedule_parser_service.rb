@@ -4,6 +4,7 @@ module Api
       def initialize(vet, date)
         self.vet = vet
         self.date = date
+        self.valid_start = Time.current
       end
 
       def retrieve_time_slots
@@ -14,14 +15,14 @@ module Api
         return [] if @calendars.blank?
         @appointments = @vet.appointments.where('start_at >= :start AND end_at <= :end', start: day_start,
                                                                                          end: day_end)
-        parse_time_slots
+        parse_calendars
       end
 
       private
 
-      attr_accessor :vet, :date
+      attr_accessor :vet, :date, :valid_start
 
-      def parse_time_slots
+      def parse_calendars
         @time_slots = []
         @calendars.each do |c|
           slot_start = c.start_at
@@ -33,15 +34,18 @@ module Api
 
       def parse_each_calendar(slot_start, last_available_slot)
         loop do
-          slot_end = slot_start + vet.session_duration.minutes
-          overlapsing_appointments = check_appointments(slot_start, slot_end)
-          if overlapsing_appointments.blank?
-            time_slot = { start_at: slot_start.strftime('%I:%M %p'), end_at: slot_end.strftime('%I:%M %p') }
-            @time_slots << time_slot
-          end
+          parse_time_slot(slot_start) if slot_start >= valid_start
           slot_start += 15.minutes
           break if slot_start > last_available_slot
         end
+      end
+
+      def parse_time_slot(slot_start)
+        slot_end = slot_start + vet.session_duration.minutes
+        overlapsing_appointments = check_appointments(slot_start, slot_end)
+        return if overlapsing_appointments.present?
+        time_slot = { start_at: slot_start.to_i, end_at: slot_end.to_i }
+        @time_slots << time_slot
       end
 
       def check_appointments(slot_start, slot_end)

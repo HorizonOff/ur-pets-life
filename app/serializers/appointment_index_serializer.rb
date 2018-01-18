@@ -1,12 +1,20 @@
-class AppointmentIndexSerializer < ActiveModel::Serializer
-  attributes :id, :start_at, :picture_url, :address, :distance, :working_hours, :bookable_type
+class AppointmentIndexSerializer < WorkingHoursSerializer
+  attributes :id, :start_at, :picture_url, :address, :distance, :working_hours, :booked_object, :status
+
+  def status
+    Appointment.statuses[object.status]
+  end
+
+  def start_at
+    object.start_at.to_i
+  end
 
   def picture_url
     object.bookable.picture.try(:url)
   end
 
   def address
-    object.bookable.location.try(:address)
+    object.bookable.address
   end
 
   def distance
@@ -14,15 +22,14 @@ class AppointmentIndexSerializer < ActiveModel::Serializer
   end
 
   def working_hours
-    wday = Schedule::DAYS[Time.now.wday.to_s]
-    bookable = object.bookable
-    { open_at: bookable.schedule.send(wday + '_open_at').strftime('%H:%m'),
-      close_at: bookable.schedule.send(wday + '_close_at').strftime('%H:%m') }
+    @schedule = object.bookable.schedule
+    return 'Open 24/7' if @schedule.day_and_night?
+    @time = Time.now.utc + scope[:time_zone].to_i.hours
+    retrieve_wday_schedule
+    show_message
   end
 
-  private
-
-  def show_distance?
-    scope[:latitude].present? && scope[:longitude].present?
+  def booked_object
+    object.bookable.name
   end
 end

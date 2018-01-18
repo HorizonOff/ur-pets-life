@@ -22,7 +22,7 @@ module Api
       end
 
       def parse_date
-        @date = Time.zone.parse(params[:date])
+        @date = Time.zone.at(params[:date].to_i)
         return render_422(date: 'Date is required') if params[:date].blank? || @date.blank?
       end
 

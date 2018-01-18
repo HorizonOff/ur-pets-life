@@ -1,7 +1,7 @@
 class VersionSerializer < ActiveModel::Serializer
   type 'weight'
   attribute :created_at, key: :date do
-    object.created_at.utc.iso8601
+    object.created_at.to_i
   end
 
   attribute :weight do

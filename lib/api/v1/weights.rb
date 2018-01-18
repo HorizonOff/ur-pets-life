@@ -7,8 +7,8 @@ module Api
         property :weights do
           items do
             property :date do
-              key :type, :string
-              key :example, '2017-12-12T11:13:40Z'
+              key :type, :integer
+              key :example, 1516217199
             end
             property :weight do
               key :type, :number

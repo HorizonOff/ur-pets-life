@@ -7,8 +7,8 @@ module Api
         property :time_slots do
           items do
             property :start_at do
-              key :type, :string
-              key :example, '10:00 AM'
+              key :type, :integer
+              key :example, 1516217199
             end
           end
         end
@@ -18,13 +18,13 @@ module Api
         property :time_slots do
           items do
             property :start_at do
-              key :type, :string
-              key :example, '10:00 AM'
+              key :type, :integer
+              key :example, 1516217199
             end
 
             property :end_at do
-              key :type, :string
-              key :example, '10:30 AM'
+              key :type, :integer
+              key :example, 1516217200
             end
           end
         end
@@ -51,8 +51,8 @@ module Api
           parameter do
             key :name, :date
             key :in, :query
-            key :type, :string
-            key :example, '10 Jan 2018'
+            key :type, :integer
+            key :example, 1516217199
           end
 
           response 200 do
@@ -85,8 +85,8 @@ module Api
           parameter do
             key :name, :date
             key :in, :query
-            key :type, :string
-            key :example, '10 Jan 2018'
+            key :type, :integer
+            key :example, 1516217199
           end
 
           response 200 do
@@ -119,8 +119,8 @@ module Api
           parameter do
             key :name, :date
             key :in, :query
-            key :type, :string
-            key :example, '10 Jan 2018'
+            key :type, :integer
+            key :example, 1516217199
           end
 
           response 200 do

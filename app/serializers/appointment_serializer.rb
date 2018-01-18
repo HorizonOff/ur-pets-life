@@ -10,4 +10,8 @@ class AppointmentSerializer < ActiveModel::Serializer
   has_one :diagnosis do
     object.diagnosis if object.for_clinic?
   end
+
+  def start_at
+    object.start_at.to_i
+  end
 end

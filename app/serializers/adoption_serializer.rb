@@ -1,4 +1,4 @@
-class AdoptionSerializer < PictureUrlSerializer
+class AdoptionSerializer < BaseMethodsSerializer
   type 'pet'
 
   attributes :id, :avatar_url, :name, :sex, :weight, :birthday, :comment, :pet_type_id,
@@ -16,19 +16,15 @@ class AdoptionSerializer < PictureUrlSerializer
   end
 
   def address
-    object.location.try(:address)
+    object.user.location.try(:address)
   end
 
   def distance
-    object.location.distance_to([scope[:latitude], scope[:longitude]], :km).try(:round, 2) if show_distance?
+    object.location.distance_to([scope[:latitude], scope[:longitude]], :km).try(:round, 2) if show_user_distance?
   end
 
   def sex
     Pet.sexes[object.sex]
-  end
-
-  def birthday
-    object.birthday.utc.iso8601
   end
 
   class VaccineTypeSerializer < ActiveModel::Serializer
@@ -37,11 +33,5 @@ class AdoptionSerializer < PictureUrlSerializer
     has_many :vaccinations do
       scope[:pet_vaccinations][object.id] || []
     end
-  end
-
-  private
-
-  def show_distance?
-    object.location.present? && scope[:latitude].present? && scope[:longitude].present?
   end
 end

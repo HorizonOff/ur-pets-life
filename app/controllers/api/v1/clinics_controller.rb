@@ -8,14 +8,16 @@ module Api
         clinics = clinics_query.find_objects
         serialized_clinics = ActiveModel::Serializer::CollectionSerializer.new(
           clinics, serializer: ClinicIndexSerializer,
-                   scope: { latitude: params[:latitude], longitude: params[:longitude] }
+                   scope: { latitude: params[:latitude], longitude: params[:longitude],
+                            time_zone: params[:time_zone] }
         )
 
         render json: { clinics: serialized_clinics, total_count: clinics.total_count }
       end
 
       def show
-        render json: @clinic, scope: { latitude: params[:latitude], longitude: params[:longitude] }
+        render json: @clinic, scope: { latitude: params[:latitude], longitude: params[:longitude],
+                                       time_zone: params[:time_zone] }
       end
 
       private

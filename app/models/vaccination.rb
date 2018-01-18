@@ -7,6 +7,11 @@ class Vaccination < ApplicationRecord
   # validates :picture, file_size: { less_than: 512.kilobytes }
   mount_uploader :picture, PhotoUploader
 
+  def done_at=(value)
+    value = Time.zone.at(value.to_i)
+    super
+  end
+
   private
 
   def vaccine_type_should_be_valid

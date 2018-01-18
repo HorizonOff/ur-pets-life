@@ -1,8 +1,8 @@
-class PetSerializer < PictureUrlSerializer
+class PetSerializer < BaseMethodsSerializer
   type 'pet'
 
   attributes :id, :avatar_url, :name, :sex, :weight, :birthday, :comment, :pet_type_id,
-             :is_lost, :is_for_adoption
+             :lost_at, :is_for_adoption
 
   belongs_to :breed, unless: -> { object.pet_type_is_additional? }
   attribute :additional_type, if: -> { object.pet_type_is_additional? }
@@ -15,8 +15,8 @@ class PetSerializer < PictureUrlSerializer
     Pet.sexes[object.sex]
   end
 
-  def birthday
-    object.birthday.utc.iso8601
+  def lost_at
+    object.lost_at.to_i
   end
 
   class VaccineTypeSerializer < ActiveModel::Serializer

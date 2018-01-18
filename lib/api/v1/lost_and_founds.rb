@@ -65,11 +65,11 @@ module Api
               key :example, 34
             end
             property :lost_at do
-              key :type, :string
-              key :example, '2017-12-12T11:13:40Z'
+              key :type, :integer
+              key :example, 1516217199
             end
             property :found_at do
-              key :type, :string
+              key :type, :integer
               key :example, nil
             end
           end
@@ -91,8 +91,8 @@ module Api
 
       swagger_schema :LostFields do
         property :lost_at do
-          key :type, :string
-          key :example, '2017-12-12T11:13:40Z'
+          key :type, :integer
+          key :example, 1516217199
         end
         property :description do
           key :type, :string
@@ -311,8 +311,8 @@ module Api
             key :name, 'pet[found_at]'
             key :in, :formData
             key :required, true
-            key :type, :string
-            key :example, '2017-12-12T11:13:40Z'
+            key :type, :integer
+            key :example, 1516217199
           end
           parameter do
             key :name, 'pet[pet_type_id]'

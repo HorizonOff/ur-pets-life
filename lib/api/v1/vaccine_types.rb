@@ -13,8 +13,8 @@ module Api
           key :example, 1
         end
         property :done_at do
-          key :type, :string
-          key :example, '2017-12-12T11:13:40Z'
+          key :type, :integer
+          key :example, 1516217199
         end
         property :picture_url do
           key :type, :string

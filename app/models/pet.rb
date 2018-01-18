@@ -14,7 +14,7 @@ class Pet < ApplicationRecord
   has_one :location, as: :place, inverse_of: :place
   reverse_geocoded_by 'locations.latitude', 'locations.longitude'
 
-  delegate :address, to: :location
+  delegate :address, to: :location, allow_nil: true
 
   accepts_nested_attributes_for :location, update_only: true
   accepts_nested_attributes_for :vaccinations, allow_destroy: true
@@ -62,6 +62,21 @@ class Pet < ApplicationRecord
     self.mobile_number = nil
     self.description = nil
     self.additional_comment = nil
+  end
+
+  def birthday=(value)
+    value = Time.zone.at(value.to_i)
+    super
+  end
+
+  def lost_at=(value)
+    value = Time.zone.at(value.to_i)
+    super
+  end
+
+  def found_at=(value)
+    value = Time.zone.at(value.to_i)
+    super
   end
 
   def pet_type_is_additional?
