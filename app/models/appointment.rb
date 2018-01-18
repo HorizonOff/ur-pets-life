@@ -16,8 +16,9 @@ class Appointment < ApplicationRecord
 
   before_validation :set_end_at, :set_calendar
   validates :start_at, presence: { message: 'Date and time are required' }
-  validate :vet_id_should_be_vaild, :pet_id_should_be_valid, :service_ids_should_be_valid
-  validate :time_should_be_valid, :appointmet_overlaps
+  validate :vet_id_should_be_vaild, :pet_id_should_be_valid, :service_ids_should_be_valid, :time_should_be_valid,
+           :appointmet_overlaps
+  validate :start_at_should_be_valid, on: :create
 
   before_create :set_price
 
@@ -110,6 +111,10 @@ class Appointment < ApplicationRecord
 
   def overlapsing_appointments
     vet.appointments.overlapsing(id, start_at, end_at)
+  end
+
+  def start_at_should_be_valid
+    errors.add(:start_at, 'Booking session should be in the future') if start_at.present? && start_at < Time.current
   end
 
   def set_price
