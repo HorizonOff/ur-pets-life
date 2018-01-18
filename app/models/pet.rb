@@ -101,14 +101,6 @@ class Pet < ApplicationRecord
     lost_at.present? || found_at.present?
   end
 
-  def not_found?
-    found_at.blank?
-  end
-
-  def lost_or_found?
-    lost_at.present? || found_at.present?
-  end
-
   def sex_should_be_valid
     return unless @sex_backup
     self.sex ||= @sex_backup
