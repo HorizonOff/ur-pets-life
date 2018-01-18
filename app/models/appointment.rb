@@ -24,10 +24,11 @@ class Appointment < ApplicationRecord
   scope :past, -> { where('start_at < ?', Time.current).order(start_at: :desc) }
   scope :upcoming, -> { where('start_at > ?', Time.current).order(start_at: :asc) }
   scope :for_clinic, -> { where(bookable_type: 'Clinic') }
+  scope :without_rejected, -> { where(status: %i[pending accepted]) }
   scope :overlapsing, (lambda do |id, start_at, end_at|
-    where.not(id: id).where('(start_at < :end AND end_at >= :end) OR
-                             (start_at <= :start AND end_at > :start) OR
-                             (start_at >= :start AND end_at <= :end)', start: start_at, end: end_at)
+    without_rejected.where.not(id: id).where('(start_at < :end AND end_at >= :end) OR
+                                              (start_at <= :start AND end_at > :start) OR
+                                              (start_at >= :start AND end_at <= :end)', start: start_at, end: end_at)
   end)
 
   def for_clinic?

@@ -13,8 +13,8 @@ module Api
         @calendars = @vet.calendars.where('start_at >= :start AND end_at <= :end', start: day_start,
                                                                                    end: day_end)
         return [] if @calendars.blank?
-        @appointments = @vet.appointments.where('start_at >= :start AND end_at <= :end', start: day_start,
-                                                                                         end: day_end)
+        @appointments = @vet.appointments.without_rejected
+                            .where('start_at >= :start AND end_at <= :end', start: day_start, end: day_end)
         parse_calendars
       end
 
