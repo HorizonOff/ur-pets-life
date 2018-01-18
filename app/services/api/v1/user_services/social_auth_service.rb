@@ -20,7 +20,7 @@ module Api
 
           return user if user.present?
 
-          user = User.find_by_email(fb_user.email)
+          user = User.find_by_email(fb_user.email) if fb_user.email.present?
           if user.present?
             user.update_attributes(facebook_id: fb_user.id)
             return user
