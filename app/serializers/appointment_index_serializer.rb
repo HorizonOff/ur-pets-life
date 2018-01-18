@@ -1,5 +1,9 @@
 class AppointmentIndexSerializer < WorkingHoursSerializer
-  attributes :id, :start_at, :picture_url, :address, :distance, :working_hours, :booked_object
+  attributes :id, :start_at, :picture_url, :address, :distance, :working_hours, :booked_object, :status
+
+  def status
+    Appointment.statuses[object.status]
+  end
 
   def start_at
     object.start_at.to_i
