@@ -1,9 +1,10 @@
 module Api
   module V1
     class LocationBasedPetsQuery
-      def initialize(scope, params)
+      def initialize(scope, params, is_adoption = false)
         @scope = scope
         @params = params
+        @is_adoption = is_adoption
       end
 
       def find_objects
@@ -17,10 +18,11 @@ module Api
 
       private
 
-      attr_reader :scope, :params
+      attr_reader :scope, :params, :is_adoption
 
       def objects_by_location_attributes
-        scope.joins(:location).near([params[:latitude], params[:longitude]], 999_999, units: :km)
+        correct_location = is_adoption ? :user_location : :location
+        scope.joins(correct_location).near([params[:latitude], params[:longitude]], 999_999, units: :km)
       end
 
       def all_objects
