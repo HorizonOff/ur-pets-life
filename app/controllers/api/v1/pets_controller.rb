@@ -72,7 +72,7 @@ module Api
       def create_pet
         pet = @user.pets.new(pet_params)
         if pet.save
-          render json: { message: 'Pet created successfully' }
+          render json: pet
         else
           render_422(parse_errors_messages(pet))
         end

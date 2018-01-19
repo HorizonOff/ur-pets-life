@@ -1,0 +1,7 @@
+.nested-fields
+  .form-group
+    = f.label :instruction, class: 'control-label col-md-3 col-sm-3 col-xs-12'
+    .col-md-9.col-sm-9.col-xs-12
+      = f.text_area :instruction, rows: 2, class: 'form-control no-resize', reuired: true
+  .form-group
+    = link_to_remove_association "Remove recipe", f, { class: 'btn btn-danger pull-right'}

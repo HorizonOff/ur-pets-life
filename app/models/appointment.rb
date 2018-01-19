@@ -37,6 +37,10 @@ class Appointment < ApplicationRecord
     @for_clinic ||= bookable_type == 'Clinic'
   end
 
+  def past?
+    start_at <= current_time
+  end
+
   def start_at=(value)
     value = Time.zone.at(value.to_i)
     super
@@ -50,7 +54,7 @@ class Appointment < ApplicationRecord
   end
 
   def vet_id_should_be_vaild
-    if bookable_type == 'Clinic' && bookable
+    if for_clinic? && bookable
       errors.add(:vet_id, 'Vet is invalid') unless bookable.vet_ids.include?(vet_id)
       errors.add(:vet_id, 'Vet is required') if vet_id.blank?
     else
@@ -59,7 +63,7 @@ class Appointment < ApplicationRecord
   end
 
   def service_ids_should_be_valid
-    if bookable_type == 'Clinic'
+    if for_clinic?
       self.service_detail_ids = []
     else
       check_services_count

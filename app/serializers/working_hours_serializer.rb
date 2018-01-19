@@ -42,7 +42,7 @@ class WorkingHoursSerializer < BaseMethodsSerializer
     if @time < @open_at
       'Open ' + @open_at.strftime('%-d %b at %I:%M %p')
     else
-      'Open today until ' + @open_at.strftime('%I:%M %p')
+      'Open today until ' + @close_at.strftime('%I:%M %p')
     end
   end
 

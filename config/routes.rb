@@ -80,6 +80,7 @@ Rails.application.routes.draw do
     end
     resources :service_types, except: %i[new index show]
     resources :appointments, only: %i[index show] do
+      resources :diagnoses, shallow: true, except: %i[index destroy]
       member { put :accept }
       member { put :reject }
     end

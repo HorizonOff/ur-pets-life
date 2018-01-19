@@ -126,14 +126,8 @@ module Api
       end
 
       swagger_schema :WorkingHours do
-        property :open_at do
-          key :type, :string
-          key :example, '11:00'
-        end
-        property :close_at do
-          key :type, :string
-          key :example, '19:00'
-        end
+        key :type, :string
+        key :example, 'Open today untill 10:00 PM'
       end
 
       swagger_path '/clinics' do

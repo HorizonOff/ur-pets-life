@@ -240,6 +240,9 @@ module Api
 
           response 200 do
             key :description, 'Success response'
+            schema do
+              key :'$ref', :PetResponse
+            end
           end
         end
       end
@@ -406,8 +409,12 @@ module Api
             key :type, :file
             key :description, 'Adding new picture'
           end
+
           response 200 do
             key :description, 'Success response'
+            schema do
+              key :'$ref', :PetResponse
+            end
           end
         end
 

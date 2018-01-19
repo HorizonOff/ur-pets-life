@@ -42,7 +42,7 @@
                     = @appointment.pet.name
                   %li
                     %i.fa.fa-map-marker.user-profile-icon
-                    = @appointment.pet.pet_type.is_additional_type? ? @appointment.pet.additional_type : @appointment.pet.breed.name
+                    = @appointment.pet.pet_type.is_additional_type? ? @appointment.pet.additional_type : @appointment.pet.pet_type.name + ': ' + @appointment.pet.breed.name
                   %li
                     %i.fa.fa-phone.user-profile-icon
                     = @appointment.pet.birthday.strftime('%-d %b %Y %I:%M %p')
@@ -61,9 +61,16 @@
                   %p.title= @appointment.bookable.name
                   %p= @appointment.bookable_type
 
-                  -if @appointment.bookable_type == 'Clinic'
-                    %p.title= @appointment.vet.name
-                    %p Vet
+                  -if @appointment.for_clinic?
+                    %table.table
+                      %thead
+                        %tr
+                          %th Vet
+                          %th Consultation fee
+                      %tbody
+                        %tr
+                          %td= @appointment.vet.name
+                          %td= @appointment.vet.consultation_fee
                   -else
                     %table.table
                       %thead
@@ -87,6 +94,9 @@
                   %p.title Session start
                   %p= @appointment.start_at.strftime('%-d %b %Y %I:%M %p')
 
+                  %p.title Comment
                   %p= @appointment.comment
                 .text-center.mtop20
                   = appointment_actions(@appointment)
+    - if @appointment.for_clinic? && @appointment.past?
+      = render partial: 'admin_panel/diagnoses/diagnosis', locals: { appointment_id: @appointment.id, diagnosis: @appointment.diagnosis }

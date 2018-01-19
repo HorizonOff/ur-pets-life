@@ -6,6 +6,8 @@ class Diagnosis < ApplicationRecord
   validate :appointment_id_should_be_valid
   before_save :squish_instruction
 
+  accepts_nested_attributes_for :recipes, allow_destroy: true
+
   private
 
   def appointment_id_should_be_valid
