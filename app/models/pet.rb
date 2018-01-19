@@ -12,6 +12,7 @@ class Pet < ApplicationRecord
   has_many :past_clinic_appointments, -> { where(bookable_type: 'Clinic').past }, class_name: 'Appointment'
 
   has_one :location, as: :place, inverse_of: :place
+  has_one :user_location, through: :user, source: :location
   reverse_geocoded_by 'locations.latitude', 'locations.longitude'
 
   delegate :address, to: :location, allow_nil: true
@@ -23,6 +24,7 @@ class Pet < ApplicationRecord
   validates_presence_of :name, message: 'Name is required', if: :not_found?
   validates_presence_of :birthday, message: 'Birthday is required', if: :not_found?
   validates_presence_of :sex, message: 'Sex is required', if: :not_found?
+  validates_presence_of :weight, message: 'Weight is required', if: :not_found?
   validates_presence_of :additional_type, message: 'Type is required', if: :additional_type_required?
 
   validates_presence_of :description, message: 'Short description is required', if: :lost_or_found?

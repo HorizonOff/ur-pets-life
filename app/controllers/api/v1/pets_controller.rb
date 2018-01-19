@@ -20,7 +20,8 @@ module Api
 
       def update
         if @pet.update(pet_params.except(:pet_type_id))
-          render json: { message: 'Pet updated successfully' }
+          render json: @pet, include: 'breed,vaccine_types,vaccinations,pictures,vaccine_types.vaccinations',
+                 scope: { pet_vaccinations: pet_vaccinations }
         else
           render_422(parse_errors_messages(@pet))
         end
