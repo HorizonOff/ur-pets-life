@@ -36,7 +36,8 @@ module AdminPanel
     end
 
     def appointments
-      appointments = @vet.appointments.where(start_at: Time.zone.parse(params[:start])..Time.zone.parse(params[:end]))
+      appointments = @vet.appointments.where(status: params[:status].to_sym,
+                                             start_at: Time.zone.parse(params[:start])..Time.zone.parse(params[:end]))
       render json: appointments, each_serializer: CalendarSerializer, adapter: :attributes
     end
 

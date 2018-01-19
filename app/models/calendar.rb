@@ -1,9 +1,12 @@
 class Calendar < ApplicationRecord
+  include CalendarValidationConcern
   belongs_to :vet
+  has_one :clinic, through: :vet
 
   has_many :appointments
 
   validate :different_days, :calendar_overlaps
+  validate :check_clinic_time, if: ->(obj) { obj.start_at.present? }
   validate :appointments_should_be_valid, on: :update
 
   before_destroy :check_appointments

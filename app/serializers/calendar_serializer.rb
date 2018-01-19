@@ -1,6 +1,7 @@
 class CalendarSerializer < ActiveModel::Serializer
-  attribute :id, if: :show_id?
+  attribute :id, if: :calendar?
   attributes :start, :end
+  attribute :url, unless: :calendar?
 
   def start
     object.start_at
@@ -10,7 +11,11 @@ class CalendarSerializer < ActiveModel::Serializer
     object.end_at
   end
 
-  def show_id?
+  def url
+    '/admin_panel/appointments/' + object.id.to_s
+  end
+
+  def calendar?
     object.is_a? Calendar
   end
 end

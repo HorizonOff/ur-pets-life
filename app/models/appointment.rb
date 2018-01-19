@@ -1,4 +1,6 @@
 class Appointment < ApplicationRecord
+  include CalendarValidationConcern
+
   STATUS_OPTIONS = %i[pending accepted rejected].freeze
   enum status: STATUS_OPTIONS
 
@@ -16,18 +18,19 @@ class Appointment < ApplicationRecord
 
   before_validation :set_end_at, :set_calendar
   validates :start_at, presence: { message: 'Date and time are required' }
-  validate :vet_id_should_be_vaild, :pet_id_should_be_valid, :service_ids_should_be_valid
-  validate :time_should_be_valid, :appointmet_overlaps
+  validate :vet_id_should_be_vaild, :pet_id_should_be_valid, :service_ids_should_be_valid, :time_should_be_valid,
+           :appointmet_overlaps
 
   before_create :set_price
 
   scope :past, -> { where('start_at < ?', Time.current).order(start_at: :desc) }
   scope :upcoming, -> { where('start_at > ?', Time.current).order(start_at: :asc) }
   scope :for_clinic, -> { where(bookable_type: 'Clinic') }
+  scope :without_rejected, -> { where(status: %i[pending accepted]) }
   scope :overlapsing, (lambda do |id, start_at, end_at|
-    where.not(id: id).where('(start_at < :end AND end_at >= :end) OR
-                             (start_at <= :start AND end_at > :start) OR
-                             (start_at >= :start AND end_at <= :end)', start: start_at, end: end_at)
+    without_rejected.where.not(id: id).where('(start_at < :end AND end_at >= :end) OR
+                                              (start_at <= :start AND end_at > :start) OR
+                                              (start_at >= :start AND end_at <= :end)', start: start_at, end: end_at)
   end)
 
   def for_clinic?
@@ -90,16 +93,6 @@ class Appointment < ApplicationRecord
   def set_end_at
     return if vet_id.blank? || vet.nil?
     self.end_at = start_at + vet.session_duration.minutes
-  end
-
-  def time_should_be_valid
-    return if bookable_type != 'Clinic'
-    errors.add(:base, 'Vet is unavailable at this time') if calendar_id.nil? || !within_the_schedule?
-  end
-
-  def within_the_schedule?
-    time_range = calendar.start_at.utc..calendar.end_at.utc
-    start_at.utc.in?(time_range) && end_at.utc.in?(time_range)
   end
 
   def appointmet_overlaps

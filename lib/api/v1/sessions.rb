@@ -19,9 +19,11 @@ module Api
             schema do
               property :email do
                 key :type, :string
+                key :example, 'user1@mail.com'
               end
               property :password do
                 key :type, :string
+                key :example, '111111'
               end
               property :device_type do
                 key :type, :string
@@ -44,7 +46,7 @@ module Api
           security do
             key :api_key, []
           end
-          
+
           key :description, 'Sign out'
           key :produces, %w[application/json]
           key :consumes, %w[application/json]

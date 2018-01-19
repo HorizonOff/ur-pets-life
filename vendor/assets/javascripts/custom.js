@@ -2377,8 +2377,9 @@ if (typeof NProgress != 'undefined') {
 				  },
           defaultView: 'agendaWeek',
           allDaySlot: false,
-				  selectable: true,
-				  selectHelper: true,
+          selectable: true,
+          selectHelper: true,
+          slotDuration: '00:15:00',
 
           eventSources: [
             {
@@ -2387,8 +2388,14 @@ if (typeof NProgress != 'undefined') {
             },
             {
       				  editable: false,
-                url: '/admin_panel/vets/' + vet_id + '/calendars/appointments',
+                url: '/admin_panel/vets/' + vet_id + '/calendars/appointments?status=accepted',
                 color: 'green'
+            },
+            {
+                editable: false,
+                url: '/admin_panel/vets/' + vet_id + '/calendars/appointments?status=pending',
+                color: 'rgb(255, 221, 49)',
+                textColor: 'black'
             }
           ],
 
@@ -2429,7 +2436,8 @@ if (typeof NProgress != 'undefined') {
               $('p.time_slot').text(current_time_slot);
               $('a.destroy_link').attr('href', '/admin_panel/calendars/' + calEvent.id)
             } else {
-              return false
+              window.open(calEvent.url);
+              return false;
             };
 
             $('a.destroy_link').on('click', function(e) {
