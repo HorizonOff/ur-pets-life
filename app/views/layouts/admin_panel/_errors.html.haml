@@ -1,0 +1,6 @@
+- if object.errors.present?
+  .form-group
+    .col-md-12.col-sm-12.col-xs-12.error
+      - object.errors.full_messages.each do |m|
+        %label= m
+        %br

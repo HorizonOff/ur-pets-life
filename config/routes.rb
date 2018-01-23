@@ -59,6 +59,10 @@ Rails.application.routes.draw do
   devise_for :admins, path: 'admin_panel/admins', except: :registrations
   namespace :admin_panel do
     resources :admins, except: :create
+    resources :users, except: %i[new ceate]
+    resources :pets, except: %i[index new ceate] do
+      member { get :weight_history }
+    end
     resources :clinics do
       member { get :location }
       member { get :add_vet }

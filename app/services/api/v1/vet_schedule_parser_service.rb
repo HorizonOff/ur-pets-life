@@ -1,11 +1,11 @@
 module Api
   module V1
     class VetScheduleParserService
-      def initialize(vet, date, admin_panel = false)
-        self.vet = vet
-        self.date = date
-        self.valid_start = Time.current
-        @admin_panel = admin_panel
+      def initialize(vet, date, for_cms = false)
+        @vet = vet
+        @date = date
+        @valid_start = Time.current
+        @for_cms = for_cms
       end
 
       def retrieve_time_slots
@@ -21,8 +21,7 @@ module Api
 
       private
 
-      attr_accessor :vet, :date, :valid_start
-      attr_reader :admin_panel
+      attr_reader :vet, :date, :valid_start, :for_cms
 
       def parse_calendars
         @time_slots = []
@@ -46,7 +45,7 @@ module Api
         slot_end = slot_start + vet.session_duration.minutes
         overlapsing_appointments = check_appointments(slot_start, slot_end)
         return if overlapsing_appointments.present?
-        time_slot = { id: slot_start.to_i, text: slot_text(slot_start, slot_end) } if admin_panel
+        time_slot = { id: slot_start.to_i, text: slot_text(slot_start, slot_end) } if for_cms
         time_slot ||= { start_at: slot_start.to_i, end_at: slot_end.to_i }
         @time_slots << time_slot
       end

@@ -1,10 +1,6 @@
 .row
-  - if @grooming_centre.errors.present?
-    .form-group
-      .col-md-12.col-sm-12.col-xs-12.error
-        - @grooming_centre.errors.full_messages.each do |m|
-          %label= m
-          %br
+  = render partial: 'layouts/admin_panel/errors', locals: { object: @grooming_centre }
+
   = render partial: 'main_info_form', locals: { f: f }
   = render partial: 'admin_panel/schedules/form', locals: { f: f }
-  = render partial: 'location_form', locals: { f: f }
+  = render partial: 'admin_panel/locations/form', locals: { f: f }

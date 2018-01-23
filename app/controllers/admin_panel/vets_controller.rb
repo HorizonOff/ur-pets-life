@@ -82,7 +82,11 @@ module AdminPanel
     end
 
     def schedule_parser_service
-      @schedule_parser_service ||= ::Api::V1::VetScheduleParserService.new(@vet, @date, true)
+      @schedule_parser_service ||= ::Api::V1::VetScheduleParserService.new(@vet, @date, for_cms?)
+    end
+
+    def for_cms?
+      true
     end
   end
 end

@@ -1,0 +1,21 @@
+%div
+  .page-title
+    .title_left
+      %h3 Users 
+  .clearfix
+
+  .row
+    .col-md-12.col-sm-12.col-xs-12
+      .x_panel
+        .x_content
+          %table.table
+            %thead
+              %tr
+                %th #
+                %th Name
+                %th Email
+                %th Phone
+                %th Status
+                %th Actions
+            %tbody
+              =render @users

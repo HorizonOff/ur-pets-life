@@ -1,0 +1,18 @@
+%tr
+  %th{ scope: 'row' } #{pet.id}
+  %td= pet.name
+  %td
+    -if pet.avatar.present?
+      =image_tag(pet.avatar.thumb.url, class: 'avatar')
+  %td= pet.birthday&.strftime('%e %b %Y')
+  %td= pet.pet_type.name
+  %td
+    - if pet.male?
+      %span.fa.fa-mars
+    - else
+      %span.fa.fa-venus
+  %td= link_to pet.weight, weight_history_admin_panel_pet_path(pet), remote: true if pet.weight.present?
+  %td
+  %td
+    =link_to 'Edit', edit_admin_panel_pet_path(pet), class: 'btn btn-warning btn-xs'
+    =link_to 'Delete', admin_panel_pet_path(pet), method: :delete, class: 'btn btn-danger btn-xs'

@@ -43,7 +43,7 @@ class User < ApplicationRecord
   has_many :appointments
   has_one :location, as: :place, inverse_of: :place
 
-  accepts_nested_attributes_for :location, update_only: true
+  accepts_nested_attributes_for :location, update_only: true, reject_if: :all_blank
 
   delegate :address, to: :location, allow_nil: true
 

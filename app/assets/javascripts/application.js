@@ -98,6 +98,9 @@ function init_timepicker(){
       singleDatePicker: true,
       singleClasses: "picker_1",
       autoUpdateInput: false,
+      locale: {
+        "format": "DD/MM/YYYY"
+      }
     });
 
     $('.single_cal1').on('apply.daterangepicker', function(ev, picker) {

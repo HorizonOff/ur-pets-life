@@ -6,7 +6,8 @@
         = link_to edit_admin_panel_diagnosis_path(diagnosis), remote: true, class: 'btn btn-warning pull-right' do
           Edit diagnosis
       -else
-        = link_to new_admin_panel_appointment_diagnosis_path(@appointment), disabled: !@appointment.accepted?, remote: true, class: 'btn btn-primary pull-right disabled' do
+        = link_to new_admin_panel_appointment_diagnosis_path(@appointment),
+          remote: true, class: "btn btn-primary pull-right #{'disabled' unless @appointment.accepted?}" do
           Write diagnosis
       .clearfix
     - if diagnosis.present?
