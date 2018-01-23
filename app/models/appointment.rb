@@ -24,7 +24,7 @@ class Appointment < ApplicationRecord
   validate :vet_id_should_be_vaild, :pet_id_should_be_valid, :service_ids_should_be_valid, :time_should_be_valid,
            :appointmet_overlaps
 
-  before_create :set_price
+  after_validation :set_price
 
   scope :past, -> { where('start_at < ?', Time.current).order(start_at: :desc) }
   scope :upcoming, -> { where('start_at > ?', Time.current).order(start_at: :asc) }
