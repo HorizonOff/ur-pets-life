@@ -70,6 +70,7 @@ Rails.application.routes.draw do
       member { get :new_service_type }
     end
     resources :vets do
+      member { get :schedule }
       resources :calendars, shallow: true, only: %i[index create destroy update] do
         collection { get :timeline }
         collection { get :appointments }
@@ -81,6 +82,7 @@ Rails.application.routes.draw do
     resources :service_types, except: %i[new index show]
     resources :appointments, only: %i[index show] do
       resources :diagnoses, shallow: true, except: %i[index destroy]
+      resource :next_appointment, shallow: true, only: %i[new create]
       member { put :accept }
       member { put :reject }
     end

@@ -30,7 +30,7 @@
             = ff.text_field :wednesday_open_at, value: ff.object.wednesday_open_at.try(:strftime, '%I:%M %p'), class: 'form-control timepicker open', disabled: ff.object.day_and_night?
           = ff.label :wednesday_close_at, 'Wednesday close', class: 'control-label col-md-3 col-sm-3 col-xs-12'
           .col-md-3.col-sm-3.col-xs-12
-            = ff.text_field :wednesday_close_at, value: ff.object.wednesday_open_at.try(:strftime, '%I:%M %p'), class: 'form-control timepicker close_time', disabled: ff.object.day_and_night?
+            = ff.text_field :wednesday_close_at, value: ff.object.wednesday_close_at.try(:strftime, '%I:%M %p'), class: 'form-control timepicker close_time', disabled: ff.object.day_and_night?
         .form-group
           = ff.label :thursday_open_at, 'Thursday open', class: 'control-label col-md-3 col-sm-3 col-xs-12'
           .col-md-3.col-sm-3.col-xs-12
@@ -44,18 +44,18 @@
             = ff.text_field :friday_open_at, value: ff.object.friday_open_at.try(:strftime, '%I:%M %p'), class: 'form-control timepicker open', disabled: ff.object.day_and_night?
           = ff.label :friday_close_at, 'Friday close', class: 'control-label col-md-3 col-sm-3 col-xs-12'
           .col-md-3.col-sm-3.col-xs-12
-            = ff.text_field :friday_close_at, value: ff.object.friday_open_at.try(:strftime, '%I:%M %p'), class: 'form-control timepicker close_time', disabled: ff.object.day_and_night?
+            = ff.text_field :friday_close_at, value: ff.object.friday_close_at.try(:strftime, '%I:%M %p'), class: 'form-control timepicker close_time', disabled: ff.object.day_and_night?
         .form-group
           = ff.label :saturday_open_at, 'Saturday open', class: 'control-label col-md-3 col-sm-3 col-xs-12'
           .col-md-3.col-sm-3.col-xs-12
             = ff.text_field :saturday_open_at, value: ff.object.saturday_open_at.try(:strftime, '%I:%M %p'), class: 'form-control timepicker open', disabled: ff.object.day_and_night?
           = ff.label :saturday_close_at, 'Saturday close', class: 'control-label col-md-3 col-sm-3 col-xs-12'
           .col-md-3.col-sm-3.col-xs-12
-            = ff.text_field :saturday_close_at, value: ff.object.saturday_open_at.try(:strftime, '%I:%M %p'), class: 'form-control timepicker close_time', disabled: ff.object.day_and_night?
+            = ff.text_field :saturday_close_at, value: ff.object.saturday_close_at.try(:strftime, '%I:%M %p'), class: 'form-control timepicker close_time', disabled: ff.object.day_and_night?
         .form-group
           = ff.label :sunday_open_at, 'Sunday open', class: 'control-label col-md-3 col-sm-3 col-xs-12'
           .col-md-3.col-sm-3.col-xs-12
             = ff.text_field :sunday_open_at, value: ff.object.sunday_open_at.try(:strftime, '%I:%M %p'), class: 'form-control timepicker open', disabled: ff.object.day_and_night?
           = ff.label :sunday_close_at, 'Sunday close', class: 'control-label col-md-3 col-sm-3 col-xs-12'
           .col-md-3.col-sm-3.col-xs-12
-            = ff.text_field :sunday_close_at, value: ff.object.sunday_open_at.try(:strftime, '%I:%M %p'), class: 'form-control timepicker close_time', disabled: ff.object.day_and_night?
+            = ff.text_field :sunday_close_at, value: ff.object.sunday_close_at.try(:strftime, '%I:%M %p'), class: 'form-control timepicker close_time', disabled: ff.object.day_and_night?

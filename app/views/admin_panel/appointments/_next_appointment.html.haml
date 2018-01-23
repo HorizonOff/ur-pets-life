@@ -1,0 +1,22 @@
+#next_appointment_block.col-md-6.col-sm-6.col-xs-12
+  .x_panel
+    .x_title
+      %h2 Next Appointment
+      - if next_appointment.blank?
+        = link_to new_admin_panel_appointment_next_appointment_path(@appointment), remote: true, disabled: !@appointment.accepted?, class: 'btn btn-primary pull-right disabled' do
+          Book next appointment
+      .clearfix
+    - if next_appointment.present?
+      .panel-body
+        %table.table
+          %thead
+            %tr
+              %th #
+              %th Booked object
+              %th Vet
+              %th Booked time
+              %th Session start
+              %th Status
+              %th Actions
+          %tbody
+            =render next_appointment

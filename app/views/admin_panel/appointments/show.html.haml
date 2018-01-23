@@ -65,10 +65,12 @@
                     %table.table
                       %thead
                         %tr
+                          %th #
                           %th Vet
                           %th Consultation fee
                       %tbody
                         %tr
+                          %td 1
                           %td= @appointment.vet.name
                           %td= @appointment.vet.consultation_fee
                   -else
@@ -79,11 +81,11 @@
                           %th Service
                           %th Price
                       %tbody
-                        - @appointment.service_details.each_with_index do |s, i|
+                        - @appointment.cart_items.each_with_index do |c, i|
                           %tr
                             %td= i + 1
-                            %td= s.service_type.name
-                            %td= s.price
+                            %td= c.service_detail.service_type.name
+                            %td= c.price
                         %tr
                           %td{ colspan: 2 } Total
                           %td= @appointment.total_price
@@ -99,4 +101,5 @@
                 .text-center.mtop20
                   = appointment_actions(@appointment)
     - if @appointment.for_clinic? && @appointment.past?
-      = render partial: 'admin_panel/diagnoses/diagnosis', locals: { appointment_id: @appointment.id, diagnosis: @appointment.diagnosis }
+      = render partial: 'admin_panel/diagnoses/diagnosis', locals: { diagnosis: @appointment.diagnosis }
+      = render partial: 'next_appointment', locals: { next_appointment: @appointment.next_appointment }

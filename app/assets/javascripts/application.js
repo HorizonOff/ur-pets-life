@@ -23,6 +23,7 @@
 //= require gmaps/google
 //= require cocoon
 //= require fullcalendar
+//= require daterangepicker
 
 //= require_self
 //= require_tree .
@@ -92,6 +93,32 @@ function init_select2(){
 }
 
 function init_timepicker(){
+  if ($('.single_cal1')){
+    $('.single_cal1').daterangepicker({
+      singleDatePicker: true,
+      singleClasses: "picker_1",
+      autoUpdateInput: false,
+    });
+
+    $('.single_cal1').on('apply.daterangepicker', function(ev, picker) {
+      var new_date = picker.startDate.format('DD/MM/YYYY')
+      var vet_id = $(this).data('vet-id');
+      $(this).val(new_date);
+      $.ajax({
+        type: 'get',
+        url: '/admin_panel/vets/' + vet_id + '/schedule?date=' + new_date,
+        success: function(response){
+          $('.select2').empty();
+          $('.select2').select2({
+            placeholder: 'Select ...',
+            allowClear: true,
+            data: response.time_slots
+          });
+        }
+      });
+    });
+  };
+
   if ($('.timepicker')[0]) {
     $('.timepicker.open').datetimepicker({
       format: 'hh:mm A'

@@ -1,6 +1,5 @@
 class Diagnosis < ApplicationRecord
   belongs_to :appointment
-  belongs_to :next_appointment, class_name: Appointment, optional: true
   has_many :recipes, dependent: :destroy
   validates :condition, :message, presence: true
   validate :appointment_id_should_be_valid

@@ -45,6 +45,12 @@ module AdminPanel
       redirect_to admin_panel_vets_path
     end
 
+    def schedule
+      parse_date
+      time_slots = schedule_parser_service.retrieve_time_slots
+      render json: { time_slots: time_slots }
+    end
+
     private
 
     def set_vet
@@ -68,6 +74,15 @@ module AdminPanel
 
     def location_params
       %i[id latitude longitude city area street building_type building_name unit_number villa_number comment _destroy]
+    end
+
+    def parse_date
+      @date = Time.zone.parse(params[:date])
+      return render_422(date: 'Date is required') if params[:date].blank? || @date.blank?
+    end
+
+    def schedule_parser_service
+      @schedule_parser_service ||= ::Api::V1::VetScheduleParserService.new(@vet, @date, true)
     end
   end
 end

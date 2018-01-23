@@ -17,6 +17,7 @@
  *= require select2
  *= require bootstrap-datetimepicker.min
  *= require fullcalendar
+ *= require daterangepicker
 
  *= require_tree
  *= require_self

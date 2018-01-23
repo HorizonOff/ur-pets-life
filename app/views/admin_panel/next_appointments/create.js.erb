@@ -1,0 +1,4 @@
+<% if @next_appointment.errors.empty? %>
+  $('#Modal').modal('hide')
+  $('#next_appointment_block').replaceWith("<%= j render partial: 'admin_panel/appointments/next_appointment', locals: { next_appointment: @next_appointment } %>");
+<% end %>

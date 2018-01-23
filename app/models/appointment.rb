@@ -9,10 +9,13 @@ class Appointment < ApplicationRecord
   belongs_to :pet
   belongs_to :vet, optional: true
   belongs_to :calendar, optional: true
+  belongs_to :main_appointment, class_name: 'Appointment', optional: true
 
   has_one :diagnosis, dependent: :destroy
+  has_one :next_appointment, class_name: 'Appointment', foreign_key: :main_appointment_id
 
-  has_and_belongs_to_many :service_details
+  has_many :cart_items
+  has_many :service_details, through: :cart_items
 
   after_initialize :set_defaults
 
@@ -110,6 +113,6 @@ class Appointment < ApplicationRecord
 
   def set_price
     return self.total_price = vet.consultation_fee if vet_id.present?
-    self.total_price = service_details.sum(&:price)
+    self.total_price = cart_items.sum(&:price)
   end
 end
