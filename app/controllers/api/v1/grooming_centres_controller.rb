@@ -8,22 +8,22 @@ module Api
       def index
         grooming_centres = grooming_centres_query.find_objects
         serialized_centres = ActiveModel::Serializer::CollectionSerializer.new(
-          grooming_centres, serializer: GroomingCentreIndexSerializer,
-                            scope: { latitude: params[:latitude], longitude: params[:longitude],
-                                     time_zone: params[:time_zone] }
+          grooming_centres, serializer: GroomingCentreIndexSerializer, scope: serializable_params
         )
 
         render json: { grooming_centres: serialized_centres, total_count: grooming_centres.total_count }
       end
 
       def show
-        render json: @grooming_centre, scope: { latitude: params[:latitude], longitude: params[:longitude],
-                                                time_zone: params[:time_zone] },
+        favorite = @grooming_centre.favorites.find_by(user: @user)
+
+        render json: @grooming_centre, scope: serializable_params.merge(favorite: favorite),
                include: 'service_types,service_types.service_details'
       end
 
       def schedule
         time_slots = schedule_parser_service.retrieve_time_slots
+
         render json: { time_slots: time_slots }
       end
 

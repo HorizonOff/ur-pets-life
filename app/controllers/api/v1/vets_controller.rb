@@ -6,11 +6,14 @@ module Api
       before_action :parse_date, only: :schedule
 
       def show
-        render json: @vet
+        favorite = @vet.favorites.find_by(user: @user)
+
+        render json: @vet, scope: { favorite: favorite }
       end
 
       def schedule
         time_slots = schedule_parser_service.retrieve_time_slots
+
         render json: { time_slots: time_slots }
       end
 

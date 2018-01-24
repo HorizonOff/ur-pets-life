@@ -64,6 +64,10 @@ module Api
             key :type, :integer
             key :example, 345
           end
+          property :favorite_id do
+            key :type, :integer
+            key :example, 1
+          end
           property :mobile_number do
             key :type, :string
             key :example, '+3805050505050'
@@ -180,6 +184,12 @@ module Api
           key :consumes, %w[application/json]
           key :produces, %w[application/json]
           key :tags, %w[Clinics]
+
+          parameter do
+            key :type, :string
+            key :name, 'Authorization'
+            key :in, :header
+          end
 
           parameter do
             key :name, :id

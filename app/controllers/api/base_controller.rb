@@ -2,12 +2,21 @@ module Api
   class BaseController < ApplicationController
     # attr_reader :current_user
     protect_from_forgery with: :null_session
+    before_action :authenticate_token
     before_action :authenticate_user
 
     private
 
+    def current_user
+      @user
+    end
+
+    def serializable_params
+      { latitude: params[:latitude], longitude: params[:longitude], time_zone: params[:time_zone] }
+    end
+
     def authenticate_user
-      authenticate_token || render_401
+      render_401 unless @user
     end
 
     def authenticate_token
