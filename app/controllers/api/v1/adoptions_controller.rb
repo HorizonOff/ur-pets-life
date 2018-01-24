@@ -7,8 +7,7 @@ module Api
       def index
         pets = pets_query.find_objects
         serialized_pets = ActiveModel::Serializer::CollectionSerializer.new(
-          pets, serializer: AdoptionIndexSerializer,
-                scope: { latitude: params[:latitude], longitude: params[:longitude] }
+          pets, serializer: AdoptionIndexSerializer, scope: serializable_params
         )
 
         render json: { pets: serialized_pets, total_count: pets.total_count }
@@ -17,7 +16,7 @@ module Api
       def show
         render json: @pet, serializer: AdoptionSerializer,
                include: 'breed,vaccine_types,vaccinations,vaccine_types.vaccinations,pictures',
-               scope: { pet_vaccinations: pet_vaccinations, latitude: params[:latitude], longitude: params[:longitude] }
+               scope: serializable_params.merge(pet_vaccinations: pet_vaccinations)
       end
 
       private

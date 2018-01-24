@@ -7,16 +7,14 @@ module Api
       def index
         pets = pets_query.find_objects
         serialized_pets = ActiveModel::Serializer::CollectionSerializer.new(
-          pets, serializer: LostAndFoundIndexSerializer,
-                scope: { latitude: params[:latitude], longitude: params[:longitude] }
+          pets, serializer: LostAndFoundIndexSerializer, scope: serializable_params
         )
 
         render json: { pets: serialized_pets, total_count: pets.total_count }
       end
 
       def show
-        render json: @pet, serializer: LostAndFoundSerializer,
-               scope: { latitude: params[:latitude], longitude: params[:longitude] }
+        render json: @pet, serializer: LostAndFoundSerializer, scope: serializable_params
       end
 
       private
