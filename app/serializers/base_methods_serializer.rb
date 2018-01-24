@@ -15,12 +15,20 @@ class BaseMethodsSerializer < ActiveModel::Serializer
     false
   end
 
+  def favorite_id
+    scope[:favorite].try(:id)
+  end
+
   def birthday
     object.birthday.to_i
   end
 
   def distance
     object.location.distance_to([scope[:latitude], scope[:longitude]], :km).try(:round, 2) if show_distance?
+  end
+
+  def type
+    object.class.to_s
   end
 
   private

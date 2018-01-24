@@ -38,7 +38,7 @@ class User < ApplicationRecord
 
   attr_accessor :skip_password_validation
 
-  has_many :favorites
+  has_many :favorites, -> { order(created_at: :asc) }
   has_many :sessions
   has_many :pets
   has_many :appointments
