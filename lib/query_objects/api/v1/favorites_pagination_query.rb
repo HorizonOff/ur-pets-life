@@ -21,7 +21,7 @@ module Api
       end
 
       def show_all?
-        params[:filter] == 'all' || !params[:filter].in?(%w[clinics day_care_centres grooming_centres trainers vets])
+        return true unless params[:filter].in?(%w[clinics day_care_centres grooming_centres trainers vets])
       end
     end
   end
