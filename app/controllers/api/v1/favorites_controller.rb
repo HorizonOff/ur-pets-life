@@ -16,7 +16,7 @@ module Api
       def create
         favorite = @user.favorites.new(favorite_params)
         if favorite.save
-          render json: { message: 'Favorite item created successfully' }
+          render json: { favorite_id: favorite.id }
         else
           render_422(parse_errors_messages(favorite))
         end
