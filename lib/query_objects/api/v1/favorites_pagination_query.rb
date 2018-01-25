@@ -7,7 +7,7 @@ module Api
       end
 
       def find_objects
-        check_filter.includes(:favoritable, favoritable: %i[location schedule]).page(params[:page])
+        check_filter.includes(:favoritable, favoritable: %i[location schedule])
       end
 
       private

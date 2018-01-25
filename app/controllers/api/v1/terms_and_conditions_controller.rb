@@ -4,7 +4,7 @@ module Api
       skip_before_action :authenticate_user
 
       def show
-        render json: { terms_and_conditions: TermsAndCondition.first.content }
+        render json: TermsAndCondition.first.content.to_json
       end
     end
   end
