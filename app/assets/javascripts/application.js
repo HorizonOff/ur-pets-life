@@ -24,6 +24,7 @@
 //= require cocoon
 //= require fullcalendar
 //= require daterangepicker
+//= require ckeditor/init
 
 //= require_self
 //= require_tree .

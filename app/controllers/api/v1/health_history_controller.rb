@@ -6,14 +6,10 @@ module Api
       def index
         appointments = @pet.past_clinic_appointments.page(params[:page])
         serialized_appointments = ActiveModel::Serializer::CollectionSerializer.new(
-          appointments, serializer: AppointmentIndexSerializer,
-                        scope: { latitude: params[:latitude], longitude: params[:longitude] }
+          appointments, serializer: AppointmentIndexSerializer, scope: serializable_params
         )
 
-        render json: {
-          appointments: serialized_appointments,
-          total_count: appointments.total_count
-        }
+        render json: { appointments: serialized_appointments, total_count: appointments.total_count }
       end
 
       private

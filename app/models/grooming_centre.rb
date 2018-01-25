@@ -5,6 +5,5 @@ class GroomingCentre < ApplicationRecord
   has_many :service_types, as: :serviceable
   has_many :service_details, through: :service_types
 
-  has_one :schedule, as: :schedulable, inverse_of: :schedulable
   accepts_nested_attributes_for :schedule, update_only: true
 end

@@ -68,6 +68,10 @@ module Api
             key :type, :string
             key :example, 'www.website.com'
           end
+          property :favorite_id do
+            key :type, :integer
+            key :example, 1
+          end
           property :service_options do
             key :type, :array
             key :example, ['Drop off']
@@ -165,6 +169,12 @@ module Api
           key :consumes, %w[application/json]
           key :produces, %w[application/json]
           key :tags, %W[Day\ Care\ Centres]
+
+          parameter do
+            key :type, :string
+            key :name, 'Authorization'
+            key :in, :header
+          end
 
           parameter do
             key :name, :id

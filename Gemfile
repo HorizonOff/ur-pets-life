@@ -56,6 +56,7 @@ gem 'jquery-rails'
 gem "font-awesome-rails"
 gem 'kaminari'
 gem 'file_validators'
+gem 'ckeditor'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 

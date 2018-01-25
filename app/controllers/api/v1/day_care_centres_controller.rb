@@ -8,17 +8,16 @@ module Api
       def index
         day_care_centres = day_care_centres_query.find_objects
         serialized_centres = ActiveModel::Serializer::CollectionSerializer.new(
-          day_care_centres, serializer: DayCareCentreIndexSerializer,
-                            scope: { latitude: params[:latitude], longitude: params[:longitude],
-                                     time_zone: params[:time_zone] }
+          day_care_centres, serializer: DayCareCentreIndexSerializer, scope: serializable_params
         )
 
         render json: { day_care_centres: serialized_centres, total_count: day_care_centres.total_count }
       end
 
       def show
-        render json: @day_care_centre, scope: { latitude: params[:latitude], longitude: params[:longitude],
-                                                time_zone: params[:time_zone] },
+        favorite = @day_care_centre.favorites.find_by(user: @user)
+
+        render json: @day_care_centre, scope: serializable_params.merge(favorite: favorite),
                include: 'service_types,service_types.service_details'
       end
 

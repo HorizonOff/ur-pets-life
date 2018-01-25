@@ -20,8 +20,10 @@ class Vet < ApplicationRecord
   has_many :calendars, -> { order(start_at: :asc) }, dependent: :destroy
   has_many :appointments, dependent: :destroy
   has_many :qualifications, as: :skill, inverse_of: :skill
+  has_many :favorites, as: :favoritable
 
   has_one :location, as: :place, inverse_of: :place
+  has_one :schedule, as: :schedulable, inverse_of: :schedulable
 
   accepts_nested_attributes_for :qualifications, allow_destroy: true
   accepts_nested_attributes_for :location, update_only: true, allow_destroy: true

@@ -22,6 +22,7 @@ module ServiceCentreConcern
 
     has_and_belongs_to_many :pet_types
 
+    has_one :schedule, as: :schedulable, inverse_of: :schedulable
     has_one :location, as: :place, inverse_of: :place
     accepts_nested_attributes_for :location, update_only: true
 

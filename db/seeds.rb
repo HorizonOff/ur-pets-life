@@ -480,3 +480,7 @@ if Recipe.count.zero?
     end
   end
 end
+
+if TermsAndCondition.count.zero?
+  TermsAndCondition.create
+end
