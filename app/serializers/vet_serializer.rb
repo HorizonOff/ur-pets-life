@@ -2,7 +2,7 @@ class VetSerializer < BaseMethodsSerializer
   type 'vet'
 
   attributes :id, :name, :avatar_url, :mobile_number, :consultation_fee, :clinic_picture_url, :pet_type_ids,
-             :experience, :specializations
+             :experience, :specializations, :favorite_id
   has_many :qualifications
 
   def clinic_picture_url

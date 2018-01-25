@@ -312,9 +312,9 @@ Vet.all.each do |v|
 end
 
 if Admin.count.zero?
-  Admin.create(email: ENV['GMAIL_ADMIN'], password: ENV['GMAIL_PASSWORD'], password_confirmation: ENV['GMAIL_PASSWORD'],
+  Admin.create(email: ENV['ADMIN'], password: ENV['ADMIN_PASSWORD'], password_confirmation: ENV['ADMIN_PASSWORD'],
                is_super_admin: true)
-  Admin.create(email: 'admin@example.com', password: ENV['GMAIL_PASSWORD'], password_confirmation: ENV['GMAIL_PASSWORD'],
+  Admin.create(email: 'admin@example.com', password: ENV['ADMIN_PASSWORD'], password_confirmation: ENV['ADMIN_PASSWORD'],
                is_super_admin: true)
 end
 
