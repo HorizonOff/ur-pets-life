@@ -54,6 +54,10 @@ module Api
             key :type, :integer
             key :example, 4
           end
+          property :favorite_id do
+            key :type, :integer
+            key :example, 1
+          end
           property :specializations do
             key :type, :array
             key :example, ['Dog Trainer']
@@ -128,6 +132,12 @@ module Api
           key :consumes, %w[application/json]
           key :produces, %w[application/json]
           key :tags, %W[Trainers]
+
+          parameter do
+            key :type, :string
+            key :name, 'Authorization'
+            key :in, :header
+          end
 
           parameter do
             key :name, :id

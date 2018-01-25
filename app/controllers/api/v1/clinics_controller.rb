@@ -7,17 +7,16 @@ module Api
       def index
         clinics = clinics_query.find_objects
         serialized_clinics = ActiveModel::Serializer::CollectionSerializer.new(
-          clinics, serializer: ClinicIndexSerializer,
-                   scope: { latitude: params[:latitude], longitude: params[:longitude],
-                            time_zone: params[:time_zone] }
+          clinics, serializer: ClinicIndexSerializer, scope: serializable_params
         )
 
         render json: { clinics: serialized_clinics, total_count: clinics.total_count }
       end
 
       def show
-        render json: @clinic, scope: { latitude: params[:latitude], longitude: params[:longitude],
-                                       time_zone: params[:time_zone] }
+        favorite = @clinic.favorites.find_by(user: @user)
+
+        render json: @clinic, scope: serializable_params.merge(favorite: favorite)
       end
 
       private

@@ -7,15 +7,16 @@ module Api
       def index
         trainers = trainers_query.find_trainers
         serialized_trainers = ActiveModel::Serializer::CollectionSerializer.new(
-          trainers, serializer: TrainerIndexSerializer,
-                    scope: { latitude: params[:latitude], longitude: params[:longitude] }
+          trainers, serializer: TrainerIndexSerializer, scope: serializable_params
         )
 
         render json: { trainers: serialized_trainers, total_count: trainers.total_count }
       end
 
       def show
-        render json: @trainer
+        favorite = @trainer.favorites.find_by(user: @user)
+
+        render json: @trainer, scope: { favorite: favorite }
       end
 
       private

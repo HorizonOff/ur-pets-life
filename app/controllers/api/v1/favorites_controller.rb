@@ -3,7 +3,15 @@ module Api
     class FavoritesController < Api::BaseController
       before_action :set_favorite, only: :destroy
 
-      def index; end
+      def index
+        favorites = favorites_pagination_query.find_objects
+        serialized_favorites = []
+        favorites.each do |f|
+          serialized_favorites << serialize_favorite(f, serializable_params.merge(favorite: f))
+        end
+
+        render json: { favorites: serialized_favorites, total_count: favorites.total_count }
+      end
 
       def create
         favorite = @user.favorites.new(favorite_params)
@@ -33,6 +41,15 @@ module Api
 
       def favorite_params
         params.require(:favorite).permit(:favoritable_type, :favoritable_id)
+      end
+
+      def favorites_pagination_query
+        @favorites_pagination_query ||= ::Api::V1::FavoritesPaginationQuery.new(@user.favorites, params)
+      end
+
+      def serialize_favorite(favorite, scope)
+        serializer = favorite.favoritable_type + 'IndexSerializer'
+        serializer.constantize.new(favorite.favoritable, scope: scope)
       end
     end
   end

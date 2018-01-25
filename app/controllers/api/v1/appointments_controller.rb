@@ -6,19 +6,14 @@ module Api
       def index
         appointments = appointments_pagination_query.find_objects
         serialized_appointments = ActiveModel::Serializer::CollectionSerializer.new(
-          appointments, serializer: AppointmentIndexSerializer,
-                        scope: { latitude: params[:latitude], longitude: params[:longitude],
-                                 time_zone: params[:time_zone] }
+          appointments, serializer: AppointmentIndexSerializer, scope: serializable_params
         )
 
-        render json: {
-          appointments: serialized_appointments,
-          total_count: appointments.total_count
-        }
+        render json: { appointments: serialized_appointments, total_count: appointments.total_count }
       end
 
       def show
-        render json: @appointment, scope: { latitude: params[:latitude], longitude: params[:longitude] }
+        render json: @appointment, scope: serializable_params
       end
 
       def create
