@@ -10,7 +10,7 @@ module Api
           serialized_favorites << serialize_favorite(f, serializable_params.merge(favorite: f))
         end
 
-        render json: { favorites: serialized_favorites, total_count: favorites.total_count }
+        render json: { favorites: serialized_favorites }
       end
 
       def create
