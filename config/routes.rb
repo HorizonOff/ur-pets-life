@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  mount Ckeditor::Engine => '/ckeditor'
   root 'admin_panel/dashboard#index'
   get '/login', to: 'application#login'
   devise_for :users, only: %i[confirmations passwords omniauth_callbacks],
@@ -51,6 +52,8 @@ Rails.application.routes.draw do
       resources :passwords, only: [] do
         collection { post :forgot }
       end
+      resource :terms_and_conditions, only: :show
+
       put 'passwords', to: 'passwords#update'
 
       get '/users/auth/google_oauth2/callback', to: 'application#index'
@@ -60,6 +63,7 @@ Rails.application.routes.draw do
   devise_for :admins, path: 'admin_panel/admins', except: :registrations
   namespace :admin_panel do
     resources :admins, except: :create
+    resource :terms_and_conditions, only: %i[edit update]
     resources :users, except: %i[new ceate]
     resources :pets, except: %i[index new ceate] do
       member { get :weight_history }

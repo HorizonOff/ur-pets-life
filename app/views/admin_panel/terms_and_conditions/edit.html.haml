@@ -1,0 +1,16 @@
+- content_for :head do
+  %meta{name: "turbolinks-cache-control", content:"no-cache"}
+
+%div
+  .page-title
+    .title_left
+      %h3 Edit clinic
+
+  .clearfix
+
+  = form_for @terms_and_conditions, url: admin_panel_terms_and_conditions_path,
+  html: { multipart: true, method: :put, class: 'form-horizontal form-label-left', autocomplete: 'off'} do |f|
+
+    = f.cktext_area :content, ckeditor: { language: 'uk'}
+
+    = f.submit 'Update terms and conditions', class: 'btn btn-success pull-right'

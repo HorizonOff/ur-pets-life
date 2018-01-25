@@ -33,6 +33,7 @@ AllCops:
    - lib/api/v1/*
    - spec/**/*
    - config/initializers/devise.rb
+   - app/models/ckeditor/*
 Style/FrozenStringLiteralComment:
   Enabled: false
 Style/PredicateName:
