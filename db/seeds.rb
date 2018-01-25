@@ -312,9 +312,9 @@ Vet.all.each do |v|
 end
 
 if Admin.count.zero?
-  Admin.create(email: 'ur.pets.life.project@gmail.com', password: '111111', password_confirmation: '111111',
+  Admin.create(email: ENV['GMAIL_ADMIN'], password: ENV['GMAIL_PASSWORD'], password_confirmation: ENV['GMAIL_PASSWORD'],
                is_super_admin: true)
-  Admin.create(email: 'admin@example.com', password: '111111', password_confirmation: '111111',
+  Admin.create(email: 'admin@example.com', password: ENV['GMAIL_PASSWORD'], password_confirmation: ENV['GMAIL_PASSWORD'],
                is_super_admin: true)
 end
 
@@ -465,8 +465,7 @@ if Diagnosis.count.zero?
     a.create_diagnosis(condition: 'norm condition',
                        message: "sdfds ef ewf ewfo kewpofkopwekfpo kpowekfpwekf pweokrpwk pwerkewpkr
                                  pewkrpewkr pewkpewkrpwekr pwkerpewkr pwekr pekrpewkrpewkpwkr pwekrpwekr
-                                 pwekr pwerkpewkrpw kpwerpwekr",
-                       next_appointment_id: past_clinic_appointments.pluck(:id).sample)
+                                 pwekr pwerkpewkrpw kpwerpwekr")
   end
 end
 
