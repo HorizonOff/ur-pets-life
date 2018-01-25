@@ -12,14 +12,16 @@ class Vet < ApplicationRecord
                                       too_long: 'Mobile number should contain not more than 12 symbols' },
                             allow_blank: true
 
-  has_many :calendars, -> { order(start_at: :asc) }, dependent: :destroy
-  has_many :appointments, dependent: :destroy
+  belongs_to :clinic, counter_cache: true
+
   has_and_belongs_to_many :specializations
   has_and_belongs_to_many :pet_types
-  has_many :qualifications, as: :skill, inverse_of: :skill
-  has_one :location, as: :place, inverse_of: :place
 
-  belongs_to :clinic, counter_cache: true
+  has_many :calendars, -> { order(start_at: :asc) }, dependent: :destroy
+  has_many :appointments, dependent: :destroy
+  has_many :qualifications, as: :skill, inverse_of: :skill
+
+  has_one :location, as: :place, inverse_of: :place
 
   accepts_nested_attributes_for :qualifications, allow_destroy: true
   accepts_nested_attributes_for :location, update_only: true, allow_destroy: true

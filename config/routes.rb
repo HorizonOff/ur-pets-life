@@ -41,6 +41,7 @@ Rails.application.routes.draw do
         member { get :schedule }
       end
       resources :appointments, only: %i[index create show]
+      resources :favorites, only: %i[index create destroy]
 
       resources :sessions, only: :create do
         collection { post :facebook }
