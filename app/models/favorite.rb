@@ -4,7 +4,7 @@ class Favorite < ApplicationRecord
 
   validates :favoritable_id, uniqueness: { scope: %i[favoritable_type user_id],
                                            message: 'Object is already in favorite' }
-  validates :favoritable_type_should_be_valid
+  validate :favoritable_type_should_be_valid
 
   scope :clinics, -> { where(favoritable_type: 'Clinic') }
   scope :vets, -> { where(favoritable_type: 'Vet') }
