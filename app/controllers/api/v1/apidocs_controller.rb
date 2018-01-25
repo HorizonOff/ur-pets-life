@@ -43,6 +43,7 @@ module Api
         Api::V1::Favorites,
         Api::V1::Schedules,
         Api::V1::PetTypes,
+        Api::V1::ContactRequests,
         self
       ].freeze
 

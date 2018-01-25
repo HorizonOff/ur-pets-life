@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>
+  </head>
+  <body>
+    <h1>Created new contact request</h1>
+    <p>
+      Subgect:
+      <%=@contact_request.subject %>.<br>
+    </p>
+    <p>
+      Message
+      <%= @contact_request.message %>.
+    </p>
+    <p>
+      Contact request created
+      <%= @contact_request.created_at%>
+    </p>
+  </body>
+</html>
