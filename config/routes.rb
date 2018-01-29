@@ -98,5 +98,9 @@ Rails.application.routes.draw do
     end
     resource :profile, only: %i[edit update]
     resource :password, only: %i[edit update]
+    resources :contact_requests, only: %i[index show] do
+      member { get :new_reply }
+      member { post :send_reply }
+    end
   end
 end

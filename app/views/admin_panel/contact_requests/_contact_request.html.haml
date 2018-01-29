@@ -1,0 +1,10 @@
+%tr
+  %th{ scope: 'row' }= contact_request.id
+  %td= contact_request.user.name
+  %td= contact_request.user.email
+  %td= contact_request.user.mobile_number
+  %td= contact_request.subject
+  %td= contact_request.created_at.strftime('%-d %b %Y %I:%M %p')
+  %td
+    %span{ class: "label #{contact_request.is_answered? ? 'label-success' : 'label-warning'}" }= contact_request.status
+  %td= link_to 'Show', admin_panel_contact_request_path(contact_request), class: 'btn btn-primary btn-xs'

@@ -3,7 +3,7 @@
     .title_left
       %h3
         Booking
-        %span{ class: "label #{status_class(@appointment)}" } #{@appointment.status}
+        %span{ class: "label #{status_class(@appointment)}" }= @appointment.status
   .clearfix
   .row
     .col-md-12.col-sm-12.col-xs-12

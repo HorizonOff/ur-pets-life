@@ -1,0 +1,23 @@
+%div
+  .page-title
+    .title_left
+      %h3 Contact Requests
+  .clearfix
+
+  .row
+    .col-md-12.col-sm-12.col-xs-12
+      .x_panel
+        .x_content
+          %table.table
+            %thead
+              %tr
+                %th #
+                %th User name
+                %th User email
+                %th User phone
+                %th Subject
+                %th Created at
+                %th Status
+                %th Actions
+            %tbody
+              =render @contact_requests
