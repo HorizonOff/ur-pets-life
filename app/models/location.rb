@@ -8,7 +8,7 @@ class Location < ApplicationRecord
   after_initialize :set_defaults
 
   geocoded_by :address
-  after_validation :geocode, if: ->(obj) { obj.address.present? && (obj.latitude.blank? || obj.longitude.blank?) }
+  after_validation :geocode, if: :should_geocode?
 
   def address
     address_fields = [city, area, street]
@@ -43,6 +43,27 @@ class Location < ApplicationRecord
   end
 
   def attributes_should_be_valid
-    errors.add(:city, 'Location is required') if city.blank? && area.blank? && street.blank? && building_name.blank?
+    return errors.add(:city, 'Location is required') if place_type == 'Pet' && coardinates_blank? && fields_blank?
+    errors.add(:city, 'Location is required') if fields_blank?
+  end
+
+  def fields_blank?
+    city.blank? && area.blank? && street.blank? && building_name.blank?
+  end
+
+  def coardinates_blank?
+    latitude.blank? || longitude.blank?
+  end
+
+  def should_geocode?
+    (address.present? && coardinates_blank?) || (changed_some_attributes? && coardinates_the_same?)
+  end
+
+  def changed_some_attributes?
+    %w[city street area].any? { |attr| attr.in? changed_attributes.keys }
+  end
+
+  def coardinates_the_same?
+    %w[latitude longitude].none? { |attr| attr.in? changed_attributes.keys }
   end
 end

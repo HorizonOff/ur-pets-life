@@ -49,11 +49,17 @@ class User < ApplicationRecord
 
   delegate :address, to: :location, allow_nil: true
 
+  before_validation :check_location
+
   def name
     first_name + ' ' + last_name
   end
 
   private
+
+  def check_location
+    location.destroy if location.present? && address.blank?
+  end
 
   def password_required?
     return false if skip_password_validation

@@ -16,7 +16,7 @@ class PetSerializer < BaseMethodsSerializer
   end
 
   def lost_at
-    object.lost_at.to_i
+    object.lost_at.to_i if object.lost_at.present?
   end
 
   class VaccineTypeSerializer < ActiveModel::Serializer

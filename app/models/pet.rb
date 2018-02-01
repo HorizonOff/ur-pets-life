@@ -5,6 +5,8 @@ class Pet < ApplicationRecord
   belongs_to :user, optional: true
   belongs_to :breed, optional: true
   belongs_to :pet_type
+  validates :location, presence: { message: 'Locations is required' }, if: :lost_or_found?
+
   has_many :vaccine_types, through: :pet_type
   has_many :vaccinations, dependent: :destroy
   has_many :pictures, dependent: :destroy
@@ -92,7 +94,7 @@ class Pet < ApplicationRecord
   end
 
   def additional_type_required?
-    pet_type_is_additional?
+    found_at.blank? && pet_type_is_additional?
   end
 
   def not_found?

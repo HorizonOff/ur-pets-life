@@ -12,6 +12,8 @@ class Vet < ApplicationRecord
                                       too_long: 'Mobile number should contain not more than 12 symbols' },
                             allow_blank: true
 
+  validates :location, presence: { message: 'Location is required' }
+
   belongs_to :clinic, counter_cache: true
 
   has_and_belongs_to_many :specializations

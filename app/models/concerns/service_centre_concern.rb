@@ -17,6 +17,9 @@ module ServiceCentreConcern
     #                                     too_short: 'Mobile number should contain at least 10 symbols',
     #                                     too_long: 'Mobile number should contain not more than 12 symbols' },
     #                           allow_blank: true
+
+    validates :location, presence: { message: 'Location is required' }
+
     has_many :appointments, as: :bookable
     has_many :favorites, as: :favoritable
 
