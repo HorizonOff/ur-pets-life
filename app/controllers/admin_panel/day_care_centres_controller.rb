@@ -2,7 +2,10 @@ module AdminPanel
   class DayCareCentresController < AdminPanelController
     before_action :set_day_care_centre, except: %i[index new create]
     def index
-      @day_care_centres = DayCareCentre.all
+      respond_to do |format|
+        format.html {}
+        format.json { filter_day_care_centres }
+      end
     end
 
     def new
@@ -66,6 +69,21 @@ module AdminPanel
       %i[day_and_night monday_open_at monday_close_at tuesday_open_at tuesday_close_at wednesday_open_at
          wednesday_close_at thursday_open_at thursday_close_at friday_open_at friday_close_at saturday_open_at
          saturday_close_at sunday_open_at sunday_close_at]
+    end
+
+    def filter_day_care_centres
+      filtered_day_care_centres = filter_and_pagination_query.filter
+      day_care_centres = DayCareCentreDecorator.decorate_collection(filtered_day_care_centres)
+      serialized_day_care_centres = ActiveModel::Serializer::CollectionSerializer.new(
+        day_care_centres, serializer: DayCareCentreFilterSerializer, adapter: :attributes
+      )
+
+      render json: { draw: params[:draw], recordsTotal: Clinic.count,
+                     recordsFiltered: filtered_day_care_centres.total_count, data: serialized_day_care_centres }
+    end
+
+    def filter_and_pagination_query
+      @filter_and_pagination_query ||= ::AdminPanel::FilterAndPaginationQuery.new(DayCareCentre.all, params)
     end
   end
 end

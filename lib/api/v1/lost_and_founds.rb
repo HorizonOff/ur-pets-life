@@ -30,10 +30,8 @@ module Api
             key :type, :number
             key :example, 34
           end
-          property :pictures do
-            items do
-              key :'$ref', :Picture
-            end
+          property :location do
+            key :'$ref', :Location
           end
         end
       end
@@ -320,12 +318,6 @@ module Api
             key :required, true
             key :type, :integer
             key :example, 1
-          end
-          parameter do
-            key :name, 'pet[additional_type]'
-            key :in, :formData
-            key :type, :string
-            key :description, 'Required if pet_type_id - 3 - Other'
           end
           parameter do
             key :name, 'pet[additional_comment]'

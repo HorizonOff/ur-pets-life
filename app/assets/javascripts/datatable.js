@@ -18,13 +18,23 @@ function init_datatables(){
                                  { 'searchable': false, 'orderable': false, 'data': 'mobile_number', 'targets': 4 },
                                  { 'searchable': true, 'orderable': true, 'data': 'experience', 'targets': 5 },
                                  { 'searchable': true, 'orderable': true, 'data': 'is_active', 'targets': 6 },
-                                 { 'searchable': false, 'orderable': false, 'data': 'actions', 'targets': 7 } ] }
+                                 { 'searchable': false, 'orderable': false, 'data': 'actions', 'targets': 7 } ] },
+      'day_care_centres': { 'url': '/admin_panel/day_care_centres',
+                            'columns': [ { 'searchable': true, 'orderable': true, 'data': 'id', 'targets': 0 },
+                                         { 'searchable': true, 'orderable': true, 'data': 'name', 'targets': 1 },
+                                         { 'searchable': false, 'orderable': false, 'data': 'picture', 'targets': 2 },
+                                         { 'searchable': true, 'orderable': true, 'data': 'email', 'targets': 3 },
+                                         { 'searchable': false, 'orderable': false, 'data': 'mobile_number', 'targets': 4 },
+                                         { 'searchable': true, 'orderable': true, 'data': 'is_active', 'targets': 5 },
+                                         { 'searchable': false, 'orderable': false, 'data': 'actions', 'targets': 6 } ] }
     }
     var datatable = $('.datatable').first()
     if (datatable.hasClass('clinics')){
       init_datatable(table_rules['clinics']['url'], table_rules['clinics']['columns'])
-    } else {
+    } else if (datatable.hasClass('trainers')){
       init_datatable(table_rules['trainers']['url'], table_rules['trainers']['columns'])
+    } else {
+      init_datatable(table_rules['day_care_centres']['url'], table_rules['day_care_centres']['columns'])
     }
   };
 };
