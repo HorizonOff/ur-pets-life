@@ -2,7 +2,10 @@ module AdminPanel
   class TrainersController < AdminPanelController
     before_action :set_trainer, except: %i[index new create]
     def index
-      @trainers = Trainer.all
+      respond_to do |format|
+        format.html {}
+        format.json { filter_trainers }
+      end
     end
 
     def new
@@ -64,6 +67,20 @@ module AdminPanel
 
     def location_params
       %i[latitude longitude city area street building_type building_name unit_number villa_number comment]
+    end
+
+    def filter_trainers
+      filtered_trainers = filter_and_pagination_query.filter
+      trainers = TrainerDecorator.decorate_collection(filtered_trainers)
+      serialized_trainers = ActiveModel::Serializer::CollectionSerializer.new(
+        trainers, serializer: TrainerFilterSerializer, adapter: :attributes
+      )
+      render json: { draw: params[:draw], recordsTotal: Trainer.count, recordsFiltered: filtered_trainers.total_count,
+                     data: serialized_trainers }
+    end
+
+    def filter_and_pagination_query
+      @filter_and_pagination_query ||= ::AdminPanel::FilterAndPaginationQuery.new(Trainer.all, params)
     end
   end
 end

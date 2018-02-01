@@ -74,7 +74,7 @@ class Pet < ApplicationRecord
   end
 
   def lost_at=(value)
-    value = Time.zone.at(value.to_i)
+    value = Time.zone.at(value.to_i) if value.present?
     super
   end
 
@@ -94,15 +94,15 @@ class Pet < ApplicationRecord
   end
 
   def additional_type_required?
-    found_at.blank? && pet_type_is_additional?
+    @additional_type_required ||= found_at.blank? && pet_type_is_additional?
   end
 
   def not_found?
-    found_at.blank?
+    @not_found ||= found_at.blank?
   end
 
   def lost_or_found?
-    lost_at.present? || found_at.present?
+    @lost_or_found ||= lost_at.present? || found_at.present?
   end
 
   def sex_should_be_valid
