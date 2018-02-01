@@ -20,6 +20,11 @@ Metrics/MethodLength:
     - app/services/api/v1/user_services/social_auth_service.rb
     - app/helpers/params_cleaner_helper.rb
     - app/controllers/api/base_controller.rb
+    - lib/query_objects/admin_panel/filter_and_pagination_query.rb
+Metrics/ClassLength:
+  Enabled: true
+  Exclude:
+   - lib/query_objects/admin_panel/filter_and_pagination_query.rb
 AllCops:
  Excludes:
    - Gemfile

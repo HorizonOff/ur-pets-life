@@ -1,8 +1,12 @@
 module AdminPanel
   class ClinicsController < AdminPanelController
     before_action :set_clinic, except: %i[index new create]
+
     def index
-      @clinics = Clinic.all
+      respond_to do |format|
+        format.html {}
+        format.json { filter_clinics }
+      end
     end
 
     def new
@@ -72,6 +76,20 @@ module AdminPanel
       %i[day_and_night monday_open_at monday_close_at tuesday_open_at tuesday_close_at wednesday_open_at
          wednesday_close_at thursday_open_at thursday_close_at friday_open_at friday_close_at saturday_open_at
          saturday_close_at sunday_open_at sunday_close_at]
+    end
+
+    def filter_clinics
+      filtered_clinics = filter_and_pagination_query.filter
+      clinics = ClinicDecorator.decorate_collection(filtered_clinics)
+      serialized_clinics = ActiveModel::Serializer::CollectionSerializer.new(
+        clinics, serializer: ClinicFilterSerializer, adapter: :attributes
+      )
+      render json: { draw: params[:draw], recordsTotal: Clinic.count, recordsFiltered: filtered_clinics.total_count,
+                     data: serialized_clinics }
+    end
+
+    def filter_and_pagination_query
+      @filter_and_pagination_query ||= ::AdminPanel::FilterAndPaginationQuery.new('Clinic', params)
     end
   end
 end

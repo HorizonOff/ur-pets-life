@@ -18,6 +18,8 @@
  *= require bootstrap-datetimepicker.min
  *= require fullcalendar
  *= require daterangepicker
+ *= require dataTables.bootstrap.min
+ *= require buttons.bootstrap.min
 
  *= require_tree
  *= require_self
@@ -83,4 +85,8 @@ div.error label {
 .service_details_fields input,
 .service_details_fields label {
   display: inline-block;
+}
+
+.dataTables_wrapper .dataTables_filter {
+  visibility: hidden;
 }
