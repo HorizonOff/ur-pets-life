@@ -80,9 +80,9 @@ module AdminPanel
 
     def filter_clinics
       filtered_clinics = filter_and_pagination_query.filter
-      clinics = ClinicDecorator.decorate_collection(filtered_clinics)
+      clinics = ::AdminPanel::ClinicDecorator.decorate_collection(filtered_clinics)
       serialized_clinics = ActiveModel::Serializer::CollectionSerializer.new(
-        clinics, serializer: ClinicFilterSerializer, adapter: :attributes
+        clinics, serializer: ::AdminPanel::ClinicFilterSerializer, adapter: :attributes
       )
       render json: { draw: params[:draw], recordsTotal: Clinic.count, recordsFiltered: filtered_clinics.total_count,
                      data: serialized_clinics }

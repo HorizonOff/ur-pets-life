@@ -71,10 +71,11 @@ module AdminPanel
 
     def filter_trainers
       filtered_trainers = filter_and_pagination_query.filter
-      trainers = TrainerDecorator.decorate_collection(filtered_trainers)
+      trainers = ::AdminPanel::TrainerDecorator.decorate_collection(filtered_trainers)
       serialized_trainers = ActiveModel::Serializer::CollectionSerializer.new(
-        trainers, serializer: TrainerFilterSerializer, adapter: :attributes
+        trainers, serializer: ::AdminPanel::TrainerFilterSerializer, adapter: :attributes
       )
+
       render json: { draw: params[:draw], recordsTotal: Trainer.count, recordsFiltered: filtered_trainers.total_count,
                      data: serialized_trainers }
     end

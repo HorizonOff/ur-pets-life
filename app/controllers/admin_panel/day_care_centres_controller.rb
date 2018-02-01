@@ -73,12 +73,12 @@ module AdminPanel
 
     def filter_day_care_centres
       filtered_day_care_centres = filter_and_pagination_query.filter
-      day_care_centres = DayCareCentreDecorator.decorate_collection(filtered_day_care_centres)
+      day_care_centres = ::AdminPanel::DayCareCentreDecorator.decorate_collection(filtered_day_care_centres)
       serialized_day_care_centres = ActiveModel::Serializer::CollectionSerializer.new(
-        day_care_centres, serializer: DayCareCentreFilterSerializer, adapter: :attributes
+        day_care_centres, serializer: ::AdminPanel::DayCareCentreFilterSerializer, adapter: :attributes
       )
 
-      render json: { draw: params[:draw], recordsTotal: Clinic.count,
+      render json: { draw: params[:draw], recordsTotal: DayCareCentre.count,
                      recordsFiltered: filtered_day_care_centres.total_count, data: serialized_day_care_centres }
     end
 

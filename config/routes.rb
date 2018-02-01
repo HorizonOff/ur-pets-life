@@ -17,6 +17,7 @@ Rails.application.routes.draw do
 
       get 'pets/:id/health_history', to: 'health_history#index'
       get 'pets/:id/weight_history', to: 'weight_history#index'
+      get 'found_pets', to: 'pets#found_pets'
       resources :pets, except: %i[new edit] do
         collection { post :found }
         collection { get :can_be_lost }

@@ -96,6 +96,14 @@ module Api
               key :type, :integer
               key :example, 1516217199
             end
+            property :pet_type_id do
+              key :type, :integer
+              key :example, 2
+            end
+            property :mobile_numbner do
+              key :type, :string
+              key :example, '+38050505050'
+            end
           end
         end
       end
@@ -435,6 +443,40 @@ module Api
           end
           response 204 do
             key :description, 'Success response'
+          end
+        end
+      end
+
+      swagger_path '/found_pets' do
+        operation :get do
+          key :description, 'Get my found pets'
+          key :consumes, %w[application/json]
+          key :produces, %w[application/json]
+          key :tags, %w[Pets]
+
+          security do
+            key :api_key, []
+          end
+
+          parameter do
+            key :name, :longitude
+            key :in, :query
+            key :type, :number
+            key :example, 22.287883
+          end
+
+          parameter do
+            key :name, :latitude
+            key :in, :query
+            key :type, :number
+            key :example, 48.6208
+          end
+
+          response 200 do
+            key :description, 'Success response'
+            schema do
+              key :'$ref', :LostAndFoundsResponse
+            end
           end
         end
       end

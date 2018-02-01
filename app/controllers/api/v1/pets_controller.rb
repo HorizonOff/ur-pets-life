@@ -62,6 +62,12 @@ module Api
         render json: pets, each_serializer: PetIndexSerializer
       end
 
+      def found_pets
+        pets = @user.pets.found.joins(:location).near([params[:latitude], params[:longitude]], 999_999, units: :km)
+
+        render json: pets, each_serializer: LostAndFoundIndexSerializer, scope: serializable_params
+      end
+
       private
 
       def set_pet

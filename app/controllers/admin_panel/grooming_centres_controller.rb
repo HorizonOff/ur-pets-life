@@ -2,7 +2,10 @@ module AdminPanel
   class GroomingCentresController < AdminPanelController
     before_action :set_grooming_centre, except: %i[index new create]
     def index
-      @grooming_centres = GroomingCentre.all
+      respond_to do |format|
+        format.html {}
+        format.json { filter_grooming_centres }
+      end
     end
 
     def new
@@ -66,6 +69,21 @@ module AdminPanel
       %i[day_and_night monday_open_at monday_close_at tuesday_open_at tuesday_close_at wednesday_open_at
          wednesday_close_at thursday_open_at thursday_close_at friday_open_at friday_close_at saturday_open_at
          saturday_close_at sunday_open_at sunday_close_at]
+    end
+
+    def filter_grooming_centres
+      filtered_grooming_centres = filter_and_pagination_query.filter
+      grooming_centres = ::AdminPanel::GroomingCentreDecorator.decorate_collection(filtered_grooming_centres)
+      serialized_grooming_centres = ActiveModel::Serializer::CollectionSerializer.new(
+        grooming_centres, serializer: ::AdminPanel::GroomingCentreFilterSerializer, adapter: :attributes
+      )
+
+      render json: { draw: params[:draw], recordsTotal: GroomingCentre.count,
+                     recordsFiltered: filtered_grooming_centres.total_count, data: serialized_grooming_centres }
+    end
+
+    def filter_and_pagination_query
+      @filter_and_pagination_query ||= ::AdminPanel::FilterAndPaginationQuery.new(GroomingCentre.all, params)
     end
   end
 end
