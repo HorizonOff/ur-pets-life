@@ -5,10 +5,16 @@ class CreateTrainers < ActiveRecord::Migration[5.1]
       t.string :email
       t.string :picture
       t.string :mobile_number
-      t.boolean :is_active
+      t.boolean :is_active, default: true
       t.integer :experience
 
       t.timestamps
+
+      t.index :name
+      t.index :email
+      t.index :mobile_number
+      t.index :is_active
+      t.index :experience
     end
 
     create_join_table :specializations, :trainers

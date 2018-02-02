@@ -6,28 +6,32 @@ module AdminPanel
                           'specialization_id' => { join_model: :specializations, field: 'specializations.id' },
                           'pet_type_id' => { join_model: :pet_types, field: 'pet_types.id' } }.freeze
 
-    def initialize(scope, params)
+    def initialize(model, params)
+      @model = model
       @params = params
 
-      self.scope = scope
+      self.scope = model.constantize.all
     end
 
     def filter
       if draw_first?
         scope.order(id: :asc).page(params[:page]).per(10)
       else
+        select_additional_fields
         parse_params
-        filter_by_search_params if @searchable_columns.present?
-        filter_by_additional_params if @additional_params.present?
-        filter_by_order_params
-        filter_by_page_params
+        filter_by_all_params
       end
     end
 
     private
 
+    attr_reader :model, :params
     attr_accessor :scope
-    attr_reader :params
+
+    def select_additional_fields
+      return if model != 'User'
+      @scope = scope.select("users.*, concat(users.first_name, ' ', users.last_name) as name")
+    end
 
     def draw_first?
       params[:draw] == '1'
@@ -82,6 +86,13 @@ module AdminPanel
 
     def parse_page_params
       @page = (params[:start].to_i / params[:length].to_i) + 1
+    end
+
+    def filter_by_all_params
+      filter_by_search_params if @searchable_columns.present?
+      filter_by_additional_params if @additional_params.present?
+      filter_by_order_params
+      filter_by_page_params
     end
 
     def filter_by_search_params

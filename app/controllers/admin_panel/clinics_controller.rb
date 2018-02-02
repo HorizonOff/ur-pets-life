@@ -89,7 +89,7 @@ module AdminPanel
     end
 
     def filter_and_pagination_query
-      @filter_and_pagination_query ||= ::AdminPanel::FilterAndPaginationQuery.new(Clinic.all, params)
+      @filter_and_pagination_query ||= ::AdminPanel::FilterAndPaginationQuery.new('Clinic', params)
     end
   end
 end

@@ -83,7 +83,7 @@ module AdminPanel
     end
 
     def filter_and_pagination_query
-      @filter_and_pagination_query ||= ::AdminPanel::FilterAndPaginationQuery.new(GroomingCentre.all, params)
+      @filter_and_pagination_query ||= ::AdminPanel::FilterAndPaginationQuery.new('GroomingCentre', params)
     end
   end
 end

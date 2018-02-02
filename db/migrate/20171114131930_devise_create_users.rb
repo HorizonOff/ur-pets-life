@@ -20,6 +20,7 @@ class DeviseCreateUsers < ActiveRecord::Migration[5.1]
       t.datetime :confirmation_sent_at
       t.integer  :sign_in_count, default: 0, null: false
       # t.string   :unconfirmed_email # Only if using reconfirmable
+      t.boolean :is_active, default: true
 
       t.timestamps null: false
     end
@@ -29,5 +30,7 @@ class DeviseCreateUsers < ActiveRecord::Migration[5.1]
     add_index :users, :confirmation_token,   unique: true
     add_index :users, :facebook_id,          unique: true
     add_index :users, :google_id,            unique: true
+    add_index :users, :is_active
+    add_index :users, :mobile_number
   end
 end

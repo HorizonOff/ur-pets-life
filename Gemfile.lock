@@ -311,6 +311,8 @@ GEM
       pry (>= 0.9.11)
     public_suffix (3.0.1)
     puma (3.10.0)
+    pundit (1.1.0)
+      activesupport (>= 3.0.0)
     rack (2.0.3)
     rack-oauth2 (1.6.4)
       activesupport (>= 2.3)
@@ -473,6 +475,7 @@ DEPENDENCIES
   pry-remote
   pry-stack_explorer
   puma (~> 3.7)
+  pundit
   rails!
   rest-client
   rspec-rails (~> 3.6)

@@ -12,10 +12,15 @@ class CreateAppointments < ActiveRecord::Migration[5.1]
       t.datetime :end_at
       t.integer :status
       t.integer :total_price
+      t.timestamps
 
       t.index :main_appointment_id
+      t.index :start_at
+      t.index :end_at
+      t.index :status
+      t.index :total_price
+      t.index :created_at
 
-      t.timestamps
     end
   end
 end

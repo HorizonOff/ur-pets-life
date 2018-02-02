@@ -2,9 +2,13 @@ module AdminPanel
   class UsersController < AdminPanelController
     before_action :set_user, except: %i[index new create]
     before_action :set_location, only: %i[edit]
+    before_action :authorize_admin
 
     def index
-      @users = User.all
+      respond_to do |format|
+        format.html {}
+        format.json { filter_users }
+      end
     end
 
     def edit; end
@@ -30,6 +34,10 @@ module AdminPanel
 
     private
 
+    def authorize_admin
+      authorize :application, :super_admin?
+    end
+
     def set_user
       @user = User.find_by(id: params[:id])
     end
@@ -44,6 +52,21 @@ module AdminPanel
 
     def location_params
       %i[id latitude longitude city area street building_type building_name unit_number villa_number comment _destroy]
+    end
+
+    def filter_users
+      filtered_users = filter_and_pagination_query.filter
+      users = ::AdminPanel::UserDecorator.decorate_collection(filtered_users)
+      serialized_users = ActiveModel::Serializer::CollectionSerializer.new(
+        users, serializer: ::AdminPanel::UserFilterSerializer, adapter: :attributes
+      )
+
+      render json: { draw: params[:draw], recordsTotal: User.count,
+                     recordsFiltered: filtered_users.total_count, data: serialized_users }
+    end
+
+    def filter_and_pagination_query
+      @filter_and_pagination_query ||= ::AdminPanel::FilterAndPaginationQuery.new('User', params)
     end
   end
 end

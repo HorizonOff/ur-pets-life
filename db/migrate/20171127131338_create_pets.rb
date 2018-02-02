@@ -21,6 +21,10 @@ class CreatePets < ActiveRecord::Migration[5.1]
       t.string :additional_comment
 
       t.timestamps
+
+      t.index :lost_at
+      t.index :found_at
+      t.index :is_for_adoption
     end
   end
 end

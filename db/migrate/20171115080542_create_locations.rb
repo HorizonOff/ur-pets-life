@@ -14,6 +14,8 @@ class CreateLocations < ActiveRecord::Migration[5.1]
       t.string :comment
 
       t.timestamps
+
+      t.index :city
     end
   end
 end

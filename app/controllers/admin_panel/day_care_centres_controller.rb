@@ -83,7 +83,7 @@ module AdminPanel
     end
 
     def filter_and_pagination_query
-      @filter_and_pagination_query ||= ::AdminPanel::FilterAndPaginationQuery.new(DayCareCentre.all, params)
+      @filter_and_pagination_query ||= ::AdminPanel::FilterAndPaginationQuery.new('DayCareCentre', params)
     end
   end
 end

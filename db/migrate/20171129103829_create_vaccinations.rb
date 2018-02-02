@@ -7,6 +7,8 @@ class CreateVaccinations < ActiveRecord::Migration[5.1]
       t.string :picture
 
       t.timestamps
+
+      t.index :done_at
     end
   end
 end

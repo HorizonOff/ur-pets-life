@@ -13,14 +13,15 @@
     #sidebar-menu.main_menu_side.hidden-print.main_menu
       .menu_section
         %ul.nav.side-menu
-          %li{ class: "#{'current-page' if current_page?(admin_panel_admins_path)}" }
-            = link_to admin_panel_admins_path do
-              %i.fa.fa-edit
-              Admins
-          %li{ class: "#{'current-page' if current_page?(admin_panel_users_path)}" }
-            = link_to admin_panel_users_path do
-              %i.fa.fa-users
-              Users
+          - if current_admin.is_super_admin?
+            %li{ class: "#{'current-page' if current_page?(admin_panel_admins_path)}" }
+              = link_to admin_panel_admins_path do
+                %i.fa.fa-edit
+                Admins
+            %li{ class: "#{'current-page' if current_page?(admin_panel_users_path)}" }
+              = link_to admin_panel_users_path do
+                %i.fa.fa-users
+                Users
           %li{ class: "#{'current-page' if current_page?(admin_panel_clinics_path)}" }
             = link_to admin_panel_clinics_path do
               %i.fa.fa-plus-square
