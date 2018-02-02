@@ -43,7 +43,6 @@ class User < ApplicationRecord
   has_many :pets
   has_many :appointments
   has_one :location, as: :place, inverse_of: :place
-  has_many :contact_requests, dependent: :destroy
 
   accepts_nested_attributes_for :location, update_only: true, reject_if: :all_blank
 

@@ -41,7 +41,16 @@ function init_datatables(){
                               { 'searchable': true, 'orderable': true, 'data': 'email', 'targets': 2 },
                               { 'searchable': false, 'orderable': false, 'data': 'mobile_number', 'targets': 3 },
                               { 'searchable': true, 'orderable': true, 'data': 'is_active', 'targets': 4 },
-                              { 'searchable': false, 'orderable': false, 'data': 'actions', 'targets': 5 } ] }
+                              { 'searchable': false, 'orderable': false, 'data': 'actions', 'targets': 5 } ] },
+      'contact_requests': { 'url': '/admin_panel/contact_requests',
+                            'columns': [ { 'searchable': true, 'orderable': true, 'data': 'id', 'targets': 0 },
+                                         { 'searchable': false, 'orderable': false, 'data': 'user_name', 'targets': 1 },
+                                         { 'searchable': true, 'orderable': true, 'data': 'email', 'targets': 2 },
+                                         { 'searchable': false, 'orderable': false, 'data': 'user_mobile_number', 'targets': 3 },
+                                         { 'searchable': false, 'orderable': false, 'data': 'subject', 'targets': 4 },
+                                         { 'searchable': false, 'orderable': true, 'data': 'created_at', 'targets': 5 },
+                                         { 'searchable': true, 'orderable': true, 'data': 'is_answered', 'targets': 6 },
+                                         { 'searchable': false, 'orderable': false, 'data': 'actions', 'targets': 7 } ] }
     }
     var datatable = $('.datatable').first()
     if (datatable.hasClass('clinics')){
@@ -52,8 +61,10 @@ function init_datatables(){
       init_datatable(table_rules['day_care_centres']['url'], table_rules['day_care_centres']['columns'])
     } else if (datatable.hasClass('grooming_centres')){
       init_datatable(table_rules['grooming_centres']['url'], table_rules['grooming_centres']['columns'])
-    } else {
+    } else if (datatable.hasClass('users')){
       init_datatable(table_rules['users']['url'], table_rules['users']['columns'])
+    } else {
+      init_datatable(table_rules['contact_requests']['url'], table_rules['contact_requests']['columns'])
     }
   };
 };

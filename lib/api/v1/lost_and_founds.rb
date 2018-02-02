@@ -158,6 +158,12 @@ module Api
           key :tags, %W[Lost\ and\ Found]
 
           parameter do
+            key :type, :string
+            key :name, 'Authorization'
+            key :in, :header
+          end
+
+          parameter do
             key :name, :id
             key :in, :path
             key :type, :integer
@@ -169,7 +175,6 @@ module Api
             key :type, :number
             key :example, 22.287883
           end
-
           parameter do
             key :name, :latitude
             key :in, :query

@@ -14,7 +14,7 @@ module Api
       end
 
       def show
-        render json: @pet, serializer: LostAndFoundSerializer, scope: serializable_params
+        render json: @pet, serializer: LostAndFoundSerializer, scope: serializable_params.merge(user: @user)
       end
 
       private

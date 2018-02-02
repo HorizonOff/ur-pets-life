@@ -13,4 +13,8 @@ class LostAndFoundSerializer < BaseMethodsSerializer
   def found_at
     object.found_at.to_i if object.found_at.present?
   end
+
+  def mobile_number
+    object.mobile_number unless scope[:user].try(:id) == object.user_id
+  end
 end

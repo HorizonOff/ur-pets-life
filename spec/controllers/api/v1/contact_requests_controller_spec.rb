@@ -5,35 +5,47 @@ RSpec.describe Api::V1::ContactRequestsController, type: :controller do
     let(:contact_request_params) do
       attributes_for(:contact_request)
     end
+    let(:success_response_message) do
+      { 'message' => 'Successfully created' }
+    end
     subject { post :create, params: { contact_request: contact_request_params} }
 
-    context 'When user not Authenticated ' do
-      let(:success_response_message) do
-        { 'errors' => { 'error' => 'Not Authorized' } }
+    context 'When user not Authenticated' do
+      let(:unsuccess_response_message) do
+        { 'errors' => { 'email' => 'Email is required' } }
       end
 
-      it 'returns unsuccess response' do
+      before do
         subject
-
-        expect(response).not_to be_success
       end
 
-      it 'returns proper status 401' do
-        subject
+      context 'and params[:email] is empty' do
+        it 'returns proper status 422' do
+          expect(response.status).to eq(422)
+        end
 
-        expect(response.status).to eq(401)
+        it 'returns message unsuccess response' do
+          expect(JSON.parse(response.body)).to eq(unsuccess_response_message)
+        end
       end
 
-      it 'returns message unsuccess response' do
-        subject
+      context 'and send email in params' do
+        subject { post :create, params: { contact_request: contact_request_params.merge(email: 'user2@mail.com')} }
 
-        expect(JSON.parse(response.body)).to eq(success_response_message)
+        it 'returns proper status 200' do
+          expect(response.status).to eq(200)
+        end
+
+        it 'returns success message' do
+          expect(JSON.parse(response.body)).to eq(success_response_message)
+        end
       end
     end
 
     context 'When user Authenticated' do
       before do
         @request, @user, @session = auth_user(@request)
+        subject
       end
 
       let(:message_two_field_blank) do
@@ -46,14 +58,10 @@ RSpec.describe Api::V1::ContactRequestsController, type: :controller do
       let(:message_blank_field_subject) do
         { 'errors' => {  'subject' => 'Subject is required' } }
       end
-      let(:message_success) do
-        { 'message' => 'Successfully created' }
-      end
 
       context 'Blank all params' do
-        before do
-          post :create, params: { contact_request: { subject: '', message: '' } }
-        end
+        subject { post :create, params: { contact_request: { subject: '', message: '' } } }
+
         it 'returns message/blank two fields' do
           expect(JSON.parse(response.body)).to eq(message_two_field_blank)
         end
@@ -67,9 +75,8 @@ RSpec.describe Api::V1::ContactRequestsController, type: :controller do
       end
 
       context 'Blank params subject' do
-        before do
-          post :create, params: { contact_request: { subject: '', message: 'Message' } }
-        end
+        subject { post :create, params: { contact_request: { subject: '', message: 'Message' } } }
+
         it 'returns error response' do
           expect(response).not_to be_success
         end
@@ -83,9 +90,8 @@ RSpec.describe Api::V1::ContactRequestsController, type: :controller do
       end
 
       context 'Blank params message' do
-        before do
-          post :create, params: { contact_request: { subject: 'Test subject', message: '' } }
-        end
+        subject { post :create, params: { contact_request: { subject: 'Test subject', message: '' } } }
+
         it 'returns error response' do
           expect(response).not_to be_success
         end
@@ -100,10 +106,6 @@ RSpec.describe Api::V1::ContactRequestsController, type: :controller do
       end
 
       context 'Valid params' do
-        before do
-          subject
-        end
-
         it 'returns success response' do
           expect(response).to be_success
         end
@@ -112,7 +114,7 @@ RSpec.describe Api::V1::ContactRequestsController, type: :controller do
           expect(response.status).to eq(200)
         end
         it 'returns success message' do
-          expect(JSON.parse(response.body)).to eq(message_success)
+          expect(JSON.parse(response.body)).to eq(success_response_message)
         end
       end
     end

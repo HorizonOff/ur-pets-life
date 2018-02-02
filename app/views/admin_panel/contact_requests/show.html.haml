@@ -3,7 +3,7 @@
     .title_left
       %h3
         Contact request
-        %span{ class: "label #{@contact_request.is_answered? ? 'label-success' : 'label-warning'}" }= @contact_request.status
+        = @contact_request.status
   .clearfix
 
   .x_panel
@@ -12,17 +12,17 @@
       .form-group
         = label_tag :user_name, 'User name', class: 'control-label col-md-3 col-sm-3 col-xs-12'
         .col-md-9.col-sm-9.col-xs-12
-          %p= @contact_request.user.name
+          %p= @contact_request.user_name
       %br
       .form-group
         = label_tag :user_email, 'User email', class: 'control-label col-md-3 col-sm-3 col-xs-12'
         .col-md-9.col-sm-9.col-xs-12
-          %p= @contact_request.user.email
+          %p= @contact_request.email
       %br
       .form-group
         = label_tag :user_phone, 'User mobile number', class: 'control-label col-md-3 col-sm-3 col-xs-12'
         .col-md-9.col-sm-9.col-xs-12
-          %p= @contact_request.user.mobile_number
+          %p= @contact_request.user_mobile_number
       %br
       .form-group
         = label_tag :subject, 'Subject', class: 'control-label col-md-3 col-sm-3 col-xs-12'

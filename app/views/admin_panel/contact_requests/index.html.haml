@@ -8,16 +8,27 @@
     .col-md-12.col-sm-12.col-xs-12
       .x_panel
         .x_content
-          %table.table
+          %table.table.datatable.contact_requests
             %thead
               %tr
-                %th #
-                %th User name
-                %th User email
-                %th User phone
+                %th{style: 'width:30px'}  #
+                %th User Name
+                %th User Email
+                %th User Phone
                 %th Subject
-                %th Created at
+                %th Send_at
                 %th Status
                 %th Actions
+              %tr
+                %th{style: 'width:30px'}
+                  = text_field_tag :id, '', class: 'form-control', style: 'width:100%'
+                %th
+                %th
+                  = text_field_tag :email, '', class: 'form-control', style: 'width:100%'
+                %th
+                %th
+                %th
+                %th
+                  = select_tag :is_answered, options_for_select([[], ['Answered', true], ['New', false]]),  class: 'form-control select2'
+                %th
             %tbody
-              =render @contact_requests

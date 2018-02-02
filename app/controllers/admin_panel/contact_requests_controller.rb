@@ -1,12 +1,18 @@
 module AdminPanel
   class ContactRequestsController < AdminPanelController
+    before_action :authorize_admin
     before_action :set_contact_request, except: :index
 
     def index
-      @contact_requests = ContactRequest.all
+      respond_to do |format|
+        format.html {}
+        format.json { filter_contact_requests }
+      end
     end
 
-    def show; end
+    def show
+      @contact_request = ::AdminPanel::ContactRequestDecorator.decorate(@contact_request)
+    end
 
     def new_reply; end
 
@@ -20,6 +26,21 @@ module AdminPanel
 
     def set_contact_request
       @contact_request = ContactRequest.find_by(id: params[:id])
+    end
+
+    def filter_contact_requests
+      filtered_contact_requests = filter_and_pagination_query.filter
+      contact_requests = ::AdminPanel::ContactRequestDecorator.decorate_collection(filtered_contact_requests)
+      serialized_contact_requests = ActiveModel::Serializer::CollectionSerializer.new(
+        contact_requests, serializer: ::AdminPanel::ContactRequestFilterSerializer, adapter: :attributes
+      )
+
+      render json: { draw: params[:draw], recordsTotal: ContactRequest.count,
+                     recordsFiltered: filtered_contact_requests.total_count, data: serialized_contact_requests }
+    end
+
+    def filter_and_pagination_query
+      @filter_and_pagination_query ||= ::AdminPanel::FilterAndPaginationQuery.new('ContactRequest', params)
     end
   end
 end

@@ -7,6 +7,10 @@ module AdminPanel
 
     private
 
+    def authorize_admin
+      authorize :application, :super_admin?
+    end
+
     def pundit_user
       current_admin
     end

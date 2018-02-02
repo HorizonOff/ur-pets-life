@@ -1,6 +1,8 @@
 module AdminPanel
   class TrainersController < AdminPanelController
+    before_action :authorize_admin
     before_action :set_trainer, except: %i[index new create]
+
     def index
       respond_to do |format|
         format.html {}

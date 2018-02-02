@@ -1,8 +1,11 @@
 module Api
   module V1
     class ContactRequestsController < Api::BaseController
+      skip_before_action :authenticate_user
+
       def create
-        contact_request = @user.contact_requests.new(contact_request_params)
+        contact_request = ContactRequest.new(contact_request_params)
+        contact_request.assign_attributes(email: @user.email, user: @user) if @user
         if contact_request.save
           render json: { message: 'Successfully created' }
           ContactRequestMailer.send_contact_request(contact_request).deliver
@@ -14,7 +17,7 @@ module Api
       private
 
       def contact_request_params
-        params.require(:contact_request).permit(:subject, :message)
+        params.require(:contact_request).permit(:email, :subject, :message)
       end
     end
   end

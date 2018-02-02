@@ -1,5 +1,6 @@
 module AdminPanel
   class UsersController < AdminPanelController
+    before_action :authorize_admin
     before_action :set_user, except: %i[index new create]
     before_action :set_location, only: %i[edit]
     before_action :authorize_admin

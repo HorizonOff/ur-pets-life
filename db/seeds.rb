@@ -417,10 +417,10 @@ if Pet.count.zero?
                    avatar: File.open(File.join(Rails.root, 'public', 'images', 'cat_1.jpg')))
   user.pets.create(name: 'Pluto', sex: 1, birthday: 1516017199, pet_type_id: 2, breed_id: 3,  weight: 2,
                    lost_at: 1516217199, description: 'My favorite dog', additional_comment: 'Help me',
-                   mobile_number: '+2342342343343', location_attributes: uzhgorod,
+                   mobile_number: '+805050505052', location_attributes: uzhgorod,
                    avatar: File.open(File.join(Rails.root, 'public', 'images', 'dog_1.jpg')))
   user.pets.create(description: 'Little mouse Jerry', pet_type_id: 3, additional_comment: 'Somebody, Take it away',
-                   additional_type: 'Bird', found_at: 1516217199, mobile_number: '+2342342343343',
+                   found_at: 1516217199, mobile_number: '+805050505052',
                    location_attributes: mukachevo,
                    avatar: File.open(File.join(Rails.root, 'public', 'images', 'other_1.jpg')))
 end

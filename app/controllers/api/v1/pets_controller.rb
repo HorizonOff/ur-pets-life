@@ -46,7 +46,8 @@ module Api
 
       def change_status
         if @pet.update(status_params)
-          render json: { message: 'Pet updated successfully' }
+          render json: @pet, include: 'breed,vaccine_types,vaccinations,pictures,vaccine_types.vaccinations',
+                 scope: { pet_vaccinations: pet_vaccinations }
         else
           render_422(parse_errors_messages(@pet))
         end

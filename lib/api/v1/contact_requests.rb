@@ -5,25 +5,33 @@ module Api
 
       swagger_schema :ContactRequest do
         property :contact_request do
+          property :email do
+            key :type, :string
+            key :example, 'user3@mail.com'
+          end
           property :subject do
             key :type, :string
+            key :example, 'Subject'
           end
           property :message do
             key :type, :string
+            key :example, 'Message'
           end
         end
       end
 
       swagger_path '/contact_requests' do
         operation :post do
-          security do
-            key :api_key, []
-          end
-
           key :summary, 'Create contact request'
           key :produces, 'application/json'
           key :consumes, 'application/json'
           key :tags, %w[ContactRequest]
+
+          parameter do
+            key :type, :string
+            key :name, 'Authorization'
+            key :in, :header
+          end
 
           parameter do
             key :name, :contact_request
