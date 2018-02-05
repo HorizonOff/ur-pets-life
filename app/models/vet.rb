@@ -12,7 +12,7 @@ class Vet < ApplicationRecord
                                       too_long: 'Mobile number should contain not more than 12 symbols' },
                             allow_blank: true
 
-  validates :location, presence: { message: 'Location is required' }
+  validates :location, presence: { message: 'Location is required' }, if: :work_as_emergency?
 
   belongs_to :clinic, counter_cache: true
 
@@ -38,6 +38,10 @@ class Vet < ApplicationRecord
   before_validation :check_location
 
   private
+
+  def work_as_emergency?
+    is_emergency?
+  end
 
   def check_location
     return location.destroy if !is_emergency? && location

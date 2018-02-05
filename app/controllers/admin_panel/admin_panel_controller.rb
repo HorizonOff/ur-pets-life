@@ -7,7 +7,11 @@ module AdminPanel
 
     private
 
-    def authorize_admin
+    def super_admin?
+      current_admin.is_super_admin?
+    end
+
+    def authorize_super_admin
       authorize :application, :super_admin?
     end
 
@@ -16,7 +20,10 @@ module AdminPanel
     end
 
     def not_allowed
-      redirect_to root_path
+      respond_to do |format|
+        format.html { redirect_to root_path }
+        format.json { render json: { message: 'You have no permission' }, status: 403 }
+      end
     end
   end
 end

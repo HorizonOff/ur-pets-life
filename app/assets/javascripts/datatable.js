@@ -92,11 +92,12 @@ function init_datatable(url, column_rules){
         d.city = $(".additional_parameter[name*='city']").val();
       }
     },
-    'order': [[ 0, 'asc' ]],
-    "columnDefs": column_rules
+    "order": [[ 0, 'asc' ]],
+    "columnDefs": column_rules,
+    "drawCallback": function(settings) {
+      $('.table a.check_response').on('ajax:success', draw_table)
+    }
   });
-
-  $(document).on('ajax:success', '.table a.check_response', draw_table)
 
   $('.additional_parameter.select2').on('select2:select select2:unselect', draw_table)
   $('input.additional_parameter').on('change', draw_table)

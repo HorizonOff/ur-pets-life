@@ -148,57 +148,6 @@ function init_timepicker(){
   }
 }
 
-function init_datatables(){
-  if ($('.datatable')){
-    var table = $('.datatable').DataTable({
-      "orderCellsTop": true,
-      "processing": true,
-      "serverSide": true,
-      "ajax": {
-        "url": "/admin_panel/clinics",
-        "data": function(d){
-          d.specialization_id = $(".additional_parameter[name*='specialization_id']").val();
-          d.pet_type_id = $(".additional_parameter[name*='pet_type_id']").val();
-          d.city = $(".additional_parameter[name*='city']").val();
-        }
-      },
-      'order': [[ 0, 'asc' ]],
-      "columnDefs": [
-        { 'searchable': true, 'orderable': true, 'data': 'id', 'targets': 0 },
-        { 'searchable': true, 'orderable': true, 'data': 'name', 'targets': 1 },
-        { 'searchable': false, 'orderable': false, 'data': 'picture', 'targets': 2 },
-        { 'searchable': true, 'orderable': true, 'data': 'email', 'targets': 3 },
-        { 'searchable': false, 'orderable': false, 'data': 'mobile_number', 'targets': 4 },
-        { 'searchable': true, 'orderable': true, 'data': 'vets_count', 'targets': 5 },
-        { 'searchable': true, 'orderable': true, 'data': 'is_active', 'targets': 6 },
-        { 'searchable': false, 'orderable': false, 'data': 'actions', 'targets': 7 }
-      ]
-    });
-
-    $('.additional_parameter.select2').on('select2:select select2:unselect', draw_table)
-    $('input.additional_parameter').on('change', draw_table)
-
-    $('.datatable thead .select2').on('select2:select select2:unselect', filter_again)
-    $('.datatable thead input').on('keyup change', filter_again)
-    
-    function draw_table(){
-      setTimeout(function(){
-        table.draw();
-      }, 200)
-    }
-
-    function filter_again(){
-      var input = this
-      setTimeout(function(){
-        var column_index = $(input).parent().index();
-        if (table.column(column_index).search() !== input.value){
-          table.column(column_index).search(input.value).draw();
-        };
-      }, 200)
-    }
-  };
-};
-
 $(document).on('change', 'input.service_detail_switch', function() {
   var destroy_checkbox = $(this).siblings('.destroy_service_detail')
   destroy_checkbox.prop('checked', !destroy_checkbox.prop('checked'))

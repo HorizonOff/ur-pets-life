@@ -339,9 +339,8 @@ if GroomingCentre.count.zero?
   GroomingCentre.create(name: 'GroomingCentre 3', email: Faker::Internet.email, mobile_number: '+805050505052',
                         location_attributes: uzhgorod,
                         schedule_attributes: schedule_attributes)
-  GroomingCentre.all.each do |gs|
-    gs.service_options = service_options.sample
-    gs.pet_types = pet_types.sample
+  GroomingCentre.all.each do |gc|
+    gc.service_options = service_options.sample
   end
 end
 
@@ -355,9 +354,8 @@ if DayCareCentre.count.zero?
   DayCareCentre.create(name: 'DayCareCentre 3', email: Faker::Internet.email, mobile_number: '+805050505052',
                        location_attributes: uzhgorod,
                        schedule_attributes: schedule_attributes)
-  DayCareCentre.all.each do |dcs|
-    dcs.service_options = service_options.sample
-    dcs.pet_types = pet_types.sample
+  DayCareCentre.all.each do |dcc|
+    dcc.service_options = service_options.sample
   end
 end
 
@@ -369,10 +367,10 @@ if ServiceType.count.zero?
     gc.service_types.create(name: 'Hair Color', description: description)
     gc.service_types.create(name: 'Grooming', description: description)
   end
-  DayCareCentre.all.each do |gc|
-    gc.service_types.create(name: 'Care service 1', description: description)
-    gc.service_types.create(name: 'Care service 2', description: description)
-    gc.service_types.create(name: 'Care service 3', description: description)
+  DayCareCentre.all.each do |dcc|
+    dcc.service_types.create(name: 'Care service 1', description: description)
+    dcc.service_types.create(name: 'Care service 2', description: description)
+    dcc.service_types.create(name: 'Care service 3', description: description)
   end
 end
 

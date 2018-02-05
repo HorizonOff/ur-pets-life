@@ -1,6 +1,6 @@
 module AdminPanel
   class ContactRequestsController < AdminPanelController
-    before_action :authorize_admin
+    before_action :authorize_super_admin
     before_action :set_contact_request, except: :index
 
     def index
@@ -19,6 +19,7 @@ module AdminPanel
     def send_reply
       ContactRequestMailer.send_reply(@contact_request, params[:message]).deliver if params[:message].present?
       @contact_request.update_attribute(:is_answered, true)
+
       redirect_to admin_panel_contact_request_path(@contact_request)
     end
 

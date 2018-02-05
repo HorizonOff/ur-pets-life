@@ -1,7 +1,8 @@
 module AdminPanel
   class AdminsController < AdminPanelController
-    before_action :authorize_admin
+    before_action :authorize_super_admin
     before_action :set_admin, except: :index
+    before_action :authorize_admin, except: :index
 
     def index
       respond_to do |format|
@@ -33,9 +34,14 @@ module AdminPanel
       @admin = Admin.find_by_id(params[:id])
     end
 
+    def authorize_admin
+      authorize @admin, :not_him_self?
+    end
+
     def filter_admins
       filtered_admins = filter_and_pagination_query.filter
-      admins = ::AdminPanel::AdminDecorator.decorate_collection(filtered_admins)
+      admins = ::AdminPanel::AdminDecorator.decorate_collection(filtered_admins,
+                                                                context: { current_admin: current_admin })
       serialized_admins = ActiveModel::Serializer::CollectionSerializer.new(
         admins, serializer: ::AdminPanel::AdminFilterSerializer, adapter: :attributes
       )

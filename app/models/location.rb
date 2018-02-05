@@ -52,11 +52,11 @@ class Location < ApplicationRecord
   end
 
   def coardinates_blank?
-    latitude.blank? || longitude.blank?
+    @coardinates_blank ||= latitude.blank? || longitude.blank?
   end
 
   def should_geocode?
-    (address.present? && coardinates_blank?) || (changed_some_attributes? && coardinates_the_same?)
+    address.present? && coardinates_blank?
   end
 
   def changed_some_attributes?

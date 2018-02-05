@@ -28,9 +28,14 @@
                 %i.fa.fa-user.user-profile-icon
                 Day Care centre admin
 
-            =link_to edit_admin_panel_day_care_centre_path(@day_care_centre), class: 'btn btn-warning' do
+            = link_to edit_admin_panel_day_care_centre_path(@day_care_centre), class: 'btn btn-warning' do
               %i.fa.fa-edit.m-right-xs
               Edit DayCare Centre
+            %br
+
+            = link_to admin_panel_day_care_centre_path(@day_care_centre), method: :delete, class: 'btn btn-danger' do
+              %i.fa.fa-trash.m-right-xs
+              Delete DayCare Centre
             %br
 
           .col-md-9.col-sm-9.col-xs-12

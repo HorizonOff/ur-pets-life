@@ -20,7 +20,14 @@ module AdminPanel
     end
 
     def actions
+      return if model == context[:current_admin]
       lock_unlock_text = model.is_active? ? 'Lock' : 'Activate'
+      links(lock_unlock_text)
+    end
+
+    private
+
+    def links(lock_unlock_text)
       (link_to lock_unlock_text, url_helpers.change_status_admin_panel_admin_path(model),
                method: :put, remote: true, class: 'btn btn-info btn-xs check_response') +
         (link_to 'Delete', url_helpers.admin_panel_admin_path(model),

@@ -14,41 +14,6 @@
       .menu_section
         %ul.nav.side-menu
           - if current_admin.is_super_admin?
-            %li{ class: "#{'current-page' if current_page?(admin_panel_admins_path)}" }
-              = link_to admin_panel_admins_path do
-                %i.fa.fa-edit
-                Admins
-            %li{ class: "#{'current-page' if current_page?(admin_panel_users_path)}" }
-              = link_to admin_panel_users_path do
-                %i.fa.fa-users
-                Users
-          %li{ class: "#{'current-page' if current_page?(admin_panel_clinics_path)}" }
-            = link_to admin_panel_clinics_path do
-              %i.fa.fa-plus-square
-              Clinics
-          %li{ class: "#{'current-page' if current_page?(admin_panel_vets_path)}" }
-            = link_to admin_panel_vets_path do
-              %i.fa.fa-stethoscope
-              Vets
-          %li{ class: "#{'current-page' if current_page?(admin_panel_day_care_centres_path)}" }
-            = link_to admin_panel_day_care_centres_path do
-              %i.fa.fa-tasks
-              Day Care Centres
-          %li{ class: "#{'current-page' if current_page?(admin_panel_grooming_centres_path)}" }
-            = link_to admin_panel_grooming_centres_path do
-              %i.fa.fa-scissors
-              Grooming Centres
-          - if current_admin.is_super_admin?
-            %li{ class: "#{'current-page' if current_page?(admin_panel_trainers_path)}" }
-              = link_to admin_panel_trainers_path do
-                %i.fa.fa-male
-                Trainers
-          %li{ class: "#{'current-page' if current_page?(admin_panel_appointments_path)}" }
-            = link_to admin_panel_appointments_path do
-              %i.fa.fa-table
-              Appointmets
-          - if current_admin.is_super_admin?
-            %li{ class: "#{'current-page' if current_page?(admin_panel_contact_requests_path)}" }
-              = link_to admin_panel_contact_requests_path do
-                %i.fa.fa-table
-                Contact requests
+            = render 'layouts/admin_panel/super_admin_sidebar'
+          - else
+            = render 'layouts/admin_panel/simple_admin_sidebar' 

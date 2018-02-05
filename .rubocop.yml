@@ -12,6 +12,9 @@ Metrics/AbcSize:
  Exclude:
    - app/controllers/api/v1/sessions_controller.rb
    - app/controllers/api/base_controller.rb
+   - app/controllers/admin_panel/clinics_controller.rb
+   - app/controllers/admin_panel/day_care_centres_controller.rb
+   - app/controllers/admin_panel/grooming_centres_controller.rb
    - app/helpers/params_cleaner_helper.rb
    - app/services/api/v1/user_services/social_auth_service.rb
 Metrics/MethodLength:
@@ -20,6 +23,9 @@ Metrics/MethodLength:
     - app/services/api/v1/user_services/social_auth_service.rb
     - app/helpers/params_cleaner_helper.rb
     - app/controllers/api/base_controller.rb
+    - app/controllers/admin_panel/clinics_controller.rb
+    - app/controllers/admin_panel/day_care_centres_controller.rb
+    - app/controllers/admin_panel/grooming_centres_controller.rb
     - lib/query_objects/admin_panel/filter_and_pagination_query.rb
 Metrics/ClassLength:
   Enabled: true

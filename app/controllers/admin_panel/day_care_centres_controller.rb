@@ -1,7 +1,11 @@
 module AdminPanel
   class DayCareCentresController < AdminPanelController
     before_action :set_day_care_centre, except: %i[index new create]
+    before_action :can_create?, only: %i[new create]
+    before_action :can_update?, except: %i[index new create]
+
     def index
+      authorize_super_admin
       respond_to do |format|
         format.html {}
         format.json { filter_day_care_centres }
@@ -19,10 +23,14 @@ module AdminPanel
     def show; end
 
     def create
-      @day_care_centre = DayCareCentre.new(day_care_centre_params)
+      @day_care_centre = if super_admin?
+                           DayCareCentre.new(day_care_centre_params)
+                         else
+                           current_admin.build_day_care_centre(day_care_centre_params.delete(:admin_id))
+                         end
       if @day_care_centre.save
         flash[:success] = 'DayCare Centre was successfully created'
-        redirect_to admin_panel_day_care_centres_path
+        redirect_to admin_panel_day_care_centre_path(@day_care_centre)
       else
         render :new
       end
@@ -39,9 +47,21 @@ module AdminPanel
 
     def destroy
       if @day_care_centre.destroy
-        render json: { message: 'DayCare Centre was deleted' }, status: 200
+        respond_to do |format|
+          format.html do
+            flash[:success] = 'DayCare Centre was deleted'
+            redirect_to admin_panel_day_care_centres_path
+          end
+          format.json { render json: { message: 'DayCare Centre was deleted' }, status: 200 }
+        end
       else
-        render json: { errors: @day_care_centre.errors.full_messages }, status: 422
+        respond_to do |format|
+          format.html do
+            flash[:error] = "DayCare Centre wasn't deleted"
+            render :show
+          end
+          format.json { render json: { errors: @day_care_centre.errors.full_messages }, status: 422 }
+        end
       end
     end
 
@@ -57,8 +77,17 @@ module AdminPanel
       @day_care_centre = DayCareCentre.find_by(id: params[:id])
     end
 
+    def can_create?
+      authorize :day_care_centre, :create?
+    end
+
+    def can_update?
+      authorize @day_care_centre, :update?
+    end
+
     def day_care_centre_params
-      params.require(:day_care_centre).permit(:name, :email, :picture, :mobile_number, :website, :description,
+      params.require(:day_care_centre).permit(:admin_id, :name, :email, :picture, :mobile_number, :website,
+                                              :description,
                                               service_option_ids: [], location_attributes: location_params,
                                               schedule_attributes: schedule_params)
     end

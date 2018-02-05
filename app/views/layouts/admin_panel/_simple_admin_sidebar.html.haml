@@ -1,0 +1,41 @@
+- clinic = current_admin.clinic
+- if clinic.present?
+  %li{ class: "#{'current-page' if current_page?(admin_panel_clinic_path(clinic))}" }
+    = link_to admin_panel_clinic_path(clinic) do
+      %i.fa.fa-plus-square
+      Clinic
+  %li{ class: "#{'current-page' if current_page?(admin_panel_vets_path)}" }
+    = link_to admin_panel_vets_path do
+      %i.fa.fa-stethoscope
+      Vets
+- else
+  %li{ class: "#{'current-page' if current_page?(new_admin_panel_clinic_path)}" }
+    = link_to new_admin_panel_clinic_path do
+      %i.fa.fa-plus-square
+      New Clinic
+- dc = current_admin.day_care_centre
+- if dc.present?
+  %li{ class: "#{'current-page' if current_page?(admin_panel_day_care_centre_path(dc))}" }
+    = link_to admin_panel_day_care_centre_path(dc) do
+      %i.fa.fa-tasks
+      DayCare Centre
+- else
+  %li{ class: "#{'current-page' if current_page?(new_admin_panel_day_care_centre_path)}" }
+    = link_to new_admin_panel_day_care_centre_path do
+      %i.fa.fa-plus-square
+      New DayCare Centre
+- gc = current_admin.grooming_centre
+- if gc.present?
+  %li{ class: "#{'current-page' if current_page?(admin_panel_grooming_centre_path(gc))}" }
+    = link_to admin_panel_grooming_centre_path(gc) do
+      %i.fa.fa-tasks
+      Grooming Centre
+- else
+  %li{ class: "#{'current-page' if current_page?(new_admin_panel_grooming_centre_path)}" }
+    = link_to new_admin_panel_grooming_centre_path do
+      %i.fa.fa-plus-square
+      New Grooming Centre
+%li{ class: "#{'current-page' if current_page?(admin_panel_appointments_path)}" }
+  = link_to admin_panel_appointments_path do
+    %i.fa.fa-table
+    Appointmets

@@ -1,6 +1,9 @@
 module AdminPanel
   class GroomingCentresController < AdminPanelController
     before_action :set_grooming_centre, except: %i[index new create]
+    before_action :can_create?, only: %i[new create]
+    before_action :can_update?, except: %i[index new create]
+
     def index
       respond_to do |format|
         format.html {}
@@ -19,10 +22,14 @@ module AdminPanel
     def show; end
 
     def create
-      @grooming_centre = GroomingCentre.new(grooming_centre_params)
+      @grooming_centre = if super_admin?
+                           GroomingCentre.new(grooming_centre_params)
+                         else
+                           current_admin.build_grooming_centre(grooming_centre_params.delete(:admin_id))
+                         end
       if @grooming_centre.save
         flash[:success] = 'Grooming Centre was successfully created'
-        redirect_to admin_panel_grooming_centres_path
+        redirect_to admin_panel_grooming_centre_path(@grooming_centre)
       else
         render :new
       end
@@ -38,10 +45,22 @@ module AdminPanel
     end
 
     def destroy
-      if @grooming_centre.destroy
-        render json: { message: 'Grooming Centre was deleted' }, status: 200
+      if @groming_centre.destroy
+        respond_to do |format|
+          format.html do
+            flash[:success] = 'Grooming Centre was deleted'
+            redirect_to admin_panel_groming_centres_path
+          end
+          format.json { render json: { message: 'Grooming Centre was deleted' }, status: 200 }
+        end
       else
-        render json: { errors: @grooming_centre.errors.full_messages }, status: 422
+        respond_to do |format|
+          format.html do
+            flash[:error] = "Grooming Centre wasn't deleted"
+            render :show
+          end
+          format.json { render json: { errors: @groming_centre.errors.full_messages }, status: 422 }
+        end
       end
     end
 
@@ -57,8 +76,17 @@ module AdminPanel
       @grooming_centre = GroomingCentre.find_by(id: params[:id])
     end
 
+    def can_create?
+      authorize :grooming_centre, :create?
+    end
+
+    def can_update?
+      authorize @grooming_centre, :update?
+    end
+
     def grooming_centre_params
-      params.require(:grooming_centre).permit(:name, :email, :picture, :mobile_number, :website, :description,
+      params.require(:grooming_centre).permit(:admin_id, :name, :email, :picture, :mobile_number, :website,
+                                              :description,
                                               service_option_ids: [], location_attributes: location_params,
                                               schedule_attributes: schedule_params)
     end

@@ -224,22 +224,32 @@ function init_vet_map(){
 };
 
 function check_clinic_location(){
-  $('input.flat[name*="use_clinic_location"]').iCheck('enable');
-  var clinic_id = $('#clinic_id').val();
-  var work_for_emergency = $('input.flat[name*="is_emergency"]').iCheck('update')[0].checked
-  if (clinic_id && use_clinic_location && work_for_emergency){
-    disable_inputs($('.location_tab_fields'))
-    retrieve_clinic_location(clinic_id)
-  }
+  setTimeout(function(){
+    $('input.flat[name*="use_clinic_location"]').iCheck('enable');
+    var clinic_id = $('#clinic_id').val();
+    if (clinic_id == '') {
+      clear_clinic_location();
+    } else {
+      var work_for_emergency = $('input.flat[name*="is_emergency"]').iCheck('update')[0].checked
+      if (clinic_id && use_clinic_location && work_for_emergency){
+        disable_inputs($('.location_tab_fields'))
+        retrieve_clinic_location(clinic_id)
+      }
+    }
+  }, 200)
 }
 
 function retrieve_clinic_location(clinic_id){
   return $.ajax({
     type: 'get',
+    dataType: 'json',
     url: '/admin_panel/clinics/' + clinic_id + '/location',
     success: function(response){
       fill_inputs_with(response)
-    }
+    },
+    error: function(response){
+      window.location.href = '/'
+    },
   });
 }
 

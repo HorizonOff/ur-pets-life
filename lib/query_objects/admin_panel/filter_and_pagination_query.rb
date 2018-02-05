@@ -5,6 +5,8 @@ module AdminPanel
     ADDITIONAL_PARAMS = { 'city' => { join_model: :location, field: 'locations.city' },
                           'specialization_id' => { join_model: :specializations, field: 'specializations.id' },
                           'pet_type_id' => { join_model: :pet_types, field: 'pet_types.id' } }.freeze
+    SQL_RULES = { 'name' => { model: 'User',
+                              sql: "((users.first_name || ' ' || users.last_name) ILIKE :value)" } }.freeze
 
     def initialize(model, params)
       @model = model
@@ -97,15 +99,28 @@ module AdminPanel
 
     def filter_by_search_params
       @searchable_columns.each do |column|
-        @scope = case column[:type]
-                 when :integer
-                   @scope.where("#{column[:name]} = :value", value: column[:value].to_i)
-                 when :boolean
-                   @scope.where("#{column[:name]} = :value", value: column[:value])
-                 else
-                   @scope.where("#{column[:name]} ILIKE :value", value: "%#{column[:value]}%")
-                 end
+        @scope = choose_sql(column)
       end
+    end
+
+    def choose_sql(column)
+      column_name = column[:name]
+      column_type = column[:type]
+      column_value = column[:value]
+
+      if specific_sql_rule_for?(column_name)
+        @scope.where(SQL_RULES[column_name][:sql], value: "%#{column_value}%")
+      elsif column_type == :integer
+        @scope.where("#{column_name} = :value", value: column_value.to_i)
+      elsif column_type == :boolean
+        @scope.where("#{column_name} = :value", value: column_value)
+      else
+        @scope.where("#{column_name} ILIKE :value", value: "%#{column_value}%")
+      end
+    end
+
+    def specific_sql_rule_for?(column_name)
+      SQL_RULES[column_name] && SQL_RULES[column_name][:model] == model
     end
 
     def filter_by_additional_params

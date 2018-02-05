@@ -1,8 +1,11 @@
 module AdminPanel
   class ClinicsController < AdminPanelController
     before_action :set_clinic, except: %i[index new create]
+    before_action :can_create?, only: %i[new create]
+    before_action :can_update?, except: %i[index new create]
 
     def index
+      authorize_super_admin
       respond_to do |format|
         format.html {}
         format.json { filter_clinics }
@@ -16,10 +19,10 @@ module AdminPanel
     end
 
     def create
-      @clinic = Clinic.new(clinic_params)
+      @clinic = super_admin? ? Clinic.new(clinic_params) : current_admin.build_clinic(clinic_params.delete(:admin_id))
       if @clinic.save
         flash[:success] = 'Clinic was successfully created'
-        redirect_to admin_panel_clinics_path
+        redirect_to admin_panel_clinic_path(@clinic)
       else
         render :new
       end
@@ -32,7 +35,7 @@ module AdminPanel
     def update
       if @clinic.update(clinic_params)
         flash[:success] = 'Clinic was successfully updated'
-        redirect_to admin_panel_clinics_path
+        redirect_to admin_panel_clinic_path(@clinic)
       else
         render :edit
       end
@@ -40,9 +43,21 @@ module AdminPanel
 
     def destroy
       if @clinic.destroy
-        render json: { message: 'Clinic was deleted' }, status: 200
+        respond_to do |format|
+          format.html do
+            flash[:success] = 'Clinic was deleted'
+            redirect_to admin_panel_clinics_path
+          end
+          format.json { render json: { message: 'Clinic was deleted' }, status: 200 }
+        end
       else
-        render json: { errors: @clinic.errors.full_messages }, status: 422
+        respond_to do |format|
+          format.html do
+            flash[:error] = "Clinic wasn't deleted"
+            render :show
+          end
+          format.json { render json: { errors: @clinic.errors.full_messages }, status: 422 }
+        end
       end
     end
 
@@ -63,11 +78,19 @@ module AdminPanel
       @clinic = Clinic.find_by(id: params[:id])
     end
 
+    def can_create?
+      authorize :clinic, :create?
+    end
+
+    def can_update?
+      authorize @clinic, :update?
+    end
+
     def clinic_params
-      params.require(:clinic).permit(:name, :email, :picture, :mobile_number, :consultation_fee, :website, :description,
-                                     :is_emergency, specialization_ids: [], pet_type_ids: [],
-                                                    location_attributes: location_params,
-                                                    schedule_attributes: schedule_params)
+      params.require(:clinic).permit(:admin_id, :name, :email, :picture, :mobile_number, :consultation_fee, :website,
+                                     :description, :is_emergency,
+                                     specialization_ids: [], pet_type_ids: [], location_attributes: location_params,
+                                     schedule_attributes: schedule_params)
     end
 
     def location_params
