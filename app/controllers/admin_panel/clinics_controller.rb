@@ -39,9 +39,11 @@ module AdminPanel
     end
 
     def destroy
-      @clinic.destroy
-      flash[:success] = 'Clinic was successfully deleted'
-      redirect_to admin_panel_clinics_path
+      if @clinic.destroy
+        render json: { message: 'Clinic was deleted' }, status: 200
+      else
+        render json: { errors: @clinic.errors.full_messages }, status: 422
+      end
     end
 
     def location

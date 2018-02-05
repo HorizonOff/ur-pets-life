@@ -38,9 +38,11 @@ module AdminPanel
     end
 
     def destroy
-      @grooming_centre.destroy
-      flash[:success] = 'Grooming Centre was successfully deleted'
-      redirect_to admin_panel_grooming_centres_path
+      if @grooming_centre.destroy
+        render json: { message: 'Grooming Centre was deleted' }, status: 200
+      else
+        render json: { errors: @grooming_centre.errors.full_messages }, status: 422
+      end
     end
 
     def new_service_type

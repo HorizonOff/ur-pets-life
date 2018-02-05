@@ -38,9 +38,11 @@ module AdminPanel
     end
 
     def destroy
-      @day_care_centre.destroy
-      flash[:success] = 'DayCare Centre was successfully deleted'
-      redirect_to admin_panel_day_care_centres_path
+      if @day_care_centre.destroy
+        render json: { message: 'DayCare Centre was deleted' }, status: 200
+      else
+        render json: { errors: @day_care_centre.errors.full_messages }, status: 422
+      end
     end
 
     def new_service_type

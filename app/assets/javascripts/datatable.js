@@ -50,7 +50,15 @@ function init_datatables(){
                                          { 'searchable': false, 'orderable': false, 'data': 'subject', 'targets': 4 },
                                          { 'searchable': false, 'orderable': true, 'data': 'created_at', 'targets': 5 },
                                          { 'searchable': true, 'orderable': true, 'data': 'is_answered', 'targets': 6 },
-                                         { 'searchable': false, 'orderable': false, 'data': 'actions', 'targets': 7 } ] }
+                                         { 'searchable': false, 'orderable': false, 'data': 'actions', 'targets': 7 } ] },
+      'admins': { 'url': '/admin_panel/admins',
+                  'columns': [ { 'searchable': true, 'orderable': true, 'data': 'id', 'targets': 0 },
+                               { 'searchable': false, 'orderable': false, 'data': 'avatar', 'targets': 1 },
+                               { 'searchable': true, 'orderable': true, 'data': 'name', 'targets': 2 },
+                               { 'searchable': true, 'orderable': true, 'data': 'email', 'targets': 3 },
+                               { 'searchable': true, 'orderable': true, 'data': 'is_super_admin', 'targets': 4 },
+                               { 'searchable': true, 'orderable': true, 'data': 'is_active', 'targets': 5 },
+                               { 'searchable': false, 'orderable': false, 'data': 'actions', 'targets': 6 } ] }
     }
     var datatable = $('.datatable').first()
     if (datatable.hasClass('clinics')){
@@ -63,8 +71,10 @@ function init_datatables(){
       init_datatable(table_rules['grooming_centres']['url'], table_rules['grooming_centres']['columns'])
     } else if (datatable.hasClass('users')){
       init_datatable(table_rules['users']['url'], table_rules['users']['columns'])
-    } else {
+    } else if (datatable.hasClass('contact_requests')){
       init_datatable(table_rules['contact_requests']['url'], table_rules['contact_requests']['columns'])
+    } else {
+      init_datatable(table_rules['admins']['url'], table_rules['admins']['columns'])
     }
   };
 };
@@ -85,6 +95,8 @@ function init_datatable(url, column_rules){
     'order': [[ 0, 'asc' ]],
     "columnDefs": column_rules
   });
+
+  $(document).on('ajax:success', '.table a.check_response', draw_table)
 
   $('.additional_parameter.select2').on('select2:select select2:unselect', draw_table)
   $('input.additional_parameter').on('change', draw_table)

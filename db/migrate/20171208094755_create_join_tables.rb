@@ -8,10 +8,8 @@ class CreateJoinTables < ActiveRecord::Migration[5.1]
 
     create_join_table :specializations, :vets
 
-    create_join_table :day_care_centres, :pet_types
     create_join_table :day_care_centres, :service_options
 
-    create_join_table :grooming_centres, :pet_types
     create_join_table :grooming_centres, :service_options
   end
 end

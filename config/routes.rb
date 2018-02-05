@@ -64,7 +64,9 @@ Rails.application.routes.draw do
 
   devise_for :admins, path: 'admin_panel/admins', except: :registrations
   namespace :admin_panel do
-    resources :admins, except: :create
+    resources :admins, only: %w[index destroy] do
+      member { put :change_status }
+    end
     resource :terms_and_conditions, only: %i[edit update]
     resources :users, except: %i[new ceate]
     resources :pets, except: %i[index new ceate] do

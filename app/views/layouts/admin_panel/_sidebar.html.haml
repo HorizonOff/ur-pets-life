@@ -38,19 +38,17 @@
             = link_to admin_panel_grooming_centres_path do
               %i.fa.fa-scissors
               Grooming Centres
-          %li{ class: "#{'current-page' if current_page?(admin_panel_trainers_path)}" }
-            = link_to admin_panel_trainers_path do
-              %i.fa.fa-male
-              Trainers
+          - if current_admin.is_super_admin?
+            %li{ class: "#{'current-page' if current_page?(admin_panel_trainers_path)}" }
+              = link_to admin_panel_trainers_path do
+                %i.fa.fa-male
+                Trainers
           %li{ class: "#{'current-page' if current_page?(admin_panel_appointments_path)}" }
             = link_to admin_panel_appointments_path do
               %i.fa.fa-table
               Appointmets
-          %li{ class: "#{'current-page' if current_page?(edit_admin_panel_terms_and_conditions_path)}" }
-            = link_to edit_admin_panel_terms_and_conditions_path do
-              %i.fa.fa-table
-              Terms And Conditions
-          %li{ class: "#{'current-page' if current_page?(admin_panel_contact_requests_path)}" }
-            = link_to admin_panel_contact_requests_path do
-              %i.fa.fa-table
-              Contact requests
+          - if current_admin.is_super_admin?
+            %li{ class: "#{'current-page' if current_page?(admin_panel_contact_requests_path)}" }
+              = link_to admin_panel_contact_requests_path do
+                %i.fa.fa-table
+                Contact requests

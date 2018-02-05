@@ -11,22 +11,29 @@
     .col-md-12.col-sm-12.col-xs-12
       .x_panel
         .x_content
-          %table.table
+          %table.table.datatable.admins
             %thead
               %tr
-                %th #
+                %th{style: 'width:30px'} #
                 %th Avatar
                 %th Name
                 %th Email
+                %th Superadmin
+                %th Status
                 %th Actions
+              %tr
+                %th{style: 'width:30px'}
+                  = text_field_tag :id, '', class: 'form-control', style: 'width:100%'
+                %th
+                %th
+                  = text_field_tag :name, '', class: 'form-control', style: 'width:100%'
+                %th
+                  = text_field_tag :email, '', class: 'form-control', style: 'width:100%'
+                %th
+                  = select_tag :is_super_admin, options_for_select([[], ['Yes', true], ['No', false]]),  class: 'form-control select2'
+                %th
+                  = select_tag :is_active, options_for_select([[], ['Active', true], ['Locked', false]]),  class: 'form-control select2'
+                %th
             %tbody
-              - @admins.each do |admin|
-                %tr
-                  %th{ scope: 'row' } #{admin.id}
-                  %td
-                    -if admin.avatar.present?
-                      =image_tag(admin.avatar.thumb.url)
-                  %td #{admin.name}
-                  %td #{admin.email}
-                  %td
-                    sdsadsasasasas
+              
+                

@@ -40,9 +40,11 @@ module AdminPanel
     end
 
     def destroy
-      @trainer.destroy
-      flash[:success] = 'Trainer was successfully deleted'
-      redirect_to admin_panel_trainers_path
+      if @trainer.destroy
+        render json: { message: 'Trainer was deleted' }, status: 200
+      else
+        render json: { errors: @trainer.errors.full_messages }, status: 422
+      end
     end
 
     def new_service_type
