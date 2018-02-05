@@ -26,7 +26,7 @@ module AdminPanel
       @day_care_centre = if super_admin?
                            DayCareCentre.new(day_care_centre_params)
                          else
-                           current_admin.build_day_care_centre(day_care_centre_params.delete(:admin_id))
+                           current_admin.build_day_care_centre(day_care_centre_params)
                          end
       if @day_care_centre.save
         flash[:success] = 'DayCare Centre was successfully created'

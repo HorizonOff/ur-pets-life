@@ -25,7 +25,7 @@ module AdminPanel
       @grooming_centre = if super_admin?
                            GroomingCentre.new(grooming_centre_params)
                          else
-                           current_admin.build_grooming_centre(grooming_centre_params.delete(:admin_id))
+                           current_admin.build_grooming_centre(grooming_centre_params)
                          end
       if @grooming_centre.save
         flash[:success] = 'Grooming Centre was successfully created'

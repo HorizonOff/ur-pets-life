@@ -19,7 +19,7 @@ module AdminPanel
     end
 
     def create
-      @clinic = super_admin? ? Clinic.new(clinic_params) : current_admin.build_clinic(clinic_params.delete(:admin_id))
+      @clinic = super_admin? ? Clinic.new(clinic_params) : current_admin.build_clinic(clinic_params)
       if @clinic.save
         flash[:success] = 'Clinic was successfully created'
         redirect_to admin_panel_clinic_path(@clinic)
