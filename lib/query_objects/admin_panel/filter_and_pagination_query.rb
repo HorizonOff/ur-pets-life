@@ -8,11 +8,12 @@ module AdminPanel
     SQL_RULES = { 'name' => { model: 'User',
                               sql: "((users.first_name || ' ' || users.last_name) ILIKE :value)" } }.freeze
 
-    def initialize(model, params)
+    def initialize(model, params, admin = nil)
       @model = model
       @params = params
+      @admin = admin
 
-      self.scope = model.constantize.all
+      self.scope = admin ? (model + 'Policy::Scope').constantize.new(admin, model).resolve : model.constantize.all
     end
 
     def filter

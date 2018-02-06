@@ -1,5 +1,5 @@
 - clinic = current_admin.clinic
-- if clinic.present?
+- if clinic.present? && clinic.persisted?
   %li{ class: "#{'current-page' if current_page?(admin_panel_clinic_path(clinic))}" }
     = link_to admin_panel_clinic_path(clinic) do
       %i.fa.fa-plus-square
@@ -14,7 +14,7 @@
       %i.fa.fa-plus-square
       New Clinic
 - dc = current_admin.day_care_centre
-- if dc.present?
+- if dc.present? && dc.persisted?
   %li{ class: "#{'current-page' if current_page?(admin_panel_day_care_centre_path(dc))}" }
     = link_to admin_panel_day_care_centre_path(dc) do
       %i.fa.fa-tasks
@@ -25,7 +25,7 @@
       %i.fa.fa-plus-square
       New DayCare Centre
 - gc = current_admin.grooming_centre
-- if gc.present?
+- if gc.present? && gc.persisted?
   %li{ class: "#{'current-page' if current_page?(admin_panel_grooming_centre_path(gc))}" }
     = link_to admin_panel_grooming_centre_path(gc) do
       %i.fa.fa-tasks

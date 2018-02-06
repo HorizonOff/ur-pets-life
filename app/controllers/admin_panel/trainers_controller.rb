@@ -65,14 +65,6 @@ module AdminPanel
                                       qualifications_attributes: qualifications_params)
     end
 
-    def qualifications_params
-      %i[id diploma university _destroy]
-    end
-
-    def location_params
-      %i[latitude longitude city area street building_type building_name unit_number villa_number comment]
-    end
-
     def filter_trainers
       filtered_trainers = filter_and_pagination_query.filter
       trainers = ::AdminPanel::TrainerDecorator.decorate_collection(filtered_trainers)

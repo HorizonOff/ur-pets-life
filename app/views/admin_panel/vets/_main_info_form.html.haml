@@ -6,12 +6,13 @@
     .x_content
       %br
       
-      .form-group
-        = f.label :clinic_id, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
-          Clinic
-          %span.required *
-        .col-md-9.col-sm-9.col-xs-12
-          = f.collection_select :clinic_id, Clinic.all, :id, :name, {}, { class: 'select2 clinics_select', required: true, id: 'clinic_id'}
+      - if current_admin.is_super_admin?
+        .form-group
+          = f.label :clinic_id, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
+            Clinic
+            %span.required *
+          .col-md-9.col-sm-9.col-xs-12
+            = f.collection_select :clinic_id, Clinic.all, :id, :name, {}, { class: 'select2 clinics_select', required: true, id: 'clinic_id'}
       .form-group
         = f.label :name, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
           Name

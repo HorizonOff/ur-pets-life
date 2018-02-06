@@ -2,9 +2,14 @@ module AdminPanel
   class VetsController < AdminPanelController
     before_action :set_vet, except: %i[index new create]
     before_action :set_location, only: %i[edit]
+    before_action :can_create?, only: %i[index new create]
+    before_action :can_update?, except: %i[index new create]
 
     def index
-      @vets = Vet.all
+      respond_to do |format|
+        format.html {}
+        format.json { filter_vets }
+      end
     end
 
     def new
@@ -18,10 +23,10 @@ module AdminPanel
     def show; end
 
     def create
-      @vet = Vet.new(vet_params)
+      @vet = super_admin? ? Vet.new(vet_params) : current_admin.clinic.vets.build(vet_params)
       if @vet.save
         flash[:success] = 'Vet was successfully created'
-        redirect_to admin_panel_vets_path
+        redirect_to admin_panel_vet_path(@vet)
       else
         set_location
         render :new
@@ -32,7 +37,7 @@ module AdminPanel
       @vet.assign_attributes(vet_params)
       if @vet.save
         flash[:success] = 'Vet was successfully updated'
-        redirect_to admin_panel_vets_path
+        redirect_to admin_panel_vet_path(@vet)
       else
         set_location
         render :edit
@@ -57,6 +62,14 @@ module AdminPanel
       @vet = Vet.find_by(id: params[:id])
     end
 
+    def can_create?
+      authorize :vet, :create?
+    end
+
+    def can_update?
+      authorize @vet, :update?
+    end
+
     def set_location
       @vet.build_location if @vet.location.blank?
     end
@@ -66,14 +79,6 @@ module AdminPanel
                                   :is_emergency, :use_clinic_location, :clinic_id,
                                   specialization_ids: [], pet_type_ids: [], qualifications_attributes:
                                   qualifications_params, location_attributes: location_params)
-    end
-
-    def qualifications_params
-      %i[id diploma university _destroy]
-    end
-
-    def location_params
-      %i[id latitude longitude city area street building_type building_name unit_number villa_number comment _destroy]
     end
 
     def parse_date
@@ -87,6 +92,20 @@ module AdminPanel
 
     def for_cms?
       true
+    end
+
+    def filter_vets
+      filtered_vets = filter_and_pagination_query.filter
+      vets = ::AdminPanel::VetDecorator.decorate_collection(filtered_vets)
+      serialized_vets = ActiveModel::Serializer::CollectionSerializer.new(
+        vets, serializer: ::AdminPanel::VetFilterSerializer, adapter: :attributes
+      )
+      render json: { draw: params[:draw], recordsTotal: Vet.count, recordsFiltered: filtered_vets.total_count,
+                     data: serialized_vets }
+    end
+
+    def filter_and_pagination_query
+      @filter_and_pagination_query ||= ::AdminPanel::FilterAndPaginationQuery.new('Vet', params, current_admin)
     end
   end
 end

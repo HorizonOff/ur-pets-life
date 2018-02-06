@@ -58,7 +58,16 @@ function init_datatables(){
                                { 'searchable': true, 'orderable': true, 'data': 'email', 'targets': 3 },
                                { 'searchable': true, 'orderable': true, 'data': 'is_super_admin', 'targets': 4 },
                                { 'searchable': true, 'orderable': true, 'data': 'is_active', 'targets': 5 },
-                               { 'searchable': false, 'orderable': false, 'data': 'actions', 'targets': 6 } ] }
+                               { 'searchable': false, 'orderable': false, 'data': 'actions', 'targets': 6 } ] },
+      'vets': { 'url': '/admin_panel/vets',
+                'columns': [ { 'searchable': true, 'orderable': true, 'data': 'id', 'targets': 0 },
+                             { 'searchable': true, 'orderable': true, 'data': 'name', 'targets': 1 },
+                             { 'searchable': false, 'orderable': false, 'data': 'avatar', 'targets': 2 },
+                             { 'searchable': true, 'orderable': true, 'data': 'email', 'targets': 3 },
+                             { 'searchable': false, 'orderable': false, 'data': 'mobile_number', 'targets': 4 },
+                             { 'searchable': true, 'orderable': true, 'data': 'experience', 'targets': 5 },
+                             { 'searchable': true, 'orderable': true, 'data': 'is_active', 'targets': 6 },
+                             { 'searchable': false, 'orderable': false, 'data': 'actions', 'targets': 7 } ] }
     }
     var datatable = $('.datatable').first()
     if (datatable.hasClass('clinics')){
@@ -73,8 +82,10 @@ function init_datatables(){
       init_datatable(table_rules['users']['url'], table_rules['users']['columns'])
     } else if (datatable.hasClass('contact_requests')){
       init_datatable(table_rules['contact_requests']['url'], table_rules['contact_requests']['columns'])
-    } else {
+    } else if (datatable.hasClass('admins')){
       init_datatable(table_rules['admins']['url'], table_rules['admins']['columns'])
+    } else {
+      init_datatable(table_rules['vets']['url'], table_rules['vets']['columns'])
     }
   };
 };
