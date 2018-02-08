@@ -26,15 +26,6 @@ module Api
       def post_params
         params.require(:post).permit(:title, :message, :pet_type_id)
       end
-
-      # def favorites_pagination_query
-      #   @favorites_pagination_query ||= ::Api::V1::FavoritesPaginationQuery.new(@user.favorites, params)
-      # end
-
-      # def serialize_favorite(favorite, scope)
-      #   serializer = favorite.favoritable_type + 'IndexSerializer'
-      #   serializer.constantize.new(favorite.favoritable, scope: scope)
-      # end
     end
   end
 end

@@ -16,7 +16,7 @@ module Api
       def create
         comment = @user.comments.new(comment_params.merge(post_id: @post.id))
         if comment.save
-          render json: { message: 'Comment saccessfulle created' }
+          render json: { message: 'Comment saccessfully created' }
         else
           render_422(parse_errors_messages(comment))
         end
@@ -32,15 +32,6 @@ module Api
       def comment_params
         params.require(:comment).permit(:message)
       end
-
-      # def favorites_pagination_query
-      #   @favorites_pagination_query ||= ::Api::V1::FavoritesPaginationQuery.new(@user.favorites, params)
-      # end
-
-      # def serialize_favorite(favorite, scope)
-      #   serializer = favorite.favoritable_type + 'IndexSerializer'
-      #   serializer.constantize.new(favorite.favoritable, scope: scope)
-      # end
     end
   end
 end
