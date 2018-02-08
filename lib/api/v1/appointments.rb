@@ -67,6 +67,32 @@ module Api
         end
       end
 
+      swagger_schema :PetSmallResponse do
+        property :id do
+          key :type, :integer
+          key :example, 10
+        end
+        property :avatar_url do
+          key :type, :string
+        end
+        property :name do
+          key :type, :string
+          key :example, 'Pluto'
+        end
+        property :birthday do
+          key :type, :integer
+          key :example, 1516217199
+        end
+        property :pet_type_id do
+          key :type, :integer
+          key :example, 2
+        end
+        property :mobile_numbner do
+          key :type, :string
+          key :example, '+38050505050'
+        end
+      end
+
       swagger_schema :AppointmentResponse do
         property :appointment do
           property :id do
@@ -83,6 +109,9 @@ module Api
           end
           property :vet do
             key :'$ref', :VetResponse
+          end
+          property :pet do
+            key :'$ref', :PetSmallResponse
           end
 
           property :picture_url do
@@ -108,16 +137,16 @@ module Api
             end
             property :message do
               key :type, :string
-              key :example, 'sdf;sdkf lrj;wkf;wkrew;om mw;ktr;wekm;eo'
+              key :example, 'Some message'
             end
             property :recipes do
               key :type, :array
               key :example, ['1st recipe', '2nd recipe']
             end
-            property :next_appointment do
-              key :type, :integer
-              key :example, 1516318200
-            end
+          end
+          property :next_appointment do
+            key :type, :integer
+            key :example, 1516318200
           end
         end
       end

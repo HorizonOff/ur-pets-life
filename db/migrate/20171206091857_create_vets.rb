@@ -11,7 +11,7 @@ class CreateVets < ActiveRecord::Migration[5.1]
       t.boolean :use_clinic_location, default: false
       t.integer :consultation_fee
       t.integer :experience
-      t.integer :session_duration
+      t.integer :session_duration, default: 0
 
       t.timestamps
 

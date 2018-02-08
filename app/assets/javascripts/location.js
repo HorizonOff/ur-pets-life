@@ -1,4 +1,5 @@
 use_clinic_location = false
+submit_clicked = false
 
 function init_map(){
   var marker
@@ -56,7 +57,7 @@ function init_map(){
     });
   }
 
-   function geocodeAddress(address) {
+  function geocodeAddress(address) {
     geocoder.geocode({
       address: address
     }, function(responses, status) {
@@ -65,7 +66,7 @@ function init_map(){
         map.setCenter(location);
         placeMarker(location);
         $('#geocoding_error').hide();
-        set_location_params(location)
+        set_location_params(location);
       } else {
         remove_marker()
         $('#geocoding_error').show();
@@ -94,7 +95,7 @@ function init_map(){
 
   function check_fields(){
     var address = retrieve_address();
-    geocodeAddress(address);
+    geocodeAddress(address)
   }
 
   $('.check_geocoder').on('change', function(){
@@ -102,6 +103,15 @@ function init_map(){
   });
   $('input.flat#building_type').on('ifClicked', function(event){
     check_fields();
+  });
+
+  $('form.with_location').on('submit', function(e){
+    if (submit_clicked){
+      return true
+    } else {
+      submit_clicked = true
+      return false
+    }
   });
 }
 
@@ -119,13 +129,21 @@ function retrieve_address(){
 }
 
 function remove_location_params(){
-  $("input[name*='latitude']").val(null)
-  $("input[name*='longitude']").val(null)
+  $("input[name*='latitude']").val(null);
+  $("input[name*='longitude']").val(null);
+  submit_form();
 }
 
 function set_location_params(location){
-  $("input[name*='latitude']").val(location.lat)
-  $("input[name*='longitude']").val(location.lng)
+  $("input[name*='latitude']").val(location.lat);
+  $("input[name*='longitude']").val(location.lng);
+  submit_form();
+}
+
+function submit_form(){
+  if (submit_clicked){
+    $('form.with_location').trigger('submit');
+  }
 }
 
 function parse_response(address_components, building_name){

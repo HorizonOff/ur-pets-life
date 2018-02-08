@@ -25,7 +25,9 @@ Rails.application.routes.draw do
         member { put :lost }
         member { put :change_status }
       end
-
+      resources :posts, only: %i[index create] do
+        resources :comments, only: %i[index create]
+      end
       resources :breeds, only: :index
       resources :vaccine_types, only: :index
       resources :pet_types, only: :index
