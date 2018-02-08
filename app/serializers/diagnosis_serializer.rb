@@ -4,8 +4,4 @@ class DiagnosisSerializer < ActiveModel::Serializer
   attribute :recipes do
     object.recipes.pluck(:instruction)
   end
-
-  attribute :next_appointment do
-    object.next_appointment.start_at unless object.next_appointment_id.nil?
-  end
 end
