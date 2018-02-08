@@ -22,8 +22,14 @@ class ApplicationPolicy
       if user.is_super_admin?
         scope.constantize.all
       else
-        scope.constantize.where(clinic_id: user.clinic.try(:id))
+        scope.constantize.joins(:admin).where(admins: { id: user.id })
       end
     end
+  end
+
+  private
+
+  def owner?
+    record.admin_id == user.id
   end
 end

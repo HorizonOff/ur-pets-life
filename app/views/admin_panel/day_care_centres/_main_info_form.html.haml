@@ -10,7 +10,7 @@
         .form-group
           = f.label :admin_id, 'Admin', class: 'control-label col-md-3 col-sm-3 col-xs-12'
           .col-md-9.col-sm-9.col-xs-12
-            = f.select :admin_id, options_from_collection_for_select(Admin.for_day_care_centre, :id, :email), { include_blank: true }, { class: 'select2' }
+            = f.select :admin_id, @day_care_centre.admins_for_select, { include_blank: true }, { class: 'select2' }
       .form-group
         = f.label :name, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
           Name

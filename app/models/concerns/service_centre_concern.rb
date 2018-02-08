@@ -33,5 +33,16 @@ module ServiceCentreConcern
     reverse_geocoded_by 'locations.latitude', 'locations.longitude'
 
     scope :alphabetical_order, -> { order(name: :asc) }
+
+    after_save :check_admin
+  end
+
+  private
+
+  def check_admin
+    return unless saved_changes.keys.include?('admin_id')
+    appointments.each do |a|
+      a.update_column(:admin_id, admin_id)
+    end
   end
 end

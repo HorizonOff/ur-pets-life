@@ -18,6 +18,7 @@ Metrics/AbcSize:
    - app/helpers/params_cleaner_helper.rb
    - app/services/api/v1/user_services/social_auth_service.rb
    - app/decorators/admin_panel/vet_decorator.rb
+   - lib/query_objects/admin_panel/filter_and_pagination_query.rb
 Metrics/MethodLength:
   Enabled: true
   Exclude:

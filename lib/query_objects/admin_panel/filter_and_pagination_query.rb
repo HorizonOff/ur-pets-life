@@ -5,8 +5,10 @@ module AdminPanel
     ADDITIONAL_PARAMS = { 'city' => { join_model: :location, field: 'locations.city' },
                           'specialization_id' => { join_model: :specializations, field: 'specializations.id' },
                           'pet_type_id' => { join_model: :pet_types, field: 'pet_types.id' } }.freeze
-    SQL_RULES = { 'name' => { model: 'User',
-                              sql: "((users.first_name || ' ' || users.last_name) ILIKE :value)" } }.freeze
+    SQL_RULES = { 'name' => { models: %w[User Appointment],
+                              sql: "(users.first_name || ' ' || users.last_name) ILIKE :value" },
+                  'vet_name' => { models: %w[Appointment], join_model: :vet,
+                                  sql: '(vets.name ILIKE :value)' } }.freeze
 
     def initialize(model, params, admin = nil)
       @model = model
@@ -17,10 +19,10 @@ module AdminPanel
     end
 
     def filter
+      select_additional_fields
       if draw_first?
         scope.order(id: :asc).page(params[:page]).per(10)
       else
-        select_additional_fields
         parse_params
         filter_by_all_params
       end
@@ -32,8 +34,11 @@ module AdminPanel
     attr_accessor :scope
 
     def select_additional_fields
-      return if model != 'User'
-      @scope = scope.select("users.*, concat(users.first_name, ' ', users.last_name) as name")
+      if model == 'User'
+        @scope = scope.select("users.*, concat(users.first_name, ' ', users.last_name) as name")
+      elsif model == 'Appointment'
+        @scope = scope.includes(:vet, :user).joins(:user)
+      end
     end
 
     def draw_first?
@@ -106,22 +111,34 @@ module AdminPanel
 
     def choose_sql(column)
       column_name = column[:name]
+      field = model.downcase.pluralize + '.' + column_name
       column_type = column[:type]
       column_value = column[:value]
 
       if specific_sql_rule_for?(column_name)
-        @scope.where(SQL_RULES[column_name][:sql], value: "%#{column_value}%")
+        use_sql_rule(column)
       elsif column_type == :integer
-        @scope.where("#{column_name} = :value", value: column_value.to_i)
+        @scope.where("#{field} = :value", value: column_value.to_i)
       elsif column_type == :boolean
-        @scope.where("#{column_name} = :value", value: column_value)
+        @scope.where("#{field} = :value", value: column_value)
       else
-        @scope.where("#{column_name} ILIKE :value", value: "%#{column_value}%")
+        @scope.where("#{field} ILIKE :value", value: "%#{column_value}%")
       end
     end
 
     def specific_sql_rule_for?(column_name)
-      SQL_RULES[column_name] && SQL_RULES[column_name][:model] == model
+      SQL_RULES[column_name] && SQL_RULES[column_name][:models].include?(model)
+    end
+
+    def use_sql_rule(column)
+      column_rule = SQL_RULES[column[:name]]
+      column_value = column[:value]
+      if column_rule[:join_model]
+        @scope.joins(column_rule[:join_model])
+              .where(column_rule[:sql], value: "%#{column_value}%")
+      else
+        @scope.where(column_rule[:sql], value: "%#{column_value}%")
+      end
     end
 
     def filter_by_additional_params
@@ -139,7 +156,8 @@ module AdminPanel
     end
 
     def filter_by_order_params
-      @scope = scope.distinct.order("#{@order_column_name} #{@order_column_dir}")
+      field = model == 'User' ? @order_column_name : model.downcase.pluralize + '.' + @order_column_name
+      @scope = scope.distinct.order("#{field} #{@order_column_dir}")
     end
 
     def filter_by_page_params
