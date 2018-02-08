@@ -40,9 +40,5 @@ module AdminPanel
       params.require(:pet).permit(:name, :birthday, :breed_id, :weight, :avatar,
                                   :additional_type, :comment, location_attributes: location_params)
     end
-
-    def location_params
-      %i[id latitude longitude city area street building_type building_name unit_number villa_number comment _destroy]
-    end
   end
 end

@@ -31,7 +31,7 @@ module AdminPanel
     end
 
     def location_params
-      %i[latitude longitude city area street building_type building_name unit_number villa_number comment]
+      %i[latitude longitude city area street building_type building_name unit_number villa_number comment _destroy]
     end
 
     def schedule_params

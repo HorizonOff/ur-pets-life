@@ -26,19 +26,21 @@
         .col-md-9.col-sm-9.col-xs-12
           = f.email_field :email, class: 'form-control', required: true
       .form-group
-        = f.label :avatar, class: 'control-label col-md-3 col-sm-3 col-xs-12'
+        = f.label :avatar, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
+          Avatar
+          %span.required *
         .col-md-9.col-sm-9.col-xs-12
-          -if @vet.avatar.present?
+          -if @vet.avatar?
             =image_tag @vet.avatar.medium.url, class: 'avatar-show', style: ' display:block;margin:auto'
 
           = f.file_field :avatar
           = f.hidden_field :avatar_cache
       .form-group
-        = f.label :mobile_number, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
+        = f.label :mobile_number, class: 'control-label col-md-3 col-sm-3 col-xs-12',
           Phone
           %span.required *
         .col-md-9.col-sm-9.col-xs-12
-          = f.text_field :mobile_number, class: 'form-control', required: true
+          = f.text_field :mobile_number, class: 'form-control'
       .form-group
         = f.label :is_emergency, 'Work for emergency', class: 'control-label col-md-3 col-sm-3 col-xs-12'
         .col-md-9.col-sm-9.col-xs-12

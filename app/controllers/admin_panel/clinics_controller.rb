@@ -88,7 +88,7 @@ module AdminPanel
 
     def clinic_params
       params.require(:clinic).permit(:admin_id, :name, :email, :picture, :mobile_number, :consultation_fee, :website,
-                                     :description, :is_emergency,
+                                     :description, :is_emergency, :picture_cache,
                                      specialization_ids: [], pet_type_ids: [], location_attributes: location_params,
                                      schedule_attributes: schedule_params)
     end
