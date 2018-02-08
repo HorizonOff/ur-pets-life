@@ -6,7 +6,7 @@
   .clearfix
   
   = form_for @clinic, url: admin_panel_clinics_path,
-  html: { multipart: true, method: :post, class: 'form-horizontal form-label-left', autocomplete: 'off'} do |f|
+  html: { multipart: true, method: :post, class: 'form-horizontal form-label-left with_location', autocomplete: 'off' } do |f|
 
     = render partial: 'form', locals: { f: f }
     
