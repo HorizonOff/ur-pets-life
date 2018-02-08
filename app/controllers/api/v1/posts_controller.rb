@@ -15,7 +15,7 @@ module Api
       def create
         post = @user.posts.new(post_params)
         if post.save
-          render json: { message: 'Post saccessfulle created' }
+          render json: { message: 'Post saccessfully created' }
         else
           render_422(parse_errors_messages(post))
         end

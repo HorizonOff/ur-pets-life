@@ -76,7 +76,7 @@ module AdminPanel
 
     def vet_params
       params.require(:vet).permit(:name, :email, :avatar, :mobile_number, :consultation_fee, :experience, :is_active,
-                                  :is_emergency, :use_clinic_location, :clinic_id,
+                                  :is_emergency, :use_clinic_location, :clinic_id, :session_duration,
                                   specialization_ids: [], pet_type_ids: [], qualifications_attributes:
                                   qualifications_params, location_attributes: location_params)
     end
