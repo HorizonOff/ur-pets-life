@@ -12,6 +12,9 @@ class Vet < ApplicationRecord
                                       too_long: 'Mobile number should contain not more than 12 symbols' },
                             allow_blank: true
 
+  validates :session_duration, presence: { message: 'Session duration is required' },
+                               numericality: { only_integer: true, greater_than: 0, less_than: 1440 }
+
   validates :location, presence: { message: 'Location is required' }, if: :work_as_emergency?
 
   belongs_to :clinic, counter_cache: true
