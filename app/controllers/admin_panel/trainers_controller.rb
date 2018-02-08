@@ -60,7 +60,7 @@ module AdminPanel
     end
 
     def trainer_params
-      params.require(:trainer).permit(:name, :email, :picture, :mobile_number, :experience,
+      params.require(:trainer).permit(:name, :email, :picture, :mobile_number, :experience, :picture_cache,
                                       pet_type_ids: [], location_attributes: location_params, specialization_ids: [],
                                       qualifications_attributes: qualifications_params)
     end

@@ -87,7 +87,7 @@ module AdminPanel
 
     def day_care_centre_params
       params.require(:day_care_centre).permit(:admin_id, :name, :email, :picture, :mobile_number, :website,
-                                              :description,
+                                              :description, :picture_cache,
                                               service_option_ids: [], location_attributes: location_params,
                                               schedule_attributes: schedule_params)
     end

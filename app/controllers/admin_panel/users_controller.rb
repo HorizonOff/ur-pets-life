@@ -46,10 +46,6 @@ module AdminPanel
       params.require(:user).permit(:first_name, :last_name, :mobile_number, location_attributes: location_params)
     end
 
-    def location_params
-      %i[id latitude longitude city area street building_type building_name unit_number villa_number comment _destroy]
-    end
-
     def filter_users
       filtered_users = filter_and_pagination_query.filter
       users = ::AdminPanel::UserDecorator.decorate_collection(filtered_users)
