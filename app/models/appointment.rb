@@ -57,7 +57,7 @@ class Appointment < ApplicationRecord
     self.status ||= :pending
   end
 
-  def sdt_admin
+  def set_admin
     self.admin_id = bookable.admin_id
   end
 

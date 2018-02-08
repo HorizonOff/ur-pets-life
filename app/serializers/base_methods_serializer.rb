@@ -42,6 +42,6 @@ class BaseMethodsSerializer < ActiveModel::Serializer
   end
 
   def show_user_distance?
-    object.user.location && scope[:latitude].present? && scope[:longitude].present?
+    object.user_location && scope[:latitude].present? && scope[:longitude].present?
   end
 end
