@@ -31,6 +31,10 @@ class BaseMethodsSerializer < ActiveModel::Serializer
     object.class.to_s
   end
 
+  def created_at
+    object.created_at.to_i
+  end
+
   private
 
   def show_distance?

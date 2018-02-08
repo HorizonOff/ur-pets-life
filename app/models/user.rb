@@ -38,15 +38,20 @@ class User < ApplicationRecord
 
   attr_accessor :skip_password_validation
 
+  has_one :location, as: :place, inverse_of: :place
+
   has_many :favorites, -> { order(created_at: :asc) }
   has_many :sessions
   has_many :pets
+  has_one :pet_avatar, -> { order(id: :asc).limit(1) }, class_name: 'Pet'
   has_many :appointments
-  has_one :location, as: :place, inverse_of: :place
+  has_many :posts
+  has_many :comments
 
   accepts_nested_attributes_for :location, update_only: true, reject_if: :all_blank
 
   delegate :address, to: :location, allow_nil: true
+  delegate :avatar, to: :pet_avatar, allow_nil: true
 
   before_validation :check_location
 
