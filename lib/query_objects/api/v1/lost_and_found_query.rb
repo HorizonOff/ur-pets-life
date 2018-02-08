@@ -30,9 +30,7 @@ module Api
       end
 
       def objects_by_location_attributes
-        @scope.left_joins(:location)
-              .near([params[:latitude], params[:longitude]], 999_999, units: :km, order: false)
-              .order('distance ASC NULLS LAST')
+        @scope.joins(:location).near([params[:latitude], params[:longitude]], 999_999, units: :km)
       end
 
       def all_objects

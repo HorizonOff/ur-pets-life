@@ -34,7 +34,7 @@ module Api
       end
 
       def day_care_centres_query
-        @day_care_centres_query ||= ::Api::V1::LocationBasedQuery.new(DayCareCentre.all, params)
+        @day_care_centres_query ||= ::Api::V1::LocationBasedQuery.new('DayCareCentre', params)
       end
 
       def schedule_parser_service

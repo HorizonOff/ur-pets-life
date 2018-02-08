@@ -5,7 +5,7 @@ module Api
       before_action :set_trainer, only: :show
 
       def index
-        trainers = trainers_query.find_trainers
+        trainers = trainers_query.find_objects
         serialized_trainers = ActiveModel::Serializer::CollectionSerializer.new(
           trainers, serializer: TrainerIndexSerializer, scope: serializable_params
         )
@@ -27,7 +27,7 @@ module Api
       end
 
       def trainers_query
-        @trainers_query ||= ::Api::V1::LocationBasedQuery.new(Trainer.all, params)
+        @trainers_query ||= ::Api::V1::LocationBasedQuery.new('Trainer', params)
       end
     end
   end
