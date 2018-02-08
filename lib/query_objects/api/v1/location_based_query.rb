@@ -21,7 +21,7 @@ module Api
                   else
                     all_objects
                   end
-        objects.includes(:location).order('distance ASC NULLS LAST').page(params[:page])
+        objects.includes(:location).page(params[:page])
       end
 
       private
@@ -29,8 +29,9 @@ module Api
       attr_reader :scope, :params
 
       def objects_by_location_attributes
-        scope.left_joins(:location).near([params[:latitude], params[:longitude]], 999_999,
-                                         units: :km, order: false)
+        scope.left_joins(:location)
+             .near([params[:latitude], params[:longitude]], 999_999, units: :km, order: false)
+             .order('distance ASC NULLS LAST')
       end
 
       def all_objects
