@@ -76,7 +76,14 @@ function init_datatables(){
                                      { 'searchable': true, 'orderable': true, 'data': 'created_at', 'targets': 4 },
                                      { 'searchable': true, 'orderable': true, 'data': 'start_at', 'targets': 5 },
                                      { 'searchable': true, 'orderable': true, 'data': 'status', 'targets': 6 },
-                                     { 'searchable': false, 'orderable': false, 'data': 'actions', 'targets': 7 } ] }
+                                     { 'searchable': false, 'orderable': false, 'data': 'actions', 'targets': 7 } ] },
+      'posts': { 'url': '/admin_panel/posts',
+                 'columns': [ { 'searchable': true, 'orderable': true, 'data': 'id', 'targets': 0 },
+                              { 'searchable': true, 'orderable': false, 'data': 'name', 'targets': 1 },
+                              { 'searchable': true, 'orderable': false, 'data': 'title', 'targets': 2 },
+                              { 'searchable': true, 'orderable': true, 'data': 'pet_type_id', 'targets': 3 },
+                              { 'searchable': false, 'orderable': true, 'data': 'created_at', 'targets': 4 },
+                              { 'searchable': false, 'orderable': false, 'data': 'actions', 'targets': 5 } ] }
     }
     var datatable = $('.datatable').first()
     if (datatable.hasClass('clinics')){
@@ -95,8 +102,10 @@ function init_datatables(){
       init_datatable(table_rules['admins']['url'], table_rules['admins']['columns'])
     } else if (datatable.hasClass('vets')){
       init_datatable(table_rules['vets']['url'], table_rules['vets']['columns'])
-    } else {
+    } else if (datatable.hasClass('appointments')){
       init_datatable(table_rules['appointments']['url'], table_rules['appointments']['columns'])
+    } else {
+      init_datatable(table_rules['posts']['url'], table_rules['posts']['columns'])
     }
   };
 };

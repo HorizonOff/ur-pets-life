@@ -36,6 +36,7 @@ class Vet < ApplicationRecord
   accepts_nested_attributes_for :location, update_only: true, allow_destroy: true
 
   mount_uploader :avatar, PhotoUploader
+  validates_presence_of :avatar
 
   delegate :address, to: :location, allow_nil: true
   reverse_geocoded_by 'locations.latitude', 'locations.longitude'
