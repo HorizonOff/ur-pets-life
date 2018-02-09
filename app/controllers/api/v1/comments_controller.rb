@@ -16,7 +16,7 @@ module Api
       def create
         comment = @user.comments.new(comment_params.merge(post_id: @post.id))
         if comment.save
-          render json: { message: 'Comment saccessfully created' }
+          render json: comment
         else
           render_422(parse_errors_messages(comment))
         end
