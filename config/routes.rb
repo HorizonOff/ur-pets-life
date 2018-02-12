@@ -107,5 +107,8 @@ Rails.application.routes.draw do
       member { get :new_reply }
       member { post :send_reply }
     end
+    resources :posts, only: %i[index show] do
+      resources :comments, only: %i[index]
+    end
   end
 end
