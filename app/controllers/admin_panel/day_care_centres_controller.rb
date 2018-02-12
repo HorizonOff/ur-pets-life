@@ -52,7 +52,7 @@ module AdminPanel
             flash[:success] = 'DayCare Centre was deleted'
             redirect_to admin_panel_day_care_centres_path
           end
-          format.json { render json: { message: 'DayCare Centre was deleted' }, status: 200 }
+          format.json { render json: { message: 'DayCare Centre was deleted' } }
         end
       else
         respond_to do |format|

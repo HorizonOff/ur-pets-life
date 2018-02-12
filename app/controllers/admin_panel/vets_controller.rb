@@ -45,9 +45,23 @@ module AdminPanel
     end
 
     def destroy
-      @vet.destroy
-      flash[:success] = 'Vet was successfully deleted'
-      redirect_to admin_panel_vets_path
+      if @vet.destroy
+        respond_to do |format|
+          format.html do
+            flash[:success] = 'Vet was deleted'
+            redirect_to admin_panel_vets_path
+          end
+          format.js { render json: { message: 'Vet was deleted' } }
+        end
+      else
+        respond_to do |format|
+          format.html do
+            flash[:error] = "Vet wasn't deleted"
+            render :show
+          end
+          format.js { render json: { errors: @vet.errors.full_messages }, status: 422 }
+        end
+      end
     end
 
     def schedule

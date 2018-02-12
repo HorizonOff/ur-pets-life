@@ -18,7 +18,8 @@ module AdminPanel
         (link_to 'View calendar', url_helpers.admin_panel_vet_calendars_path(model), class: 'btn btn-info btn-xs') +
         (link_to 'Edit', url_helpers.edit_admin_panel_vet_path(model), class: 'btn btn-warning btn-xs') +
         (link_to 'Delete', url_helpers.admin_panel_vet_path(model),
-                 method: :delete, remote: true, class: 'btn btn-danger btn-xs check_response')
+                 data: { confirm: 'Are you sure?' }, method: :delete, remote: true,
+                 class: 'btn btn-danger btn-xs check_response')
     end
   end
 end

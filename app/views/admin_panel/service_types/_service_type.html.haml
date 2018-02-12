@@ -3,4 +3,4 @@
   %td #{service_type.name}
   %td
     =link_to 'Edit', edit_admin_panel_service_type_path(service_type), class: 'btn btn-warning', remote: true
-    =link_to 'Delete', admin_panel_service_type_path(service_type), method: :delete, class: 'btn btn-danger', remote: true
+    =link_to 'Delete', admin_panel_service_type_path(service_type), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger', remote: true

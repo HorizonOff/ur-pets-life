@@ -38,16 +38,15 @@
                   = image_tag(@appointment.pet.avatar.medium.url, class: 'img-responsive avatar-view', title:  @appointment.pet.name) if @appointment.pet.avatar.present?
                 %ul.list-unstyled.user_data
                   %li
-                    %i.fa.fa-map-marker.user-profile-icon
                     = @appointment.pet.name
                   %li
-                    %i.fa.fa-map-marker.user-profile-icon
+                    %i.fa.fa-paw.user-profile-icon
                     = @appointment.pet.pet_type.is_additional_type? ? @appointment.pet.additional_type : @appointment.pet.pet_type.name + ': ' + @appointment.pet.breed.name
                   %li
-                    %i.fa.fa-phone.user-profile-icon
+                    %i.fa.fa-birthday-cake.user-profile-icon
                     = @appointment.pet.birthday.strftime('%-d %b %Y %I:%M %p')
                   %li
-                    %i.fa.fa-phone.user-profile-icon
+                    Weight: 
                     = @appointment.pet.weight
 
           .col-md-6.col-sm-6.col-xs-12
