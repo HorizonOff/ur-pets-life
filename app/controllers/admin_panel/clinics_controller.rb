@@ -48,7 +48,7 @@ module AdminPanel
             flash[:success] = 'Clinic was deleted'
             redirect_to admin_panel_clinics_path
           end
-          format.json { render json: { message: 'Clinic was deleted' }, status: 200 }
+          format.js { render json: { message: 'Clinic was deleted' } }
         end
       else
         respond_to do |format|
@@ -56,7 +56,7 @@ module AdminPanel
             flash[:error] = "Clinic wasn't deleted"
             render :show
           end
-          format.json { render json: { errors: @clinic.errors.full_messages }, status: 422 }
+          format.js { render json: { errors: @clinic.errors.full_messages }, status: 422 }
         end
       end
     end
