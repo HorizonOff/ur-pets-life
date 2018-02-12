@@ -13,6 +13,9 @@
                 = @user.email
               %li
                 %i.fa.fa-phone.user-profile-icon
+                = @user.mobile_number
+              %li
+                %i.fa.fa-map-marker.user-profile-icon
                 = @user.address
 
             =link_to edit_admin_panel_user_path(@user), class: 'btn btn-warning' do
