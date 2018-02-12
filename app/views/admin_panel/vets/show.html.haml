@@ -13,6 +13,9 @@
 
             %ul.list-unstyled.user_data
               %li
+                %i.fa.fa-plus-square.user-profile-icon
+                = @vet.clinic.name
+              %li
                 %i.fa.fa-briefcase.user-profile-icon
                 = @vet.specializations.pluck(:name).join("\n")
               %li
@@ -22,8 +25,15 @@
                 %i.fa.fa-envelope.user-profile-icon
                 = @vet.email
               %li
-                %i.fa.fa-user.user-profile-icon
-                Clininc's admin
+                %i.fa.fa-paw.user-profile-icon
+                = @vet.pet_types.pluck(:name).join(', ')
+              %li
+                Session: 
+                = @vet.session_duration
+                minutes
+              %li
+                Experience: 
+                = @vet.experience
 
             =link_to edit_admin_panel_vet_path(@vet), class: 'btn btn-warning' do
               %i.fa.fa-edit.m-right-xs
