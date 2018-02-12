@@ -39,6 +39,7 @@ Metrics/ClassLength:
   Enabled: true
   Exclude:
    - lib/query_objects/admin_panel/filter_and_pagination_query.rb
+   - app/controllers/admin_panel/vets_controller.rb
 AllCops:
  Excludes:
    - Gemfile
