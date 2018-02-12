@@ -158,7 +158,7 @@ module AdminPanel
     end
 
     def filter_by_order_params
-      field = model == 'User' ? @order_column_name : model.downcase.pluralize + '.' + @order_column_name
+      field = model == 'User' ? @order_column_name : model.tableize + '.' + @order_column_name
       @scope = scope.distinct.order("#{field} #{@order_column_dir}")
     end
 

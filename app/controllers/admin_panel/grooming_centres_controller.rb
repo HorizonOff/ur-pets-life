@@ -51,7 +51,7 @@ module AdminPanel
             flash[:success] = 'Grooming Centre was deleted'
             redirect_to admin_panel_groming_centres_path
           end
-          format.json { render json: { message: 'Grooming Centre was deleted' }, status: 200 }
+          format.json { render json: { message: 'Grooming Centre was deleted' } }
         end
       else
         respond_to do |format|
