@@ -113,7 +113,7 @@ module AdminPanel
 
     def choose_sql(column)
       column_name = column[:name]
-      field = model.downcase.pluralize + '.' + column_name
+      field = model.tableize + '.' + column_name
       column_type = column[:type]
       column_value = column[:value]
 

@@ -1,8 +1,10 @@
 class Post < ApplicationRecord
-  belongs_to :user
+  belongs_to :user, -> { with_deleted }
   belongs_to :pet_type
 
-  has_many :comments
+  has_many :comments, dependent: :destroy
+
+  acts_as_paranoid
 
   validates :title, presence: { message: 'Title is required' }
   validates :message, presence: { message: 'Message is required' }

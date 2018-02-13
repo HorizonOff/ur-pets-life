@@ -10,6 +10,8 @@ class Location < ApplicationRecord
   geocoded_by :address
   after_validation :geocode, if: :should_geocode?
 
+  acts_as_paranoid
+
   def address
     address_fields = [city, area, street]
     address_fields += building? ? [building_name, unit_number] : [villa_number]

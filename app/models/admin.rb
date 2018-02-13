@@ -12,6 +12,8 @@ class Admin < ApplicationRecord
 
   has_many :appointments, dependent: :nullify
 
+  acts_as_paranoid
+
   scope :simple, -> { where(is_super_admin: false) }
   scope :for_clinic, -> { simple.left_joins(:clinic).having('count(clinics.id) = 0').group('admins.id') }
 

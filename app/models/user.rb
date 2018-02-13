@@ -38,11 +38,13 @@ class User < ApplicationRecord
 
   attr_accessor :skip_password_validation
 
+  acts_as_paranoid
+
   has_one :location, as: :place, inverse_of: :place
 
-  has_many :favorites, -> { order(created_at: :asc) }
-  has_many :sessions
-  has_many :pets
+  has_many :favorites, -> { order(created_at: :asc) }, dependent: :destroy
+  has_many :sessions, dependent: :destroy
+  has_many :pets, dependent: :destroy
   has_one :pet_avatar, -> { order(id: :asc).limit(1) }, class_name: 'Pet'
   has_many :appointments
   has_many :posts
@@ -62,7 +64,7 @@ class User < ApplicationRecord
   private
 
   def check_location
-    location.destroy if location.present? && address.blank?
+    location.really_destroy! if location.present? && address.blank?
   end
 
   def password_required?
