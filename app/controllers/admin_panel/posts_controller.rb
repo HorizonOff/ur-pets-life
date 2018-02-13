@@ -1,7 +1,7 @@
 module AdminPanel
   class PostsController < AdminPanelController
     before_action :authorize_super_admin
-    before_action :set_post, only: :show
+    before_action :set_post, except: :index
 
     def index
       respond_to do |format|
@@ -12,6 +12,14 @@ module AdminPanel
 
     def show
       @comments = @post.comments.includes(:user).order(id: :desc).page(params[:page])
+    end
+
+    def destroy
+      if @post.destroy
+        render json: { message: 'Post was deleted' }
+      else
+        render json: { errors: @post.errors.full_messages }, status: 422
+      end
     end
 
     private

@@ -21,7 +21,8 @@
                 %i.fa.fa-external-link.user-profile-icon
                 = @post.created_at.strftime('%-d %b %Y %I:%M %p')
               %li
-                Comments: #{@post.comments.size}
+                Comments:
+                %span.comment_count= @post.comments.size
 
           .col-md-9.col-sm-9.col-xs-12
             %h1= @post.title
