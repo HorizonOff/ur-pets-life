@@ -45,11 +45,11 @@ module AdminPanel
     end
 
     def destroy
-      if @groming_centre.destroy
+      if @grooming_centre.destroy
         respond_to do |format|
           format.html do
             flash[:success] = 'Grooming Centre was deleted'
-            redirect_to admin_panel_groming_centres_path
+            redirect_to admin_panel_grooming_centres_path
           end
           format.json { render json: { message: 'Grooming Centre was deleted' } }
         end
@@ -59,7 +59,7 @@ module AdminPanel
             flash[:error] = "Grooming Centre wasn't deleted"
             render :show
           end
-          format.json { render json: { errors: @groming_centre.errors.full_messages }, status: 422 }
+          format.json { render json: { errors: @grooming_centre.errors.full_messages }, status: 422 }
         end
       end
     end
