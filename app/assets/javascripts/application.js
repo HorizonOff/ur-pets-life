@@ -29,9 +29,10 @@
 //= require dataTables.bootstrap.min
 //= require dataTables.buttons.min
 //= require buttons.bootstrap.min
+//= require location.js
+//= require datatable.js
 
 //= require_self
-//= require_tree .
 $(document).on('turbolinks:load', function() {
   init_all_functions()
 });

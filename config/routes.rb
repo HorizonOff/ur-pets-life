@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   mount Ckeditor::Engine => '/ckeditor'
-  root 'admin_panel/dashboard#index'
+  root 'pages#landing'
   get '/login', to: 'application#login'
   devise_for :users, only: %i[confirmations passwords omniauth_callbacks],
                      controllers: { confirmations: 'confirmations',

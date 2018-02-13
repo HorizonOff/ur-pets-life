@@ -21,7 +21,6 @@
  *= require dataTables.bootstrap.min
  *= require buttons.bootstrap.min
 
- *= require_tree
  *= require_self
  */
 
