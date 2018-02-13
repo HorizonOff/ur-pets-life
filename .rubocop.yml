@@ -15,8 +15,13 @@ Metrics/AbcSize:
    - app/controllers/admin_panel/clinics_controller.rb
    - app/controllers/admin_panel/day_care_centres_controller.rb
    - app/controllers/admin_panel/grooming_centres_controller.rb
+   - app/controllers/admin_panel/trainers_controller.rb
+   - app/controllers/admin_panel/vets_controller.rb
+   - app/controllers/admin_panel/users_controller.rb
    - app/helpers/params_cleaner_helper.rb
    - app/services/api/v1/user_services/social_auth_service.rb
+   - app/decorators/admin_panel/vet_decorator.rb
+   - lib/query_objects/admin_panel/filter_and_pagination_query.rb
 Metrics/MethodLength:
   Enabled: true
   Exclude:
@@ -26,11 +31,15 @@ Metrics/MethodLength:
     - app/controllers/admin_panel/clinics_controller.rb
     - app/controllers/admin_panel/day_care_centres_controller.rb
     - app/controllers/admin_panel/grooming_centres_controller.rb
+    - app/controllers/admin_panel/trainers_controller.rb
+    - app/controllers/admin_panel/vets_controller.rb
+    - app/controllers/admin_panel/users_controller.rb
     - lib/query_objects/admin_panel/filter_and_pagination_query.rb
 Metrics/ClassLength:
   Enabled: true
   Exclude:
    - lib/query_objects/admin_panel/filter_and_pagination_query.rb
+   - app/controllers/admin_panel/vets_controller.rb
 AllCops:
  Excludes:
    - Gemfile

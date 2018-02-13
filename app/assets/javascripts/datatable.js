@@ -58,7 +58,32 @@ function init_datatables(){
                                { 'searchable': true, 'orderable': true, 'data': 'email', 'targets': 3 },
                                { 'searchable': true, 'orderable': true, 'data': 'is_super_admin', 'targets': 4 },
                                { 'searchable': true, 'orderable': true, 'data': 'is_active', 'targets': 5 },
-                               { 'searchable': false, 'orderable': false, 'data': 'actions', 'targets': 6 } ] }
+                               { 'searchable': false, 'orderable': false, 'data': 'actions', 'targets': 6 } ] },
+      'vets': { 'url': '/admin_panel/vets',
+                'columns': [ { 'searchable': true, 'orderable': true, 'data': 'id', 'targets': 0 },
+                             { 'searchable': true, 'orderable': true, 'data': 'name', 'targets': 1 },
+                             { 'searchable': false, 'orderable': false, 'data': 'avatar', 'targets': 2 },
+                             { 'searchable': true, 'orderable': true, 'data': 'email', 'targets': 3 },
+                             { 'searchable': false, 'orderable': false, 'data': 'mobile_number', 'targets': 4 },
+                             { 'searchable': true, 'orderable': true, 'data': 'experience', 'targets': 5 },
+                             { 'searchable': true, 'orderable': true, 'data': 'is_active', 'targets': 6 },
+                             { 'searchable': false, 'orderable': false, 'data': 'actions', 'targets': 7 } ] },
+      'appointments': { 'url': '/admin_panel/appointments',
+                        'columns': [ { 'searchable': true, 'orderable': true, 'data': 'id', 'targets': 0 },
+                                     { 'searchable': true, 'orderable': false, 'data': 'name', 'targets': 1 },
+                                     { 'searchable': true, 'orderable': false, 'data': 'bookable_type', 'targets': 2 },
+                                     { 'searchable': true, 'orderable': false, 'data': 'vet_name', 'targets': 3 },
+                                     { 'searchable': true, 'orderable': true, 'data': 'created_at', 'targets': 4 },
+                                     { 'searchable': true, 'orderable': true, 'data': 'start_at', 'targets': 5 },
+                                     { 'searchable': true, 'orderable': true, 'data': 'status', 'targets': 6 },
+                                     { 'searchable': false, 'orderable': false, 'data': 'actions', 'targets': 7 } ] },
+      'posts': { 'url': '/admin_panel/posts',
+                 'columns': [ { 'searchable': true, 'orderable': true, 'data': 'id', 'targets': 0 },
+                              { 'searchable': true, 'orderable': false, 'data': 'name', 'targets': 1 },
+                              { 'searchable': true, 'orderable': false, 'data': 'title', 'targets': 2 },
+                              { 'searchable': true, 'orderable': true, 'data': 'pet_type_id', 'targets': 3 },
+                              { 'searchable': false, 'orderable': true, 'data': 'created_at', 'targets': 4 },
+                              { 'searchable': false, 'orderable': false, 'data': 'actions', 'targets': 5 } ] }
     }
     var datatable = $('.datatable').first()
     if (datatable.hasClass('clinics')){
@@ -73,8 +98,14 @@ function init_datatables(){
       init_datatable(table_rules['users']['url'], table_rules['users']['columns'])
     } else if (datatable.hasClass('contact_requests')){
       init_datatable(table_rules['contact_requests']['url'], table_rules['contact_requests']['columns'])
-    } else {
+    } else if (datatable.hasClass('admins')){
       init_datatable(table_rules['admins']['url'], table_rules['admins']['columns'])
+    } else if (datatable.hasClass('vets')){
+      init_datatable(table_rules['vets']['url'], table_rules['vets']['columns'])
+    } else if (datatable.hasClass('appointments')){
+      init_datatable(table_rules['appointments']['url'], table_rules['appointments']['columns'])
+    } else {
+      init_datatable(table_rules['posts']['url'], table_rules['posts']['columns'])
     }
   };
 };

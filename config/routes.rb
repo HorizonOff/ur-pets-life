@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   mount Ckeditor::Engine => '/ckeditor'
-  root 'admin_panel/dashboard#index'
+  root 'pages#landing'
   get '/login', to: 'application#login'
   devise_for :users, only: %i[confirmations passwords omniauth_callbacks],
                      controllers: { confirmations: 'confirmations',
@@ -25,7 +25,9 @@ Rails.application.routes.draw do
         member { put :lost }
         member { put :change_status }
       end
-
+      resources :posts, only: %i[index create] do
+        resources :comments, only: %i[index create]
+      end
       resources :breeds, only: :index
       resources :vaccine_types, only: :index
       resources :pet_types, only: :index
@@ -104,6 +106,9 @@ Rails.application.routes.draw do
     resources :contact_requests, only: %i[index show] do
       member { get :new_reply }
       member { post :send_reply }
+    end
+    resources :posts, only: %i[index show] do
+      resources :comments, only: %i[index]
     end
   end
 end

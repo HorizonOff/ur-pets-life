@@ -6,6 +6,7 @@ class Appointment < ApplicationRecord
 
   belongs_to :user
   belongs_to :bookable, polymorphic: true
+  belongs_to :admin, optional: true
   belongs_to :pet
   belongs_to :vet, optional: true
   belongs_to :calendar, optional: true
@@ -19,12 +20,12 @@ class Appointment < ApplicationRecord
 
   after_initialize :set_defaults
 
-  before_validation :set_end_at, :set_calendar
+  before_validation :set_end_at, :set_calendar, :set_admin, on: :create
   validates :start_at, presence: { message: 'Date and time are required' }
   validate :vet_id_should_be_vaild, :pet_id_should_be_valid, :service_ids_should_be_valid, :time_should_be_valid,
            :appointmet_overlaps
 
-  after_validation :set_price
+  after_validation :set_price, on: :create
 
   scope :past, -> { where('start_at < ?', Time.current).order(start_at: :desc) }
   scope :upcoming, -> { where('start_at > ?', Time.current).order(start_at: :asc) }
@@ -54,6 +55,10 @@ class Appointment < ApplicationRecord
   def set_defaults
     return if persisted? && status.present?
     self.status ||= :pending
+  end
+
+  def set_admin
+    self.admin_id = bookable.admin_id
   end
 
   def vet_id_should_be_vaild

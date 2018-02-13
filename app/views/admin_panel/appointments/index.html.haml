@@ -9,15 +9,29 @@
     .col-md-12.col-sm-12.col-xs-12
       .x_panel
         .x_content
-          %table.table
+          %table.table.datatable.appointments
             %thead
               %tr
-                %th #
+                %th{style: 'width:30px'} #
+                %th User
                 %th Booked object
                 %th Vet
                 %th Booked time
                 %th Session start
                 %th Status
                 %th Actions
+              %tr
+                %th{style: 'width:30px'}
+                  = text_field_tag :id, '', class: 'form-control', style: 'width:100%'
+                %th
+                  = text_field_tag :name, '', class: 'form-control', style: 'width:100%'
+                %th
+                  = select_tag :bookable_type, options_for_select(['', 'Clinic', 'DayCareCentre', 'GroomingCentre']), class: 'form-control select2'
+                %th
+                  = text_field_tag :vet_name, '', class: 'form-control', style: 'width:100%'
+                %th
+                %th
+                %th
+                  = select_tag :status, options_for_select([[], ['Pending', 0], ['Accepted', 1], ['Rejected', 2]]),  class: 'form-control select2'
+                %th
             %tbody
-              =render @appointments

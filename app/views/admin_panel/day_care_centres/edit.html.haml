@@ -6,11 +6,11 @@
   .clearfix
   
   = form_for @day_care_centre, url: admin_panel_day_care_centre_path(@day_care_centre),
-  html: { multipart: true, method: :put, class: 'form-horizontal form-label-left', autocomplete: 'off'} do |f|
+  html: { multipart: true, method: :put, class: 'form-horizontal form-label-left with_location', autocomplete: 'off'} do |f|
 
     = render partial: 'form', locals: { f: f }
 
-    = f.submit 'Update day_care_centre', class: 'btn btn-success pull-right'
+    = f.submit 'Update day care centre', class: 'btn btn-success pull-right'
 
 :javascript
   init_map();

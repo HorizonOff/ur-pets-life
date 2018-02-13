@@ -41,9 +41,21 @@ module AdminPanel
 
     def destroy
       if @trainer.destroy
-        render json: { message: 'Trainer was deleted' }, status: 200
+        respond_to do |format|
+          format.html do
+            flash[:success] = 'Trainer was deleted'
+            redirect_to admin_panel_trainers_path
+          end
+          format.js { render json: { message: 'Trainer was deleted' } }
+        end
       else
-        render json: { errors: @trainer.errors.full_messages }, status: 422
+        respond_to do |format|
+          format.html do
+            flash[:error] = "Trainer wasn't deleted"
+            render :show
+          end
+          format.js { render json: { errors: @trainer.errors.full_messages }, status: 422 }
+        end
       end
     end
 
@@ -60,17 +72,9 @@ module AdminPanel
     end
 
     def trainer_params
-      params.require(:trainer).permit(:name, :email, :picture, :mobile_number, :experience,
+      params.require(:trainer).permit(:name, :email, :picture, :mobile_number, :experience, :picture_cache,
                                       pet_type_ids: [], location_attributes: location_params, specialization_ids: [],
                                       qualifications_attributes: qualifications_params)
-    end
-
-    def qualifications_params
-      %i[id diploma university _destroy]
-    end
-
-    def location_params
-      %i[latitude longitude city area street building_type building_name unit_number villa_number comment]
     end
 
     def filter_trainers

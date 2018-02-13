@@ -35,7 +35,7 @@ module Api
       end
 
       def grooming_centres_query
-        @grooming_centres_query ||= ::Api::V1::LocationBasedQuery.new(GroomingCentre.all, params)
+        @grooming_centres_query ||= ::Api::V1::LocationBasedQuery.new('GroomingCentre', params)
       end
 
       def schedule_parser_service

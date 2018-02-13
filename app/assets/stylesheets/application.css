@@ -21,7 +21,6 @@
  *= require dataTables.bootstrap.min
  *= require buttons.bootstrap.min
 
- *= require_tree
  *= require_self
  */
 
@@ -89,4 +88,8 @@ div.error label {
 
 .dataTables_wrapper .dataTables_filter {
   visibility: hidden;
+}
+
+ul.msg_list li.full_width {
+  width: 100% !important;
 }

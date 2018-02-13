@@ -27,7 +27,7 @@ module Api
       end
 
       def clinics_query
-        @clinics_query ||= ::Api::V1::LocationBasedQuery.new(Clinic.all, params)
+        @clinics_query ||= ::Api::V1::LocationBasedQuery.new('Clinic', params)
       end
     end
   end

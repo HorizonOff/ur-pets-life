@@ -27,9 +27,23 @@ module AdminPanel
     end
 
     def destroy
-      @user.destroy
-      flash[:success] = 'User was successfully deleted'
-      redirect_to admin_panel_users_path
+      if @user.destroy
+        respond_to do |format|
+          format.html do
+            flash[:success] = 'User was deleted'
+            redirect_to admin_panel_users_path
+          end
+          format.js { render json: { message: 'User was deleted' } }
+        end
+      else
+        respond_to do |format|
+          format.html do
+            flash[:error] = "User wasn't deleted"
+            render :show
+          end
+          format.js { render json: { errors: @user.errors.full_messages }, status: 422 }
+        end
+      end
     end
 
     private
@@ -44,10 +58,6 @@ module AdminPanel
 
     def user_params
       params.require(:user).permit(:first_name, :last_name, :mobile_number, location_attributes: location_params)
-    end
-
-    def location_params
-      %i[id latitude longitude city area street building_type building_name unit_number villa_number comment _destroy]
     end
 
     def filter_users

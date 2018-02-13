@@ -44,6 +44,8 @@ module Api
         Api::V1::Schedules,
         Api::V1::PetTypes,
         Api::V1::ContactRequests,
+        Api::V1::Posts,
+        Api::V1::Comments,
         self
       ].freeze
 

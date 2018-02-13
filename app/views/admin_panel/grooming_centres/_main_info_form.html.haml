@@ -10,7 +10,7 @@
         .form-group
           = f.label :admin_id, 'Admin', class: 'control-label col-md-3 col-sm-3 col-xs-12'
           .col-md-9.col-sm-9.col-xs-12
-            = f.select :admin_id, options_from_collection_for_select(Admin.for_grooming_centre, :id, :email), { include_blank: true }, { class: 'select2' }
+            = f.select :admin_id, @grooming_centre.admins_for_select, { include_blank: true }, { class: 'select2' }
       .form-group
         = f.label :name, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
           Name
@@ -18,9 +18,11 @@
         .col-md-9.col-sm-9.col-xs-12
           = f.text_field :name, class: 'form-control', required: true
       .form-group
-        = f.label :picture, class: 'control-label col-md-3 col-sm-3 col-xs-12'
+        = f.label :picture, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
+          Picture
+          %span.required *
         .col-md-9.col-sm-9.col-xs-12
-          -if @grooming_centre.picture.present?
+          -if @grooming_centre.picture?
             =image_tag @grooming_centre.picture.medium.url, class: 'avatar-show', style: ' display:block;margin:auto'
 
           = f.file_field :picture

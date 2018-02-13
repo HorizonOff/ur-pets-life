@@ -21,6 +21,12 @@
               %li
                 %i.fa.fa-envelope.user-profile-icon
                 = @trainer.email
+              %li
+                %i.fa.fa-paw.user-profile-icon
+                = @trainer.pet_types.pluck(:name).join(', ')
+              %li
+                Experience: 
+                = @trainer.experience
 
             =link_to edit_admin_panel_trainer_path(@trainer), class: 'btn btn-warning' do
               %i.fa.fa-edit.m-right-xs

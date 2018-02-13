@@ -52,7 +52,7 @@ module AdminPanel
             flash[:success] = 'DayCare Centre was deleted'
             redirect_to admin_panel_day_care_centres_path
           end
-          format.json { render json: { message: 'DayCare Centre was deleted' }, status: 200 }
+          format.json { render json: { message: 'DayCare Centre was deleted' } }
         end
       else
         respond_to do |format|
@@ -87,19 +87,9 @@ module AdminPanel
 
     def day_care_centre_params
       params.require(:day_care_centre).permit(:admin_id, :name, :email, :picture, :mobile_number, :website,
-                                              :description,
+                                              :description, :picture_cache,
                                               service_option_ids: [], location_attributes: location_params,
                                               schedule_attributes: schedule_params)
-    end
-
-    def location_params
-      %i[latitude longitude city area street building_type building_name unit_number villa_number comment]
-    end
-
-    def schedule_params
-      %i[day_and_night monday_open_at monday_close_at tuesday_open_at tuesday_close_at wednesday_open_at
-         wednesday_close_at thursday_open_at thursday_close_at friday_open_at friday_close_at saturday_open_at
-         saturday_close_at sunday_open_at sunday_close_at]
     end
 
     def filter_day_care_centres

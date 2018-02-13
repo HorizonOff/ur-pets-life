@@ -1,0 +1,40 @@
+%div
+  .row
+    .col-md-12.col-sm-12.col-xs-12
+      .x_panel
+        .x_title
+          %h2 Post
+          .clearfix
+        .x_content
+          .col-md-3.col-sm-3.col-xs-12.profile_left
+            %ul.list-unstyled.user_data
+              %li
+                %i.fa.fa-map-marker.user-profile-icon
+                = @post.user.name
+              %li
+                %i.fa.fa-phone.user-profile-icon
+                = @post.user.mobile_number
+              %li
+                %i.fa.fa-envelope.user-profile-icon
+                = @post.user.email
+              %li.m-top-xs
+                %i.fa.fa-external-link.user-profile-icon
+                = @post.created_at.strftime('%-d %b %Y %I:%M %p')
+              %li
+                Comments: #{@post.comments.size}
+
+          .col-md-9.col-sm-9.col-xs-12
+            %h1= @post.title
+            %blockquote
+              %p= @post.message
+    .col-md-12.col-sm-12.col-xs-12
+      .x_panel
+        .x_title
+          %h2 Comments
+          .clearfix
+        .x_content
+          %ul.list-unstyled.msg_list
+            = render @comments
+          .clearfix
+        .x_footer
+          = paginate @comments, remote: true, params: { controller: 'admin_panel/comments', action: 'index', post_id: @post.id }

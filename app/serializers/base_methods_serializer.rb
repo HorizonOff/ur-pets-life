@@ -31,6 +31,10 @@ class BaseMethodsSerializer < ActiveModel::Serializer
     object.class.to_s
   end
 
+  def created_at
+    object.created_at.to_i
+  end
+
   private
 
   def show_distance?
@@ -38,6 +42,6 @@ class BaseMethodsSerializer < ActiveModel::Serializer
   end
 
   def show_user_distance?
-    object.user.location && scope[:latitude].present? && scope[:longitude].present?
+    object.user_location && scope[:latitude].present? && scope[:longitude].present?
   end
 end

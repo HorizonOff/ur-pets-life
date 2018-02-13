@@ -8,7 +8,7 @@ class Pet < ApplicationRecord
   validates :location, presence: { message: 'Locations is required' }, if: :lost_or_found?
 
   has_many :vaccine_types, through: :pet_type
-  has_many :vaccinations, dependent: :destroy
+  has_many :vaccinations, -> { order(done_at: :desc) }, dependent: :destroy
   has_many :pictures, dependent: :destroy
   has_many :appointments, dependent: :destroy
   has_many :past_clinic_appointments, -> { where(bookable_type: 'Clinic').past }, class_name: 'Appointment'

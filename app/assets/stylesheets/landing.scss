@@ -1,0 +1,258 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, or any plugin's
+ * vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any other CSS/SCSS
+ * files in this directory. Styles in this file should be added after the last require_* statement.
+ * It is generally better to create a new file per style scope.
+ *
+ *= require bootstrap4/bootstrap.min
+ *= require bootstrap4/bootstrap-grid.min
+ *= require bootstrap4/bootstrap-reboot.min
+ *= require animate.css
+
+ *= require_self
+ */
+
+.container-fluid {
+  font-family: Helvetica;
+  max-width: 1440px !important;
+}
+
+#container-1 {
+  padding-top: 60px;
+  padding-left: 60px;
+  max-width: 1440px !important;
+  color: #FFFFFF;
+  height: 887px;
+
+
+  #logo {
+    width: 250px;
+    height: 82.29px
+  }
+
+  background-image: image_url('landing/bg_landing.png');
+  background-repeat: no-repeat;
+
+  .first-text {
+    font-size: 48px;
+    line-height: 60px;
+    margin-top: 130px;
+  }
+
+  .second-text {
+    font-size: 24px;
+    line-height: 29px;
+    margin-top: 50px;
+  }
+
+  .store-buttons {
+    margin-top: 240px;
+
+    .store-button {
+      margin-left: 16px;
+    }
+  }
+
+  .iphone-image {
+    background-image: image_url('landing/first_iphones.png');
+    background-repeat: no-repeat;
+    height: 887px;
+    background-position-y: 60px;
+    margin-right: 15px;
+  }
+}
+
+
+#container-2 {
+  background-color: #ffffff;
+  padding-top: 60px;
+  padding-bottom: 80px;
+  height: 307px;
+  z-index: 2;
+  position: relative;
+
+  .whats-up-text {
+    font-size: 36px;
+  }
+
+  .whats-up-text-2 {
+    text-align: center;
+    color: #7B7B7B;
+    margin-top: 20px;
+    font-size: 18px;
+  }
+}
+
+
+#container-3 {
+   height: 1100px;
+   z-index: 3;
+
+  .know-section {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 24px;
+    height: 361px;
+
+    .know-image {
+      img {max-width:100%; height:auto}
+      padding: 20px;
+    }
+
+    .clinics-title {
+      text-align: center;
+      margin-top: 44px;
+    }
+
+    .grooming-title {
+      text-align: center;
+      margin-top: 43px;
+    }
+
+    .trainers-title {
+      text-align: center;
+      margin-top: 44px;
+    }
+
+    .day-care-title {
+      text-align: center;
+      margin-top: 45px;
+    }
+
+    .lost-title {
+      text-align: center;
+      margin-top: 44px;
+    }
+
+    .adoption-title {
+      text-align: center;
+      margin-top: 44px;
+    }
+
+    .description {
+      color: #7F7F7F;
+      margin-top: 20px;
+      font-size: 18px;
+    }
+  }
+
+  .know-section-2 {
+    margin-top: 70px;
+  }
+
+  .know-section-3 {
+    color:  #F8951D;
+    font-size: 24px;
+    margin-top: 100px;
+  }
+}
+
+#container-4 {
+  height: 887px;
+  z-index: 4;
+  background-image: image_url('landing/bg_landing2.png');
+  background-repeat: no-repeat;
+
+  .iphone {
+    z-index: 3;
+    margin-top: -66px;
+    margin-left: 80px;
+  }
+
+  .title {
+    font-size: 36px;
+    color: white;
+    margin-top: 48%;
+  }
+
+  .description {
+    margin-top: 20px;
+    font-size: 18px;
+    color: white;
+    margin-right: 4px;
+  }
+}
+
+#container-5 {
+  background-image: image_url('landing/third_iphones.png');
+  background-repeat: no-repeat;
+  background-position-x: center;
+  background-position-y: 304px;
+  height: 867px;
+  z-index: 5;
+
+  .title {
+    font-size: 36px;
+    margin-top: 70px;
+  }
+
+  .description {
+    font-size: 18px;
+    margin-top: 20px;
+    color: #7F7F7F;
+    text-align: center;
+  }
+}
+
+#container-6 {
+  height: 361px;
+  background-image: image_url('landing/bg-footer.png');
+  background-repeat: no-repeat;
+  background-position-x: center;
+  padding-top: 55px;
+  z-index: 6;
+
+  .small-social-icon {
+    padding: 28px;
+  }
+
+  .btn-social {
+    cursor: pointer;
+    margin: 6px;
+    height: 53px;
+    width: 53px;
+    background-repeat: no-repeat;
+    border-radius: 100%;
+  }
+
+  .fb-button {
+    background-image: image_url('landing/facebook-logo.png');
+    background-position-y: 11px;
+    background-position-x: 17px;
+    background-color: #4568B0;
+
+  }
+
+  .tw-button {
+    background-image: image_url('landing/twitter-logo.png');
+    background-position-y: 14px;
+    background-position-x: 12px;
+    background-color: #2AA3F0;
+
+  }
+
+  .gl-button {
+    background-image: image_url('landing/google-plus-logo.png');
+    background-position-y: 15px;
+    background-position-x: 8px;
+    background-color: #F05643;
+  }
+
+  .copyright {
+    color: #ffffff;
+    font-size: 24px;
+    margin-top: 50px;
+  }
+
+  #footer-logo {
+    width: 250px;
+    height: 82.29px;
+    margin-top: 35px;
+  }
+}

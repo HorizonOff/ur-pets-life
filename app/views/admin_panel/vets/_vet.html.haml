@@ -12,4 +12,4 @@
     =link_to 'Show', admin_panel_vet_path(vet), class: 'btn btn-primary btn-xs'
     =link_to 'View calendar', admin_panel_vet_calendars_path(vet), class: 'btn btn-info btn-xs'
     =link_to 'Edit', edit_admin_panel_vet_path(vet), class: 'btn btn-warning btn-xs'
-    =link_to 'Delete', admin_panel_vet_path(vet), method: :delete, class: 'btn btn-danger btn-xs'
+    =link_to 'Delete', admin_panel_vet_path(vet), data: { confirm: 'Are you sure?' }, method: :delete, class: 'btn btn-danger btn-xs'

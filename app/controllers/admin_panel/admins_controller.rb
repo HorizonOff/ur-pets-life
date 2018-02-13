@@ -22,9 +22,9 @@ module AdminPanel
 
     def destroy
       if @admin.destroy
-        render json: { message: 'Admin was deleted' }, status: 200
+        render js: { message: 'Admin was deleted' }
       else
-        render json: { errors: @admin.errors.full_messages }, status: 422
+        render js: { errors: @admin.errors.full_messages }, status: 422
       end
     end
 
