@@ -17,6 +17,7 @@ class Appointment < ApplicationRecord
 
   has_many :cart_items
   has_many :service_details, through: :cart_items
+  has_many :service_types, through: :service_details
 
   after_initialize :set_defaults
 

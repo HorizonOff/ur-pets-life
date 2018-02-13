@@ -1,5 +1,5 @@
 class AppointmentSerializer < ActiveModel::Serializer
-  attributes :id, :start_at, :bookable_type, :total_price
+  attributes :id, :start_at, :bookable_type, :total_price, :service_type_names
 
   belongs_to :vet do
     object.vet if object.for_clinic?
@@ -15,6 +15,10 @@ class AppointmentSerializer < ActiveModel::Serializer
 
   attribute :next_appointment do
     object.next_appointment.start_at.to_i if object.next_appointment.present?
+  end
+
+  def service_type_names
+    object.service_types.pluck(:name)
   end
 
   def start_at

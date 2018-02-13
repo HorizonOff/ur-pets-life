@@ -32,8 +32,7 @@ class Pet < ApplicationRecord
   validates_presence_of :description, message: 'Short description is required', if: :lost_or_found?
   validates :mobile_number, format: { with: /\A\+\d+\z/, message: 'Mobile Number is invalid' },
                             presence: { message: 'Mobile number is required' },
-                            length: { within: 11..13,
-                                      too_short: 'Mobile number should contain at least 10 symbols',
+                            length: { within: 11..13, too_short: 'Mobile number should contain at least 10 symbols',
                                       too_long: 'Mobile number should contain not more than 12 symbols' },
                             if: :lost_or_found?
 
