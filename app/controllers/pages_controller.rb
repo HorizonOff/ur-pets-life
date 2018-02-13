@@ -1,8 +1,5 @@
 class PagesController < ApplicationController
   layout 'landing'
 
-
-  def landing
-
-  end
+  def landing; end
 end
