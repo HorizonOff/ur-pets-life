@@ -1,6 +1,7 @@
 class CreateAppointments < ActiveRecord::Migration[5.1]
   def change
     create_table :appointments do |t|
+      t.references :admin, foreign_key: true
       t.references :user, foreign_key: true
       t.references :bookable, polymorphic: true
       t.references :pet, foreign_key: true
@@ -20,7 +21,6 @@ class CreateAppointments < ActiveRecord::Migration[5.1]
       t.index :status
       t.index :total_price
       t.index :created_at
-
     end
   end
 end
