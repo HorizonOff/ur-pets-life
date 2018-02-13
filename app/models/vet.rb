@@ -25,15 +25,17 @@ class Vet < ApplicationRecord
   has_one :admin, through: :clinic
 
   has_many :calendars, -> { order(start_at: :asc) }, dependent: :destroy
-  has_many :appointments, dependent: :destroy
-  has_many :qualifications, as: :skill, inverse_of: :skill
-  has_many :favorites, as: :favoritable
+  has_many :appointments
+  has_many :qualifications, as: :skill, inverse_of: :skill, dependent: :destroy
+  has_many :favorites, as: :favoritable, dependent: :destroy
 
   has_and_belongs_to_many :specializations
   has_and_belongs_to_many :pet_types
 
   accepts_nested_attributes_for :qualifications, allow_destroy: true
   accepts_nested_attributes_for :location, update_only: true, allow_destroy: true
+
+  acts_as_paranoid
 
   mount_uploader :avatar, PhotoUploader
   validates_presence_of :avatar
@@ -50,7 +52,7 @@ class Vet < ApplicationRecord
   end
 
   def check_location
-    return location.destroy if !is_emergency? && location
+    return location.really_destroy! if !is_emergency? && location
     return unless use_clinic_location?
     location_attributes = clinic.location.attributes.except('id', 'place_type', 'place_id', 'created_at',
                                                             'updated_at', 'comment')

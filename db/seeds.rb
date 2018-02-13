@@ -263,15 +263,19 @@ clinics = [{ name: 'ABVC', email: 'info@abvc.ae', location_attributes: { city: '
 
 if Clinic.count.zero?
   if Rails.env.development?
-    Clinic.create(name: 'Clinic 1', email: Faker::Internet.email, mobile_number: '+805050505050',
-                  is_emergency: [true, false].sample, location_attributes: afrika,
-                  schedule_attributes: schedule_attributes, consultation_fee: rand(500))
-    Clinic.create(name: 'Clinic 2', email: Faker::Internet.email, mobile_number: '+805050505051',
-                  is_emergency: [true, false].sample, location_attributes: mukachevo,
-                  schedule_attributes: schedule_attributes, consultation_fee: rand(500))
-    Clinic.create(name: 'Clinic 3', email: Faker::Internet.email, mobile_number: '+805050505052',
-                  is_emergency: [true, false].sample, location_attributes: uzhgorod,
-                  schedule_attributes: schedule_attributes, consultation_fee: rand(500))
+    c = Clinic.new(name: 'Clinic 1', email: Faker::Internet.email, mobile_number: '+805050505050',
+                      is_emergency: [true, false].sample, location_attributes: afrika,
+                      schedule_attributes: schedule_attributes, consultation_fee: rand(500))
+    c.save(validate: false)
+    c = Clinic.new(name: 'Clinic 2', email: Faker::Internet.email, mobile_number: '+805050505051',
+                      is_emergency: [true, false].sample, location_attributes: mukachevo,
+                      schedule_attributes: schedule_attributes, consultation_fee: rand(500))
+    c.save(validate: false)
+
+    c = Clinic.new(name: 'Clinic 3', email: Faker::Internet.email, mobile_number: '+805050505052',
+                      is_emergency: [true, false].sample, location_attributes: uzhgorod,
+                      schedule_attributes: schedule_attributes, consultation_fee: rand(500))
+    c.save(validate: false)
   else
     clinics.each do |c|
       Clinic.create(name: c[:name], email: c[:email], mobile_number: c[:mobile_number],
@@ -330,30 +334,36 @@ service_options = [[pick_up], [drop_off], [pick_up, drop_off]]
 pet_types = [[dog], [cat], [cat, dog]]
 
 if GroomingCentre.count.zero?
-  GroomingCentre.create(name: 'GroomingCentre 1', email: Faker::Internet.email, mobile_number: '+805050505050',
+  g = GroomingCentre.new(name: 'GroomingCentre 1', email: Faker::Internet.email, mobile_number: '+805050505050',
                         location_attributes: afrika,
                         schedule_attributes: schedule_attributes)
-  GroomingCentre.create(name: 'GroomingCentre 2', email: Faker::Internet.email, mobile_number: '+805050505051',
+  g.save(validate: false)
+  g = GroomingCentre.new(name: 'GroomingCentre 2', email: Faker::Internet.email, mobile_number: '+805050505051',
                         location_attributes: mukachevo,
                         schedule_attributes: schedule_attributes)
-  GroomingCentre.create(name: 'GroomingCentre 3', email: Faker::Internet.email, mobile_number: '+805050505052',
+  g.save(validate: false)
+  g = GroomingCentre.new(name: 'GroomingCentre 3', email: Faker::Internet.email, mobile_number: '+805050505052',
                         location_attributes: uzhgorod,
                         schedule_attributes: schedule_attributes)
+  g.save(validate: false)
   GroomingCentre.all.each do |gc|
     gc.service_options = service_options.sample
   end
 end
 
 if DayCareCentre.count.zero?
-  DayCareCentre.create(name: 'DayCareCentre 1', email: Faker::Internet.email, mobile_number: '+805050505050',
+  d = DayCareCentre.new(name: 'DayCareCentre 1', email: Faker::Internet.email, mobile_number: '+805050505050',
                        location_attributes: afrika,
                        schedule_attributes: schedule_attributes)
-  DayCareCentre.create(name: 'DayCareCentre 2', email: Faker::Internet.email, mobile_number: '+805050505051',
+  d.save(validate: false)
+  d = DayCareCentre.new(name: 'DayCareCentre 2', email: Faker::Internet.email, mobile_number: '+805050505051',
                        location_attributes: mukachevo,
                        schedule_attributes: schedule_attributes)
-  DayCareCentre.create(name: 'DayCareCentre 3', email: Faker::Internet.email, mobile_number: '+805050505052',
+  d.save(validate: false)
+  d = DayCareCentre.new(name: 'DayCareCentre 3', email: Faker::Internet.email, mobile_number: '+805050505052',
                        location_attributes: uzhgorod,
                        schedule_attributes: schedule_attributes)
+  d.save(validate: false)
   DayCareCentre.all.each do |dcc|
     dcc.service_options = service_options.sample
   end

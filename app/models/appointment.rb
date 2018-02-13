@@ -4,11 +4,11 @@ class Appointment < ApplicationRecord
   STATUS_OPTIONS = %i[pending accepted rejected].freeze
   enum status: STATUS_OPTIONS
 
-  belongs_to :user
-  belongs_to :bookable, polymorphic: true
-  belongs_to :admin, optional: true
-  belongs_to :pet
-  belongs_to :vet, optional: true
+  belongs_to :user, -> { with_deleted }
+  belongs_to :bookable, -> { with_deleted }, polymorphic: true
+  belongs_to :admin, -> { with_deleted }, optional: true
+  belongs_to :pet, -> { with_deleted }
+  belongs_to :vet, -> { with_deleted }, optional: true
   belongs_to :calendar, optional: true
   belongs_to :main_appointment, class_name: 'Appointment', optional: true
 
@@ -26,6 +26,8 @@ class Appointment < ApplicationRecord
            :appointmet_overlaps
 
   after_validation :set_price, on: :create
+
+  acts_as_paranoid
 
   scope :past, -> { where('start_at < ?', Time.current).order(start_at: :desc) }
   scope :upcoming, -> { where('start_at > ?', Time.current).order(start_at: :asc) }

@@ -2,18 +2,17 @@ class Pet < ApplicationRecord
   SEX_OPTIONS = %i[male female].freeze
   enum sex: SEX_OPTIONS
 
-  belongs_to :user, optional: true
+  belongs_to :user, -> { with_deleted }, optional: true
   belongs_to :breed, optional: true
   belongs_to :pet_type
-  validates :location, presence: { message: 'Locations is required' }, if: :lost_or_found?
 
   has_many :vaccine_types, through: :pet_type
   has_many :vaccinations, -> { order(done_at: :desc) }, inverse_of: :pet, dependent: :destroy
   has_many :pictures, inverse_of: :pet, dependent: :destroy
-  has_many :appointments, dependent: :destroy
+  has_many :appointments
   has_many :past_clinic_appointments, -> { where(bookable_type: 'Clinic').past }, class_name: 'Appointment'
 
-  has_one :location, as: :place, inverse_of: :place
+  has_one :location, as: :place, inverse_of: :place, dependent: :destroy
   has_one :user_location, through: :user, source: :location
   reverse_geocoded_by 'locations.latitude', 'locations.longitude'
 
@@ -23,6 +22,7 @@ class Pet < ApplicationRecord
   accepts_nested_attributes_for :vaccinations, allow_destroy: true
   accepts_nested_attributes_for :pictures, allow_destroy: true
 
+  validates_presence_of :location, message: 'Locations is required', if: :lost_or_found?
   validates_presence_of :name, message: 'Name is required', if: :not_found?
   validates_presence_of :birthday, message: 'Birthday is required', if: :not_found?
   validates_presence_of :sex, message: 'Sex is required', if: :not_found?
@@ -40,6 +40,8 @@ class Pet < ApplicationRecord
   validate :sex_should_be_valid, :breed_should_be_valid, :lost_and_found_should_be_vaild
   # validates :avatar, file_size: { less_than: 1.megabyte }
   mount_uploader :avatar, PhotoUploader
+
+  acts_as_paranoid
 
   has_paper_trail only: [:weight], skip: [:avatar]
 
@@ -95,7 +97,7 @@ class Pet < ApplicationRecord
   private
 
   def remove_location
-    location.destroy if location.present?
+    location.really_destroy! if location.present?
   end
 
   def additional_type_required?

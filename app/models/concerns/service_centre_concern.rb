@@ -21,11 +21,13 @@ module ServiceCentreConcern
     validates :location, presence: { message: 'Location is required' }
 
     has_many :appointments, as: :bookable
-    has_many :favorites, as: :favoritable
+    has_many :favorites, as: :favoritable, dependent: :destroy
 
     has_one :schedule, as: :schedulable, inverse_of: :schedulable
     has_one :location, as: :place, inverse_of: :place
     accepts_nested_attributes_for :location, update_only: true
+
+    acts_as_paranoid
 
     mount_uploader :picture, PhotoUploader
     validates_presence_of :picture

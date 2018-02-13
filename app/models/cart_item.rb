@@ -1,6 +1,6 @@
 class CartItem < ApplicationRecord
   belongs_to :appointment
-  belongs_to :service_detail
+  belongs_to :service_detail, -> { with_deleted }
 
   before_validation :set_price, on: :create
 

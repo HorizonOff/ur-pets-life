@@ -2,6 +2,8 @@ class Schedule < ApplicationRecord
   belongs_to :schedulable, polymorphic: true
   validate :check_hours
 
+  acts_as_paranoid
+
   DAYS = { '0' => 'sunday',
            '1' => 'monday',
            '2' => 'tuesday',
