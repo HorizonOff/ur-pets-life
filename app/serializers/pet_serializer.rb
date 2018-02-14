@@ -1,8 +1,8 @@
 class PetSerializer < BaseMethodsSerializer
   type 'pet'
 
-  attributes :id, :avatar_url, :name, :sex, :weight, :birthday, :comment, :pet_type_id,
-             :lost_at, :is_for_adoption
+  attributes :id, :avatar_url, :name, :sex, :weight, :birthday, :comment, :pet_type_id, :lost_at, :is_for_adoption,
+             :municipality_tag, :microchip
 
   belongs_to :breed, unless: -> { object.pet_type_is_additional? }
   attribute :additional_type, if: -> { object.pet_type_is_additional? }
