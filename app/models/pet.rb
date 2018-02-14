@@ -1,6 +1,5 @@
 class Pet < ApplicationRecord
-  SEX_OPTIONS = %i[male female].freeze
-  enum sex: SEX_OPTIONS
+  enum sex: User::GENDER_OPTIONS
 
   belongs_to :user, -> { with_deleted }, optional: true
   belongs_to :breed, optional: true
