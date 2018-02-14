@@ -33,7 +33,7 @@ module Api
 
       def user_params
         params.require(:user).permit(:first_name, :last_name, :email, :mobile_number, :password, :password_confirmation,
-                                     :google_id, :facebook_id,
+                                     :google_id, :facebook_id, :birthday, :gender,
                                      location_attributes: %i[latitude longitude city area street building_type
                                                              building_name unit_number villa_number comment])
       end

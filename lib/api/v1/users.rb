@@ -6,15 +6,27 @@ module Api
       swagger_schema :User do
         property :first_name do
           key :type, :string
+          key :example, 'TestFirstName'
         end
         property :last_name do
           key :type, :string
+          key :example, 'TestLastName'
         end
         property :email do
           key :type, :email
+          key :example, 'test1@mail.com'
         end
         property :mobile_number do
           key :type, :string
+          key :example, '+12345678901'
+        end
+        property :gender do
+          key :type, :integer
+          key :example, 0
+        end
+        property :birthday do
+          key :type, :integer
+          key :example, 1516217199
         end
         property :facebook_id do
           key :type, :string
@@ -23,25 +35,37 @@ module Api
           key :type, :string
         end
         property :password do
-          key :type, :string
+          key :type, '111111'
         end
         property :password_confirmation do
-          key :type, :string
+          key :type, '111111'
         end
       end
 
       swagger_schema :UserFields do
         property :first_name do
           key :type, :string
+          key :example, 'TestFirstName'
         end
         property :last_name do
           key :type, :string
+          key :example, 'TestLastName'
         end
         property :email do
           key :type, :email
+          key :example, 'test1@mail.com'
         end
         property :mobile_number do
           key :type, :string
+          key :example, '+12345678901'
+        end
+        property :gender do
+          key :type, :integer
+          key :example, 0
+        end
+        property :birthday do
+          key :type, :integer
+          key :example, 1516217199
         end
       end
 
@@ -160,15 +184,27 @@ module Api
               property :user do
                 property :first_name do
                   key :type, :string
+                  key :example, 'TestFirstName'
                 end
                 property :last_name do
                   key :type, :string
+                  key :example, 'TestLastName'
                 end
                 property :email do
                   key :type, :email
+                  key :example, 'user1@mail.com'
                 end
                 property :mobile_number do
                   key :type, :string
+                  key :example, '+12345678901'
+                end
+                property :gender do
+                  key :type, :integer
+                  key :example, 0
+                end
+                property :birthday do
+                  key :type, :integer
+                  key :example, 1516217199
                 end
                 property :location_attributes do
                   key :'$ref', :Location

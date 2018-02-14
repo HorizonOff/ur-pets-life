@@ -1,5 +1,8 @@
 class User < ApplicationRecord
   include EmailCheckable
+  GENDER_OPTIONS = %i[male female].freeze
+  enum gender: GENDER_OPTIONS
+
   # Include default devise modules. Others available are:
   # :rememberable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -36,6 +39,8 @@ class User < ApplicationRecord
 
   validates :facebook_id, :google_id, uniqueness: true, allow_blank: true
 
+  validate :gender_should_be_valid
+
   attr_accessor :skip_password_validation
 
   acts_as_paranoid
@@ -57,8 +62,25 @@ class User < ApplicationRecord
 
   before_validation :check_location
 
+  def birthday=(value)
+    value = Time.zone.at(value.to_i)
+    super
+  end
+
   def name
     first_name + ' ' + last_name
+  end
+
+  def gender=(value)
+    super value if value.nil?
+    value = value.to_i if value.in?(%w[0 1])
+    super value
+    @gender_backup = nil
+  rescue ArgumentError => exception
+    error_message = 'is not a valid gender'
+    raise unless exception.message.include?(error_message)
+    @gender_backup = value
+    self[:gender] = nil
   end
 
   private
@@ -70,5 +92,12 @@ class User < ApplicationRecord
   def password_required?
     return false if skip_password_validation
     !persisted? || !password.nil? || !password_confirmation.nil?
+  end
+
+  def gender_should_be_valid
+    return unless @gender_backup
+    self.gender ||= @gender_backup
+    error_message = 'Gender is invalid'
+    errors.add(:gender, error_message)
   end
 end
