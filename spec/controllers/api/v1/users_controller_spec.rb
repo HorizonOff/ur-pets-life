@@ -159,7 +159,9 @@ RSpec.describe Api::V1::UsersController, type: :controller do
     let(:success_response) {
       { 'user' => { 'first_name' => @user.first_name,
                     'last_name' => @user.last_name, 'email' => @user.email,
-                    'mobile_number' => @user.mobile_number, 'location_attributes' => nil}
+                    'mobile_number' => @user.mobile_number,
+                    'birthday' => @user.birthday, 'gender' => User.genders[@user.gender],
+                    'location_attributes' => nil}
       }
     }
 

@@ -20,7 +20,7 @@ class BaseMethodsSerializer < ActiveModel::Serializer
   end
 
   def birthday
-    object.birthday.to_i
+    object.birthday.to_i if object.birthday
   end
 
   def distance
