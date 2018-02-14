@@ -87,10 +87,10 @@ module Api
 
       def pet_params
         params.require(:pet).permit(:avatar, :name, :birthday, :sex, :pet_type_id, :breed_id, :additional_type, :weight,
-                                    :comment, :found_at, :additional_comment, :mobile_number, :description,
-                                    pictures_attributes: %i[id attachment _destroy],
-                                    vaccinations_attributes: vaccinations_params,
-                                    location_attributes: location_params)
+                                    :comment, :found_at, :additional_comment, :mobile_number, :description, :microchip,
+                                    :municipality_tag, pictures_attributes: %i[id attachment _destroy],
+                                                       vaccinations_attributes: vaccinations_params,
+                                                       location_attributes: location_params)
       end
 
       def lost_params

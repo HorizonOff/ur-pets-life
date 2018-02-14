@@ -55,6 +55,14 @@ module Api
           property :is_for_adoption do
             key :type, :boolean
           end
+          property :microchip do
+            key :type, :string
+            key :example, '123456789012345'
+          end
+          property :municipality_tag do
+            key :type, :string
+            key :example, 'D12345 1234'
+          end
           property :breed do
             property :id do
               key :type, :integer
@@ -196,6 +204,20 @@ module Api
             key :name, 'pet[avatar]'
             key :in, :formData
             key :type, :file
+          end
+          parameter do
+            key :name, 'pet[microchip]'
+            key :in, :formData
+            key :type, :string
+            key :example, '123456789012345'
+            key :description, 'Required unless pet_type_id - 3 - Other'
+          end
+          parameter do
+            key :name, 'pet[municipality_tag]'
+            key :in, :formData
+            key :type, :string
+            key :example, 'D12345 1234'
+            key :description, 'Required unless pet_type_id - 3 - Other'
           end
 
 
@@ -348,6 +370,20 @@ module Api
             key :name, 'pet[avatar]'
             key :in, :formData
             key :type, :file
+          end
+          parameter do
+            key :name, 'pet[microchip]'
+            key :in, :formData
+            key :type, :string
+            key :example, '123456789012345'
+            key :description, 'Required unless pet_type_id - 3 - Other'
+          end
+          parameter do
+            key :name, 'pet[municipality_tag]'
+            key :in, :formData
+            key :type, :string
+            key :example, 'D12345 1234'
+            key :description, 'Required unless pet_type_id - 3 - Other'
           end
 
 

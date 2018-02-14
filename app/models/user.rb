@@ -63,7 +63,7 @@ class User < ApplicationRecord
   before_validation :check_location
 
   def birthday=(value)
-    value = Time.zone.at(value.to_i)
+    value = Time.zone.at(value.to_i) if value.present?
     super
   end
 
