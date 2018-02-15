@@ -22,10 +22,10 @@ class Pet < ApplicationRecord
   accepts_nested_attributes_for :pictures, allow_destroy: true
 
   validates_presence_of :location, message: 'Locations is required', if: :lost_or_found?
-  validates_presence_of :name, message: 'Name is required', if: :not_found?
-  validates_presence_of :birthday, message: 'Birthday is required', if: :not_found?
-  validates_presence_of :sex, message: 'Sex is required', if: :not_found?
-  validates_presence_of :weight, message: 'Weight is required', if: :not_found?
+  validates_presence_of :name, message: 'Name is required', if: :owned?
+  validates_presence_of :birthday, message: 'Birthday is required', if: :owned?
+  validates_presence_of :sex, message: 'Sex is required', if: :owned?
+  validates_presence_of :weight, message: 'Weight is required', if: :owned?
   validates_presence_of :additional_type, message: 'Type is required', if: :additional_type_required?
 
   validates_presence_of :description, message: 'Short description is required', if: :lost_or_found?
@@ -100,10 +100,26 @@ class Pet < ApplicationRecord
     @pet_type_is_additional ||= pet_type.is_additional_type?
   end
 
+  def owned?
+    @owned ||= found_at.blank?
+  end
+
+  def lost?
+    @lost ||= lost_at.present?
+  end
+
+  def found?
+    @found ||= found_at.present?
+  end
+
+  def lost_or_found?
+    @lost_or_found ||= lost? || found?
+  end
+
   private
 
   def owned_main_type_pet?
-    @owned_main_type_pet ||= not_found? && !pet_type_is_additional?
+    @owned_main_type_pet ||= owned? && !pet_type_is_additional?
   end
 
   def remove_location
@@ -111,15 +127,7 @@ class Pet < ApplicationRecord
   end
 
   def additional_type_required?
-    @additional_type_required ||= not_found? && pet_type_is_additional?
-  end
-
-  def not_found?
-    @not_found ||= found_at.blank?
-  end
-
-  def lost_or_found?
-    @lost_or_found ||= lost_at.present? || found_at.present?
+    @additional_type_required ||= owned? && pet_type_is_additional?
   end
 
   def sex_should_be_valid

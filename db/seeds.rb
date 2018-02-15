@@ -421,11 +421,12 @@ pets_pictures = %w[cat_1.jpg cat_2.png dog_1.jpg dog_2.png other_1.jpg other_2.p
 
 if Pet.count.zero?
   user.pets.create(name: 'Tom', sex: 1, birthday: 1516017199, pet_type_id: 1, breed_id: 205,
-                   is_for_adoption: true, weight: 1,
+                   is_for_adoption: true, weight: 1, microchip: '123456789012345', municipality_tag: 'D12345 1234',
                    avatar: File.open(File.join(Rails.root, 'public', 'images', 'cat_1.jpg')))
   user.pets.create(name: 'Pluto', sex: 1, birthday: 1516017199, pet_type_id: 2, breed_id: 3,  weight: 2,
                    lost_at: 1516217199, description: 'My favorite dog', additional_comment: 'Help me',
                    mobile_number: '+805050505052', location_attributes: uzhgorod,
+                   microchip: '123456789012345', municipality_tag: 'D12345 1234',
                    avatar: File.open(File.join(Rails.root, 'public', 'images', 'dog_1.jpg')))
   user.pets.create(description: 'Little mouse Jerry', pet_type_id: 3, additional_comment: 'Somebody, Take it away',
                    found_at: 1516217199, mobile_number: '+805050505052',

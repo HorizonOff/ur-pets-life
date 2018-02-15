@@ -37,8 +37,9 @@ module AdminPanel
     end
 
     def pet_params
-      params.require(:pet).permit(:name, :birthday, :breed_id, :weight, :avatar,
-                                  :additional_type, :comment, location_attributes: location_params)
+      params.require(:pet).permit(:name, :birthday, :breed_id, :weight, :avatar, :avatar_cache, :additional_type,
+                                  :lost_at, :found_at, :description, :mobile_number, :additional_comment,
+                                  :comment, :municipality_tag, :microchip, location_attributes: location_params)
     end
   end
 end

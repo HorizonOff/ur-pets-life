@@ -72,10 +72,9 @@ class User < ApplicationRecord
   end
 
   def gender=(value)
-    super value if value.nil?
-    value = value.to_i if value.in?(%w[0 1])
-    super value
+    value = value.in?(['0', '1', 0, 1]) ? value.to_i : nil
     @gender_backup = nil
+    super value
   rescue ArgumentError => exception
     error_message = 'is not a valid gender'
     raise unless exception.message.include?(error_message)
