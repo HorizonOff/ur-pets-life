@@ -50,7 +50,9 @@ class User < ApplicationRecord
   has_many :favorites, -> { order(created_at: :asc) }, dependent: :destroy
   has_many :sessions, dependent: :destroy
   has_many :pets, dependent: :destroy
-  has_one :pet_avatar, -> { order(id: :asc).limit(1) }, class_name: 'Pet'
+
+  has_one :pet_avatar, -> { order(id: :asc) }, class_name: 'Pet'
+
   has_many :appointments
   has_many :posts
   has_many :comments
