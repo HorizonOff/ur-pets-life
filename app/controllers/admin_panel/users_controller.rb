@@ -13,7 +13,9 @@ module AdminPanel
 
     def edit; end
 
-    def show; end
+    def show
+      @pets = ::AdminPanel::PetDecorator.decorate_collection(@user.pets)
+    end
 
     def update
       @user.assign_attributes(user_params)
@@ -57,7 +59,8 @@ module AdminPanel
     end
 
     def user_params
-      params.require(:user).permit(:first_name, :last_name, :mobile_number, location_attributes: location_params)
+      params.require(:user).permit(:first_name, :last_name, :mobile_number, :gender, :birthday,
+                                   location_attributes: location_params)
     end
 
     def filter_users

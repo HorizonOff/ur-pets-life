@@ -9,7 +9,13 @@
           .col-md-3.col-sm-3.col-xs-12.profile_left
             %ul.list-unstyled.user_data
               %li
-                %i.fa.fa-briefcase.user-profile-icon
+                %i.fa.fa-birthday-cake.user-profile-icon
+                = @user.birthday&.strftime('%e %b %Y')
+              %li
+                Gender: 
+                = @user.gender
+              %li
+                %i.fa.fa-envelope.user-profile-icon
                 = @user.email
               %li
                 %i.fa.fa-phone.user-profile-icon
@@ -43,4 +49,4 @@
                   %th Status
                   %th Actions
               %tbody
-                = render @user.pets
+                = render @pets
