@@ -29,6 +29,14 @@ module Api
         end
       end
 
+      def set_push_token
+        if @current_session.update_column(:push_token, params[:push_token])
+          render json: { message: 'Session updated successfully' }
+        else
+          render_422(parse_errors_messages(@current_session))
+        end
+      end
+
       private
 
       def user_params

@@ -12,6 +12,7 @@ Rails.application.routes.draw do
       resources :contact_requests, only: [:create]
       resources :users, only: :create do
         collection { get :profile }
+        collection { put :set_push_token }
       end
       put 'users', to: 'users#update'
 
@@ -59,6 +60,8 @@ Rails.application.routes.draw do
       put 'passwords', to: 'passwords#update'
 
       get '/users/auth/google_oauth2/callback', to: 'application#index'
+
+      resources :notifications, only: :index
     end
   end
 
