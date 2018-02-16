@@ -21,7 +21,7 @@ RSpec.describe Api::V1::SessionsController, type: :controller do
         email: email,
         password: password,
         device_id: 'device_id',
-        device_type: 'device_type'
+        device_type: 'ios'
       }
     end
 
