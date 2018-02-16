@@ -56,6 +56,7 @@ class User < ApplicationRecord
   has_many :appointments
   has_many :posts
   has_many :comments
+  has_many :notifications
 
   accepts_nested_attributes_for :location, update_only: true, reject_if: :all_blank
 

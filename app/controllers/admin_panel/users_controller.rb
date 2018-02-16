@@ -59,7 +59,7 @@ module AdminPanel
     end
 
     def user_params
-      params.require(:user).permit(:first_name, :last_name, :mobile_number, :gender, :birthday,
+      params.require(:user).permit(:first_name, :last_name, :mobile_number, :gender, :birthday, :email,
                                    location_attributes: location_params)
     end
 
