@@ -6,7 +6,7 @@ module Api
 
       def index
         @created_at = Time.zone.at(params[:created_at].to_i)
-        comments = @post.comments.where('created_at <= ?', @created_at).order(created_at: :desc)
+        comments = @post.comments.where('created_at < ?', @created_at).order(created_at: :desc)
                         .includes(:user, user: :pet_avatar).limit(20)
         serialized_comments = ActiveModel::Serializer::CollectionSerializer.new(comments)
 

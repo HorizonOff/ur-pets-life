@@ -8,16 +8,22 @@
       
       .form-group
         = f.label :first_name, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
-          Name
+          First Name
           %span.required *
         .col-md-9.col-sm-9.col-xs-12
           = f.text_field :first_name, class: 'form-control', required: true
       .form-group
         = f.label :last_name, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
-          Email
+          Last Name
           %span.required *
         .col-md-9.col-sm-9.col-xs-12
           = f.text_field :last_name, class: 'form-control', required: true
+      .form-group
+        = f.label :email, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
+          Email
+          %span.required *
+        .col-md-9.col-sm-9.col-xs-12
+          = f.email_field :email, class: 'form-control', required: true
       .form-group
         = f.label :mobile_number, 'Phone', class: 'control-label col-md-3 col-sm-3 col-xs-12'
         .col-md-9.col-sm-9.col-xs-12
