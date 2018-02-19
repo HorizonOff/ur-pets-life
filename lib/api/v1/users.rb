@@ -238,6 +238,35 @@ module Api
           end
         end
       end
+
+      swagger_path '/users/set_push_token' do
+        operation :put do
+          key :description, "Set devise push token"
+          key :consumes, %w[application/json]
+          key :consumes, %w[application/json]
+          key :tags, %w[Users Notifications]
+
+          security do
+            key :api_key, []
+          end
+
+          parameter do
+            key :name, :body
+            key :in, :body
+            key :required, true
+
+            schema do
+              property :push_token do
+                key :type, :string
+              end
+            end
+          end
+
+          response 200 do
+            key :description, 'Success response'
+          end
+        end
+      end
     end
   end
 end

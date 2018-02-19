@@ -1,13 +1,19 @@
 class Notification < ApplicationRecord
-  belongs_to :user
+  belongs_to :user, counter_cache: true
   belongs_to :appointment, optional: true
   belongs_to :pet, optional: true
+
+  before_validation :set_user
 
   validates :message, presence: { message: 'Message is required' }
 
   after_create :send_push
 
   private
+
+  def set_user
+    self.user_id = appointment.user_id if appointment_id
+  end
 
   def send_push
     return if Rails.env.test?

@@ -8,5 +8,7 @@ class CreateNotifications < ActiveRecord::Migration[5.1]
 
       t.timestamps
     end
+
+    add_column :users, :notifications_count, :integer, default: 0
   end
 end

@@ -1,6 +1,6 @@
 class EmergencySerializer < BaseMethodsSerializer
   type 'emergency'
-  attributes :name, :address, :mobile_number, :type, :latitude, :longitude
+  attributes :id, :name, :address, :mobile_number, :type, :latitude, :longitude
 
   def type
     object.class.name

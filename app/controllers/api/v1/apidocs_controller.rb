@@ -46,6 +46,7 @@ module Api
         Api::V1::ContactRequests,
         Api::V1::Posts,
         Api::V1::Comments,
+        Api::V1::Notifications,
         self
       ].freeze
 
