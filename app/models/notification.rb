@@ -17,15 +17,19 @@ class Notification < ApplicationRecord
 
   def send_push
     return if Rails.env.test?
-    ios_push_tokens = user.sessions.where(device_type: 'ios').pluck(:push_token).uniq
-    # android_push_tokens = user.sessions.where(devise_type: 'android').pluck(:push_token).uniq
-    send_push_to_ios(ios_push_tokens) if ios_push_tokens.present?
+    sessions = user.sessions
+    ios_push_tokens = sessions.where(device_type: 'ios').pluck(:push_token).compact.uniq
+    android_push_tokens = sessions.where(device_type: 'android').pluck(:push_token).compact.uniq
+
+    send_push_to_ios(ios_push_tokens)
+    send_push_to_android(android_push_tokens)
   end
 
   def send_push_to_ios(tokens)
+    return if tokens.blank?
     password = nil
 
-    notification = RubyPushNotifications::APNS::APNSNotification.new(tokens, aps: { alert: message })
+    notification = RubyPushNotifications::APNS::APNSNotification.new(tokens, aps: ios_options)
 
     pusher = RubyPushNotifications::APNS::APNSPusher.new(
       File.read("#{Rails.root}/app/certificates/aps_development.pem"),
@@ -34,5 +38,26 @@ class Notification < ApplicationRecord
     )
 
     pusher.push [notification]
+  end
+
+  def send_push_to_android(tokens)
+    return if tokens.blank?
+
+    fcm = FCM.new(ENV['FCM_SERVER_KEY'])
+
+    fcm.send(tokens, android_options)
+  end
+
+  def android_options
+    {
+      collapse_key: 'type_a',
+      data: { body: message,
+              title: 'UrPetsLife',
+              badge: 10 }
+    }
+  end
+
+  def ios_options
+    { alert: message, sound: 'default', badge: 10 }
   end
 end
