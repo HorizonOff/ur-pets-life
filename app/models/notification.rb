@@ -7,7 +7,15 @@ class Notification < ApplicationRecord
 
   validates :message, presence: { message: 'Message is required' }
 
-  after_create :send_push
+  after_create :send_push, unless: ->(obj) { obj.skip_push_sending }
+
+  attr_accessor :skip_push_sending
+
+  def self.view
+    select { |n| n.viewed_at.blank? }.each do |n|
+      n.update_column(:viewed_at, Time.current)
+    end
+  end
 
   private
 
@@ -53,11 +61,11 @@ class Notification < ApplicationRecord
       collapse_key: 'type_a',
       data: { body: message,
               title: 'UrPetsLife',
-              badge: 10 }
+              badge: user.unread_notifications.count }
     }
   end
 
   def ios_options
-    { alert: message, sound: 'default', badge: 10 }
+    { alert: message, sound: 'default', badge: user.unread_notifications.count }
   end
 end

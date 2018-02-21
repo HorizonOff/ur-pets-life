@@ -1,7 +1,7 @@
 class NotificationSerializer < BaseMethodsSerializer
   type 'notification'
 
-  attributes :id, :message, :pet_id, :appointment_id, :avatar_url, :created_at
+  attributes :id, :message, :pet_id, :appointment_id, :avatar_url, :created_at, :viewed_at
 
   def avatar_url
     if object.pet_id

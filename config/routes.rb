@@ -61,7 +61,9 @@ Rails.application.routes.draw do
 
       get '/users/auth/google_oauth2/callback', to: 'application#index'
 
-      resources :notifications, only: :index
+      resources :notifications, only: :index do
+        collection { get :unread }
+      end
     end
   end
 
