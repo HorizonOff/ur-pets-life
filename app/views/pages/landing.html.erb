@@ -213,9 +213,54 @@
     </div>
   </div>
 
+
+  <div id="container-7">
+    <div class="row justify-content-center wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.3s">
+      <div class="col bg">
+        <div class="row justify-content-center title">
+          Get in Touch
+        </div>
+        <div class="row justify-content-center description py-4">
+          Whether you're a Pet's Owner, an Establishment or just simply a animals enthousiast,<br>
+          we would love to hear from you.
+        </div>
+          <div class="row mt-3">
+            <div class="col-md-3 offset-3">
+              <div class="form-group">
+              <%= form_for (@contact_request), remote: true, url: send_message_post_path do |f| %>
+              <%= f.label :user_name, class: 'sr-only' %>
+              <%= f.text_field :user_name, class: "form-control bg-input pl-0" , placeholder: 'Your Name', required: "required" %>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <%= f.label :email, class: 'sr-only' %>
+              <%= f.email_field :email, class: "form-control bg-input pl-0" , placeholder: 'Your Email Addres', required: "required" %>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 offset-3">
+                <div class="form-group">
+                  <%= f.label :message, class: 'sr-only' %>
+                  <%= f.text_area :message, class: "form-control bg-input pl-0" , placeholder: 'Write your message...', required: "required" %>
+                </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12 text-center pt-4">
+              <div class="form-group">
+                <%= f.submit "Send", class: 'btn btn-orange' %>
+              </div>
+            </div>
+              <% end %>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+
   <div id="container-6">
     <div class="row justify-content-center wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.3s">
-      <button type="button" class="btn btn-primary btn-social fb-button"></button>
+      <a href="https://www.facebook.com/urpetslife" class="btn btn-primary btn-social fb-button" role="button" aria-pressed="true"></a>
       <button type="button" class="btn btn-info btn-social tw-button"></button>
       <button type="button" class="btn btn-danger btn-social gl-button"></button>
     </div>

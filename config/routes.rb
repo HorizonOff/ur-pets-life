@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   mount Ckeditor::Engine => '/ckeditor'
   root 'pages#landing'
   get '/login', to: 'application#login'
+  post 'send_message', to: 'pages#send_message', as: 'send_message_post'
   devise_for :users, only: %i[confirmations passwords omniauth_callbacks],
                      controllers: { confirmations: 'confirmations',
                                     passwords: 'passwords',

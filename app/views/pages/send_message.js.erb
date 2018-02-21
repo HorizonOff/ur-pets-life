@@ -1,0 +1,6 @@
+<% if @contact_request.errors.blank? %>
+  $("#new_contact_request")[0].reset();
+  toastr.info('Message has been sent')
+<%else%>
+  toastr.error('Try again')
+<%end%>
