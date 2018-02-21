@@ -57,6 +57,7 @@ class User < ApplicationRecord
   has_many :posts
   has_many :comments
   has_many :notifications
+  has_many :unread_notifications, -> { where(viewed_at: nil) }, class_name: 'Notification'
 
   accepts_nested_attributes_for :location, update_only: true, reject_if: :all_blank
 
