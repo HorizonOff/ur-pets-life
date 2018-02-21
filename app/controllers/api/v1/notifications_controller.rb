@@ -1,7 +1,7 @@
 module Api
   module V1
     class NotificationsController < Api::BaseController
-      before_action :set_time, onle: :index
+      before_action :set_time, only: :index
 
       def index
         notifications = @user.notifications.where('created_at < ?', @created_at).order(created_at: :desc)
