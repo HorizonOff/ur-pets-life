@@ -1,6 +1,6 @@
 class PagesController < ApplicationController
-  skip_before_action :verify_authenticity_token
   layout 'landing'
+
   def landing
     @contact_request = ContactRequest.new
   end
