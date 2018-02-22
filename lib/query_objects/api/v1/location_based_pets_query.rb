@@ -8,7 +8,6 @@ module Api
       end
 
       def find_objects
-        # @correct_location = is_adoption ? :user_location : :location
         check_search_params
 
         objects = if params[:latitude].present? && params[:longitude].present?
@@ -21,7 +20,7 @@ module Api
 
       private
 
-      attr_reader :scope, :params, :is_adoption, :search
+      attr_reader :scope, :params, :search
 
       def objects_by_location_attributes
         array_of_objects = objects_with_location + objects_without_location
