@@ -7,6 +7,8 @@ class Location < ApplicationRecord
 
   after_initialize :set_defaults
 
+  before_save :set_string_fields
+
   geocoded_by :address
   after_validation :geocode, if: :should_geocode?
 
@@ -35,6 +37,15 @@ class Location < ApplicationRecord
   def set_defaults
     return if persisted?
     self.building_type ||= :building
+  end
+
+  def set_string_fields
+    self.city = '' if city.nil?
+    self.area = '' if area.nil?
+    self.street = '' if street.nil?
+    self.building_name = '' if building_name.nil?
+    self.unit_number = '' if unit_number.nil?
+    self.villa_number = '' if villa_number.nil?
   end
 
   def building_type_should_be_valid
