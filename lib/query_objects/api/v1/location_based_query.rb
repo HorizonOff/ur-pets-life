@@ -20,7 +20,7 @@ module Api
 
       private
 
-      attr_reader :model, :params, :scope
+      attr_reader :model, :params, :search, :scope
 
       def objects_by_location_attributes
         array_of_objects = objects_with_location + objects_without_location
