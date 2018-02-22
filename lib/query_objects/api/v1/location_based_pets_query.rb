@@ -60,6 +60,7 @@ module Api
 
       def check_search_params
         return if search.blank?
+
         search_field = search.split(',').join(' ').squish
         @ids = scope.joins(:user_location)
                     .where("(locations.city || ' ' || locations.area || ' ' || locations.street || ' ' ||
