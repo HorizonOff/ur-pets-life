@@ -31,7 +31,7 @@ module Api
       end
 
       def pets_query
-        @pets_query ||= ::Api::V1::LocationBasedPetsQuery.new(Pet.for_adoption, params, true)
+        @pets_query ||= ::Api::V1::LocationBasedPetsQuery.new(Pet.for_adoption, params)
       end
     end
   end

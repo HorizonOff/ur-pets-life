@@ -48,9 +48,9 @@ module Api
         objects = if search.present?
                     scope.where('name ILIKE :search', search: "%#{search}%").or(scope.where(id: @ids))
                   else
-                    scope.alphabetical_order
+                    scope
                   end
-        include_relations(objects)
+        include_relations(objects.alphabetical_order)
       end
 
       def include_relations(objects)
