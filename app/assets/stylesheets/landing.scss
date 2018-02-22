@@ -14,6 +14,7 @@
  *= require bootstrap4/bootstrap-grid.min
  *= require bootstrap4/bootstrap-reboot.min
  *= require animate.css
+ *= require libs/toastr.min
 
  *= require_self
  */
@@ -79,11 +80,12 @@
 
   .whats-up-text {
     font-size: 36px;
+    color: #1C5879;
   }
 
   .whats-up-text-2 {
     text-align: center;
-    color: #7B7B7B;
+    color: #A6BECB;
     margin-top: 20px;
     font-size: 18px;
   }
@@ -106,37 +108,43 @@
     }
 
     .clinics-title {
+      color: #1C5879;
       text-align: center;
       margin-top: 44px;
     }
 
     .grooming-title {
+      color: #1C5879;
       text-align: center;
       margin-top: 43px;
     }
 
     .trainers-title {
+      color: #1C5879;
       text-align: center;
       margin-top: 44px;
     }
 
     .day-care-title {
+      color: #1C5879;
       text-align: center;
       margin-top: 45px;
     }
 
     .lost-title {
+      color: #1C5879;
       text-align: center;
       margin-top: 44px;
     }
 
     .adoption-title {
+      color: #1C5879;
       text-align: center;
       margin-top: 44px;
     }
 
     .description {
-      color: #7F7F7F;
+      color: #A6BECB;
       margin-top: 20px;
       font-size: 18px;
     }
@@ -190,12 +198,13 @@
   .title {
     font-size: 36px;
     margin-top: 70px;
+    color: #1C5879;
   }
 
   .description {
     font-size: 18px;
     margin-top: 20px;
-    color: #7F7F7F;
+    color: #A6BECB;
     text-align: center;
   }
 }
@@ -230,6 +239,7 @@
   }
 
   .tw-button {
+    display: none;
     background-image: image_url('landing/twitter-logo.png');
     background-position-y: 14px;
     background-position-x: 12px;
@@ -238,6 +248,7 @@
   }
 
   .gl-button {
+    display: none;
     background-image: image_url('landing/google-plus-logo.png');
     background-position-y: 15px;
     background-position-x: 8px;
@@ -254,5 +265,47 @@
     width: 250px;
     height: 82.29px;
     margin-top: 35px;
+  }
+}
+
+#container-7 {
+  background-color: #F8F8F8;
+  background-repeat: no-repeat;
+  background-position-x: center;
+  background-position-y: 304px;
+  height: 420px;
+  z-index: 6;
+  border: none;
+  .bg {
+    background-color: #F8F8F8;
+  }
+  .bg-input {
+    border: none;
+    background-color: #F8F8F8;
+    border-bottom: 1px solid #A6BECB;
+    border-radius: 0;
+    line-height: 0.6;
+   }
+   ::placeholder {
+     color: #1C5879;
+    }
+  .title {
+    color: #1C5879;
+    font-size: 36px;
+    margin-top: 30px;
+  }
+
+  .description {
+    font-size: 18px;
+    margin-top: 20px;
+    color: #A6BECB;
+    text-align: center;
+  }
+  .btn-orange {
+    background: #EB8E30;
+    color: white;
+    border-radius: 50px;
+    height: 50px;
+    width: 250px;
   }
 }

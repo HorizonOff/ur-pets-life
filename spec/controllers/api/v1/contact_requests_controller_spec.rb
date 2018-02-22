@@ -50,13 +50,15 @@ RSpec.describe Api::V1::ContactRequestsController, type: :controller do
 
       let(:message_two_field_blank) do
         { 'errors' => { 'subject' => 'Subject is required',
-                        'message' => 'Message is required' } }
+                        'message' => 'Message is required',
+                         'user_name' => 'User name is required'} }
       end
       let(:message_blank_field_message) do
         { 'errors' => { 'message' => 'Message is required' } }
       end
       let(:message_blank_field_subject) do
-        { 'errors' => {  'subject' => 'Subject is required' } }
+        { 'errors' => { 'user_name' => 'User name is required',
+                        'subject' => 'Subject is required'} }
       end
 
       context 'Blank all params' do
