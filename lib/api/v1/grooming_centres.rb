@@ -119,6 +119,13 @@ module Api
             key :example, 1
           end
 
+          parameter do
+            key :name, :search
+            key :in, :query
+            key :type, :string
+            key :example, 'grooming'
+          end
+
           response 200 do
             key :description, 'Success response'
             schema do

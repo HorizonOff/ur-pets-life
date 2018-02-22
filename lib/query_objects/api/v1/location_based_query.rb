@@ -4,7 +4,7 @@ module Api
       def initialize(model, params)
         @model = model
         @params = params
-
+        @search = params[:search]
         @scope = model.constantize.all
       end
 
@@ -20,7 +20,7 @@ module Api
 
       private
 
-      attr_reader :model, :params, :scope
+      attr_reader :model, :params, :search, :scope
 
       def objects_by_location_attributes
         array_of_objects = objects_with_location + objects_without_location
@@ -30,23 +30,27 @@ module Api
 
       def objects_with_location
         objects = scope.left_joins(:location).near([params[:latitude], params[:longitude]], 999_999, units: :km)
-        objects = objects.where('name ILIKE :search', search: "%#{params[:search]}%").or(objects.where(id: @ids)) if params[:search].present?
+        if search.present?
+          objects = objects.where('name ILIKE :search', search: "%#{search}%").or(objects.where(id: @ids))
+        end
         include_relations(objects)
       end
 
       def objects_without_location
         objects = scope.left_joins(:location).where(locations: { latitude: nil, longitude: nil })
-        objects = objects.where('name ILIKE :search', search: "%#{params[:search]}%").or(objects.where(id: @ids)) if params[:search].present?
+        if search.present?
+          objects = objects.where('name ILIKE :search', search: "%#{search}%").or(objects.where(id: @ids))
+        end
         include_relations(objects)
       end
 
       def all_objects
-        objects = if params[:search].present?
-                    scope.where('name ILIKE :search', search: "%#{params[:search]}%").or(scope.where(id: @ids))
+        objects = if search.present?
+                    scope.where('name ILIKE :search', search: "%#{search}%").or(scope.where(id: @ids))
                   else
-                    scope.alphabetical_order
+                    scope
                   end
-        include_relations(objects)
+        include_relations(objects.alphabetical_order)
       end
 
       def include_relations(objects)
@@ -58,10 +62,12 @@ module Api
       end
 
       def check_search_params
-        return if params[:search].blank?
-        search_field = params[:search].split(',').join(' ').squish
+        return if search.blank?
+        search_field = search.split(',').join(' ').squish
         @ids = scope.joins(:location)
-                    .where("(locations.city || ' ' || locations.area || ' ' || locations.street || ' ' || locations.building_name || ' ' || locations.unit_number || ' ' || locations.villa_number) ILIKE :search_field", search_field: "%#{search_field}%").pluck(:id)
+                    .where("(locations.city || ' ' || locations.area || ' ' || locations.street || ' ' ||
+                             locations.building_name || ' ' || locations.unit_number || ' ' || locations.villa_number)
+                             ILIKE :search_field", search_field: "%#{search_field}%").pluck(:id)
       end
     end
   end
