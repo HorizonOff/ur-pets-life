@@ -39,6 +39,7 @@ module Api
         Api::V1::Weights,
         Api::V1::Adoptions,
         Api::V1::LostAndFounds,
+        Api::V1::AdditionalServices,
         Api::V1::Appointments,
         Api::V1::Favorites,
         Api::V1::Schedules,

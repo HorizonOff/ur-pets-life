@@ -12,7 +12,7 @@ class Favorite < ApplicationRecord
   scope :grooming_centres, -> { where(favoritable_type: 'GroomingCentre') }
   scope :trainers, -> { where(favoritable_type: 'Trainer') }
 
-  ALLOWED_TYPES = %w[Clinic Vet DayCareCentre GroomingCentre Trainer].freeze
+  ALLOWED_TYPES = %w[Clinic Vet DayCareCentre GroomingCentre Trainer AdditionalService].freeze
 
   private
 

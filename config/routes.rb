@@ -34,6 +34,7 @@ Rails.application.routes.draw do
       resources :vaccine_types, only: :index
       resources :pet_types, only: :index
       resources :clinics, only: %i[index show]
+      resources :additional_services, only: %i[index show]
       resources :grooming_centres, only: %i[index show] do
         member { get :schedule }
       end

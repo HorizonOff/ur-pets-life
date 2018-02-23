@@ -76,7 +76,7 @@ module Api
             key :name, :favorite
             key :in, :body
             key :required, true
-            key :description, "Favoritable_type: Clinic/DayCareCentre/GroomingCentre/Vet/Trainer\n" +
+            key :description, "Favoritable_type: Clinic/DayCareCentre/GroomingCentre/Vet/Trainer/AdditionalService\n" +
                               'favoritable_type, favoritable_id - required'
 
             schema do

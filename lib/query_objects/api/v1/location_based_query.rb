@@ -54,7 +54,7 @@ module Api
       end
 
       def include_relations(objects)
-        if model == 'Trainer'
+        if model == 'Trainer' || model == 'AdditionalService'
           objects.includes(:location)
         else
           objects.includes(:location, :schedule)

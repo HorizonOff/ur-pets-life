@@ -371,6 +371,18 @@ end
 
 description = 'A beauty salon is an establishment that offers a variety of cosmetic treatments and cosmetic services for men and women. Beauty salons may offer a variety of services including professional hair cutting and styling, manicures and pedicures, and often cosmetics, makeup and makeovers.'
 
+if AdditionalService.count.zero?
+  d = AdditionalService.new(name: 'AdditionalService 1', email: Faker::Internet.email, mobile_number: '+805050505050',
+                            description: description, location_attributes: afrika)
+  d.save(validate: false)
+  d = AdditionalService.new(name: 'AdditionalService 2', email: Faker::Internet.email, mobile_number: '+805050505051',
+                            description: description, location_attributes: mukachevo)
+  d.save(validate: false)
+  d = AdditionalService.new(name: 'AdditionalService 3', email: Faker::Internet.email, mobile_number: '+805050505052',
+                            description: description, location_attributes: uzhgorod)
+  d.save(validate: false)
+end
+
 if ServiceType.count.zero?
   GroomingCentre.all.each do |gc|
     gc.service_types.create(name: 'Cleaning', description: description)
