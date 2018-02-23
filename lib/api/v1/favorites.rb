@@ -132,7 +132,7 @@ module Api
             key :in, :query
             key :type, :string
             key :example, 'clinics'
-            key :description, 'clinics/day_care_centres/grooming_centres/vets/trainers'
+            key :description, 'clinics/day_care_centres/grooming_centres/vets/trainers/additional_services'
           end
 
           response 200 do

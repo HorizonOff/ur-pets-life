@@ -4,6 +4,7 @@ class AdditionalService < ApplicationRecord
 
   has_many :favorites, as: :favoritable, dependent: :destroy
 
+  has_one :schedule, as: :schedulable
   has_one :location, as: :place, inverse_of: :place
   accepts_nested_attributes_for :location, update_only: true
 
