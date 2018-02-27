@@ -333,6 +333,8 @@ end
 service_options = [[pick_up], [drop_off], [pick_up, drop_off]]
 pet_types = [[dog], [cat], [cat, dog]]
 
+description = 'A beauty salon is an establishment that offers a variety of cosmetic treatments and cosmetic services for men and women. Beauty salons may offer a variety of services including professional hair cutting and styling, manicures and pedicures, and often cosmetics, makeup and makeovers.'
+
 if GroomingCentre.count.zero?
   g = GroomingCentre.new(name: 'GroomingCentre 1', email: Faker::Internet.email, mobile_number: '+805050505050',
                         location_attributes: afrika,
@@ -369,7 +371,27 @@ if DayCareCentre.count.zero?
   end
 end
 
-description = 'A beauty salon is an establishment that offers a variety of cosmetic treatments and cosmetic services for men and women. Beauty salons may offer a variety of services including professional hair cutting and styling, manicures and pedicures, and often cosmetics, makeup and makeovers.'
+if Boarding.count.zero?
+  d = Boarding.new(name: 'Boarding 1', email: Faker::Internet.email, mobile_number: '+805050505050',
+                       location_attributes: afrika,
+                       schedule_attributes: schedule_attributes)
+  d.save(validate: false)
+  d = Boarding.new(name: 'Boarding 2', email: Faker::Internet.email, mobile_number: '+805050505051',
+                       location_attributes: mukachevo,
+                       schedule_attributes: schedule_attributes)
+  d.save(validate: false)
+  d = Boarding.new(name: 'Boarding 3', email: Faker::Internet.email, mobile_number: '+805050505052',
+                       location_attributes: uzhgorod,
+                       schedule_attributes: schedule_attributes)
+  d.save(validate: false)
+
+  Boarding.all.each do |b|
+    b.service_options = service_options.sample
+    b.service_types.create(name: 'Boarding service 1', description: description)
+    b.service_types.create(name: 'Boarding service 2', description: description)
+    b.service_types.create(name: 'Boarding service 3', description: description)
+  end
+end
 
 if AdditionalService.count.zero?
   d = AdditionalService.new(name: 'AdditionalService 1', email: Faker::Internet.email, mobile_number: '+805050505050',
