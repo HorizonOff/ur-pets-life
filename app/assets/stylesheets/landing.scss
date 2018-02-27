@@ -52,11 +52,25 @@
     margin-top: 50px;
   }
 
-  .store-buttons {
-    margin-top: 240px;
+  .store-button {
+    margin-left: 16px;
+  }
 
-    .store-button {
-      margin-left: 16px;
+  @media (min-width: 400px) {
+    .store-buttons {
+      margin-top: 130px;
+    }
+  }
+
+  @media (min-width: 1077px) {
+    .store-buttons {
+      margin-top: 180px;
+    }
+  }
+
+  @media (min-width: 1250px) {
+    .store-buttons {
+      margin-top: 240px;
     }
   }
 
