@@ -9,6 +9,7 @@ class Admin < ApplicationRecord
   has_one :clinic, dependent: :nullify
   has_one :day_care_centre, dependent: :nullify
   has_one :grooming_centre, dependent: :nullify
+  has_one :boarding, dependent: :nullify
 
   has_many :appointments, dependent: :nullify
 
@@ -23,5 +24,9 @@ class Admin < ApplicationRecord
 
   scope :for_grooming_centre, (lambda do
     simple.left_joins(:grooming_centre).having('count(grooming_centres.id) = 0').group('admins.id')
+  end)
+
+  scope :for_boarding, (lambda do
+    simple.left_joins(:boarding).having('count(boardings.id) = 0').group('admins.id')
   end)
 end
