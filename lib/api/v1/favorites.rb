@@ -76,7 +76,8 @@ module Api
             key :name, :favorite
             key :in, :body
             key :required, true
-            key :description, "Favoritable_type: Clinic/DayCareCentre/GroomingCentre/Vet/Trainer/AdditionalService\n" +
+            key :description, "Favoritable_type: Clinic/DayCareCentre/GroomingCentre/Vet/Trainer/AdditionalService/Boarding\n" +
+
                               'favoritable_type, favoritable_id - required'
 
             schema do
@@ -132,7 +133,7 @@ module Api
             key :in, :query
             key :type, :string
             key :example, 'clinics'
-            key :description, 'clinics/day_care_centres/grooming_centres/vets/trainers/additional_services'
+            key :description, 'clinics/day_care_centres/grooming_centres/vets/trainers/additional_services/boardings'
           end
 
           response 200 do
