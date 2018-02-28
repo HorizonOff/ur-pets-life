@@ -350,6 +350,9 @@ if GroomingCentre.count.zero?
   g.save(validate: false)
   GroomingCentre.all.each do |gc|
     gc.service_options = service_options.sample
+    gc.service_types.create(name: 'Cleaning', description: description)
+    gc.service_types.create(name: 'Hair Color', description: description)
+    gc.service_types.create(name: 'Grooming', description: description)
   end
 end
 
@@ -368,6 +371,9 @@ if DayCareCentre.count.zero?
   d.save(validate: false)
   DayCareCentre.all.each do |dcc|
     dcc.service_options = service_options.sample
+    dcc.service_types.create(name: 'Care service 1', description: description)
+    dcc.service_types.create(name: 'Care service 2', description: description)
+    dcc.service_types.create(name: 'Care service 3', description: description)
   end
 end
 
@@ -405,27 +411,10 @@ if AdditionalService.count.zero?
   d.save(validate: false)
 end
 
-if ServiceType.count.zero?
-  GroomingCentre.all.each do |gc|
-    gc.service_types.create(name: 'Cleaning', description: description)
-    gc.service_types.create(name: 'Hair Color', description: description)
-    gc.service_types.create(name: 'Grooming', description: description)
-  end
-  DayCareCentre.all.each do |dcc|
-    dcc.service_types.create(name: 'Care service 1', description: description)
-    dcc.service_types.create(name: 'Care service 2', description: description)
-    dcc.service_types.create(name: 'Care service 3', description: description)
-  end
-end
-
-
 if ServiceDetail.count.zero?
   ServiceType.all.each do |st|
-    # pet_types.sample.each do |t|
-    #   st.service_details.create(pet_type: t, price: rand(500))
-    # end
-    st.service_details.create(pet_type: cat, price: rand(500))
-    st.service_details.create(pet_type: dog, price: rand(500))
+    st.service_details.create(pet_type: cat, price: rand(500), weight: rand(20))
+    st.service_details.create(pet_type: dog, price: rand(500), weight: rand(20))
   end
 end
 

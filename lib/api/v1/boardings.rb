@@ -84,41 +84,6 @@ module Api
         end
       end
 
-      swagger_schema :ServiceType do
-        property :id do
-          key :type, :integer
-          key :example, 1
-        end
-        property :name do
-          key :type, :string
-          key :example, 'Service 1'
-        end
-        property :description do
-          key :type, :string
-        end
-        property :service_details do
-          items do
-            key :'$ref', :ServiceDetail
-          end
-        end
-      end
-
-      swagger_schema :ServiceDetail do
-        property :id do
-          key :type, :integer
-          key :example, 1
-        end
-        property :pet_type_id do
-          key :type, :integer
-          key :example, 1
-        end
-        property :price do
-          key :type, :integer
-          key :example, 123
-        end
-
-      end
-
       swagger_path '/boardings' do
         operation :get do
           key :description, 'Get Boarding centres. All params are not required'

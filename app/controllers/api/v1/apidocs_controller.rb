@@ -35,6 +35,7 @@ module Api
         Api::V1::GroomingCentres,
         Api::V1::DayCareCentres,
         Api::V1::Boardings,
+        Api::V1::ServiceTypes,
         Api::V1::Trainers,
         Api::V1::Vets,
         Api::V1::Weights,

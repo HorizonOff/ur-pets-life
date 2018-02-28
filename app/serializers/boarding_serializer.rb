@@ -3,7 +3,7 @@ class BoardingSerializer < ServiceCentreSerializer
 
   attribute :service_options
 
-  has_many :service_types do
-    object.service_types.includes(:service_details)
+  attribute :service_types do
+    scope[:service_types]
   end
 end

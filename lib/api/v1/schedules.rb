@@ -98,6 +98,40 @@ module Api
         end
       end
 
+      swagger_path '/boardings/{id}/schedule' do
+        operation :get do
+          key :description, 'Get boarding schedule. All params are required'
+          key :consumes, %w[application/json]
+          key :produces, %w[application/json]
+          key :tags, %W[Boardings Schedules]
+
+          security do
+            key :api_key, []
+          end
+
+          parameter do
+            key :name, :id
+            key :in, :path
+            key :type, :integer
+            key :example, 1
+          end
+
+          parameter do
+            key :name, :date
+            key :in, :query
+            key :type, :integer
+            key :example, 1516217199
+          end
+
+          response 200 do
+            key :description, 'Success response'
+            schema do
+              key :'$ref', :ScheduleResponse
+            end
+          end
+        end
+      end
+
       swagger_path '/vets/{id}/schedule' do
         operation :get do
           key :description, 'Get vet schedule. All params are required'
