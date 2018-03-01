@@ -16,7 +16,7 @@ class Appointment < ApplicationRecord
 
   has_many :cart_items
 
-  accept_nested_attributes_for :cart_items
+  accepts_nested_attributes_for :cart_items
 
   has_many :serviceable, through: :cart_items
   has_many :service_options_details, -> { where(serviceable_type: 'ServiceOptionDetail') }, class_name: 'CartItem'
