@@ -7,7 +7,6 @@ class Appointment < ApplicationRecord
   belongs_to :user, -> { with_deleted }
   belongs_to :bookable, -> { with_deleted }, polymorphic: true
   belongs_to :admin, -> { with_deleted }, optional: true
-  belongs_to :pet, -> { with_deleted }
   belongs_to :vet, -> { with_deleted }, optional: true
   belongs_to :calendar, optional: true
   belongs_to :main_appointment, class_name: 'Appointment', optional: true
@@ -16,8 +15,15 @@ class Appointment < ApplicationRecord
   has_one :next_appointment, class_name: 'Appointment', foreign_key: :main_appointment_id
 
   has_many :cart_items
-  has_many :service_details, through: :cart_items
-  has_many :service_types, through: :service_details
+
+  accept_nested_attributes_for :cart_items
+
+  has_many :serviceable, through: :cart_items
+  has_many :service_options_details, -> { where(serviceable_type: 'ServiceOptionDetail') }, class_name: 'CartItem'
+  has_many :service_options, through: :service_option_details, source: :serviceable
+  has_many :service_details, -> { where(serviceable_type: 'ServiceDetail') }, class_name: 'CartItem'
+
+  has_and_belongs_to_many :pets, -> { with_deleted }
 
   after_initialize :set_defaults
 
