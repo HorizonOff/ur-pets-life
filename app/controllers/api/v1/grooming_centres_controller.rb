@@ -1,7 +1,7 @@
 module Api
   module V1
     class GroomingCentresController < Api::BaseController
-      skip_before_action :authenticate_user, except:  %i[schedule services]
+      skip_before_action :authenticate_user, except: %i[schedule services]
       before_action :set_grooming_centre, except: :index
       before_action :parse_date, only: :schedule
       before_action :retrieve_pets_and_pet_types, only: :services
@@ -33,9 +33,9 @@ module Api
 
       def services
         @services = @grooming_centre.service_details.with_pet_types(@pet_type_ids).includes(:service_type)
-                                    .group_by { |sd| [sd.service_type_id, sd.pet_type_id] }.values
+                                    .group_by { |sd| [sd.service_type_id, sd.pet_type_id] }
 
-        render json: { service_types: pet_services_serializer_service.serialize }
+        render json: { pets: pet_services_serializer_service.serialize }
       end
 
       private

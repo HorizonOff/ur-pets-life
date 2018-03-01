@@ -34,7 +34,7 @@ module Api
         @services = @boarding.service_details.with_pet_types(@pet_type_ids).includes(:service_type)
                              .group_by { |sd| [sd.service_type_id, sd.pet_type_id] }
 
-        render json: { service_types: pet_services_serializer_service.serialize }
+        render json: { pets: pet_services_serializer_service.serialize }
       end
 
       private
