@@ -45,6 +45,10 @@ class Vet < ApplicationRecord
 
   before_validation :check_location
 
+  scope :with_pet_types, (lambda do |pet_type_ids|
+    joins(:pet_types).where(pet_types: { id: pet_type_ids }).group('vets.id').having('count(*) = ?', pet_type_ids.size)
+  end)
+
   private
 
   def work_as_emergency?
