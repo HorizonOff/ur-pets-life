@@ -2,7 +2,7 @@ module Api
   module V1
     class ClinicsController < Api::BaseController
       skip_before_action :authenticate_user
-      before_action :set_clinic, only: :show
+      before_action :set_clinic, except: :index
 
       def index
         clinics = clinics_query.find_objects
@@ -17,6 +17,12 @@ module Api
         favorite = @clinic.favorites.find_by(user: @user)
 
         render json: @clinic, scope: serializable_params.merge(favorite: favorite)
+      end
+
+      def vets
+        pet_type_ids = @user.pets.owned.where(id: params[:pet_ids]).pluck(:pet_type_id).uniq
+
+        render json: @clinic.vets.with_pet_types(pet_type_ids), each_serialiser: VetIndexSerializer
       end
 
       private

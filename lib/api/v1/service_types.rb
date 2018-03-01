@@ -1,41 +1,42 @@
 module Api
   module V1
-    class Schedules < ActionController::Base
+    class ServiceTypes < ActionController::Base
       include Swagger::Blocks
 
-      swagger_schema :ScheduleResponse do
-        property :time_slots do
+      swagger_schema :PetServicesResponse do
+        property :pets do
           items do
-            property :start_at do
+            property :pet_id do
               key :type, :integer
-              key :example, 1516217199
+              key :example, 1
+            end
+            property :name do
+              key :type, :string
+              key :example, 'Tom'
+            end
+            property :service_types do
+              items do
+                key :'$ref', :ServiceType
+              end
             end
           end
         end
       end
 
-      swagger_schema :ScheduleWithEndResponse do
-        property :time_slots do
+      swagger_schema :VetsForPets do
+        property :vets do
           items do
-            property :start_at do
-              key :type, :integer
-              key :example, 1516217199
-            end
-
-            property :end_at do
-              key :type, :integer
-              key :example, 1516217200
-            end
+            key :'$ref', :Vet
           end
         end
       end
 
-      swagger_path '/grooming_centres/{id}/schedule' do
+      swagger_path '/clinics/{id}/vets' do
         operation :get do
-          key :description, 'Get grooming centre schedule. All params are required'
+          key :description, 'Get clinics vets for pets'
           key :consumes, %w[application/json]
           key :produces, %w[application/json]
-          key :tags, %W[Grooming\ Centres Schedules]
+          key :tags, %W[Clinics Vets Services]
 
           security do
             key :api_key, []
@@ -49,27 +50,26 @@ module Api
           end
 
           parameter do
-            key :name, :date
+            key :name, 'pet_ids[]'
             key :in, :query
-            key :type, :integer
-            key :example, 1516217199
+            key :example, 1
           end
 
           response 200 do
             key :description, 'Success response'
             schema do
-              key :'$ref', :ScheduleResponse
+              key :'$ref', :VetsForPets
             end
           end
         end
       end
 
-      swagger_path '/day_care_centres/{id}/schedule' do
+      swagger_path '/day_care_centres/{id}/services' do
         operation :get do
-          key :description, 'Get daycare centre schedule. All params are required'
+          key :description, 'Get day care centre services'
           key :consumes, %w[application/json]
           key :produces, %w[application/json]
-          key :tags, %W[Day\ Care\ Centres Schedules]
+          key :tags, %W[Day\ Care\ Centres Services]
 
           security do
             key :api_key, []
@@ -83,27 +83,26 @@ module Api
           end
 
           parameter do
-            key :name, :date
+            key :name, 'pet_ids[]'
             key :in, :query
-            key :type, :integer
-            key :example, 1516217199
+            key :example, 1
           end
 
           response 200 do
             key :description, 'Success response'
             schema do
-              key :'$ref', :ScheduleResponse
+              key :'$ref', :PetServicesResponse
             end
           end
         end
       end
 
-      swagger_path '/boardings/{id}/schedule' do
+      swagger_path '/grooming_centres/{id}/services' do
         operation :get do
-          key :description, 'Get boarding schedule. All params are required'
+          key :description, 'Get grooming centre services'
           key :consumes, %w[application/json]
           key :produces, %w[application/json]
-          key :tags, %W[Boardings Schedules]
+          key :tags, %W[Grooming\ Centres Services]
 
           security do
             key :api_key, []
@@ -117,27 +116,26 @@ module Api
           end
 
           parameter do
-            key :name, :date
+            key :name, 'pet_ids[]'
             key :in, :query
-            key :type, :integer
-            key :example, 1516217199
+            key :example, 1
           end
 
           response 200 do
             key :description, 'Success response'
             schema do
-              key :'$ref', :ScheduleResponse
+              key :'$ref', :PetServicesResponse
             end
           end
         end
       end
 
-      swagger_path '/vets/{id}/schedule' do
+      swagger_path '/boardings/{id}/services' do
         operation :get do
-          key :description, 'Get vet schedule. All params are required'
+          key :description, 'Get boarding services'
           key :consumes, %w[application/json]
           key :produces, %w[application/json]
-          key :tags, %W[Vets Schedules]
+          key :tags, %W[Boardings Services]
 
           security do
             key :api_key, []
@@ -151,16 +149,15 @@ module Api
           end
 
           parameter do
-            key :name, :date
+            key :name, 'pet_ids[]'
             key :in, :query
-            key :type, :integer
-            key :example, 1516217199
+            key :example, 1
           end
 
           response 200 do
             key :description, 'Success response'
             schema do
-              key :'$ref', :ScheduleWithEndResponse
+              key :'$ref', :PetServicesResponse
             end
           end
         end

@@ -6,5 +6,17 @@ class ServiceDetail < ApplicationRecord
 
   has_and_belongs_to_many :appointments
 
+  delegate :name, :description, to: :service_type
+
+  scope :with_pet_types, ->(pet_type_ids) { where(pet_type_id: pet_type_ids) }
+
   acts_as_paranoid
+
+  before_save :check_fields
+
+  private
+
+  def check_fields
+    self.weight = nil if service_type.serviceable_type == 'GroomingCentre'
+  end
 end

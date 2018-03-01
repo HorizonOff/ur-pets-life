@@ -85,7 +85,7 @@ module Api
       end
 
       swagger_schema :ServiceType do
-        property :id do
+        property :pet_type_id do
           key :type, :integer
           key :example, 1
         end
@@ -116,7 +116,10 @@ module Api
           key :type, :integer
           key :example, 123
         end
-
+        property :weight do
+          key :type, :number
+          key :example, 15
+        end
       end
 
       swagger_path '/day_care_centres' do
@@ -220,6 +223,7 @@ module Api
           end
         end
       end
+
     end
   end
 end
