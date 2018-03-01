@@ -86,6 +86,10 @@ module Api
       end
 
       swagger_schema :ServiceType do
+        property :id do
+          key :type, :integer
+          key :example, 1
+        end
         property :pet_type_id do
           key :type, :integer
           key :example, 1

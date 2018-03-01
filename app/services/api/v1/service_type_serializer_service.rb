@@ -20,7 +20,8 @@ module Api
 
       def serialize_all(pet_services = services)
         pet_services.each do |s|
-          service_type = { name: s.first.name, description: s.first.description, pet_type_id: s.first.pet_type_id }
+          service_type = { id: s.first.service_type_id, name: s.first.name,
+                           description: s.first.description, pet_type_id: s.first.pet_type_id }
           service_type[:service_details] = ActiveModel::Serializer::CollectionSerializer.new(
             s, serializer: ServiceDetailSerializer
           )
