@@ -13,9 +13,9 @@ module Api
             key :type, :integer
             key :example, 1
           end
-          property :pet_id do
-            key :type, :integer
-            key :example, 1
+          property :pet_ids do
+            key :type, :array
+            key :example, [1]
           end
           property :vet_id do
             key :type, :integer
@@ -28,10 +28,26 @@ module Api
           property :comment do
             key :type, :string
           end
-          property :service_detail_ids do
-            key :type, :array
-            key :example, [1]
+          property :cart_items_attributes do
+            items do
+              key :'$ref', :CartItemInput
+            end
           end
+        end
+      end
+
+      swagger_schema :CartItemInput do
+        property :pet_id do
+          key :type, :integer
+          key :example, 1
+        end
+        property :serviceable_type do
+          key :type, :string
+          key :example, 'ServiceDetail'
+        end
+        property :serviceable_id do
+          key :type, :integer
+          key :example, 1
         end
       end
 
@@ -166,9 +182,11 @@ module Api
             key :name, :appointment
             key :in, :body
             key :required, true
-            key :description, "Bookable_type: Clinic/DayCareCentre/GroomingCentre\n" +
-                              "vet_id - required if bookable_type - Clinic\n" +
-                              'bookable_type, bookable_id, start_at, pet_id - required'
+            key :description, "Bookable_type: Clinic/DayCareCentre/GroomingCentre/Boarding\n" +
+                              "vet_id & pet_ids - required if bookable_type - Clinic\n" +
+                              "bookable_type, bookable_id, start_at, pet_id - required\n" +
+                              "cart_items_attributes - required ib bookable type NOT A CLINIC\n" +
+                              'serviceable_type - ServiceDetail/ServiceOptionDetail'
 
             schema do
               key :'$ref', :AppointmentInput

@@ -4,7 +4,6 @@ class CreateAppointments < ActiveRecord::Migration[5.1]
       t.references :admin, foreign_key: true
       t.references :user, foreign_key: true
       t.references :bookable, polymorphic: true
-      t.references :pet, foreign_key: true
       t.references :vet, foreign_key: true
       t.references :calendar, foreign_key: true
       t.integer :main_appointment_id

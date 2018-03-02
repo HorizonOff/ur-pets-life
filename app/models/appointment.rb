@@ -18,10 +18,10 @@ class Appointment < ApplicationRecord
 
   accepts_nested_attributes_for :cart_items
 
-  has_many :serviceable, through: :cart_items
-  has_many :service_options_details, -> { where(serviceable_type: 'ServiceOptionDetail') }, class_name: 'CartItem'
-  has_many :service_options, through: :service_option_details, source: :serviceable
-  has_many :service_details, -> { where(serviceable_type: 'ServiceDetail') }, class_name: 'CartItem'
+  # has_many :services, through: :cart_items, source_type: :serviceable
+  # has_many :service_options_details, -> { where(serviceable_type: 'ServiceOptionDetail') }, class_name: 'CartItem'
+  # has_many :service_options, through: :service_option_details, source: :serviceable
+  # has_many :service_details, -> { where(serviceable_type: 'ServiceDetail') }, class_name: 'CartItem'
 
   has_and_belongs_to_many :pets, -> { with_deleted }
 
@@ -29,7 +29,7 @@ class Appointment < ApplicationRecord
 
   before_validation :set_end_at, :set_calendar, :set_admin, on: :create
   validates :start_at, presence: { message: 'Date and time are required' }
-  validate :vet_id_should_be_vaild, :pet_id_should_be_valid, :service_ids_should_be_valid, :time_should_be_valid,
+  validate :vet_id_should_be_vaild, :pet_ids_should_be_valid, :service_ids_should_be_valid, :time_should_be_valid,
            :appointmet_overlaps
 
   after_validation :set_price, on: :create
@@ -81,32 +81,36 @@ class Appointment < ApplicationRecord
 
   def service_ids_should_be_valid
     if for_clinic?
-      self.service_detail_ids = []
+      self.cart_items = []
     else
       check_services_count
-      check_services if service_detail_ids.present?
     end
-  end
-
-  def check_services
-    services_valid = service_details.each do |sd|
-      break false if sd.pet_type_id != pet.pet_type_id
-    end
-    errors.add(:service_detail_ids, '1 of Services is invalid') unless services_valid
   end
 
   def check_services_count
     errors.add(:service_detail_ids, 'Booking service is required') if service_detail_ids.empty?
-    errors.add(:service_detail_ids, 'Should be only 1 service in booking') if bookable_type == 'DayCareCenre' && \
-                                                                              service_detail_ids.size > 1
+    return if bookable_type == 'Clinic' || bookable_type == 'GroomingCentre'
+    services_valid = cart_items.group_by(&:pet_id).each_value do |ci|
+      break false if ci.size > 1
+    end
+    errors.add(:service_detail_ids, 'Should be only 1 service for pet in booking') unless services_valid
   end
 
-  def pet_id_should_be_valid
-    errors.add(:pet_id, 'Pet is invalid') unless user.pet_ids.include?(pet_id)
+  def pet_ids_should_be_valid
+    user_pet_ids = user.pets.owned.pluck(:id)
+    if for_clinic?
+      another_ids = pet_ids - user_pet_ids
+      errors.add(:pet_ids, 'Pets are invalid') if another_ids.present?
+    else
+      service_pet_ids = cart_items.map(&:pet_id).uniq.compact
+      another_ids = service_pet_ids - user_pet_ids
+      return errors.add(:pet_ids, 'Pets are invalid') if another_ids.present?
+      self.pet_ids = service_pet_ids
+    end
   end
 
   def set_calendar
-    return if bookable_type != 'Clinic' || calendar_id.present? || vet_id.blank?
+    return if !for_clinic? || calendar_id.present? || vet_id.blank?
     current_vet_calendar = vet.calendars.where('start_at <= ? AND end_at >= ?', start_at, end_at).first
     self.calendar = current_vet_calendar if current_vet_calendar
   end
@@ -117,7 +121,7 @@ class Appointment < ApplicationRecord
   end
 
   def appointmet_overlaps
-    return if bookable_type != 'Clinic' || vet_id.blank?
+    return if !for_clinic? || vet_id.blank?
     errors.add(:base, 'Appointment is overlapsing with other appointment') unless overlapsing_appointments.count.zero?
   end
 
@@ -129,4 +133,12 @@ class Appointment < ApplicationRecord
     return self.total_price = vet.consultation_fee if vet_id.present?
     self.total_price = cart_items.sum(&:price)
   end
+
+  def service_detail_ids
+    @service_detail_ids ||= cart_items.select { |ca| ca.serviceable_type == 'ServiceDetail' }.map(&:serviceable_id)
+  end
+
+  # def service_details
+  #   @service_detais ||= cart_items.select { |ca| ca.serviceable_type == 'ServiceDetail' }.map(&:serviceable_id)
+  # end
 end
