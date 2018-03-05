@@ -1,25 +1,23 @@
 class AppointmentSerializer < ActiveModel::Serializer
-  attributes :id, :start_at, :bookable_type, :total_price, :service_type_names
+  attributes :id, :start_at, :bookable_type, :total_price
 
   belongs_to :vet do
     object.vet if object.for_clinic?
   end
 
-  belongs_to :pet, serializer: PetIndexSerializer
+  # belongs_to :bookable
 
-  belongs_to :bookable, key: 'booked_object'
-
-  has_one :diagnosis do
-    object.diagnosis if object.for_clinic?
+  attribute :booked_object do
+    ActiveModelSerializers::SerializableResource.new(object.bookable, scope: scope, adapter: :attributes)
   end
 
   attribute :next_appointment do
     object.next_appointment.start_at.to_i if object.next_appointment.present?
   end
 
-  def service_type_names
-    object.service_types.pluck(:name)
-  end
+  has_many :service_option_details
+
+  has_many :pets, serializer: PetAppointmentSerializer
 
   def start_at
     object.start_at.to_i

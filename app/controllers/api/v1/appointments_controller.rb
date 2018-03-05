@@ -13,7 +13,9 @@ module Api
       end
 
       def show
-        render json: @appointment, scope: serializable_params
+        render json: @appointment, scope: serializable_params.merge(pets_services: pets_services,
+                                                                    pets_diagnoses: pets_diagnoses),
+               include: 'vet,service_option_details,pets,pets.service_details,pets.diagnosis'
       end
 
       def create
@@ -47,6 +49,14 @@ module Api
       def appointments_pagination_query
         @appointments_pagination_query ||= ::Api::V1::AppointmentsPaginationQuery.new(@user.appointments,
                                                                                       params[:page], params[:past])
+      end
+
+      def pets_diagnoses
+        @appointment.diagnosis.group_by(&:pet_id)
+      end
+
+      def pets_services
+        @appointment.cart_items.where(serviceable_type: 'ServiceDetail').group_by(&:pet_id)
       end
     end
   end

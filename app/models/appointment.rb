@@ -11,17 +11,14 @@ class Appointment < ApplicationRecord
   belongs_to :calendar, optional: true
   belongs_to :main_appointment, class_name: 'Appointment', optional: true
 
-  has_one :diagnosis, dependent: :destroy
+  has_many :diagnosis, dependent: :destroy
   has_one :next_appointment, class_name: 'Appointment', foreign_key: :main_appointment_id
 
   has_many :cart_items
 
   accepts_nested_attributes_for :cart_items
 
-  # has_many :services, through: :cart_items, source_type: :serviceable
-  # has_many :service_options_details, -> { where(serviceable_type: 'ServiceOptionDetail') }, class_name: 'CartItem'
-  # has_many :service_options, through: :service_option_details, source: :serviceable
-  # has_many :service_details, -> { where(serviceable_type: 'ServiceDetail') }, class_name: 'CartItem'
+  has_many :service_option_details, through: :cart_items, source: :serviceable, source_type: 'ServiceOptionDetail'
 
   has_and_belongs_to_many :pets, -> { with_deleted }
 
@@ -90,7 +87,8 @@ class Appointment < ApplicationRecord
   def check_services_count
     errors.add(:service_detail_ids, 'Booking service is required') if service_detail_ids.empty?
     return if bookable_type == 'Clinic' || bookable_type == 'GroomingCentre'
-    services_valid = cart_items.group_by(&:pet_id).each_value do |ci|
+    cart_items_for_check = cart_items.select { |ci| ci.serviceable_type == 'ServiceDetail' }.group_by(&:pet_id)
+    services_valid = cart_items_for_check.each_value do |ci|
       break false if ci.size > 1
     end
     errors.add(:service_detail_ids, 'Should be only 1 service for pet in booking') unless services_valid
@@ -137,8 +135,4 @@ class Appointment < ApplicationRecord
   def service_detail_ids
     @service_detail_ids ||= cart_items.select { |ca| ca.serviceable_type == 'ServiceDetail' }.map(&:serviceable_id)
   end
-
-  # def service_details
-  #   @service_detais ||= cart_items.select { |ca| ca.serviceable_type == 'ServiceDetail' }.map(&:serviceable_id)
-  # end
 end

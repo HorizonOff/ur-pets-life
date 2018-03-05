@@ -23,6 +23,10 @@ class BaseMethodsSerializer < ActiveModel::Serializer
     object.birthday.to_i if object.birthday
   end
 
+  def show_service_options?
+    scope[:pets_services].blank?
+  end
+
   def distance
     object.location.distance_to([scope[:latitude], scope[:longitude]], :km).try(:round, 2) if show_distance?
   end

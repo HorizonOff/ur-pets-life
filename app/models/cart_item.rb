@@ -22,7 +22,12 @@ class CartItem < ApplicationRecord
   end
 
   def weight_should_be_valid
-    return if serviceable_type == 'ServiceOptionDetail' || appointment.for_clinic? || appointment.bookable_type == 'GroomingCentre'
+    return if should_not_check_weight?
     errors.add(:pet, 'Too small room for pet') if pet.weight.to_f > serviceable.weight.to_f
+  end
+
+  def should_not_check_weight?
+    serviceable_type == 'ServiceOptionDetail' || appointment.for_clinic? || \
+      appointment.bookable_type == 'GroomingCentre'
   end
 end

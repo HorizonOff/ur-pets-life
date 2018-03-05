@@ -22,6 +22,7 @@ Metrics/AbcSize:
    - app/services/api/v1/user_services/social_auth_service.rb
    - app/decorators/admin_panel/vet_decorator.rb
    - lib/query_objects/admin_panel/filter_and_pagination_query.rb
+   - app/models/appointment.rb
 Metrics/CyclomaticComplexity:
   Enabled: true
   Exclude:
@@ -45,6 +46,7 @@ Metrics/ClassLength:
    - lib/query_objects/admin_panel/filter_and_pagination_query.rb
    - app/controllers/admin_panel/vets_controller.rb
    - app/models/pet.rb
+   - app/models/appointment.rb
 AllCops:
  Excludes:
    - Gemfile
