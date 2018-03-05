@@ -1,6 +1,9 @@
 class Diagnosis < ApplicationRecord
   belongs_to :appointment
+
   has_many :recipes, dependent: :destroy
+
+  validates :pet_id, uniqueness: { scope: :appointment_id, message: 'Diagnosis already exist' }
   validates :condition, :message, presence: true
   validate :appointment_id_should_be_valid
   before_save :squish_instruction

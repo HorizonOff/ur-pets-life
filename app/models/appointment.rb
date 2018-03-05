@@ -11,7 +11,7 @@ class Appointment < ApplicationRecord
   belongs_to :calendar, optional: true
   belongs_to :main_appointment, class_name: 'Appointment', optional: true
 
-  has_one :diagnosis, dependent: :destroy
+  has_many :diagnosis, dependent: :destroy
   has_one :next_appointment, class_name: 'Appointment', foreign_key: :main_appointment_id
 
   has_many :cart_items
@@ -19,7 +19,7 @@ class Appointment < ApplicationRecord
   accepts_nested_attributes_for :cart_items
 
   # has_many :services, through: :cart_items, source_type: :serviceable
-  # has_many :service_options_details, -> { where(serviceable_type: 'ServiceOptionDetail') }, class_name: 'CartItem'
+  has_many :service_option_details, through: :cart_items, source: :serviceable, source_type: 'ServiceOptionDetail'
   # has_many :service_options, through: :service_option_details, source: :serviceable
   # has_many :service_details, -> { where(serviceable_type: 'ServiceDetail') }, class_name: 'CartItem'
 

@@ -83,10 +83,10 @@ module Api
         end
       end
 
-      swagger_schema :PetSmallResponse do
+      swagger_schema :PetAppointmentResponse do
         property :id do
           key :type, :integer
-          key :example, 10
+          key :example, 1
         end
         property :avatar_url do
           key :type, :string
@@ -95,17 +95,46 @@ module Api
           key :type, :string
           key :example, 'Pluto'
         end
-        property :birthday do
-          key :type, :integer
-          key :example, 1516217199
+        property :service_details do
+          key :'$ref', :PetServices
         end
-        property :pet_type_id do
-          key :type, :integer
-          key :example, 2
+        property :diagnosis do
+          key :'$ref', :DiagnosisResponse
         end
-        property :mobile_numbner do
+        property :diagnosis do
+          key :'$ref', :DiagnosisResponse
+        end
+      end
+
+      swagger_schema :PetServices do
+        items do
+          property :id do
+            key :type, :integer
+            key :example, 1
+          end
+          property :name do
+            key :type, :string
+            key :example, 'Service 3'
+          end
+          property :price do
+            key :type, :integer
+            key :example, 345
+          end
+        end
+      end
+
+      swagger_schema :DiagnosisResponse do
+        property :condition do
           key :type, :string
-          key :example, '+38050505050'
+          key :example, 'All good. No lockers'
+        end
+        property :message do
+          key :type, :string
+          key :example, 'Some message'
+        end
+        property :recipes do
+          key :type, :array
+          key :example, ['1st recipe', '2nd recipe']
         end
       end
 
@@ -126,43 +155,20 @@ module Api
           property :vet do
             key :'$ref', :VetResponse
           end
-          property :pet do
-            key :'$ref', :PetSmallResponse
-          end
-
-          property :picture_url do
-            key :type, :string
-          end
-          property :adress do
-            key :type, :string
-          end
-          property :distance do
-            key :type, :number
-            key :example, 34.57
-          end
-          property :working_hours do
-            key :'$ref', :WorkingHours
-          end
           property :booked_object do
             key :'$ref', :Clinic
           end
-          property :diagnosis do
-            property :condition do
-              key :type, :string
-              key :example, 'All good. No lockers'
-            end
-            property :message do
-              key :type, :string
-              key :example, 'Some message'
-            end
-            property :recipes do
-              key :type, :array
-              key :example, ['1st recipe', '2nd recipe']
-            end
+          property :pets do
+            key :'$ref', :PetAppointmentResponse
           end
           property :next_appointment do
             key :type, :integer
             key :example, 1516318200
+          end
+          property :service_option_details do
+            items do
+              key :'$ref', :ServiceOptionDetail
+            end
           end
         end
       end
