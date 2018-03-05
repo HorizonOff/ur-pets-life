@@ -40,8 +40,8 @@ module Api
       end
 
       def appointment_params
-        params.require(:appointment).permit(:bookable_type, :bookable_id, :vet_id, :start_at, :pet_id, :comment,
-                                            service_detail_ids: [])
+        params.require(:appointment).permit(:bookable_type, :bookable_id, :vet_id, :start_at, :pet_ids, :comment,
+                                            cart_items_attributes: %i[pet_id serviceable_type serviceable_id])
       end
 
       def appointments_pagination_query
