@@ -72,9 +72,10 @@ module Api
             key :type, :integer
             key :example, 1
           end
-          property :service_options do
-            key :type, :array
-            key :example, ['Drop off']
+          property :service_option_details do
+            items do
+              key :'$ref', :ServiceOptionDetail
+            end
           end
           property :service_types do
             items do
@@ -85,6 +86,10 @@ module Api
       end
 
       swagger_schema :ServiceType do
+        property :id do
+          key :type, :integer
+          key :example, 1
+        end
         property :pet_type_id do
           key :type, :integer
           key :example, 1
@@ -100,6 +105,25 @@ module Api
           items do
             key :'$ref', :ServiceDetail
           end
+        end
+      end
+
+      swagger_schema :ServiceOptionDetail do
+        property :id do
+          key :type, :integer
+          key :example, 1
+        end
+        property :service_option_id do
+          key :type, :integer
+          key :example, 1
+        end
+        property :price do
+          key :type, :integer
+          key :example, 123
+        end
+        property :name do
+          key :type, :string
+          key :example, 'Pick Up'
         end
       end
 

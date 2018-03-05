@@ -4,7 +4,7 @@ class ServiceDetail < ApplicationRecord
   belongs_to :service_type, -> { with_deleted }
   belongs_to :pet_type
 
-  has_and_belongs_to_many :appointments
+  has_many :cart_items, as: :serviceable
 
   delegate :name, :description, to: :service_type
 

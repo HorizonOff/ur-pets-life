@@ -1,7 +1,7 @@
 class BoardingSerializer < ServiceCentreSerializer
   type 'boarding'
 
-  attribute :service_options
+  has_many :service_option_details
 
   attribute :service_types do
     scope[:service_types]

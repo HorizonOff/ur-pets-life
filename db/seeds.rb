@@ -349,7 +349,9 @@ if GroomingCentre.count.zero?
                         schedule_attributes: schedule_attributes)
   g.save(validate: false)
   GroomingCentre.all.each do |gc|
-    gc.service_options = service_options.sample
+    service_options.sample.each do |so|
+      gc.service_option_details.create(service_option_id: so.id, price: rand(500))
+    end
     gc.service_types.create(name: 'Cleaning', description: description)
     gc.service_types.create(name: 'Hair Color', description: description)
     gc.service_types.create(name: 'Grooming', description: description)
@@ -370,7 +372,9 @@ if DayCareCentre.count.zero?
                        schedule_attributes: schedule_attributes)
   d.save(validate: false)
   DayCareCentre.all.each do |dcc|
-    dcc.service_options = service_options.sample
+    service_options.sample.each do |so|
+      dcc.service_option_details.create(service_option_id: so.id, price: rand(500))
+    end
     dcc.service_types.create(name: 'Care service 1', description: description)
     dcc.service_types.create(name: 'Care service 2', description: description)
     dcc.service_types.create(name: 'Care service 3', description: description)
@@ -392,7 +396,9 @@ if Boarding.count.zero?
   d.save(validate: false)
 
   Boarding.all.each do |b|
-    b.service_options = service_options.sample
+    service_options.sample.each do |so|
+      b.service_option_details.create(service_option_id: so.id, price: rand(500))
+    end
     b.service_types.create(name: 'Boarding service 1', description: description)
     b.service_types.create(name: 'Boarding service 2', description: description)
     b.service_types.create(name: 'Boarding service 3', description: description)
@@ -467,51 +473,51 @@ if Picture.count.zero?
   end
 end
 
-if Appointment.count.zero?
-  Clinic.all.each do |c|
-    3.times do
-      user.appointments.create(bookable: c, vet_id: c.vet_ids.sample, start_at: rand(1.month.ago..1.month.since),
-                               pet: pet)
-    end
-  end
-  DayCareCentre.all.each do |c|
-    3.times do
-      a = user.appointments.new(bookable: c, start_at: rand(1.month.ago..1.month.since), pet: pet,
-                               service_detail_ids: [c.service_details.where(pet_type_id: pet.id).first.try(:id)])
-      puts a.errors.messages unless a.save
-    end
-  end
-  GroomingCentre.all.each do |c|
-    3.times do
-      a = user.appointments.new(bookable: c, start_at: rand(1.month.ago..1.month.since), pet: pet,
-                               service_detail_ids: c.service_details.where(pet_type_id: pet.id).pluck(:id))
-      puts a.errors.messages unless a.save
+# if Appointment.count.zero?
+#   Clinic.all.each do |c|
+#     3.times do
+#       user.appointments.create(bookable: c, vet_id: c.vet_ids.sample, start_at: rand(1.month.ago..1.month.since),
+#                                pet: pet)
+#     end
+#   end
+#   DayCareCentre.all.each do |c|
+#     3.times do
+#       a = user.appointments.new(bookable: c, start_at: rand(1.month.ago..1.month.since), pet: pet,
+#                                service_detail_ids: [c.service_details.where(pet_type_id: pet.id).first.try(:id)])
+#       puts a.errors.messages unless a.save
+#     end
+#   end
+#   GroomingCentre.all.each do |c|
+#     3.times do
+#       a = user.appointments.new(bookable: c, start_at: rand(1.month.ago..1.month.since), pet: pet,
+#                                service_detail_ids: c.service_details.where(pet_type_id: pet.id).pluck(:id))
+#       puts a.errors.messages unless a.save
 
-    end
-  end
-end
+#     end
+#   end
+# end
 
-if Diagnosis.count.zero?
-  past_clinic_appointments = Appointment.for_clinic.past
-  past_clinic_appointments.each do |a|
-    a.create_diagnosis(condition: 'norm condition',
-                       message: "sdfds ef ewf ewfo kewpofkopwekfpo kpowekfpwekf pweokrpwk pwerkewpkr
-                                 pewkrpewkr pewkpewkrpwekr pwkerpewkr pwekr pekrpewkrpewkpwkr pwekrpwekr
-                                 pwekr pwerkpewkrpw kpwerpwekr")
-  end
-end
+# if Diagnosis.count.zero?
+#   past_clinic_appointments = Appointment.for_clinic.past
+#   past_clinic_appointments.each do |a|
+#     a.create_diagnosis(condition: 'norm condition',
+#                        message: "sdfds ef ewf ewfo kewpofkopwekfpo kpowekfpwekf pweokrpwk pwerkewpkr
+#                                  pewkrpewkr pewkpewkrpwekr pwkerpewkr pwekr pekrpewkrpewkpwkr pwekrpwekr
+#                                  pwekr pwerkpewkrpw kpwerpwekr")
+#   end
+# end
 
-if Recipe.count.zero?
-  first_instruction = 'ssdas dwewqe qwe wqe wqe qwe qwe eqe qweqweawdas qwe'
-  second_instruction = 'kfldgdfkl fkdlgmklfdmg dgdfkmg 234v erkgmferlk m'
-  resipes = [[first_instruction], [second_instruction], [first_instruction, second_instruction]]
-  Diagnosis.all.each do |d|
-    resipes.sample.each do |instr|
-      d.recipes.create(instruction: instr)
-    end
-  end
-end
+# if Recipe.count.zero?
+#   first_instruction = 'ssdas dwewqe qwe wqe wqe qwe qwe eqe qweqweawdas qwe'
+#   second_instruction = 'kfldgdfkl fkdlgmklfdmg dgdfkmg 234v erkgmferlk m'
+#   resipes = [[first_instruction], [second_instruction], [first_instruction, second_instruction]]
+#   Diagnosis.all.each do |d|
+#     resipes.sample.each do |instr|
+#       d.recipes.create(instruction: instr)
+#     end
+#   end
+# end
 
-if TermsAndCondition.count.zero?
-  TermsAndCondition.create
-end
+# if TermsAndCondition.count.zero?
+#   TermsAndCondition.create
+# end

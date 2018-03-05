@@ -8,7 +8,7 @@ class Pet < ApplicationRecord
   has_many :vaccine_types, through: :pet_type
   has_many :vaccinations, -> { order(done_at: :desc) }, inverse_of: :pet, dependent: :destroy
   has_many :pictures, inverse_of: :pet, dependent: :destroy
-  has_many :appointments
+  has_and_belongs_to_many :appointments
   has_many :past_clinic_appointments, -> { where(bookable_type: 'Clinic').past }, class_name: 'Appointment'
 
   has_one :location, as: :place, inverse_of: :place, dependent: :destroy
