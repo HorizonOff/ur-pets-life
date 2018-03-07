@@ -26,7 +26,14 @@
                 = @day_care_centre.website
               %li
                 %i.fa.fa-user.user-profile-icon
-                Day Care centre admin
+                = @day_care_centre.admin.try(:name)
+                
+              - if @day_care_centre.service_option_details.present?
+                %li
+                  Service options:
+                  - @day_care_centre.service_option_details.each do |sod|
+                    %br
+                    = "#{sod.name}: #{sod.price} AED"
 
             = link_to edit_admin_panel_day_care_centre_path(@day_care_centre), class: 'btn btn-warning' do
               %i.fa.fa-edit.m-right-xs
