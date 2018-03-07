@@ -1,18 +1,57 @@
-= f.hidden_field :serviceable_type
-= f.hidden_field :serviceable_id
+.col-md-12.col-sm-12.col-xs-12
+  .x_panel
+    .x_content
+      %br
+      = f.hidden_field :serviceable_type
+      = f.hidden_field :serviceable_id
+      
+      .form-group
+        = f.label :name, 'Title', class: 'control-label col-md-3 col-sm-3 col-xs-12'
+        .col-md-6.col-sm-6.col-xs-12
+          = f.text_field :name, class: 'form-control col-md-7 col-xs-12', required: true
+      .form-group
+        = f.label :description, 'Description', class: 'control-label col-md-3 col-sm-3 col-xs-12'
+        .col-md-9.col-sm-9.col-xs-12
+          = f.text_area :description, rows: 5, class: 'form-control no-resize'
 
-.form-group
-  = f.label :name, 'Title', class: 'control-label col-md-3 col-sm-3 col-xs-12'
-  .col-md-6.col-sm-6.col-xs-12
-    = f.text_field :name, class: 'form-control col-md-7 col-xs-12', required: true
-.form-group
-  = f.label :description, 'Description', class: 'control-label col-md-3 col-sm-3 col-xs-12'
-  .col-md-9.col-sm-9.col-xs-12
-    = f.text_area :description, rows: 5, class: 'form-control no-resize'
-
-= f.fields_for :service_details do |sd|
-  = render partial: 'admin_panel/service_types/service_detail', locals: { f: sd }
-
-.ln_solid
 .row
-  = f.submit 'Save', class: 'btn btn-success center-block', style: 'margin:auto'
+  .col-md-4.col-sm-4.col-xs-12
+    .x_panel
+      .x_content
+        %br
+        #cat_services
+          %div{ style: 'text-align:center' }
+            %img{ src: '/images/ic_cat_active@2x.png', class: 'pet_type_icon' }
+          %br
+          = f.fields_for :cat_services do |ff|
+            = render partial: 'admin_panel/service_types/service_detail_form', locals: {f: ff}
+          .links
+            = link_to_add_association 'Add service', f, :cat_services, { class: 'btn btn-info', partial: 'admin_panel/service_types/service_detail_form' }
+        
+  .col-md-4.col-sm-4.col-xs-12
+    .x_panel
+      .x_content
+
+        %br
+        #dog_services
+          %div{ style: 'text-align:center' }
+            %img{ src: '/images/ic_dog_active@2x.png', class: 'pet_type_icon' }
+          %br
+          = f.fields_for :dog_services do |ff|
+            = render partial: 'admin_panel/service_types/service_detail_form', locals: {f: ff}
+          .links
+            = link_to_add_association 'Add service', f, :dog_services, { class: 'btn btn-info', partial: 'admin_panel/service_types/service_detail_form' }
+
+  .col-md-4.col-sm-4.col-xs-12
+    .x_panel
+      .x_content
+
+        %br
+        #other_services
+          %div{ style: 'text-align:center' }
+            %img{ src: '/images/ic_other_active@2x.png', class: 'pet_type_icon' }
+          %br
+          = f.fields_for :other_services do |ff|
+            = render partial: 'admin_panel/service_types/service_detail_form', locals: {f: ff}
+        .links
+          = link_to_add_association 'Add service', f, :other_services, { class: 'btn btn-info', partial: 'admin_panel/service_types/service_detail_form' }

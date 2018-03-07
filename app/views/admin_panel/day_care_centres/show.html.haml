@@ -27,7 +27,7 @@
               %li
                 %i.fa.fa-user.user-profile-icon
                 = @day_care_centre.admin.try(:name)
-                
+
               - if @day_care_centre.service_option_details.present?
                 %li
                   Service options:
@@ -53,7 +53,7 @@
               .col-md-6.col-sm-6.col-xs-6
                 %h2 Total count of services #{@day_care_centre.service_types.size}
               .col-md-6.col-sm-6.col-xs-6
-                =link_to 'Add a service', new_service_type_admin_panel_day_care_centre_path(@day_care_centre), class: 'btn btn-info pull-right', remote: true
+                =link_to 'Add a service', new_service_type_admin_panel_day_care_centre_path(@day_care_centre), class: 'btn btn-info pull-right'
             %table.table
               %thead
                 %tr

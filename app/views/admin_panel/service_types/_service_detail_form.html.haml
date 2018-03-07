@@ -1,0 +1,16 @@
+.nested-fields
+  .form-group
+    = f.label :weight, 'weight', class: 'control-label col-md-4 col-sm-4 col-xs-12'
+    .col-md-6.col-sm-6.col-xs-12
+      = f.number_field :weight, class: 'form-control col-md-4 col-xs-12', required: true
+  .form-group
+    = f.label :total_space, 'total_space', class: 'control-label col-md-4 col-sm-4 col-xs-12'
+    .col-md-6.col-sm-6.col-xs-12
+      = f.number_field :total_space, class: 'form-control col-md-4 col-xs-12', required: true
+  .form-group
+    = f.label :price, 'Price', class: 'control-label col-md-4 col-sm-4 col-xs-12'
+    .col-md-6.col-sm-6.col-xs-12
+      = f.number_field :price, class: 'form-control col-md-4 col-xs-12', required: true
+
+  .form-group{ style: 'text-align:center' }
+    = link_to_remove_association "Remove service", f, { class: 'btn btn-danger' }
