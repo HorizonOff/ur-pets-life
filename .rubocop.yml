@@ -14,6 +14,7 @@ Metrics/AbcSize:
    - app/controllers/api/base_controller.rb
    - app/controllers/admin_panel/clinics_controller.rb
    - app/controllers/admin_panel/day_care_centres_controller.rb
+   - app/controllers/admin_panel/boardings_controller.rb
    - app/controllers/admin_panel/grooming_centres_controller.rb
    - app/controllers/admin_panel/trainers_controller.rb
    - app/controllers/admin_panel/vets_controller.rb
@@ -35,10 +36,12 @@ Metrics/MethodLength:
     - app/controllers/api/base_controller.rb
     - app/controllers/admin_panel/clinics_controller.rb
     - app/controllers/admin_panel/day_care_centres_controller.rb
+    - app/controllers/admin_panel/boardings_controller.rb
     - app/controllers/admin_panel/grooming_centres_controller.rb
     - app/controllers/admin_panel/trainers_controller.rb
     - app/controllers/admin_panel/vets_controller.rb
     - app/controllers/admin_panel/users_controller.rb
+    - app/controllers/admin_panel/service_types_controller.rb
     - lib/query_objects/admin_panel/filter_and_pagination_query.rb
 Metrics/ClassLength:
   Enabled: true

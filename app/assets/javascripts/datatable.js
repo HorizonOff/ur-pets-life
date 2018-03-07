@@ -27,6 +27,14 @@ function init_datatables(){
                                          { 'searchable': false, 'orderable': false, 'data': 'mobile_number', 'targets': 4 },
                                          { 'searchable': true, 'orderable': true, 'data': 'is_active', 'targets': 5 },
                                          { 'searchable': false, 'orderable': false, 'data': 'actions', 'targets': 6 } ] },
+      'boardings': { 'url': '/admin_panel/boardings',
+                     'columns': [ { 'searchable': true, 'orderable': true, 'data': 'id', 'targets': 0 },
+                                  { 'searchable': true, 'orderable': true, 'data': 'name', 'targets': 1 },
+                                  { 'searchable': false, 'orderable': false, 'data': 'picture', 'targets': 2 },
+                                  { 'searchable': true, 'orderable': true, 'data': 'email', 'targets': 3 },
+                                  { 'searchable': false, 'orderable': false, 'data': 'mobile_number', 'targets': 4 },
+                                  { 'searchable': true, 'orderable': true, 'data': 'is_active', 'targets': 5 },
+                                  { 'searchable': false, 'orderable': false, 'data': 'actions', 'targets': 6 } ] },
       'grooming_centres': { 'url': '/admin_panel/grooming_centres',
                             'columns': [ { 'searchable': true, 'orderable': true, 'data': 'id', 'targets': 0 },
                                          { 'searchable': true, 'orderable': true, 'data': 'name', 'targets': 1 },
@@ -104,8 +112,10 @@ function init_datatables(){
       init_datatable(table_rules['vets']['url'], table_rules['vets']['columns'])
     } else if (datatable.hasClass('appointments')){
       init_datatable(table_rules['appointments']['url'], table_rules['appointments']['columns'])
-    } else {
+    } else if (datatable.hasClass('posts')){
       init_datatable(table_rules['posts']['url'], table_rules['posts']['columns'])
+    } else {
+      init_datatable(table_rules['boardings']['url'], table_rules['boardings']['columns'])
     }
   };
 };
