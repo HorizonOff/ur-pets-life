@@ -56,7 +56,9 @@ Rails.application.routes.draw do
       resources :vets, only: :show do
         member { get :schedule }
       end
-      resources :appointments, only: %i[index create show]
+      resources :appointments, only: %i[index create show] do
+        member { put :cancel }
+      end
       resources :favorites, only: %i[index create destroy]
 
       resources :sessions, only: :create do

@@ -34,6 +34,15 @@ module Api
         render json: { nothing: true }, status: 204
       end
 
+      def cancel
+        return render_422(status: 'Cant be changed') if @appointment.canceled? || @appointment.start_at <= Time.current
+        if @appointment.update(status: :canceled)
+          render json: { message: 'Appointment canceled' }
+        else
+          render_422(parse_errors_messages(@appointment))
+        end
+      end
+
       private
 
       def set_appointment

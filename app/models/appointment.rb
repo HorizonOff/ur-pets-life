@@ -1,7 +1,7 @@
 class Appointment < ApplicationRecord
   include CalendarValidationConcern
 
-  STATUS_OPTIONS = %i[pending accepted rejected].freeze
+  STATUS_OPTIONS = %i[pending accepted rejected canceled].freeze
   enum status: STATUS_OPTIONS
 
   belongs_to :user, -> { with_deleted }
