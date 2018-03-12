@@ -21,7 +21,7 @@ module AdminPanel
 
     def not_allowed
       respond_to do |format|
-        format.html { redirect_to(root_path) && return }
+        format.html { redirect_to(admin_panel_root_path) && return }
         format.json { (render json: { message: 'You have no permission' }, status: 403) && return }
       end
     end
