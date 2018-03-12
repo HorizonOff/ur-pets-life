@@ -49,9 +49,7 @@ module AdminPanel
       if model.pending?
         link_for_accepting + link_for_rejecting
       elsif model.accepted?
-        link_for_rejecting
-      else
-        link_for_accepting
+        link_for_canceling
       end
     end
 
@@ -64,6 +62,12 @@ module AdminPanel
     def link_for_rejecting
       (link_to url_helpers.reject_admin_panel_appointment_path(model), class: 'btn btn-danger btn-xs', method: :put do
         content_tag(:i, nil, class: 'fa fa-close') + 'Reject'
+      end)
+    end
+
+    def link_for_canceling
+      (link_to url_helpers.cancel_admin_panel_appointment_path(model), class: 'btn btn-danger btn-xs', method: :put do
+        content_tag(:i, nil, class: 'fa fa-close') + 'Cancel'
       end)
     end
   end

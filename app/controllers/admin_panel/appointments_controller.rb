@@ -22,6 +22,11 @@ module AdminPanel
       render :show
     end
 
+    def cancel
+      @appointment.update(status: :canceled)
+      render :show
+    end
+
     private
 
     def set_appointment

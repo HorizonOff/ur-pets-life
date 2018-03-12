@@ -1,7 +1,8 @@
 class Diagnosis < ApplicationRecord
   belongs_to :appointment
+  belongs_to :pet
 
-  has_many :recipes, dependent: :destroy
+  has_many :recipes, dependent: :destroy, inverse_of: :diagnosis
 
   validates :pet_id, uniqueness: { scope: :appointment_id, message: 'Diagnosis already exist' }
   validates :condition, :message, presence: true

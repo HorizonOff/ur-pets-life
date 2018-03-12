@@ -120,6 +120,7 @@ Rails.application.routes.draw do
       resource :next_appointment, shallow: true, only: %i[new create]
       member { put :accept }
       member { put :reject }
+      member { put :cancel }
     end
     resource :profile, only: %i[edit update]
     resource :password, only: %i[edit update]

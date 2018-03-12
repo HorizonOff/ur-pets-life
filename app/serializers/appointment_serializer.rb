@@ -1,5 +1,6 @@
 class AppointmentSerializer < ActiveModel::Serializer
   attributes :id, :start_at, :bookable_type, :total_price
+  attribute :can_be_canceled?, key: :can_be_canceled
 
   belongs_to :vet do
     object.vet if object.for_clinic?

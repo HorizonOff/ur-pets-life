@@ -51,7 +51,8 @@ module Api
       end
 
       def appointment_params
-        params.require(:appointment).permit(:bookable_type, :bookable_id, :vet_id, :start_at, :pet_ids, :comment,
+        params.require(:appointment).permit(:bookable_type, :bookable_id, :vet_id, :start_at, :comment,
+                                            pet_ids: [],
                                             cart_items_attributes: %i[pet_id serviceable_type serviceable_id])
       end
 
@@ -61,7 +62,7 @@ module Api
       end
 
       def pets_diagnoses
-        @appointment.diagnosis.group_by(&:pet_id)
+        @appointment.diagnoses.group_by(&:pet_id)
       end
 
       def pets_services

@@ -4,12 +4,12 @@ module AdminPanel
     before_action :set_diagnosis, only: %i[edit update]
 
     def new
-      @diagnosis = @appointment.build_diagnosis
+      @diagnosis = @appointment.diagnoses.build(pet_id: params[:pet_id])
       @diagnosis.recipes.build
     end
 
     def create
-      @diagnosis = @appointment.build_diagnosis(diagnosis_params)
+      @diagnosis = @appointment.diagnoses.build(diagnosis_params)
       flash[:success] = 'Diagnosis wqas successfully created' if @diagnosis.save
     end
 
@@ -24,7 +24,7 @@ module AdminPanel
     private
 
     def diagnosis_params
-      params.require(:diagnosis).permit(:condition, :message, recipes_attributes: %i[id instruction _destroy])
+      params.require(:diagnosis).permit(:pet_id, :condition, :message, recipes_attributes: %i[id instruction _destroy])
     end
 
     def set_appointment

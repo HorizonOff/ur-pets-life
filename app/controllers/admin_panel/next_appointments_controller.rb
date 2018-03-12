@@ -7,9 +7,10 @@ module AdminPanel
     end
 
     def create
-      new_attributes = appointment_params.merge(@appointment.slice(:user_id, :bookable_id, :bookable_type, :pet_id,
+      new_attributes = appointment_params.merge(@appointment.slice(:user_id, :bookable_id, :bookable_type,
                                                                    :vet_id, :status))
       @next_appointment = @appointment.build_next_appointment(new_attributes)
+      @next_appointment.pet_ids = @appointment.pet_ids
       @next_appointment.save
     end
 

@@ -3,9 +3,9 @@ class ServiceType < ApplicationRecord
 
   belongs_to :serviceable, -> { with_deleted }, polymorphic: true
   has_many :service_details, dependent: :destroy, inverse_of: :service_type
-  has_many :cat_services, -> { where(pet_type_id: 1) }, class_name: 'ServiceDetail'
-  has_many :dog_services, -> { where(pet_type_id: 2) }, class_name: 'ServiceDetail'
-  has_many :other_services, -> { where(pet_type_id: 3) }, class_name: 'ServiceDetail'
+  has_many :cat_services, -> { where(pet_type_id: 1) }, class_name: 'ServiceDetail', inverse_of: :service_type
+  has_many :dog_services, -> { where(pet_type_id: 2) }, class_name: 'ServiceDetail', inverse_of: :service_type
+  has_many :other_services, -> { where(pet_type_id: 3) }, class_name: 'ServiceDetail', inverse_of: :service_type
 
   accepts_nested_attributes_for :service_details, allow_destroy: true
   accepts_nested_attributes_for :cat_services, allow_destroy: true
