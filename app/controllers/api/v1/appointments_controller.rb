@@ -34,6 +34,15 @@ module Api
         render json: { nothing: true }, status: 204
       end
 
+      def cancel
+        return render_422(status: 'Cant be changed') if @appointment.canceled? || @appointment.start_at <= Time.current
+        if @appointment.update(status: :canceled)
+          render json: { message: 'Appointment canceled' }
+        else
+          render_422(parse_errors_messages(@appointment))
+        end
+      end
+
       private
 
       def set_appointment
@@ -42,7 +51,8 @@ module Api
       end
 
       def appointment_params
-        params.require(:appointment).permit(:bookable_type, :bookable_id, :vet_id, :start_at, :pet_ids, :comment,
+        params.require(:appointment).permit(:bookable_type, :bookable_id, :vet_id, :start_at, :comment,
+                                            pet_ids: [],
                                             cart_items_attributes: %i[pet_id serviceable_type serviceable_id])
       end
 
@@ -52,7 +62,7 @@ module Api
       end
 
       def pets_diagnoses
-        @appointment.diagnosis.group_by(&:pet_id)
+        @appointment.diagnoses.group_by(&:pet_id)
       end
 
       def pets_services

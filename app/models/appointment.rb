@@ -1,7 +1,7 @@
 class Appointment < ApplicationRecord
   include CalendarValidationConcern
 
-  STATUS_OPTIONS = %i[pending accepted rejected].freeze
+  STATUS_OPTIONS = %i[pending accepted rejected canceled].freeze
   enum status: STATUS_OPTIONS
 
   belongs_to :user, -> { with_deleted }
@@ -11,7 +11,7 @@ class Appointment < ApplicationRecord
   belongs_to :calendar, optional: true
   belongs_to :main_appointment, class_name: 'Appointment', optional: true
 
-  has_many :diagnosis, dependent: :destroy
+  has_many :diagnoses, dependent: :destroy
   has_one :next_appointment, class_name: 'Appointment', foreign_key: :main_appointment_id
 
   has_many :cart_items
@@ -54,6 +54,10 @@ class Appointment < ApplicationRecord
   def start_at=(value)
     value = Time.zone.at(value.to_i)
     super
+  end
+
+  def can_be_canceled?
+    !past? && (pending? || accepted?)
   end
 
   private

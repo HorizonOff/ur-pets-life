@@ -56,7 +56,9 @@ Rails.application.routes.draw do
       resources :vets, only: :show do
         member { get :schedule }
       end
-      resources :appointments, only: %i[index create show]
+      resources :appointments, only: %i[index create show] do
+        member { put :cancel }
+      end
       resources :favorites, only: %i[index create destroy]
 
       resources :sessions, only: :create do
@@ -118,6 +120,7 @@ Rails.application.routes.draw do
       resource :next_appointment, shallow: true, only: %i[new create]
       member { put :accept }
       member { put :reject }
+      member { put :cancel }
     end
     resource :profile, only: %i[edit update]
     resource :password, only: %i[edit update]

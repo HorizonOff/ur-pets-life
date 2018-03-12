@@ -1,4 +1,4 @@
 <% if @diagnosis.errors.empty? %>
-  $('#diagnosis_block').replaceWith("<%= j render partial: 'admin_panel/diagnoses/diagnosis', locals: { appointment_id: @diagnosis.appointment_id, diagnosis: @diagnosis } %>");
+  $('.diagnosis_block[data-pet-id="<%= @diagnosis.pet_id %>"]').replaceWith("<%= j render partial: 'admin_panel/diagnoses/diagnosis', locals: { diagnosis: @diagnosis, pet_id: @diagnosis.pet_id } %>");
   $('#Modal').modal('hide');
 <% end %>

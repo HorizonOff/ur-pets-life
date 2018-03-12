@@ -350,6 +350,30 @@ module Api
           end
         end
       end
+
+      swagger_path '/appointments/{id}/cancel' do
+        operation :put do
+          key :description, 'Cancel appointment'
+          key :consumes, %w[application/json]
+          key :produces, %w[application/json]
+          key :tags, %w[Appointments]
+
+          security do
+            key :api_key, []
+          end
+          parameter do
+            key :name, :id
+            key :in, :path
+            key :type, :integer
+            key :required, true
+            key :example, 1
+          end
+
+          response 200 do
+            key :description, 'Success response'
+          end
+        end
+      end
     end
   end
 end
