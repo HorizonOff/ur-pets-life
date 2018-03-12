@@ -39,5 +39,9 @@ module AdminPanel
          wednesday_close_at thursday_open_at thursday_close_at friday_open_at friday_close_at saturday_open_at
          saturday_close_at sunday_open_at sunday_close_at]
     end
+
+    def service_option_params
+      %i[id service_option_id price _destroy]
+    end
   end
 end

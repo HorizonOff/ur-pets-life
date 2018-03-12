@@ -2,7 +2,7 @@ class GroomingCentre < ApplicationRecord
   include ServiceCentreConcern
   belongs_to :admin, optional: true
 
-  has_many :service_option_details, as: :service_optionable
+  has_many :service_option_details, as: :service_optionable, inverse_of: :service_optionable
   has_many :service_options, through: :service_option_details
 
   has_many :service_types, as: :serviceable
@@ -10,6 +10,7 @@ class GroomingCentre < ApplicationRecord
   has_many :pet_types, through: :service_details
 
   accepts_nested_attributes_for :schedule, update_only: true
+  accepts_nested_attributes_for :service_option_details
 
   def admins_for_select
     if admin_id?

@@ -43,7 +43,26 @@ module ServiceCentreConcern
     after_save :check_admin
   end
 
+  def build_relations
+    if new_record?
+      build_location
+      build_schedule
+      build_default_service_option_details
+    else
+      build_service_option_details_with_blanks
+    end
+  end
+
   private
+
+  def build_service_option_details_with_blanks
+    build_default_service_option_details(service_option_details.pluck(:service_option_id))
+  end
+
+  def build_default_service_option_details(except_ids = [])
+    options = ServiceOption.where.not(id: except_ids)
+    options.map { |o| service_option_details.build(service_option: o) }
+  end
 
   def check_admin
     return unless saved_changes.keys.include?('admin_id')

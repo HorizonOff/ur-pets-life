@@ -159,3 +159,16 @@ $(document).on('change', 'input.service_detail_switch', function() {
     hide_and_disable_inputs(selector)
   }
 });
+
+$(document).on('ifChanged', 'input.service_option_switch', function() {
+  var destroy_checkbox = $(this).parent().siblings('._destroy')
+  destroy_checkbox.prop('checked', !destroy_checkbox.prop('checked'))
+  var selector = $(this).parents('.check_boxes').siblings('.service_option_details_fields');
+  if(selector.hasClass('hiden')) {
+    selector.removeClass('hiden');
+    show_and_enable_inputs(selector)
+  } else {
+    selector.addClass('hiden');
+    hide_and_disable_inputs(selector);
+  }
+});

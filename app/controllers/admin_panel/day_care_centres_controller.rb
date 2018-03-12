@@ -14,11 +14,12 @@ module AdminPanel
 
     def new
       @day_care_centre = DayCareCentre.new
-      @day_care_centre.build_location
-      @day_care_centre.build_schedule
+      @day_care_centre.build_relations
     end
 
-    def edit; end
+    def edit
+      @day_care_centre.build_relations
+    end
 
     def show; end
 
@@ -88,7 +89,8 @@ module AdminPanel
     def day_care_centre_params
       params.require(:day_care_centre).permit(:admin_id, :name, :email, :picture, :mobile_number, :website,
                                               :description, :picture_cache,
-                                              service_option_ids: [], location_attributes: location_params,
+                                              service_option_details_attributes: service_option_params,
+                                              location_attributes: location_params,
                                               schedule_attributes: schedule_params)
     end
 

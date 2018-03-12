@@ -92,3 +92,7 @@ div.error label {
 ul.msg_list li.full_width {
   width: 100% !important;
 }
+
+.hiden {
+  display: none;
+}
