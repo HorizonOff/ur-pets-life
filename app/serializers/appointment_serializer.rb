@@ -6,8 +6,6 @@ class AppointmentSerializer < ActiveModel::Serializer
     object.vet if object.for_clinic?
   end
 
-  # belongs_to :bookable
-
   attribute :booked_object do
     ActiveModelSerializers::SerializableResource.new(object.bookable, serializer: AppointmentBookedObjectSerializer,
                                                                       scope: scope, adapter: :attributes)

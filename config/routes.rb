@@ -83,6 +83,8 @@ Rails.application.routes.draw do
 
   devise_for :admins, path: 'admin_panel/admins', except: :registrations
   namespace :admin_panel do
+    root 'dashboard#index'
+
     resources :admins, only: %w[index destroy] do
       member { put :change_status }
     end
