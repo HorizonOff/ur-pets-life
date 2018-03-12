@@ -25,7 +25,7 @@
 
 
 input[type="checkbox"].check_box_picture{
-    display: none;
+  display: none;
 }
 label.check_box_picture{
   cursor: pointer;
@@ -95,4 +95,11 @@ ul.msg_list li.full_width {
 
 .hiden {
   display: none;
+}
+
+.pet_type_icon {
+  height:100px;
+  width:100px;
+  border-radius: 50%;
+  background-size: 100%;
 }

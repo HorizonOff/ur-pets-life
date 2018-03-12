@@ -1,4 +1,4 @@
 = form_for @service_type, url: admin_panel_service_type_path(@service_type),
   html: { method: :put, class: 'form-horizontal form-label-left', autocomplete: 'off', remote: true } do |f|
 
-  = render partial: 'admin_panel/service_types/form', locals: { f: f }
+  = render partial: 'admin_panel/service_types/modal_form', locals: { f: f }

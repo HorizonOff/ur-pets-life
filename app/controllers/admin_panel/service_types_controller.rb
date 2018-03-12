@@ -7,11 +7,31 @@ module AdminPanel
 
     def create
       @service_type = ServiceType.new(service_type_params)
-      flash[:success] = 'Service was successfully created' if @service_type.save
+      if @service_type.save
+        respond_to do |format|
+          format.html { redirect_to after_save_path }
+          format.js {}
+        end
+      else
+        respond_to do |format|
+          format.html { render :new }
+          format.js {}
+        end
+      end
     end
 
     def update
-      flash[:success] = 'Service was successfully updated' if @service_type.update(service_type_params)
+      if @service_type.update(service_type_params)
+        respond_to do |format|
+          format.html { redirect_to after_save_path }
+          format.js {}
+        end
+      else
+        respond_to do |format|
+          format.html { render :edit }
+          format.js {}
+        end
+      end
     end
 
     def destroy
@@ -26,11 +46,27 @@ module AdminPanel
 
     def service_type_params
       params.require(:service_type).permit(:serviceable_type, :serviceable_id, :name, :description,
-                                           service_details_attributes: %i[id pet_type_id price _destroy])
+                                           service_details_attributes: %i[id pet_type_id weight
+                                                                          total_space price _destroy],
+                                           cat_services_attributes: service_params,
+                                           dog_services_attributes: service_params,
+                                           other_services_attributes: service_params)
     end
 
     def set_service_details
       @service_type.service_details_with_blanks
+    end
+
+    def service_params
+      %i[id weight total_space price _destroy]
+    end
+
+    def after_save_path
+      if @service_type.serviceable_type == 'DayCareCentre'
+        admin_panel_day_care_centre_path(@service_type.serviceable_id)
+      else
+        admin_panel_boarding_path(@service_type.serviceable_id)
+      end
     end
   end
 end
