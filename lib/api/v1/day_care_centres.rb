@@ -142,7 +142,11 @@ module Api
         end
         property :weight do
           key :type, :number
-          key :example, 15
+          key :example, 5
+        end
+        property :total_space do
+          key :type, :number
+          key :example, 20
         end
       end
 
