@@ -9,7 +9,8 @@ class AppointmentSerializer < ActiveModel::Serializer
   # belongs_to :bookable
 
   attribute :booked_object do
-    ActiveModelSerializers::SerializableResource.new(object.bookable, scope: scope, adapter: :attributes)
+    ActiveModelSerializers::SerializableResource.new(object.bookable, serializer: AppointmentBookedObjectSerializer,
+                                                                      scope: scope, adapter: :attributes)
   end
 
   attribute :next_appointment do
