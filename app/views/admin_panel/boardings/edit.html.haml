@@ -1,0 +1,16 @@
+%div
+  .page-title
+    .title_left
+      %h3 Edit boarding
+
+  .clearfix
+  
+  = form_for @boarding, url: admin_panel_boarding_path(@boarding),
+  html: { multipart: true, method: :put, class: 'form-horizontal form-label-left with_location', autocomplete: 'off'} do |f|
+
+    = render partial: 'form', locals: { f: f }
+
+    = f.submit 'Update boarding', class: 'btn btn-success pull-right'
+
+:javascript
+  init_map();

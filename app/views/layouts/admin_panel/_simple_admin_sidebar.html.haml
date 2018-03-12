@@ -24,6 +24,17 @@
     = link_to new_admin_panel_day_care_centre_path do
       %i.fa.fa-plus-square
       New DayCare Centre
+- b = current_admin.boarding
+- if b.present? && b.persisted?
+  %li{ class: "#{'current-page' if current_page?(admin_panel_boarding_path(b))}" }
+    = link_to admin_panel_boarding_path(b) do
+      %i.fa.fa-tasks
+      Boarding
+- else
+  %li{ class: "#{'current-page' if current_page?(new_admin_panel_boarding_path)}" }
+    = link_to new_admin_panel_boarding_path do
+      %i.fa.fa-plus-square
+      New Boarding
 - gc = current_admin.grooming_centre
 - if gc.present? && gc.persisted?
   %li{ class: "#{'current-page' if current_page?(admin_panel_grooming_centre_path(gc))}" }
