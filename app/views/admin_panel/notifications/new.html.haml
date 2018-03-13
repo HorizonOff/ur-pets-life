@@ -1,0 +1,12 @@
+%div
+  .page-title
+    .title_left
+      %h3 New notification
+
+  .clearfix
+  
+  = form_tag(admin_panel_notifications_path, method: :post, class: 'form-horizontal form-label-left', autocomplete: 'off') do
+
+    = render partial: 'form'
+    
+    = submit_tag 'Create notification', class: 'btn btn-success pull-right'

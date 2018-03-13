@@ -56,6 +56,14 @@ function init_icheck(){
     $('input.flat.day_and_night').on('ifUnchecked', function(event){
       $('.timepicker').prop('disabled', false);
     });
+    $('input.flat.optional_checkbox').on('ifChecked', function(event){
+      hide_and_disable_inputs($('.user_ids'))
+      $('.optional_select').prop('disabled', true);
+    });
+    $('input.flat.optional_checkbox').on('ifUnchecked', function(event){
+      show_and_enable_inputs($('.user_ids'))
+      $('.optional_select').prop('disabled', false);
+    });
     $('input.flat#building_type').on('ifToggled', function(event){
       if ($(this).val() == 'building') {
         show_and_enable_inputs($('div.building'))

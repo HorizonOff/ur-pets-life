@@ -12,6 +12,7 @@ class Admin < ApplicationRecord
   has_one :boarding, dependent: :nullify
 
   has_many :appointments, dependent: :nullify
+  has_many :notifications, dependent: :nullify
 
   acts_as_paranoid
 
