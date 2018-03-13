@@ -4,7 +4,8 @@ module Api
       before_action :set_pet
 
       def index
-        appointments = @pet.past_clinic_appointments.page(params[:page])
+        appointments = @pet.appointments.past.for_clinic.includes(:bookable, bookable: %i[location schedule])
+                           .page(params[:page])
         serialized_appointments = ActiveModel::Serializer::CollectionSerializer.new(
           appointments, serializer: AppointmentIndexSerializer, scope: serializable_params
         )
