@@ -100,6 +100,7 @@ Rails.application.routes.draw do
     resources :day_care_centres do
       member { get :new_service_type }
     end
+    resources :additional_services, except: :show
     resources :boardings do
       member { get :new_service_type }
     end

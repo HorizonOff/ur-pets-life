@@ -1,0 +1,46 @@
+%div
+  .page-title
+    .title_left
+      %h3 Additional Services
+    .title_right
+      = link_to 'Create additional service', new_admin_panel_additional_service_path, class: 'btn btn-info btn-round pull-right'
+
+  .clearfix
+
+  .row
+    .col-md-12.col-sm-12.col-xs-12
+      .x_panel
+        .x_content
+          .form-horizontal.additional_parameters
+            .form-group
+              = label_tag :city, 'City', class: 'control-label col-md-1 col-sm-1 col-xs-6'
+              .col-md-4.col-sm-4.col-xs-6
+                = text_field_tag :city, '', class: 'form-control additional_parameter'
+
+          %table.table.datatable.additional_services
+            %thead
+              %tr
+                %th{style: 'width:30px'}  #
+                %th Name
+                %th Picture
+                %th Email
+                %th Phone
+                %th Website
+                %th Status
+                %th Actions
+              %tr
+                %th{style: 'width:30px'}
+                  = text_field_tag :id, '', class: 'form-control', style: 'width:100%'
+                %th
+                  = text_field_tag :name, '', class: 'form-control', style: 'width:100%'
+                %th
+                %th
+                  = text_field_tag :email, '', class: 'form-control', style: 'width:100%'
+                %th
+                  = text_field_tag :mobile_number, '', class: 'form-control', style: 'width:100%'
+                %th
+                  = text_field_tag :website, '', class: 'form-control', style: 'width:100%'
+                %th
+                  = select_tag :is_active, options_for_select([[], ['Active', true], ['Inactive', false]]),  class: 'form-control select2'
+                %th
+            %tbody
