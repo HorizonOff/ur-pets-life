@@ -38,9 +38,8 @@ class Notification < ApplicationRecord
     password = nil
 
     notification = RubyPushNotifications::APNS::APNSNotification.new(tokens, aps: ios_options)
-
     pusher = RubyPushNotifications::APNS::APNSPusher.new(
-      File.read("#{Rails.root}/app/certificates/aps_development.pem"),
+      File.read(certificate_path),
       ENV['APPLE_PUSH_ENV'] == 'sandbox',
       password
     )
@@ -67,5 +66,13 @@ class Notification < ApplicationRecord
 
   def ios_options
     { alert: message, sound: 'default', badge: user.unread_notifications.count }
+  end
+
+  def certificate_path
+    if ENV['APPLE_PUSH_ENV'] == 'sandbox'
+      "#{Rails.root}/app/certificates/aps_development.pem"
+    else
+      "#{Rails.root}/app/certificates/aps_production.pem"
+    end
   end
 end
