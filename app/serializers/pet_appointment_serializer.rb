@@ -6,6 +6,6 @@ class PetAppointmentSerializer < ActiveModel::Serializer
   end
 
   has_one :diagnosis do
-    scope[:pets_diagnoses][object.id]
+    scope[:pets_diagnoses][object.id]&.first
   end
 end
