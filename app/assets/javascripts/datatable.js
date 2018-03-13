@@ -91,7 +91,16 @@ function init_datatables(){
                               { 'searchable': true, 'orderable': false, 'data': 'title', 'targets': 2 },
                               { 'searchable': true, 'orderable': true, 'data': 'pet_type_id', 'targets': 3 },
                               { 'searchable': false, 'orderable': true, 'data': 'created_at', 'targets': 4 },
-                              { 'searchable': false, 'orderable': false, 'data': 'actions', 'targets': 5 } ] }
+                              { 'searchable': false, 'orderable': false, 'data': 'actions', 'targets': 5 } ] },
+      'additional_services': { 'url': '/admin_panel/additional_services',
+                               'columns': [ { 'searchable': true, 'orderable': true, 'data': 'id', 'targets': 0 },
+                                            { 'searchable': true, 'orderable': true, 'data': 'name', 'targets': 1 },
+                                            { 'searchable': false, 'orderable': false, 'data': 'picture', 'targets': 2 },
+                                            { 'searchable': true, 'orderable': true, 'data': 'email', 'targets': 3 },
+                                            { 'searchable': false, 'orderable': false, 'data': 'mobile_number', 'targets': 4 },
+                                            { 'searchable': false, 'orderable': false, 'data': 'website', 'targets': 5 },
+                                            { 'searchable': true, 'orderable': true, 'data': 'is_active', 'targets': 6 },
+                                            { 'searchable': false, 'orderable': false, 'data': 'actions', 'targets': 7 } ] }
     }
     var datatable = $('.datatable').first()
     if (datatable.hasClass('clinics')){
@@ -114,8 +123,10 @@ function init_datatables(){
       init_datatable(table_rules['appointments']['url'], table_rules['appointments']['columns'])
     } else if (datatable.hasClass('posts')){
       init_datatable(table_rules['posts']['url'], table_rules['posts']['columns'])
-    } else {
+    } else if (datatable.hasClass('boardings')){
       init_datatable(table_rules['boardings']['url'], table_rules['boardings']['columns'])
+    } else {
+      init_datatable(table_rules['additional_services']['url'], table_rules['additional_services']['columns'])
     }
   };
 };

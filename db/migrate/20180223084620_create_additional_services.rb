@@ -7,7 +7,7 @@ class CreateAdditionalServices < ActiveRecord::Migration[5.1]
       t.string :mobile_number
       t.string :website
       t.text :description
-      t.boolean :is_active
+      t.boolean :is_active, default: false
       t.datetime :deleted_at
 
       t.timestamps

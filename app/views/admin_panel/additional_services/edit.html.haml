@@ -1,0 +1,16 @@
+%div
+  .page-title
+    .title_left
+      %h3 Edit additional service
+
+  .clearfix
+  
+  = form_for @additional_service, url: admin_panel_additional_service_path(@additional_service),
+  html: { multipart: true, method: :put, class: 'form-horizontal form-label-left with_location', autocomplete: 'off'} do |f|
+
+    = render partial: 'form', locals: { f: f }
+
+    = f.submit 'Update additional service', class: 'btn btn-success pull-right'
+
+:javascript
+  init_map();
