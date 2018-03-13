@@ -1,11 +1,11 @@
 module AdminPanel
   class FilterAndPaginationQuery
     INT_COLUMNS = %w[id vets_count status specialization_id pet_type_id experience].freeze
-    BOOLEAN_COLUMNS = %w[is_active is_answered is_super_admin].freeze
+    BOOLEAN_COLUMNS = %w[is_active is_answered is_super_admin skip_push_sending].freeze
     ADDITIONAL_PARAMS = { 'city' => { join_model: :location, field: 'locations.city' },
                           'specialization_id' => { join_model: :specializations, field: 'specializations.id' },
                           'pet_type_id' => { join_model: :pet_types, field: 'pet_types.id' } }.freeze
-    SQL_RULES = { 'name' => { models: %w[User Appointment Post],
+    SQL_RULES = { 'name' => { models: %w[User Appointment Post Notification],
                               sql: "(users.first_name || ' ' || users.last_name) ILIKE :value" },
                   'vet_name' => { models: %w[Appointment], join_model: :vet,
                                   sql: '(vets.name ILIKE :value)' } }.freeze
@@ -38,7 +38,7 @@ module AdminPanel
         @scope = scope.select("users.*, concat(users.first_name, ' ', users.last_name) as name")
       elsif model == 'Appointment'
         @scope = scope.includes(:vet, :user).joins(:user)
-      elsif model == 'Post'
+      elsif model == 'Post' || model == 'Notification'
         @scope = scope.includes(:user).joins(:user)
       end
     end

@@ -1,15 +1,16 @@
 class Notification < ApplicationRecord
+  belongs_to :admin, optional: true
   belongs_to :user, counter_cache: true
   belongs_to :appointment, optional: true
   belongs_to :pet, optional: true
 
   before_validation :set_user
 
-  validates :message, presence: { message: 'Message is required' }
+  validates :message, presence: true
 
-  after_create :send_push, unless: ->(obj) { obj.skip_push_sending }
+  after_create :send_push, unless: ->(obj) { obj.skip_push_sending? }
 
-  attr_accessor :skip_push_sending
+  delegate :name, to: :user
 
   def self.view
     select { |n| n.viewed_at.blank? }.each do |n|

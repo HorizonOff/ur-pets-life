@@ -100,7 +100,13 @@ function init_datatables(){
                                             { 'searchable': false, 'orderable': false, 'data': 'mobile_number', 'targets': 4 },
                                             { 'searchable': false, 'orderable': false, 'data': 'website', 'targets': 5 },
                                             { 'searchable': true, 'orderable': true, 'data': 'is_active', 'targets': 6 },
-                                            { 'searchable': false, 'orderable': false, 'data': 'actions', 'targets': 7 } ] }
+                                            { 'searchable': false, 'orderable': false, 'data': 'actions', 'targets': 7 } ] },
+      'notifications': { 'url': '/admin_panel/notifications',
+                         'columns': [ { 'searchable': true, 'orderable': true, 'data': 'id', 'targets': 0 },
+                                      { 'searchable': true, 'orderable': false, 'data': 'name', 'targets': 1 },
+                                      { 'searchable': true, 'orderable': true, 'data': 'skip_push_sending', 'targets': 2 },
+                                      { 'searchable': false, 'orderable': true, 'data': 'created_at', 'targets': 3 },
+                                      { 'searchable': false, 'orderable': false, 'data': 'actions', 'targets': 4 } ] }
     }
     var datatable = $('.datatable').first()
     if (datatable.hasClass('clinics')){
@@ -125,8 +131,10 @@ function init_datatables(){
       init_datatable(table_rules['posts']['url'], table_rules['posts']['columns'])
     } else if (datatable.hasClass('boardings')){
       init_datatable(table_rules['boardings']['url'], table_rules['boardings']['columns'])
-    } else {
+    } else if (datatable.hasClass('additional_services')){
       init_datatable(table_rules['additional_services']['url'], table_rules['additional_services']['columns'])
+    } else {
+      init_datatable(table_rules['notifications']['url'], table_rules['notifications']['columns'])
     }
   };
 };

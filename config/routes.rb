@@ -134,5 +134,6 @@ Rails.application.routes.draw do
     resources :posts, only: %i[index show destroy], shallow: true do
       resources :comments, only: %i[index destroy]
     end
+    resources :notifications
   end
 end

@@ -1,0 +1,23 @@
+%div
+  .row
+    .col-md-12.col-sm-12.col-xs-12
+      .x_panel
+        .x_title
+          %h2 Notification
+          .clearfix
+        .x_content
+          .col-md-3.col-sm-3.col-xs-12.profile_left
+            %ul.list-unstyled.user_data
+              %li
+                %i.fa.fa-map-marker.user-profile-icon
+                = @notification.name
+              %li.m-top-xs
+                %i.fa.fa-external-link.user-profile-icon
+                = @notification.created_at
+              %li
+                Push sent:
+                %span.comment_count= @notification.skip_push_sending
+
+          .col-md-9.col-sm-9.col-xs-12
+            %blockquote
+              %p= @notification.message

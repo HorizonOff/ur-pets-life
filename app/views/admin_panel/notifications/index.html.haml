@@ -1,0 +1,31 @@
+%div
+  .page-title
+    .title_left
+      %h3 Notifications
+    .title_right
+      = link_to 'Create notification', new_admin_panel_notification_path, class: 'btn btn-info btn-round pull-right'
+
+  .clearfix
+
+  .row
+    .col-md-12.col-sm-12.col-xs-12
+      .x_panel
+        .x_content
+          %table.table.datatable.notifications
+            %thead
+              %tr
+                %th{style: 'width:30px'}  #
+                %th User Name
+                %th Push sent
+                %th Created at
+                %th Actions
+              %tr
+                %th{style: 'width:30px'}
+                  = text_field_tag :id, '', class: 'form-control', style: 'width:100%'
+                %th
+                  = text_field_tag :name, '', class: 'form-control', style: 'width:100%'
+                %th
+                  = select_tag :skip_push_sending, options_for_select([[], ['Yes', false], ['No', true]]),  class: 'form-control select2'
+                %th
+                %th
+            %tbody
