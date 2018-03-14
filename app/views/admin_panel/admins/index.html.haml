@@ -1,9 +1,13 @@
+- content_for :head do
+  %meta{name: "turbolinks-cache-control", content:"no-cache"}
+  
 %div
   .page-title
     .title_left
       %h3 Admins 
     .title_right
-      = link_to 'Invite admin', new_admin_invitation_path, class: 'btn btn-info btn-round pull-right'
+      - if current_admin.is_super_admin?
+        = link_to 'Invite admin', new_admin_invitation_path, class: 'btn btn-info btn-round pull-right'
 
   .clearfix
 
