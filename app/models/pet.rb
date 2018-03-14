@@ -52,6 +52,8 @@ class Pet < ApplicationRecord
 
   before_save :remove_location, if: ->(obj) { obj.changed_attributes.keys.include?('lost_at') && obj.lost_at.blank? }
 
+  after_update :send_lost_notification
+
   scope :alphabetical_order, -> { order(description: :asc) }
   scope :for_adoption,       -> { where(is_for_adoption: true, lost_at: nil) }
   scope :lost,               -> { where.not(lost_at: nil) }
@@ -116,6 +118,21 @@ class Pet < ApplicationRecord
   end
 
   private
+
+  def send_lost_notification
+    return if saved_changes.transform_values(&:second)[:lost_at].blank?
+    users_for_lost_notifications.each do |u|
+      send_notification_to_user(u)
+    end
+  end
+
+  def users_for_lost_notifications
+    User.where.not(id: user_id).joins(:location).near([location.latitude, location.longitude], 10, units: :km)
+  end
+
+  def send_notification_to_user(user)
+    user.notifications.create(pet_id: id, message: "#{description} was lost in your area")
+  end
 
   def owned_main_type_pet?
     @owned_main_type_pet ||= owned? && !pet_type_is_additional?
