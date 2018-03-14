@@ -3,7 +3,7 @@ module AdminPanel
     class InvitationsController < Devise::InvitationsController
       private
 
-      def after_invite_path_for(_inviter, _invitee)
+      def after_invite_path_for(_inviter, _invitee = nil)
         admin_panel_admins_path
       end
 

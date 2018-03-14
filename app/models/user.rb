@@ -66,6 +66,9 @@ class User < ApplicationRecord
 
   before_validation :check_location
 
+  delegate :address, to: :location, allow_nil: true
+  reverse_geocoded_by 'locations.latitude', 'locations.longitude'
+
   def birthday=(value)
     value = Time.zone.at(value.to_i) if value.present?
     super
