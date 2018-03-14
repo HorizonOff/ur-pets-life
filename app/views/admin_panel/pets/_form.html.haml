@@ -1,3 +1,5 @@
+- content_for :head do
+  %meta{name: "turbolinks-cache-control", content:"no-cache"}
 .row
   = render partial: 'layouts/admin_panel/errors', locals: { object: @pet }
 

@@ -81,7 +81,9 @@ Rails.application.routes.draw do
 
   resource :terms_and_conditions, only: :show
 
-  devise_for :admins, path: 'admin_panel/admins', except: :registrations
+  devise_for :admins, path: 'admin_panel/admins', except: :registrations,
+                      controllers: { invitations: 'admin_panel/admins/invitations' }
+
   namespace :admin_panel do
     root 'dashboard#index'
 

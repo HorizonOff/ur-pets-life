@@ -1,3 +1,5 @@
+- content_for :head do
+  %meta{name: "turbolinks-cache-control", content:"no-cache"}
 .row
   - if @notification_creation_service && @notification_creation_service.error.present?
     .form-group
