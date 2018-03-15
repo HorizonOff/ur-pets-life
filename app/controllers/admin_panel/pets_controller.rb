@@ -1,7 +1,6 @@
 module AdminPanel
   class PetsController < AdminPanelController
     before_action :set_pet
-    # before_action :set_location, only: %i[edit]
 
     def edit; end
 
@@ -25,6 +24,14 @@ module AdminPanel
     end
 
     def weight_history; end
+
+    def vaccinations
+      @vaccinations = @pet.vaccinations.includes(:vacine_types).order(created_at: :asc)
+    end
+
+    def diagnoses
+      @diagnoses = @pet.diagnoses.order(created_at: :asc)
+    end
 
     private
 

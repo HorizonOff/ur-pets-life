@@ -1,0 +1,17 @@
+.row
+  .col-md-12.col-sm-12.col-xs-12
+    %section.panel
+      .x_title
+        %h2 Diagnoses
+      - @diagnoses.each do |d|
+        .panel-body
+          .project_detail
+            %p.title Condition
+            %p= d.condition
+
+            %p.title Message
+            %p= d.message
+
+            %p.title Recipes
+            - d.recipes.each do |r|
+              %p= r.instruction

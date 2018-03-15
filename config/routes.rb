@@ -94,6 +94,8 @@ Rails.application.routes.draw do
     resources :users, except: %i[new ceate]
     resources :pets, except: %i[index new ceate] do
       member { get :weight_history }
+      member { get :vaccinations }
+      member { get :diagnoses }
     end
     resources :clinics do
       member { get :location }

@@ -1,0 +1,7 @@
+%tr
+  %th{ scope: 'row' } #{vaccination.id}
+  %td= vaccination.name
+  %td
+    -if vaccination.picture?
+      =image_tag(vaccination.picture.thumb.url, class: 'avatar')
+  %td= vaccination.done_at&.strftime('%e %b %Y')
