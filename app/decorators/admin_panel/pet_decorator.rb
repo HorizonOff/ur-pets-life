@@ -22,9 +22,18 @@ module AdminPanel
     end
 
     def actions
-      (link_to 'Edit', url_helpers.edit_admin_panel_pet_path(model), class: 'btn btn-warning btn-xs') +
+      pet_vaccinations_path + pet_diagnoses_path +
+        (link_to 'Edit', url_helpers.edit_admin_panel_pet_path(model), class: 'btn btn-warning btn-xs') +
         (link_to 'Delete', url_helpers.admin_panel_pet_path(model),
                  method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-xs')
+    end
+
+    def pet_vaccinations_path
+      link_to 'Vaccinations', url_helpers.vaccinations_admin_panel_pet_path(model), class: 'btn btn-info btn-xs'
+    end
+
+    def pet_diagnoses_path
+      link_to 'Diagnoses', url_helpers.diagnoses_admin_panel_pet_path(model), class: 'btn btn-info btn-xs'
     end
   end
 end

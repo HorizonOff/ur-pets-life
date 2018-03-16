@@ -8,5 +8,7 @@
   %td= pet.pet_type.name
   %td= pet.gender
   %td= link_to pet.weight, weight_history_admin_panel_pet_path(pet), remote: true if pet.weight.present?
+  %td= pet.microchip
+  %td= pet.municipality_tag
   %td= pet.status
   %td= pet.actions
