@@ -26,7 +26,7 @@ module AdminPanel
     def weight_history; end
 
     def vaccinations
-      @vaccinations = @pet.vaccinations.includes(:vacine_types).order(created_at: :asc)
+      @vaccinations = @pet.vaccinations.includes(:vaccine_type).order(created_at: :asc)
     end
 
     def diagnoses
