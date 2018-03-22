@@ -1,6 +1,10 @@
 class AppointmentSerializer < ActiveModel::Serializer
-  attributes :id, :start_at, :bookable_type, :total_price
+  attributes :id, :start_at, :end_at, :bookable_type, :total_price
   attribute :can_be_canceled?, key: :can_be_canceled
+
+  attribute :number_of_days do
+    object.number_of_days if object.day_care_or_boarding?
+  end
 
   belongs_to :vet do
     object.vet if object.for_clinic?
@@ -21,5 +25,9 @@ class AppointmentSerializer < ActiveModel::Serializer
 
   def start_at
     object.start_at.to_i
+  end
+
+  def end_at
+    object.end_at.to_i
   end
 end

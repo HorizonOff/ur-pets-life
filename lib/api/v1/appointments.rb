@@ -152,6 +152,14 @@ module Api
             key :type, :integer
             key :example, 1516318200
           end
+          property :end_at do
+            key :type, :integer
+            key :example, 1516318400
+          end
+          property :number_of_days do
+            key :type, :integer
+            key :example, 5
+          end
           property :bookable_type do
             key :type, :string
             key :example, "Clinic"
