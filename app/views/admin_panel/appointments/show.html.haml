@@ -38,7 +38,7 @@
                     %p.title= @appointment.bookable.name
                     %p= @appointment.bookable_type
 
-                    -if @appointment.for_clinic?
+                    - if @appointment.for_clinic?
                       %table.table
                         %thead
                           %tr
@@ -50,7 +50,7 @@
                             %td 1
                             %td= @appointment.vet.name
                             %td= @appointment.vet.consultation_fee
-                    -else
+                    - else
                       %table.table
                         %thead
                           %tr
@@ -105,6 +105,8 @@
                         %li
                           Weight: 
                           = pet.weight
+                        %li= link_to 'Vaccinations', vaccinations_admin_panel_pet_path(pet), class: 'btn btn-info btn-xs'
+                        %li= link_to 'Diagnoses', diagnoses_admin_panel_pet_path(pet), class: 'btn btn-info btn-xs' if @appointment.for_clinic?
                 - if @appointment.for_clinic?
                   - diagnosis = @appointment.diagnoses.select{ |d| d.pet_id == pet.id }.first
                   = render partial: 'admin_panel/diagnoses/diagnosis', locals: { pet_id: pet.id, diagnosis: diagnosis } if @appointment.past?

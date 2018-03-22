@@ -1,0 +1,22 @@
+%div
+  .page-title
+    .title_left
+      %h3 Diagnoses 
+  .clearfix
+  
+  - @diagnoses.each do |d|
+    .row
+      .col-md-12.col-sm-12.col-xs-12
+        %section.x_panel
+          .x_content
+            .project_detail
+              %p= d.created_at.strftime('%e %b %Y')
+              %p.title Condition
+              %p= d.condition
+
+              %p.title Message
+              %p= d.message
+
+              %p.title Recipes
+              - d.recipes.each do |r|
+                %p= r.instruction

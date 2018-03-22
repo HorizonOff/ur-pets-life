@@ -7,7 +7,7 @@ module Api
         favorites = favorites_pagination_query.find_objects
         serialized_favorites = []
         favorites.each do |f|
-          serialized_favorites << serialize_favorite(f, serializable_params.merge(favorite: f))
+          serialized_favorites << serialize_favorite(f, serializable_params.merge(favorite: f, hide_fee: true))
         end
 
         render json: { favorites: serialized_favorites }
