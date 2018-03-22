@@ -14,7 +14,7 @@ class Appointment < ApplicationRecord
   has_many :diagnoses, dependent: :destroy
   has_one :next_appointment, class_name: 'Appointment', foreign_key: :main_appointment_id
 
-  has_many :cart_items
+  has_many :cart_items, dependent: :destroy
 
   accepts_nested_attributes_for :cart_items
 
