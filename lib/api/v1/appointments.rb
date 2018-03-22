@@ -25,6 +25,10 @@ module Api
             key :type, :integer
             key :example, 1516318200
           end
+          property :number_of_days do
+            key :type, :integer
+            key :example, 10
+          end
           property :comment do
             key :type, :string
           end

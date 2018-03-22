@@ -38,7 +38,7 @@ module Api
         return [] if working_hours.blank?
         time_slots = []
         slot_start = working_hours.first
-        last_available_slot = working_hours.last - 15.minutes
+        last_available_slot = working_hours.last - 30.minutes
         loop do
           time_slots << { start_at: slot_start.to_i } if slot_start >= valid_start
           slot_start += 15.minutes

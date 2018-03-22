@@ -26,7 +26,16 @@ module Api
       end
 
       def schedule
-        time_slots = schedule_parser_service.retrieve_time_slots
+        time_slots = []
+        if Time.current < @date
+          (1..31).each do |i|
+            time_slot = {}
+            time_slot[:number_of_days] = i
+            time_slot[:end_at] = (@date + (i - 1).days).to_i
+            time_slots << time_slot
+          end
+        end
+        # schedule_parser_service.retrieve_time_slots
         render json: { time_slots: time_slots }
       end
 

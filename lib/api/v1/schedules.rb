@@ -14,6 +14,21 @@ module Api
         end
       end
 
+      swagger_schema :DaysScheduleResponse do
+        property :time_slots do
+          items do
+            property :end_at do
+              key :type, :integer
+              key :example, 1516217199
+            end
+            property :number_of_days do
+              key :type, :integer
+              key :example, 10
+            end
+          end
+        end
+      end
+
       swagger_schema :ScheduleWithEndResponse do
         property :time_slots do
           items do
@@ -92,7 +107,7 @@ module Api
           response 200 do
             key :description, 'Success response'
             schema do
-              key :'$ref', :ScheduleResponse
+              key :'$ref', :DaysScheduleResponse
             end
           end
         end
@@ -126,7 +141,7 @@ module Api
           response 200 do
             key :description, 'Success response'
             schema do
-              key :'$ref', :ScheduleResponse
+              key :'$ref', :DaysScheduleResponse
             end
           end
         end

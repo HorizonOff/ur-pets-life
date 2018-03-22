@@ -27,9 +27,11 @@ class Appointment < ApplicationRecord
   before_validation :set_end_at, :set_calendar, :set_admin, on: :create
   validates :start_at, presence: { message: 'Date and time are required' }
   validate :vet_id_should_be_vaild, :pet_ids_should_be_valid, :service_ids_should_be_valid, :time_should_be_valid,
-           :appointmet_overlaps
+           :appointment_overlaps
 
-  after_validation :set_price, on: :create
+  validates :number_of_days, presence: { message: 'Number of days is required' }, if: :day_care_or_boarding?
+
+  after_validation :set_total_price, on: :create
 
   acts_as_paranoid
 
@@ -45,6 +47,14 @@ class Appointment < ApplicationRecord
 
   def for_clinic?
     @for_clinic ||= bookable_type == 'Clinic'
+  end
+
+  def for_grooming?
+    @for_grooming ||= bookable_type == 'GroomingCentre'
+  end
+
+  def day_care_or_boarding?
+    @day_care_or_boarding = bookable_type == 'Boarding' || bookable_type == 'DayCareCentre'
   end
 
   def past?
@@ -118,11 +128,18 @@ class Appointment < ApplicationRecord
   end
 
   def set_end_at
-    return if vet_id.blank? || vet.nil?
-    self.end_at = start_at + vet.session_duration.minutes
+    if for_clinic?
+      return if vet_id.blank? || vet.nil?
+      self.end_at = start_at + vet.session_duration.minutes
+    elsif for_grooming?
+      self.end_at = start_at + 30.minutes
+    else
+      return if number_of_days.blank?
+      self.end_at = start_at + (number_of_days - 1).days
+    end
   end
 
-  def appointmet_overlaps
+  def appointment_overlaps
     return if !for_clinic? || vet_id.blank?
     errors.add(:base, 'Appointment is overlapsing with other appointment') unless overlapsing_appointments.count.zero?
   end
@@ -131,9 +148,9 @@ class Appointment < ApplicationRecord
     vet.appointments.overlapsing(id, start_at, end_at)
   end
 
-  def set_price
+  def set_total_price
     return self.total_price = vet.consultation_fee if vet_id.present?
-    self.total_price = cart_items.sum(&:price)
+    self.total_price = cart_items.sum(&:total_price)
   end
 
   def service_detail_ids
