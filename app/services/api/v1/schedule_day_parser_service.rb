@@ -4,7 +4,7 @@ module Api
       def initialize(schedule, date)
         self.schedule = schedule
         self.date = date
-        self.valid_start = Time.current
+        self.valid_start = Time.current.beginning_of_day
       end
 
       def retrieve_time_slots
