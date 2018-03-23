@@ -8,7 +8,12 @@ module CalendarValidationConcern
   private
 
   def start_at_should_be_valid
-    errors.add(:base, 'Slot time should be in the future') if start_at.present? && start_at < current_time
+    return if start_at.blank?
+    if day_care_or_boarding?
+      errors.add(:base, 'Slot time should be in the future') if start_at < current_time.beginning_of_day
+    elsif start_at < current_time
+      errors.add(:base, 'Slot time should be in the future')
+    end
   end
 
   def check_clinic_time
