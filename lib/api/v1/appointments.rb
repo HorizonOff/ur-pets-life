@@ -148,17 +148,19 @@ module Api
             key :type, :integer
             key :example, 10
           end
-          property :start_at do
-            key :type, :integer
-            key :example, 1516318200
-          end
-          property :end_at do
-            key :type, :integer
-            key :example, 1516318400
-          end
-          property :number_of_days do
-            key :type, :integer
-            key :example, 5
+          property :time_slot do
+            property :start_at do
+              key :type, :integer
+              key :example, 1516217199
+            end
+            property :end_at do
+              key :type, :integer
+              key :example, 1516217199
+            end
+            property :number_of_days do
+              key :type, :integer
+              key :example, 10
+            end
           end
           property :bookable_type do
             key :type, :string

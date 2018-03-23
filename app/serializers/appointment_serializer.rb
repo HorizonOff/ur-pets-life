@@ -1,9 +1,13 @@
 class AppointmentSerializer < ActiveModel::Serializer
-  attributes :id, :start_at, :end_at, :bookable_type, :total_price
+  attributes :id, :bookable_type, :total_price
   attribute :can_be_canceled?, key: :can_be_canceled
 
-  attribute :number_of_days do
-    object.number_of_days if object.day_care_or_boarding?
+  attribute :time_slot do
+    time_slot = {}
+    time_slot[:start_at] = object.start_at.to_i
+    time_slot[:end_at] = object.end_at.to_i
+    time_slot[:number_of_days] = object.number_of_days if object.day_care_or_boarding?
+    time_slot
   end
 
   belongs_to :vet do
@@ -22,12 +26,4 @@ class AppointmentSerializer < ActiveModel::Serializer
   has_many :service_option_details
 
   has_many :pets, serializer: PetAppointmentSerializer
-
-  def start_at
-    object.start_at.to_i
-  end
-
-  def end_at
-    object.end_at.to_i
-  end
 end
