@@ -3,12 +3,21 @@ class CartItem < ApplicationRecord
   belongs_to :appointment
   belongs_to :serviceable, -> { with_deleted }, polymorphic: true
 
-  before_validation :set_price, on: :create
+  before_validation :set_price, :set_quantity, :count_total_price, on: :create
 
   validate :pet_should_be_valid, :weight_should_be_valid
 
   def set_price
     self.price = serviceable.price
+  end
+
+  def set_quantity
+    return if appointment.for_clinic? || appointment.for_grooming? || serviceable_type == 'ServiceOptionDetail'
+    self.quantity = appointment.number_of_days
+  end
+
+  def count_total_price
+    self.total_price = price * quantity
   end
 
   private
@@ -27,7 +36,6 @@ class CartItem < ApplicationRecord
   end
 
   def should_not_check_weight?
-    serviceable_type == 'ServiceOptionDetail' || appointment.for_clinic? || \
-      appointment.bookable_type == 'GroomingCentre'
+    serviceable_type == 'ServiceOptionDetail' || appointment.for_clinic? || appointment.for_grooming?
   end
 end

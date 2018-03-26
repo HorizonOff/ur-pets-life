@@ -39,7 +39,7 @@ module CalendarValidationConcern
   end
 
   def time_should_be_valid
-    return if bookable_type != 'Clinic'
+    return unless for_clinic?
     errors.add(:base, 'Vet is unavailable at this time') if calendar_id.nil? || !within_the_schedule?
   end
 
