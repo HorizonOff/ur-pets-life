@@ -45,6 +45,8 @@
               Delete Grooming Centre
             %br
 
+            = link_to 'View calendar', calendar_admin_panel_grooming_centre_path(@grooming_centre), class: 'btn btn-info'
+
           .col-md-9.col-sm-9.col-xs-12
             -if @grooming_centre.location.longitude && @grooming_centre.location.latitude 
               %div{ style: 'width: 100%; height: 300px; position: relative;' }

@@ -55,7 +55,7 @@ module Api
       end
 
       def schedule_parser_service
-        @schedule_parser_service ||= ::Api::V1::ScheduleParserService.new(@grooming_centre.schedule, @date)
+        @schedule_parser_service ||= ::Api::V1::ScheduleParserService.new(@grooming_centre, @date)
       end
 
       def service_type_serializer_service

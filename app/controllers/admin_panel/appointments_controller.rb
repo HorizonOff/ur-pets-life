@@ -27,6 +27,14 @@ module AdminPanel
       render :show
     end
 
+    def update_duration
+      if @appointment.update_columns(end_at: Time.zone.parse(params[:end_at]))
+        render json: { message: 'Appointment duration successfully updated' }
+      else
+        render json: { errors: @appointment.errors.full_messages }, status: 422
+      end
+    end
+
     private
 
     def set_appointment

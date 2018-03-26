@@ -162,6 +162,10 @@ module Api
               key :example, 10
             end
           end
+          property :comment do
+            key :type, :string
+            key :example, 'comment'
+          end
           property :bookable_type do
             key :type, :string
             key :example, "Clinic"
