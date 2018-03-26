@@ -71,6 +71,30 @@ module AdminPanel
       render 'admin_panel/service_types/new'
     end
 
+    def calendar; end
+
+    def timeline
+      render json: @grooming_centre.blocked_times
+                                   .where(start_at: Time.zone.parse(params[:start])..Time.zone.parse(params[:end])),
+             each_serializer: AdminPanel::BlockedTimeSerializer, adapter: :attributes
+    end
+
+    def appointments
+      appointments = @grooming_centre.appointments
+                                     .where(status: params[:status].to_sym,
+                                            start_at: Time.zone.parse(params[:start])..Time.zone.parse(params[:end]))
+      render json: appointments, each_serializer: AdminPanel::AppointmentCalendarSerializer, adapter: :attributes
+    end
+
+    def lock_time
+      blocked_time = @grooming_centre.blocked_times.new(calendar_params)
+      if blocked_time.save
+        render json: { id: blocked_time.id }
+      else
+        render json: { errors: blocked_time.errors.full_messages }, status: 422
+      end
+    end
+
     private
 
     def set_grooming_centre
@@ -106,6 +130,10 @@ module AdminPanel
 
     def filter_and_pagination_query
       @filter_and_pagination_query ||= ::AdminPanel::FilterAndPaginationQuery.new('GroomingCentre', params)
+    end
+
+    def calendar_params
+      params.permit(:start_at, :end_at)
     end
   end
 end

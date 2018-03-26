@@ -110,6 +110,10 @@ Rails.application.routes.draw do
     end
     resources :grooming_centres do
       member { get :new_service_type }
+      member { get :calendar }
+      member { get :timeline }
+      member { get :appointments }
+      member { post :lock_time }
     end
     resources :vets do
       member { get :schedule }
@@ -121,6 +125,7 @@ Rails.application.routes.draw do
     resources :trainers do
       member { get :new_service_type }
     end
+    resources :blocked_times, only: %i[update destroy]
     resources :service_types, except: %i[new index show]
     resources :appointments, only: %i[index show] do
       resources :diagnoses, shallow: true, except: %i[index destroy]
@@ -128,6 +133,7 @@ Rails.application.routes.draw do
       member { put :accept }
       member { put :reject }
       member { put :cancel }
+      member { put :update_duration }
     end
     resource :profile, only: %i[edit update]
     resource :password, only: %i[edit update]

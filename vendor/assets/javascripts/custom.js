@@ -2345,142 +2345,15 @@ if (typeof NProgress != 'undefined') {
 		/* COMPOSE */
 		
 		function init_compose() {
-		
-			if( typeof ($.fn.slideToggle) === 'undefined'){ return; }
-			console.log('init_compose');
-		
-			$('#compose, .compose-close').click(function(){
-				$('.compose').slideToggle();
-			});
-		
-		};
-	   
-	   	/* CALENDAR */
-		  
-		    function  init_calendar() {
-					
-				if( typeof ($.fn.fullCalendar) === 'undefined'){ return; }
-				console.log('init_calendar');
-				vet_id = $('#calendar').attr('vet-id')
-				var date = new Date(),
-					d = date.getDate(),
-					m = date.getMonth(),
-					y = date.getFullYear(),
-					started,
-					categoryClass;
-
-				var calendar = $('#calendar').fullCalendar({
-				  header: {
-					left: 'prev,next',
-					center: 'title',
-					right: ''
-				  },
-          defaultView: 'agendaWeek',
-          allDaySlot: false,
-          selectable: true,
-          selectHelper: true,
-          slotDuration: '00:15:00',
-
-          eventSources: [
-            {
-                editable: true,
-                url: '/admin_panel/vets/' + vet_id + '/calendars/timeline',
-            },
-            {
-      				  editable: false,
-                url: '/admin_panel/vets/' + vet_id + '/calendars/appointments?status=accepted',
-                color: 'green'
-            },
-            {
-                editable: false,
-                url: '/admin_panel/vets/' + vet_id + '/calendars/appointments?status=pending',
-                color: 'rgb(255, 221, 49)',
-                textColor: 'black'
-            }
-          ],
-
-          select: function(start, end) {
-            data = {};
-            data.start_at = start.format()
-            data.end_at = end.format()
-            $.ajax({
-              type: 'post',
-              url: '/admin_panel/vets/' + vet_id + '/calendars',
-              data: data,
-              success: function(response){
-                calendar.fullCalendar('renderEvent', {
-                  id: response.id,
-                  start: start,
-                  end: end,
-                  editable: true
-                });
-              },
-              error: function(response){
-                console.log(response.responseJSON.errors);
-              }
-            });
-            calendar.fullCalendar('unselect');
-          },
-
-          eventClick: function(calEvent, jsEvent, view) {
-            if (calEvent.id){
-              $('#fc_destroy').click();
-
-              day_start = calEvent.start.format('DD MMM YYYY')
-              day_end = calEvent.end.format('DD MMM YYYY')
-              if (day_start == day_end) {
-                current_time_slot = day_start + ': ' + calEvent.start.format('h:mm A') + ' - ' + calEvent.end.format('h:mm A')
-              } else {
-                current_time_slot = day_start + ' ' + calEvent.start.format('h:mm A') + ' - ' + day_end + ' ' + calEvent.start.format('h:mm A')
-              }
-              $('p.time_slot').text(current_time_slot);
-              $('a.destroy_link').attr('href', '/admin_panel/calendars/' + calEvent.id)
-            } else {
-              window.open(calEvent.url);
-              return false;
-            };
-
-            $('a.destroy_link').on('click', function(e) {
-              e.preventDefault();
-              $.ajax({
-                type: 'delete',
-                url: '/admin_panel/calendars/' + calEvent.id,
-                success: function(response) {
-                  calendar.fullCalendar( 'removeEvents', calEvent.id )
-                  $('.autoclose').click();
-                },
-                error: function(response){
-                  $('.autoclose').click();
-                  console.log(response.responseJSON.errors);
-                }
-              });
-            });
-          },
-
-          eventDrop: function(calEvent, delta, revertFunc){
-            update_calendar(calEvent, delta, revertFunc)
-          },
-
-          eventResize: function(calEvent, delta, revertFunc){
-            update_calendar(calEvent, delta, revertFunc)
-          },
-				});
-
-				function update_calendar(calEvent, delta, revertFunc){
-          data = {};
-          data.start_at = calEvent.start.format()
-          data.end_at = calEvent.end.format()
-          $.ajax({
-            type: 'put',
-            url: '/admin_panel/calendars/' + calEvent.id,
-            data: data,
-            error: function(response){
-              revertFunc();
-              console.log(response.responseJSON.errors);
-            }
-          });
-        }
-			};
+    
+      if( typeof ($.fn.slideToggle) === 'undefined'){ return; }
+      console.log('init_compose');
+    
+      $('#compose, .compose-close').click(function(){
+        $('.compose').slideToggle();
+      });
+    
+    };
 	   
 		/* DATA TABLES */
 			
@@ -5005,11 +4878,263 @@ if (typeof NProgress != 'undefined') {
 	   
 		}  
 	   
-	function init_all_functions(){
-		init_sidebar();
-		init_InputMask();
-		init_DataTables();
-		init_calendar();
-		init_autosize();
-		init_autocomplete();
-	}
+function init_all_functions(){
+	init_sidebar();
+	init_InputMask();
+	init_DataTables();
+	init_calendar();
+	init_autosize();
+	init_autocomplete();
+}
+
+function init_calendar() {
+  if( typeof ($.fn.fullCalendar) === 'undefined'){ return; }
+  if ($('#calendar').length){ init_vet_calendar() }
+  if ($('#grooming_calendar').length){ init_grooming_calendar() }
+};
+
+function init_vet_calendar(){
+  vet_id = $('#calendar').attr('vet-id')
+  var date = new Date(),
+    d = date.getDate(),
+    m = date.getMonth(),
+    y = date.getFullYear(),
+    started,
+    categoryClass;
+
+  var calendar = $('#calendar').fullCalendar({
+    header: {
+    left: 'prev,next',
+    center: 'title',
+    right: ''
+    },
+    defaultView: 'agendaWeek',
+    allDaySlot: false,
+    selectable: true,
+    selectHelper: true,
+    slotDuration: '00:15:00',
+
+    eventSources: [
+      {
+          editable: true,
+          url: '/admin_panel/vets/' + vet_id + '/calendars/timeline',
+      },
+      {
+          editable: false,
+          url: '/admin_panel/vets/' + vet_id + '/calendars/appointments?status=accepted',
+          color: 'green'
+      },
+      {
+          editable: false,
+          url: '/admin_panel/vets/' + vet_id + '/calendars/appointments?status=pending',
+          color: 'rgb(255, 221, 49)',
+          textColor: 'black'
+      }
+    ],
+
+    select: function(start, end) {
+      data = {};
+      data.start_at = start.format()
+      data.end_at = end.format()
+      $.ajax({
+        type: 'post',
+        url: '/admin_panel/vets/' + vet_id + '/calendars',
+        data: data,
+        success: function(response){
+          calendar.fullCalendar('renderEvent', {
+            id: response.id,
+            start: start,
+            end: end,
+            editable: true
+          });
+        },
+        error: function(response){
+          console.log(response.responseJSON.errors);
+        }
+      });
+      calendar.fullCalendar('unselect');
+    },
+
+    eventClick: function(calEvent, jsEvent, view) {
+      if (calEvent.calendar){
+        $('#fc_destroy').click();
+
+        day_start = calEvent.start.format('DD MMM YYYY')
+        day_end = calEvent.end.format('DD MMM YYYY')
+        if (day_start == day_end) {
+          current_time_slot = day_start + ': ' + calEvent.start.format('h:mm A') + ' - ' + calEvent.end.format('h:mm A')
+        } else {
+          current_time_slot = day_start + ' ' + calEvent.start.format('h:mm A') + ' - ' + day_end + ' ' + calEvent.start.format('h:mm A')
+        }
+        $('p.time_slot').text(current_time_slot);
+        $('a.destroy_link').attr('href', '/admin_panel/calendars/' + calEvent.id)
+      } else {
+        window.open(calEvent.url);
+        return false;
+      };
+
+      $('a.destroy_link').on('click', function(e) {
+        e.preventDefault();
+        $.ajax({
+          type: 'delete',
+          url: '/admin_panel/calendars/' + calEvent.id,
+          success: function(response) {
+            calendar.fullCalendar( 'removeEvents', calEvent.id )
+            $('.autoclose').click();
+          },
+          error: function(response){
+            $('.autoclose').click();
+            console.log(response.responseJSON.errors);
+          }
+        });
+      });
+    },
+
+    eventDrop: function(calEvent, delta, revertFunc){
+      update_calendar(calEvent, delta, revertFunc)
+    },
+
+    eventResize: function(calEvent, delta, revertFunc){
+      update_calendar(calEvent, delta, revertFunc)
+    },
+  });
+
+  function update_calendar(calEvent, delta, revertFunc){
+    data = {};
+    data.start_at = calEvent.start.format()
+    data.end_at = calEvent.end.format()
+    $.ajax({
+      type: 'put',
+      url: '/admin_panel/calendars/' + calEvent.id,
+      data: data,
+      error: function(response){
+        revertFunc();
+        console.log(response.responseJSON.errors);
+      }
+    });
+  }
+}
+
+function init_grooming_calendar(){
+  grooming_centre_id = $('#grooming_calendar').attr('grooming-centre-id');
+  var date = new Date(),
+    d = date.getDate(),
+    m = date.getMonth(),
+    y = date.getFullYear(),
+    started,
+    categoryClass;
+
+  var calendar = $('#grooming_calendar').fullCalendar({
+    header: {
+    left: 'prev,next',
+    center: 'title',
+    right: ''
+    },
+    defaultView: 'agendaDay',
+    allDaySlot: false,
+    selectable: true,
+    selectHelper: true,
+    slotDuration: '00:30:00',
+
+    eventSources: [
+      {
+        startEditable: false,
+        durationEditable: true,
+        url: '/admin_panel/grooming_centres/' + grooming_centre_id + '/appointments?status=accepted',
+        color: 'green'
+      },
+      {
+        editable: false,
+        url: '/admin_panel/grooming_centres/' + grooming_centre_id + '/appointments?status=pending',
+        color: 'rgb(255, 221, 49)',
+        textColor: 'black'
+      },
+      {
+        editable: false,
+        url: '/admin_panel/grooming_centres/' + grooming_centre_id + '/timeline',
+        color: 'red'
+      }
+    ],
+
+    eventColor: 'red',
+
+    select: function(start, end) {
+      $(".fc-highlight").css("background", "red");
+      data = {};
+      data.start_at = start.format()
+      data.end_at = end.format()
+      $.ajax({
+        type: 'post',
+        url: '/admin_panel/grooming_centres/' + grooming_centre_id + '/lock_time',
+        data: data,
+        success: function(response){
+          calendar.fullCalendar('renderEvent', {
+            id: response.id,
+            start: start,
+            end: end,
+            editable: false,
+            color: 'red'
+          });
+        },
+        error: function(response){
+          console.log(response.responseJSON.errors);
+        }
+      });
+      calendar.fullCalendar('unselect');
+    },
+
+    eventClick: function(calEvent, jsEvent, view) {
+      if (calEvent.blocked_time){
+        $('#fc_destroy').click();
+
+        day_start = calEvent.start.format('DD MMM YYYY')
+        day_end = calEvent.end.format('DD MMM YYYY')
+        if (day_start == day_end) {
+          current_time_slot = day_start + ': ' + calEvent.start.format('h:mm A') + ' - ' + calEvent.end.format('h:mm A')
+        } else {
+          current_time_slot = day_start + ' ' + calEvent.start.format('h:mm A') + ' - ' + day_end + ' ' + calEvent.start.format('h:mm A')
+        }
+        $('p.time_slot').text(current_time_slot);
+        $('a.destroy_link').attr('href', '/admin_panel/blocked_times/' + calEvent.id)
+      } else {
+        window.open(calEvent.url);
+        return false;
+      };
+
+      $('a.destroy_link').on('click', function(e) {
+        e.preventDefault();
+        $.ajax({
+          type: 'delete',
+          url: '/admin_panel/blocked_times/' + calEvent.id,
+          success: function(response) {
+            calendar.fullCalendar( 'removeEvents', calEvent.id )
+            $('.autoclose').click();
+          },
+          error: function(response){
+            $('.autoclose').click();
+            console.log(response.responseJSON.errors);
+          }
+        });
+      });
+    },
+
+    eventResize: function(calEvent, delta, revertFunc){
+      update_appointment_duration(calEvent, delta, revertFunc)
+    },
+  });
+
+  function update_appointment_duration(calEvent, delta, revertFunc){
+    data = {};
+    data.start_at = calEvent.start.format()
+    data.end_at = calEvent.end.format()
+    $.ajax({
+      type: 'put',
+      url: '/admin_panel/appointments/' + calEvent.id + '/update_duration',
+      data: data,
+      error: function(response){
+        revertFunc();
+        console.log(response.responseJSON.errors);
+      }
+    });
+  }
+}
