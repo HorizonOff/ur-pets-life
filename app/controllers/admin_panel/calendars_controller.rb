@@ -32,13 +32,13 @@ module AdminPanel
 
     def timeline
       render json: @vet.calendars.where(start_at: Time.zone.parse(params[:start])..Time.zone.parse(params[:end])),
-             each_serializer: AdminPanle::CalendarSerializer, adapter: :attributes
+             each_serializer: AdminPanel::CalendarSerializer, adapter: :attributes
     end
 
     def appointments
       appointments = @vet.appointments.where(status: params[:status].to_sym,
                                              start_at: Time.zone.parse(params[:start])..Time.zone.parse(params[:end]))
-      render json: appointments, each_serializer: AdminPanle::AppointmentCalendarSerializer, adapter: :attributes
+      render json: appointments, each_serializer: AdminPanel::AppointmentCalendarSerializer, adapter: :attributes
     end
 
     private
