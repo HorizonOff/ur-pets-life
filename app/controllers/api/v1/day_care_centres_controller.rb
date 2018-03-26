@@ -26,17 +26,7 @@ module Api
       end
 
       def schedule
-        time_slots = []
-        if Time.current < @date
-          (1..31).each do |i|
-            time_slot = {}
-            time_slot[:number_of_days] = i
-            time_slot[:end_at] = (@date + (i - 1).days).to_i
-            time_slots << time_slot
-          end
-        end
-        # schedule_parser_service.retrieve_time_slots
-        render json: { time_slots: time_slots }
+        render json: { time_slots: schedule_day_parser_service.retrieve_time_slots }
       end
 
       def services
@@ -69,8 +59,8 @@ module Api
         @pet_services_serializer_service ||= ::Api::V1::PetServicesSerializerService.new(@services, @pets, true)
       end
 
-      def schedule_parser_service
-        @schedule_parser_service ||= ::Api::V1::ScheduleParserService.new(@day_care_centre.schedule, @date)
+      def schedule_day_parser_service
+        @schedule_day_parser_service ||= ::Api::V1::ScheduleDayParserService.new(@day_care_centre.schedule, @date)
       end
 
       def parse_date

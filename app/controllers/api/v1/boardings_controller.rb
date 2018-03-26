@@ -26,8 +26,7 @@ module Api
       end
 
       def schedule
-        time_slots = schedule_parser_service.retrieve_time_slots
-        render json: { time_slots: time_slots }
+        render json: { time_slots: schedule_day_parser_service.retrieve_time_slots }
       end
 
       def services
@@ -61,8 +60,8 @@ module Api
         @pet_services_serializer_service ||= ::Api::V1::PetServicesSerializerService.new(@services, @pets, true)
       end
 
-      def schedule_parser_service
-        @schedule_parser_service ||= ::Api::V1::ScheduleParserService.new(@boarding.schedule, @date)
+      def schedule_day_parser_service
+        @schedule_day_parser_service ||= ::Api::V1::ScheduleDayParserService.new(@boarding.schedule, @date)
       end
 
       def parse_date
