@@ -14,6 +14,15 @@ module AdminPanel
     end
 
     def actions
+      calendar_link + main_actions
+    end
+
+    def calendar_link
+      link_to 'View calendar', url_helpers.calendar_admin_panel_grooming_centre_path(model),
+              class: 'btn btn-info btn-xs'
+    end
+
+    def main_actions
       (link_to 'Show', url_helpers.admin_panel_grooming_centre_path(model), class: 'btn btn-primary btn-xs') +
         (link_to 'Edit', url_helpers.edit_admin_panel_grooming_centre_path(model), class: 'btn btn-warning btn-xs') +
         (link_to 'Delete', url_helpers.admin_panel_grooming_centre_path(model),

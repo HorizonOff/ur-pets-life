@@ -4945,7 +4945,8 @@ function init_vet_calendar(){
             id: response.id,
             start: start,
             end: end,
-            editable: true
+            editable: true,
+            calendar: true
           });
         },
         error: function(response){
@@ -5073,7 +5074,8 @@ function init_grooming_calendar(){
             start: start,
             end: end,
             editable: false,
-            color: 'red'
+            color: 'red',
+            blocked_time: true
           });
         },
         error: function(response){
