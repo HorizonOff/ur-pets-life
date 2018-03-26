@@ -4,7 +4,7 @@ module Api
       def initialize(schedule, date)
         self.schedule = schedule
         self.date = date
-        self.valid_start = Time.current
+        self.valid_start = Time.current.beginning_of_day
       end
 
       def retrieve_time_slots
@@ -12,6 +12,7 @@ module Api
         time_slots = []
         (1..31).each do |i|
           time_slot = {}
+          time_slot[:start_at] = date.to_i
           time_slot[:number_of_days] = i
           time_slot[:end_at] = (@date + (i - 1).days).to_i
           time_slots << time_slot

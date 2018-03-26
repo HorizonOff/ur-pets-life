@@ -17,6 +17,10 @@ module Api
       swagger_schema :DaysScheduleResponse do
         property :time_slots do
           items do
+            property :start_at do
+              key :type, :integer
+              key :example, 1516217199
+            end
             property :end_at do
               key :type, :integer
               key :example, 1516217199
