@@ -1,5 +1,5 @@
 class AppointmentSerializer < ActiveModel::Serializer
-  attributes :id, :bookable_type, :total_price
+  attributes :id, :bookable_type, :total_price, :comment
   attribute :can_be_canceled?, key: :can_be_canceled
 
   attribute :time_slot do
