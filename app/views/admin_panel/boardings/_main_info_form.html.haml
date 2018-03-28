@@ -53,9 +53,9 @@
           = f.fields_for :service_option_details do |ff|
             .form-group
               .col-md-4.col-sm-4.col-xs-4.check_boxes
-                = check_box_tag nil, nil, f.object.persisted?, class: 'flat service_option_switch', id: f.index
+                = check_box_tag nil, nil, ff.object.persisted?, class: 'flat service_option_switch', id: f.index
                 = ff.check_box :_destroy, class: "_destroy hide" if ff.object.persisted?
-                = ff.hidden_field :service_option_id
+                = ff.hidden_field :service_option_id, class: 'service_option_id', disabled: ff.object.new_record?
                 = ff.object.name
               .col-md-4.col-sm-4.col-xs-4.service_option_details_fields{ class: "#{'hiden' if ff.object.new_record?}" }
-                = ff.number_field :price, step: '0.01', placeholder: 'Price', class: 'form-control'
+                = ff.number_field :price, step: '0.01', placeholder: 'Price', class: 'form-control', required: true, disabled: ff.object.new_record?

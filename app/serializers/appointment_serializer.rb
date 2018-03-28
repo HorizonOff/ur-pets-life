@@ -3,10 +3,11 @@ class AppointmentSerializer < ActiveModel::Serializer
   attribute :can_be_canceled?, key: :can_be_canceled
 
   attribute :dates do
-    return [] if object.bookable_type != 'DayCareCentre'
     int_dates = []
-    object.dates.each do |d|
-      int_dates << Time.zone.parse(d).to_i
+    if object.bookable_type == 'DayCareCentre'
+      object.dates.each do |d|
+        int_dates << Time.zone.parse(d).to_i
+      end
     end
     int_dates
   end

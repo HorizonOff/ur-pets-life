@@ -10,7 +10,6 @@ class DayCareCentre < ApplicationRecord
   has_many :pet_types, through: :service_details
 
   accepts_nested_attributes_for :schedule, update_only: true
-  accepts_nested_attributes_for :service_option_details, allow_destroy: true
 
   def admins_for_select
     if admin_id?
