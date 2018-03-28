@@ -29,6 +29,10 @@ module Api
             key :type, :integer
             key :example, 10
           end
+          property :dates do
+            key :type, :array
+            key :example, [1516318200, 1546318200]
+          end
           property :comment do
             key :type, :string
           end
@@ -175,6 +179,10 @@ module Api
           end
           property :booked_object do
             key :'$ref', :Clinic
+          end
+          property :dates do
+            key :type, :array
+            key :example, [1516318200, 1546318200]
           end
           property :pets do
             key :'$ref', :PetAppointmentResponse

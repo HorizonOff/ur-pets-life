@@ -24,10 +24,10 @@ class Appointment < ApplicationRecord
 
   after_initialize :set_defaults
 
-  before_validation :set_end_at, :set_calendar, :set_admin, on: :create
+  before_validation :set_start_at, :set_end_at, :set_calendar, :set_admin, :set_number_of_days, on: :create
   validates :start_at, presence: { message: 'Date and time are required' }
   validate :vet_id_should_be_vaild, :pet_ids_should_be_valid, :service_ids_should_be_valid, :time_should_be_valid,
-           :appointment_overlaps
+           :appointment_overlaps, :dates_should_be_valid
 
   validates :number_of_days, presence: { message: 'Number of days is required' }, if: :day_care_or_boarding?
 
@@ -98,6 +98,16 @@ class Appointment < ApplicationRecord
     end
   end
 
+  def dates_should_be_valid
+    return unless bookable_type == 'DayCareCentre'
+    errors.add(:dates, 'Should be at least 1 date in booking') if dates.blank?
+  end
+
+  def set_number_of_days
+    return unless bookable_type == 'DayCareCentre'
+    self.number_of_days = dates.length
+  end
+
   def check_services_count
     errors.add(:service_detail_ids, 'Booking service is required') if service_detail_ids.empty?
     return if bookable_type == 'Clinic' || bookable_type == 'GroomingCentre'
@@ -127,12 +137,20 @@ class Appointment < ApplicationRecord
     self.calendar = current_vet_calendar if current_vet_calendar
   end
 
+  def set_start_at
+    return if bookable_type != 'DayCareCentre' || dates.blank?
+    self.start_at = Time.zone.parse(dates.first).to_i
+  end
+
   def set_end_at
     if for_clinic?
       return if vet_id.blank? || vet.nil?
       self.end_at = start_at + vet.session_duration.minutes
     elsif for_grooming?
       self.end_at = start_at + 30.minutes
+    elsif bookable_type == 'DayCareCentre'
+      return if dates.blank?
+      self.end_at = Time.zone.parse(dates.last)
     else
       return if number_of_days.blank?
       self.end_at = start_at + (number_of_days - 1).days

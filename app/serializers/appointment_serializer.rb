@@ -2,6 +2,15 @@ class AppointmentSerializer < ActiveModel::Serializer
   attributes :id, :bookable_type, :total_price, :comment
   attribute :can_be_canceled?, key: :can_be_canceled
 
+  attribute :dates do
+    return [] if object.bookable_type != 'DayCareCentre'
+    int_dates = []
+    object.dates.each do |d|
+      int_dates << Time.zone.parse(d).to_i
+    end
+    int_dates
+  end
+
   attribute :time_slot do
     time_slot = {}
     time_slot[:start_at] = object.start_at.to_i
