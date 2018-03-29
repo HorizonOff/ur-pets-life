@@ -33,6 +33,7 @@ module AdminPanel
         flash[:success] = 'DayCare Centre was successfully created'
         redirect_to admin_panel_day_care_centre_path(@day_care_centre)
       else
+        @day_care_centre.build_relations
         render :new
       end
     end
@@ -42,6 +43,7 @@ module AdminPanel
         flash[:success] = 'DayCare Centre was successfully updated'
         redirect_to admin_panel_day_care_centres_path
       else
+        @day_care_centre.build_relations
         render :edit
       end
     end

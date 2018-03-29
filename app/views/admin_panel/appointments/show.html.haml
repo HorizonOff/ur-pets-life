@@ -55,16 +55,18 @@
                         %thead
                           %tr
                             %th #
-                            %th Pet
                             %th Service
+                            %th Quantity
                             %th Price
+                            %th Sum
                         %tbody
                           - @appointment.cart_items.select{ |ci| ci.pet_id.blank? }.each_with_index do |c, i|
                             %tr
                               %td= i + 1
-                              %td= (c.pet.pet_type.name + ' ' + c.pet.name) if c.pet_id
                               %td= c.serviceable.name
+                              %td= c.quantity
                               %td= c.price
+                              %td= c.total_price
                             
                     %p.title Total price
                     %p= @appointment.total_price
@@ -122,10 +124,14 @@
                         %tr
                           %th #
                           %th Service
+                          %th Quantity
                           %th Price
+                          %th Sum
                       %tbody
                         - @appointment.cart_items.select{ |ci| ci.pet_id == pet.id }.each_with_index do |c, i|
                           %tr
                             %td= i + 1
                             %td= c.serviceable.name
+                            %td= c.quantity
                             %td= c.price
+                            %td= c.total_price

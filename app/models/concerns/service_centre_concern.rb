@@ -25,6 +25,7 @@ module ServiceCentreConcern
 
     has_many :service_option_details, as: :serviceable, inverse_of: :serviceable
     has_many :service_options, through: :service_option_details
+    accepts_nested_attributes_for :service_option_details, allow_destroy: true
 
     has_one :schedule, as: :schedulable, inverse_of: :schedulable
     has_one :location, as: :place, inverse_of: :place
@@ -45,9 +46,7 @@ module ServiceCentreConcern
 
   def build_relations
     if new_record?
-      build_location
-      build_schedule
-      build_default_service_option_details
+      build_relations_for_new_record
     else
       build_service_option_details_with_blanks
     end
@@ -55,8 +54,18 @@ module ServiceCentreConcern
 
   private
 
+  def build_relations_for_new_record
+    build_location unless location.present?
+    build_schedule unless schedule.present?
+    if service_option_details.present?
+      build_service_option_details_with_blanks
+    else
+      build_default_service_option_details
+    end
+  end
+
   def build_service_option_details_with_blanks
-    build_default_service_option_details(service_option_details.pluck(:service_option_id))
+    build_default_service_option_details(service_option_details.map(&:service_option_id))
   end
 
   def build_default_service_option_details(except_ids = [])

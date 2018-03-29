@@ -171,12 +171,15 @@ $(document).on('change', 'input.service_detail_switch', function() {
 $(document).on('ifChanged', 'input.service_option_switch', function() {
   var destroy_checkbox = $(this).parent().siblings('._destroy')
   destroy_checkbox.prop('checked', !destroy_checkbox.prop('checked'))
+  var service_option_id_field = $(this).parents('.check_boxes').find('.service_option_id');
   var selector = $(this).parents('.check_boxes').siblings('.service_option_details_fields');
   if(selector.hasClass('hiden')) {
     selector.removeClass('hiden');
     show_and_enable_inputs(selector)
+    service_option_id_field.prop('disabled', false);
   } else {
     selector.addClass('hiden');
     hide_and_disable_inputs(selector);
+    service_option_id_field.prop('disabled', true);
   }
 });

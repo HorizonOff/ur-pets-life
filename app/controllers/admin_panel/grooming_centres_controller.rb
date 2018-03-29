@@ -32,6 +32,7 @@ module AdminPanel
         flash[:success] = 'Grooming Centre was successfully created'
         redirect_to admin_panel_grooming_centre_path(@grooming_centre)
       else
+        @grooming_centre.build_relations
         render :new
       end
     end
@@ -41,6 +42,7 @@ module AdminPanel
         flash[:success] = 'Grooming Centre was successfully updated'
         redirect_to admin_panel_grooming_centres_path
       else
+        @grooming_centre.build_relations
         render :edit
       end
     end

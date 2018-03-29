@@ -12,7 +12,6 @@ class GroomingCentre < ApplicationRecord
   has_many :blocked_times, as: :blockable
 
   accepts_nested_attributes_for :schedule, update_only: true
-  accepts_nested_attributes_for :service_option_details
 
   def admins_for_select
     if admin_id?

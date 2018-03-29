@@ -19,11 +19,12 @@ module Api
       end
 
       def create
-        appointment = @user.appointments.new(appointment_params)
-        if appointment.save
+        @appointment = @user.appointments.new(appointment_params)
+        check_dates
+        if @appointment.save
           render json: { message: 'Appointment created successfully' }
         else
-          render_422(parse_errors_messages(appointment))
+          render_422(parse_errors_messages(@appointment))
         end
       rescue NameError
         render_422(bookable_type: 'Bookable type is invalid')
@@ -44,6 +45,16 @@ module Api
       end
 
       private
+
+      def check_dates
+        return if params[:appointment][:dates].blank?
+        dates = []
+        params[:appointment][:dates].each do |int_date|
+          parsed_time = Time.zone.at(int_date.to_i)
+          dates << parsed_time
+        end
+        @appointment.dates = dates.sort
+      end
 
       def set_appointment
         @appointment = @user.appointments.find_by_id(params[:id])

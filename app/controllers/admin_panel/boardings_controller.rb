@@ -33,6 +33,7 @@ module AdminPanel
         flash[:success] = 'Boarding was successfully created'
         redirect_to admin_panel_boarding_path(@boarding)
       else
+        @boarding.build_relations
         render :new
       end
     end
@@ -42,6 +43,7 @@ module AdminPanel
         flash[:success] = 'Boarding was successfully updated'
         redirect_to admin_panel_boardings_path
       else
+        @boarding.build_relations
         render :edit
       end
     end
