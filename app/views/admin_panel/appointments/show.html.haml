@@ -75,7 +75,18 @@
                     %p= @appointment.created_at.strftime('%-d %b %Y %I:%M %p')
 
                     %p.title Session start
-                    %p= @appointment.start_at.strftime('%-d %b %Y %I:%M %p')
+                    - if @appointment.day_care_or_boarding?
+                      %p= @appointment.start_at.strftime('%-d %b %Y')
+                    - else
+                      %p= @appointment.start_at.strftime('%-d %b %Y %I:%M %p')
+
+                    - if @appointment.day_care_or_boarding?
+                      %p.title Dates
+                      - if @appointment.for_day_care?
+                        - @appointment.dates.each do |d|
+                          %p= Time.zone.parse(d).strftime('%-d %b %Y')
+                      - else
+                        %p= @appointment.start_at.strftime('%-d %b %Y') + ' - ' + @appointment.end_at.strftime('%-d %b %Y')
 
                     %p.title Comment
                     %p= @appointment.comment
