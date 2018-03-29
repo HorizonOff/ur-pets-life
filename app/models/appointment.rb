@@ -53,8 +53,12 @@ class Appointment < ApplicationRecord
     @for_grooming ||= bookable_type == 'GroomingCentre'
   end
 
+  def for_day_care?
+    @for_day_care ||= bookable_type == 'DayCareCentre'
+  end
+
   def day_care_or_boarding?
-    @day_care_or_boarding = bookable_type == 'Boarding' || bookable_type == 'DayCareCentre'
+    @day_care_or_boarding = bookable_type == 'Boarding' || for_day_care?
   end
 
   def past?
@@ -99,12 +103,12 @@ class Appointment < ApplicationRecord
   end
 
   def dates_should_be_valid
-    return unless bookable_type == 'DayCareCentre'
+    return unless for_day_care?
     errors.add(:dates, 'Should be at least 1 date in booking') if dates.blank?
   end
 
   def set_number_of_days
-    return unless bookable_type == 'DayCareCentre'
+    return unless for_day_care?
     self.number_of_days = dates.length
   end
 
@@ -138,23 +142,39 @@ class Appointment < ApplicationRecord
   end
 
   def set_start_at
-    return if bookable_type != 'DayCareCentre' || dates.blank?
+    return if !for_day_care? || dates.blank?
     self.start_at = Time.zone.parse(dates.first).to_i
   end
 
   def set_end_at
     if for_clinic?
-      return if vet_id.blank? || vet.nil?
-      self.end_at = start_at + vet.session_duration.minutes
+      set_end_at_for_clinic
     elsif for_grooming?
-      self.end_at = start_at + 30.minutes
-    elsif bookable_type == 'DayCareCentre'
-      return if dates.blank?
-      self.end_at = Time.zone.parse(dates.last)
+      set_end_at_for_grooming
+    elsif for_day_care?
+      set_end_at_for_day_care
     else
-      return if number_of_days.blank?
-      self.end_at = start_at + (number_of_days - 1).days
+      set_end_at_for_boarding
     end
+  end
+
+  def set_end_at_for_clinic
+    return if vet_id.blank? || vet.nil?
+    self.end_at = start_at + vet.session_duration.minutes
+  end
+
+  def set_end_at_for_grooming
+    self.end_at = start_at + 30.minutes
+  end
+
+  def set_end_at_for_day_care
+    return if dates.blank?
+    self.end_at = Time.zone.parse(dates.last)
+  end
+
+  def set_end_at_for_boarding
+    return if number_of_days.blank?
+    self.end_at = start_at + (number_of_days - 1).days
   end
 
   def appointment_overlaps

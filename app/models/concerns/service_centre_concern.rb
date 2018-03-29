@@ -46,19 +46,23 @@ module ServiceCentreConcern
 
   def build_relations
     if new_record?
-      build_location unless location.present?
-      build_schedule unless schedule.present?
-      if service_option_details.present?
-        build_service_option_details_with_blanks
-      else
-        build_default_service_option_details
-      end
+      build_relations_for_new_record
     else
       build_service_option_details_with_blanks
     end
   end
 
   private
+
+  def build_relations_for_new_record
+    build_location unless location.present?
+    build_schedule unless schedule.present?
+    if service_option_details.present?
+      build_service_option_details_with_blanks
+    else
+      build_default_service_option_details
+    end
+  end
 
   def build_service_option_details_with_blanks
     build_default_service_option_details(service_option_details.map(&:service_option_id))

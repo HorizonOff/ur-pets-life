@@ -12,7 +12,7 @@ class CartItem < ApplicationRecord
   end
 
   def set_quantity
-    return if appointment.for_clinic? || appointment.for_grooming? || serviceable_type == 'ServiceOptionDetail'
+    return if leave_default_quantity?
     self.quantity = appointment.number_of_days
   end
 
@@ -21,6 +21,11 @@ class CartItem < ApplicationRecord
   end
 
   private
+
+  def leave_default_quantity?
+    appointment.for_grooming? || appointment.for_clinic? ||
+      (appointment.bookable_type == 'Boarding' && serviceable_type == 'ServiceOptionDetail')
+  end
 
   def pet_should_be_valid
     if serviceable_type == 'ServiceOptionDetail'

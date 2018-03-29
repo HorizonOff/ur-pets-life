@@ -4,7 +4,7 @@ class AppointmentSerializer < ActiveModel::Serializer
 
   attribute :dates do
     int_dates = []
-    if object.bookable_type == 'DayCareCentre'
+    if object.for_day_care?
       object.dates.each do |d|
         int_dates << Time.zone.parse(d).to_i
       end
