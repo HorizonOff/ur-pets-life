@@ -36,12 +36,14 @@ class Pet < ApplicationRecord
                             if: :lost_or_found?
 
   validates :municipality_tag, format: { with: /\A[A-Z]\d{5,5}\s\d{4,4}\z/, message: 'Municipality Tag is invalid' },
-                               presence: { message: 'Municipality Tag is required' }, if: :owned_main_type_pet?
+                               allow_blank: true
+  #                             presence: { message: 'Municipality Tag is required' }, if: :owned_main_type_pet?
 
   validates :microchip, format: { with: /\A\d+\z/, message: 'Microchip is invalid' },
                         length: { within: 12..20, too_short: 'Microchip should contain at least 12 symbols',
                                   too_long: 'Microchip should contain not more than 20 symbols' },
-                        presence: { message: 'Microchip is required' }, if: :owned_main_type_pet?
+                        allow_blank: true
+  #                      presence: { message: 'Microchip is required' }, if: :owned_main_type_pet?
 
   validate :sex_should_be_valid, :breed_should_be_valid, :lost_and_found_should_be_vaild, :data_should_be_valid
   # validates :avatar, file_size: { less_than: 1.megabyte }
