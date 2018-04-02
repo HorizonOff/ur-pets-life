@@ -28,7 +28,10 @@ module AdminPanel
     end
 
     def booked_object
-      content_tag(:a, model.bookable.name) + content_tag(:br) + content_tag(:small, model.bookable_type)
+      content = content_tag(:a, model.bookable.name)
+      content += content_tag(:span, 'New', class: 'label label-primary') unless model.is_viewed?
+      content += content_tag(:br) + content_tag(:small, model.bookable_type)
+      content
     end
 
     def vet_name

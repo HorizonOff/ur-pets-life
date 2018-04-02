@@ -51,12 +51,20 @@ module AdminPanel
       serialized_appointments = ActiveModel::Serializer::CollectionSerializer.new(
         appointments, serializer: ::AdminPanel::AppointmentFilterSerializer, adapter: :attributes
       )
+      view_appointments
       render json: { draw: params[:draw], recordsTotal: Appointment.count,
                      recordsFiltered: filtered_appointments.total_count, data: serialized_appointments }
     end
 
     def filter_and_pagination_query
       @filter_and_pagination_query ||= ::AdminPanel::FilterAndPaginationQuery.new('Appointment', params, current_admin)
+    end
+
+    def view_appointments
+      return if current_admin.is_super_admin?
+      current_admin.appointments.each do |a|
+        a.update_attribute(:is_viewed, true)
+      end
     end
   end
 end

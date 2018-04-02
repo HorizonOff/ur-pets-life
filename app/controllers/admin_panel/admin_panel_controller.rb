@@ -2,6 +2,7 @@ module AdminPanel
   class AdminPanelController < ApplicationController
     include Pundit
     before_action :authenticate_admin!
+    before_action :count_budges
 
     rescue_from Pundit::NotAuthorizedError, with: :not_allowed
 
@@ -42,6 +43,11 @@ module AdminPanel
 
     def service_option_params
       %i[id service_option_id price _destroy]
+    end
+
+    def count_budges
+      return if current_admin.is_super_admin?
+      @new_appointments_count = current_admin.appointments.where(is_viewed: false).count
     end
   end
 end
