@@ -75,14 +75,14 @@ dog_breeds = %W[Airedale\ Terrier Affenpinscher,\ Toy Afghan\ Hound,\ Hound Aire
                 Vizsla,\ Sporting West\ Highland\ White\ Terrier Weimaraner,\ Sporting
                 Welsh\ Springer\ Spaniel,\ Sporting Welsh\ Terrier,\ Terrier West\ Highland\ White\ Terrier,\ Terrier
                 Whippet,\ Hound Wire\ Fox\ Terrier,\ Terrier Wirehaired\ Pointing\ Griffon,\ Sporting
-                Wirehaired\ Vizsla,\ Sporting Xoloitzcuintli,\ Non-Sporting Yorkshire\ Terrier,\ Toy]
+                Wirehaired\ Vizsla,\ Sporting Xoloitzcuintli,\ Non-Sporting Yorkshire\ Terrier,\ Toy Mix\ Breed]
 
 cat_breeds = %W[Abyssinian American\ Bobtail American\ Curl American\ Shorthair American\ Wirehair Balinese Bengal\ Cats
                 Birman Bombay British\ Shorthair Burmese Burmilla Chartreux Chinese\ Li\ Hua Colorpoint\ Shorthair
                 Cornish\ Rex Cymric Devon\ Rex Egyptian\ Mau European\ Burmese Exotic Havana\ Brown Himalayan
                 Japanese\ Bobtail Javanese Korat LaPerm Maine\ Coon Manx Nebelung Norwegian\ Forest Ocicat Oriental
                 Persian Pixie-Bob Ragamuffin Ragdoll\ Cats Russian\ Blue Savannah Scottish\ Fold Selkirk\ Rex
-                Siamese\ Cat Siberian Singapura Snowshoe Somali Sphynx Tonkinese Turkish\ Angora Turkish\ Van]
+                Siamese\ Cat Siberian Singapura Snowshoe Somali Sphynx Tonkinese Turkish\ Angora Turkish\ Van Mix\ Breed]
 
 if Breed.count.zero?
   dog_breeds.each do |breed|
