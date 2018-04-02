@@ -21,7 +21,11 @@ module AdminPanel
     def filter
       select_additional_fields
       if draw_first?
-        scope.order(id: :asc).page(params[:page]).per(10)
+        if model == 'Appointment'
+          scope.order(created_at: :desc).page(params[:page]).per(10)
+        else
+          scope.order(id: :asc).page(params[:page]).per(10)
+        end
       else
         parse_params
         filter_by_all_params
