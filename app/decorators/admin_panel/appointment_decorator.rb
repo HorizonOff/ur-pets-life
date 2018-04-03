@@ -11,15 +11,12 @@ module AdminPanel
 
     def status_label
       text = model.status.humanize
-      span_class = case appointment.status
-                   when 'pending'
-                     'label-warning'
-                   when 'accepted'
-                     'label-success'
-                   else
-                     'label-danger'
-                   end
-      content_tag(:span, text, class: "label #{span_class}")
+      content = content_tag(:span, text, class: "label #{status_class}")
+      unless model.is_viewed?
+        content += ' '
+        content += content_tag(:span, 'New', class: 'label label-primary')
+      end
+      content
     end
 
     def actions
@@ -28,10 +25,7 @@ module AdminPanel
     end
 
     def booked_object
-      content = content_tag(:a, model.bookable.name)
-      content += content_tag(:span, 'New', class: 'label label-primary') unless model.is_viewed?
-      content += content_tag(:br) + content_tag(:small, model.bookable_type)
-      content
+      content_tag(:a, model.bookable.name) + content_tag(:br) + content_tag(:small, model.bookable_type)
     end
 
     def vet_name
@@ -47,6 +41,17 @@ module AdminPanel
     end
 
     private
+
+    def status_class
+      case model.status
+      when 'pending'
+        'label-warning'
+      when 'accepted'
+        'label-success'
+      else
+        'label-danger'
+      end
+    end
 
     def status_actions
       if model.pending?
