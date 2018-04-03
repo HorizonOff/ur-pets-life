@@ -50,5 +50,5 @@
   = link_to admin_panel_appointments_path do
     %i.fa.fa-table
     Appointments
-    - unless @new_appointments_count.blank?
+    - if @new_appointments_count.present? && !@new_appointments_count.zero?
       %span.badge.bg-green= @new_appointments_count
