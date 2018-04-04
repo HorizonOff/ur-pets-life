@@ -131,7 +131,7 @@ class Pet < ApplicationRecord
   end
 
   def remove_lost_notification
-    return if !saved_changes.keys.inlude?('lost_at') || lost_at.present?
+    return if !saved_changes.keys.include?('lost_at') || lost_at.present?
     Notification.where(pet_id: id).destroy_all
   end
 
