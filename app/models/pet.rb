@@ -55,7 +55,7 @@ class Pet < ApplicationRecord
 
   before_save :remove_location, if: ->(obj) { obj.changed_attributes.keys.include?('lost_at') && obj.lost_at.blank? }
 
-  after_update :send_lost_notification
+  after_update :send_lost_notification, :remove_lost_notification
 
   scope :alphabetical_order, -> { order(description: :asc) }
   scope :for_adoption,       -> { where(is_for_adoption: true, lost_at: nil) }
@@ -127,6 +127,11 @@ class Pet < ApplicationRecord
     users_for_lost_notifications.each do |u|
       send_notification_to_user(u)
     end
+  end
+
+  def remove_lost_notification
+    return if !saved_changes.keys.inlude?('lost_at') || lost_at.present?
+    Notification.where(pet_id: id).destroy_all
   end
 
   def users_for_lost_notifications

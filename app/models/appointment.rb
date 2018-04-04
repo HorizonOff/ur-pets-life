@@ -33,6 +33,7 @@ class Appointment < ApplicationRecord
 
   after_validation :set_total_price, on: :create
   after_commit :send_notification, on: :update
+  after_commit :send_email, on: :create
 
   acts_as_paranoid
 
@@ -80,6 +81,10 @@ class Appointment < ApplicationRecord
   def send_notification
     return unless 'status'.in?(saved_changes.keys)
     user.notifications.create(appointment: self, message: 'Your appointment was ' + status)
+  end
+
+  def send_email
+    AppointmentMiler.send_email_to_establishment(self)
   end
 
   def set_defaults
