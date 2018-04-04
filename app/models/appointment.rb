@@ -84,7 +84,7 @@ class Appointment < ApplicationRecord
   end
 
   def send_email
-    AppointmentMailer.send_email_to_establishment(self)
+    AppointmentMailer.send_email_to_establishment(self).deliver
   end
 
   def set_defaults
