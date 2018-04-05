@@ -2,6 +2,7 @@ module AdminPanel
   class ContactRequestsController < AdminPanelController
     before_action :authorize_super_admin
     before_action :set_contact_request, except: :index
+    before_action :view_contact_request, only: :show
 
     def index
       respond_to do |format|
@@ -27,6 +28,10 @@ module AdminPanel
 
     def set_contact_request
       @contact_request = ContactRequest.find_by(id: params[:id])
+    end
+
+    def view_contact_request
+      @contact_request.update_attribute(:is_viewed, true)
     end
 
     def filter_contact_requests

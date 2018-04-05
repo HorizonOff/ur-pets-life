@@ -50,7 +50,7 @@ function init_datatables(){
                               { 'searchable': false, 'orderable': false, 'data': 'mobile_number', 'targets': 3 },
                               { 'searchable': true, 'orderable': true, 'data': 'is_active', 'targets': 4 },
                               { 'searchable': false, 'orderable': false, 'data': 'actions', 'targets': 5 } ] },
-      'contact_requests': { 'url': '/admin_panel/contact_requests',
+      'contact_requests': { 'url': '/admin_panel/contact_requests', 'order_col': 5, 'order_dir': 'desc',
                             'columns': [ { 'searchable': true, 'orderable': true, 'data': 'id', 'targets': 0 },
                                          { 'searchable': false, 'orderable': false, 'data': 'user_name', 'targets': 1 },
                                          { 'searchable': true, 'orderable': true, 'data': 'email', 'targets': 2 },
@@ -120,7 +120,7 @@ function init_datatables(){
     } else if (datatable.hasClass('users')){
       init_datatable(table_rules['users']['url'], table_rules['users']['columns'])
     } else if (datatable.hasClass('contact_requests')){
-      init_datatable(table_rules['contact_requests']['url'], table_rules['contact_requests']['columns'])
+      init_datatable(table_rules['contact_requests']['url'], table_rules['contact_requests']['columns'], table_rules['contact_requests']['order_col'], table_rules['contact_requests']['order_dir'])
     } else if (datatable.hasClass('admins')){
       init_datatable(table_rules['admins']['url'], table_rules['admins']['columns'])
     } else if (datatable.hasClass('vets')){

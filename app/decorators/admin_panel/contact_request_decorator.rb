@@ -4,9 +4,14 @@ module AdminPanel
     delegate_all
 
     def status
-      text = model.is_answered? ? 'Answered' : 'New'
+      text = model.is_answered? ? 'Answered' : 'Not answered'
       span_class = model.is_answered? ? 'label-success' : 'label-warning'
-      content_tag(:span, text, class: "label #{span_class}")
+      content = content_tag(:span, text, class: "label #{span_class}")
+      unless model.is_viewed?
+        content += ' '
+        content += content_tag(:span, 'New', class: 'label label-primary')
+      end
+      content
     end
 
     def user_name
