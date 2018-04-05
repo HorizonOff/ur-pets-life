@@ -9,6 +9,7 @@ class Pet < ApplicationRecord
   has_many :vaccinations, -> { order(done_at: :desc) }, inverse_of: :pet, dependent: :destroy
   has_many :pictures, inverse_of: :pet, dependent: :destroy
   has_many :diagnoses
+  has_many :notifications, dependent: :destroy
   has_and_belongs_to_many :appointments
 
   has_one :location, as: :place, inverse_of: :place, dependent: :destroy
@@ -55,7 +56,7 @@ class Pet < ApplicationRecord
 
   before_save :remove_location, if: ->(obj) { obj.changed_attributes.keys.include?('lost_at') && obj.lost_at.blank? }
 
-  after_update :send_lost_notification
+  after_update :send_lost_notification, :remove_lost_notification
 
   scope :alphabetical_order, -> { order(description: :asc) }
   scope :for_adoption,       -> { where(is_for_adoption: true, lost_at: nil) }
@@ -127,6 +128,11 @@ class Pet < ApplicationRecord
     users_for_lost_notifications.each do |u|
       send_notification_to_user(u)
     end
+  end
+
+  def remove_lost_notification
+    return if !saved_changes.keys.include?('lost_at') || lost_at.present?
+    Notification.where(pet_id: id).destroy_all
   end
 
   def users_for_lost_notifications
