@@ -76,7 +76,7 @@ function init_datatables(){
                              { 'searchable': true, 'orderable': true, 'data': 'experience', 'targets': 5 },
                              { 'searchable': true, 'orderable': true, 'data': 'is_active', 'targets': 6 },
                              { 'searchable': false, 'orderable': false, 'data': 'actions', 'targets': 7 } ] },
-      'appointments': { 'url': '/admin_panel/appointments',
+      'appointments': { 'url': '/admin_panel/appointments', 'order_col': 4, 'order_dir': 'desc',
                         'columns': [ { 'searchable': true, 'orderable': true, 'data': 'id', 'targets': 0 },
                                      { 'searchable': true, 'orderable': false, 'data': 'name', 'targets': 1 },
                                      { 'searchable': true, 'orderable': false, 'data': 'bookable_type', 'targets': 2 },
@@ -126,7 +126,7 @@ function init_datatables(){
     } else if (datatable.hasClass('vets')){
       init_datatable(table_rules['vets']['url'], table_rules['vets']['columns'])
     } else if (datatable.hasClass('appointments')){
-      init_datatable(table_rules['appointments']['url'], table_rules['appointments']['columns'])
+      init_datatable(table_rules['appointments']['url'], table_rules['appointments']['columns'], table_rules['appointments']['order_col'], table_rules['appointments']['order_dir'])
     } else if (datatable.hasClass('posts')){
       init_datatable(table_rules['posts']['url'], table_rules['posts']['columns'])
     } else if (datatable.hasClass('boardings')){
@@ -139,7 +139,11 @@ function init_datatables(){
   };
 };
 
-function init_datatable(url, column_rules){
+function init_datatable(url, column_rules, order_col, order_dir){
+  if (typeof(order_col) == 'undefined') {
+    var order_col = 0;
+    var order_dir = 'asc'
+  }
   var table = $('.datatable').DataTable({
     "orderCellsTop": true,
     "processing": true,
@@ -152,7 +156,7 @@ function init_datatable(url, column_rules){
         d.city = $(".additional_parameter[name*='city']").val();
       }
     },
-    "order": [[ 0, 'asc' ]],
+    "order": [[ order_col, order_dir ]],
     "columnDefs": column_rules,
     "drawCallback": function(settings) {
       $('.table a.check_response').on('ajax:success', draw_table)
