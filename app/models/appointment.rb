@@ -32,6 +32,7 @@ class Appointment < ApplicationRecord
   validates :number_of_days, presence: { message: 'Number of days is required' }, if: :day_care_or_boarding?
 
   after_validation :set_total_price, on: :create
+  after_commit :send_notification, on: :update
 
   acts_as_paranoid
 
@@ -75,6 +76,11 @@ class Appointment < ApplicationRecord
   end
 
   private
+
+  def send_notification
+    return unless 'status'.in?(saved_changes.keys)
+    user.notifications.create(appointment: self, message: 'Your appointment was ' + status)
+  end
 
   def set_defaults
     return if persisted? && status.present?
