@@ -68,6 +68,14 @@
     }
   }
 
+  .store-buttons a{
+    width: 50%;
+    img {
+      border-radius: 15px;
+      max-width: 90%;
+    }
+  }
+
   @media (min-width: 1250px) {
     .store-buttons {
       margin-top: 240px;
