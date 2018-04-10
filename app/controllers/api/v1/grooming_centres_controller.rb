@@ -63,7 +63,7 @@ module Api
       end
 
       def pet_services_serializer_service
-        @pet_services_serializer_service ||= ::Api::V1::PetServicesSerializerService.new(@services, @pets)
+        @pet_services_serializer_service ||= ::Api::V1::PetServicesSerializerService.new(@services, @pets, true)
       end
 
       def parse_date

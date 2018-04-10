@@ -32,14 +32,15 @@ module Api
 
       def check_weight_and_serialize
         pet_services = []
-        services.each do |service_type|
-          checked_service_detail = service_type.select { |sd| sd.weight.to_f >= pet.weight && sd.min_weight.to_f <= pet.weight }.first
-        #   if checked_service_details.present?
-        #     checked_service_detail = checked_service_details.sort_by { |i| i[:weight] }.first
-        #   end
+        services.each do |st|
+          checked_service_detail = check_services_weight(st)
           pet_services << [checked_service_detail] if checked_service_detail
         end
         serialize_all(pet_services)
+      end
+
+      def check_services_weight(service_type)
+        service_type.select { |sd| sd.weight.to_f >= pet.weight && sd.min_weight.to_f <= pet.weight }.first
       end
 
       attr_accessor :serialized_services
