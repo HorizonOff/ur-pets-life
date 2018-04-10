@@ -8,29 +8,17 @@ module AdminPanel
     def create
       @service_type = ServiceType.new(service_type_params)
       if @service_type.save
-        respond_to do |format|
-          format.html { redirect_to after_save_path }
-          format.js {}
-        end
+        redirect_to after_save_path
       else
-        respond_to do |format|
-          format.html { render :new }
-          format.js {}
-        end
+        render :new
       end
     end
 
     def update
       if @service_type.update(service_type_params)
-        respond_to do |format|
-          format.html { redirect_to after_save_path }
-          format.js {}
-        end
+        redirect_to after_save_path
       else
-        respond_to do |format|
-          format.html { render :edit }
-          format.js {}
-        end
+        render :edit
       end
     end
 
@@ -46,7 +34,7 @@ module AdminPanel
 
     def service_type_params
       params.require(:service_type).permit(:serviceable_type, :serviceable_id, :name, :description,
-                                           service_details_attributes: %i[id pet_type_id weight
+                                           service_details_attributes: %i[id pet_type_id min_weight weight
                                                                           total_space price _destroy],
                                            cat_services_attributes: service_params,
                                            dog_services_attributes: service_params,
@@ -64,8 +52,10 @@ module AdminPanel
     def after_save_path
       if @service_type.serviceable_type == 'DayCareCentre'
         admin_panel_day_care_centre_path(@service_type.serviceable_id)
-      else
+      elsif @service_type.serviceable_type == 'Boarding'
         admin_panel_boarding_path(@service_type.serviceable_id)
+      else
+        admin_panel_grooming_centre_path(@service_type.serviceable_id)
       end
     end
   end
