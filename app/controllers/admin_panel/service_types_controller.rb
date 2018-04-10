@@ -46,7 +46,7 @@ module AdminPanel
     end
 
     def service_params
-      %i[id weight total_space price _destroy]
+      %i[id weight min_weight total_space price _destroy]
     end
 
     def after_save_path
