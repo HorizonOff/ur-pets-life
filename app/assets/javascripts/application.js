@@ -183,3 +183,11 @@ $(document).on('ifChanged', 'input.service_option_switch', function() {
     service_option_id_field.prop('disabled', true);
   }
 });
+
+$(document).on('click', '.photo_preview', function() {
+  html_text = '<img src="' + $(this).data('url') + '" alt="photo preview">'
+  $('.modal-body').html(html_text)
+  // %img.preview_image{ src: '', alt: 'photo preview' }
+  // $('.preview_image').attr('src', $(this).data('url'));
+  $('#photo_preview').modal('show');
+});
