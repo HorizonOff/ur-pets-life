@@ -8,11 +8,21 @@ class ContactRequest < ApplicationRecord
   validates :subject, presence: { message: 'Subject is required' }, if: :mobile?
   validates :message, presence: { message: 'Message is required' }
 
+  after_commit :notify_super_admin, on: :create
+
   def mobile?
     user_name.blank?
   end
 
   def landing?
     subject.blank?
+  end
+
+  private
+
+  def notify_super_admin
+    Admin.active.super.each do |sa|
+      ContactRequestMailer.notify_super_admin(sa).deliver
+    end
   end
 end
