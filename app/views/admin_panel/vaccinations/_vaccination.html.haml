@@ -3,5 +3,5 @@
   %td= vaccination.name
   %td
     -if vaccination.picture?
-      =image_tag(vaccination.picture.thumb.url, class: 'avatar')
+      =image_tag(vaccination.picture.thumb.url, class: 'avatar photo_preview', data: { url: vaccination.picture_url } )
   %td= vaccination.done_at&.strftime('%e %b %Y')
