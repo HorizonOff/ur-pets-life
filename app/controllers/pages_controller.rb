@@ -8,7 +8,7 @@ class PagesController < ApplicationController
   def send_message
     @contact_request = ContactRequest.new(contact_request_params)
     @contact_request.assign_attributes(email: @user.email, user: @user) if @user
-    ContactRequestMailer.send_contact_request(@contact_request).deliver if @contact_request.save
+    @contact_request.save
   end
 
   private

@@ -17,6 +17,9 @@ class Admin < ApplicationRecord
   acts_as_paranoid
 
   scope :simple, -> { where(is_super_admin: false) }
+  scope :super, -> { where(is_super_admin: true) }
+  scope :active, -> { where.not(invitation_accepted_at: nil).or(where(invitation_sent_at: nil)) }
+
   scope :for_clinic, -> { simple.left_joins(:clinic).having('count(clinics.id) = 0').group('admins.id') }
 
   scope :for_day_care_centre, (lambda do

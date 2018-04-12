@@ -8,7 +8,6 @@ module Api
         contact_request.assign_attributes(email: @user.email, user: @user) if @user
         if contact_request.save
           render json: { message: 'Successfully created' }
-          ContactRequestMailer.send_contact_request(contact_request).deliver
         else
           render_422(parse_errors_messages(contact_request))
         end
