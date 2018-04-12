@@ -185,9 +185,7 @@ $(document).on('ifChanged', 'input.service_option_switch', function() {
 });
 
 $(document).on('click', '.photo_preview', function() {
-  html_text = '<img src="' + $(this).data('url') + '" alt="photo preview">'
+  html_text = '<img src="' + $(this).data('url') + '" alt="photo preview" style="max-width:100%;">'
   $('.modal-body').html(html_text)
-  // %img.preview_image{ src: '', alt: 'photo preview' }
-  // $('.preview_image').attr('src', $(this).data('url'));
   $('#photo_preview').modal('show');
 });
