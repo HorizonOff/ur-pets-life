@@ -2,7 +2,8 @@ class Admin < ApplicationRecord
   include EmailCheckable
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :registerable,, :timeoutable and :omniauthable
-  devise :invitable, :database_authenticatable, :recoverable, :rememberable, :trackable, :validatable
+  devise :invitable, :database_authenticatable, :recoverable, :rememberable, :trackable, :validatable,
+         validate_on_invite: true
 
   mount_uploader :avatar, PhotoUploader
 
@@ -12,9 +13,11 @@ class Admin < ApplicationRecord
   has_one :boarding, dependent: :nullify
 
   has_many :appointments, dependent: :nullify
-  has_many :notifications, dependent: :nullify
+  has_many :notifications
 
   acts_as_paranoid
+
+  validates_uniqueness_of :email, conditions: -> { with_deleted }
 
   scope :simple, -> { where(is_super_admin: false) }
   scope :super, -> { where(is_super_admin: true) }

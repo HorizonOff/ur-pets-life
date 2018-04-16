@@ -22,16 +22,24 @@ module AdminPanel
 
     def destroy
       if @admin.destroy
-        render js: { message: 'Admin was deleted' }
+        render json: { message: 'success' }, status: 200
       else
-        render js: { errors: @admin.errors.full_messages }, status: 422
+        render json: { errors: @admin.errors.full_messages }, status: 422
+      end
+    end
+
+    def restore
+      if @admin.restore
+        render json: { message: 'success' }, status: 200
+      else
+        render json: { message: @admin.errors.full_messages }, status: 422
       end
     end
 
     private
 
     def set_admin
-      @admin = Admin.find_by_id(params[:id])
+      @admin = Admin.with_deleted.find_by_id(params[:id])
     end
 
     def authorize_admin
@@ -46,8 +54,8 @@ module AdminPanel
         admins, serializer: ::AdminPanel::AdminFilterSerializer, adapter: :attributes
       )
 
-      render json: { draw: params[:draw], recordsTotal: Admin.count, recordsFiltered: filtered_admins.total_count,
-                     data: serialized_admins }
+      render json: { draw: params[:draw], recordsTotal: Admin.with_deleted.count,
+                     recordsFiltered: filtered_admins.total_count, data: serialized_admins }
     end
 
     def filter_and_pagination_query
