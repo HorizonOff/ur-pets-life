@@ -44,6 +44,8 @@ module AdminPanel
         @scope = scope.includes(:vet, :user).joins(:user)
       elsif model == 'Post' || model == 'Notification'
         @scope = scope.includes(:user).joins(:user)
+      elsif model == 'Admin'
+        @scope = scope.with_deleted
       end
     end
 

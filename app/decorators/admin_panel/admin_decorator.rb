@@ -21,18 +21,28 @@ module AdminPanel
 
     def actions
       return if model == context[:current_admin]
-      lock_unlock_text = model.is_active? ? 'Lock' : 'Activate'
-      links(lock_unlock_text)
+      lock_unlock_link + delete_restore_link
     end
 
     private
 
-    def links(lock_unlock_text)
-      (link_to lock_unlock_text, url_helpers.change_status_admin_panel_admin_path(model),
-               method: :put, remote: true, class: 'btn btn-info btn-xs check_response') +
-        (link_to 'Delete', url_helpers.admin_panel_admin_path(model),
-                 data: { confirm: 'Are you sure?' }, method: :delete, remote: true,
-                 class: 'btn btn-danger btn-xs check_response')
+    def lock_unlock_link
+      return '' if model.deleted?
+      lock_unlock_text = model.is_active? ? 'Lock' : 'Activate'
+      link_to lock_unlock_text, url_helpers.change_status_admin_panel_admin_path(model),
+              method: :put, remote: true, class: 'btn btn-info btn-xs check_response'
+    end
+
+    def delete_restore_link
+      if model.deleted?
+        link_to 'Restore', url_helpers.restore_admin_panel_admin_path(model),
+                method: :put, remote: true,
+                class: 'btn btn-success btn-xs check_response'
+      else
+        link_to 'Delete', url_helpers.admin_panel_admin_path(model),
+                data: { confirm: 'Are you sure?' }, method: :delete, remote: true,
+                class: 'btn btn-danger btn-xs check_response'
+      end
     end
   end
 end

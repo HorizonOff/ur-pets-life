@@ -89,6 +89,7 @@ Rails.application.routes.draw do
 
     resources :admins, only: %w[index destroy] do
       member { put :change_status }
+      member { put :restore }
     end
     resource :terms_and_conditions, only: %i[edit update]
     resources :users, except: %i[new ceate]
