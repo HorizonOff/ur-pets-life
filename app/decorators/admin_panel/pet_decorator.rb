@@ -37,6 +37,16 @@ module AdminPanel
       end
     end
 
+    def status_text
+      if pet.lost?
+        'LOST'
+      elsif pet.is_for_adoption?
+        'FOR ADOPTION'
+      elsif pet.found?
+        'FOUND'
+      end
+    end
+
     def actions
       pet_vaccinations_path + pet_diagnoses_path + crud_actions
     end

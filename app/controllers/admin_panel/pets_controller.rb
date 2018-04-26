@@ -6,6 +6,7 @@ module AdminPanel
     def index
       respond_to do |format|
         format.html {}
+        format.xlsx { export_data }
         format.json { filter_pets }
       end
     end
@@ -74,6 +75,14 @@ module AdminPanel
 
     def filter_and_pagination_query
       @filter_and_pagination_query ||= ::AdminPanel::FilterAndPaginationQuery.new('Pet', params)
+    end
+
+    def export_data
+      @pets = Pet.all.order(:id).includes(:user, :pet_type)
+      @pets = ::AdminPanel::PetDecorator.decorate_collection(@pets)
+
+      name = "pets #{Time.now.utc.strftime('%d-%M-%Y')}.xlsx"
+      response.headers['Content-Disposition'] = "attachment; filename*=UTF-8''#{name}"
     end
   end
 end

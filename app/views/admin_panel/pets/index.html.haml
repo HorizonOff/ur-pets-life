@@ -4,7 +4,8 @@
   .page-title
     .title_left
       %h3 Pets
-
+    .title_right
+      = link_to 'Export in xlsx', admin_panel_pets_path(format: :xlsx), class: 'btn btn-primary btn-round pull-right'
   .clearfix
 
   .row

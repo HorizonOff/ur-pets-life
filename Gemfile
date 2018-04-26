@@ -67,6 +67,8 @@ gem "paranoia", "~> 2.2"
 
 gem 'ruby-push-notifications'
 gem 'fcm'
+gem 'axlsx'
+gem 'axlsx_rails'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

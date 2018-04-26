@@ -7,6 +7,7 @@ module AdminPanel
     def index
       respond_to do |format|
         format.html {}
+        format.xlsx { export_data }
         format.json { filter_users }
       end
     end
@@ -76,6 +77,12 @@ module AdminPanel
 
     def filter_and_pagination_query
       @filter_and_pagination_query ||= ::AdminPanel::FilterAndPaginationQuery.new('User', params)
+    end
+
+    def export_data
+      @users = User.all.order(:id).includes(:location)
+      name = "users #{Time.now.utc.strftime('%d-%M-%Y')}.xlsx"
+      response.headers['Content-Disposition'] = "attachment; filename*=UTF-8''#{name}"
     end
   end
 end

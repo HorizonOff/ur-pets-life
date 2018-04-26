@@ -76,6 +76,13 @@ GEM
     arel (8.0.0)
     ast (2.3.0)
     attr_required (1.0.1)
+    axlsx (2.0.1)
+      htmlentities (~> 4.3.1)
+      nokogiri (>= 1.4.1)
+      rubyzip (~> 1.0.0)
+    axlsx_rails (0.5.1)
+      actionpack (>= 3.1)
+      axlsx (>= 2.0.1)
     bcrypt (3.1.11)
     bindex (0.5.0)
     binding_of_caller (0.7.3)
@@ -209,6 +216,7 @@ GEM
       haml (>= 4.0, < 6)
       nokogiri (>= 1.6.0)
       ruby_parser (~> 3.5)
+    htmlentities (4.3.4)
     http-cookie (1.0.3)
       domain_name (~> 0.5)
     httparty (0.16.0)
@@ -384,6 +392,7 @@ GEM
     ruby_dep (1.5.0)
     ruby_parser (3.10.1)
       sexp_processor (~> 4.9)
+    rubyzip (1.0.0)
     sass (3.5.3)
       sass-listen (~> 4.0.0)
     sass-listen (4.0.0)
@@ -448,6 +457,8 @@ PLATFORMS
 
 DEPENDENCIES
   active_model_serializers
+  axlsx
+  axlsx_rails
   byebug
   carrierwave (~> 1.0)
   ckeditor
