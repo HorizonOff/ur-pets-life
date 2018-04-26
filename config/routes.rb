@@ -93,7 +93,7 @@ Rails.application.routes.draw do
     end
     resource :terms_and_conditions, only: %i[edit update]
     resources :users, except: %i[new ceate]
-    resources :pets, except: %i[index new ceate] do
+    resources :pets, except: %i[new ceate] do
       member { get :weight_history }
       member { get :vaccinations }
       member { get :diagnoses }

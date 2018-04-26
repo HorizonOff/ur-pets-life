@@ -106,7 +106,17 @@ function init_datatables(){
                                       { 'searchable': true, 'orderable': false, 'data': 'name', 'targets': 1 },
                                       { 'searchable': true, 'orderable': true, 'data': 'skip_push_sending', 'targets': 2 },
                                       { 'searchable': false, 'orderable': true, 'data': 'created_at', 'targets': 3 },
-                                      { 'searchable': false, 'orderable': false, 'data': 'actions', 'targets': 4 } ] }
+                                      { 'searchable': false, 'orderable': false, 'data': 'actions', 'targets': 4 } ] },
+      'pets': { 'url': '/admin_panel/pets',
+                'columns': [ { 'searchable': true, 'orderable': true, 'data': 'id', 'targets': 0 },
+                             { 'searchable': true, 'orderable': false, 'data': 'name', 'targets': 1 },
+                             { 'searchable': false, 'orderable': false, 'data': 'avatar', 'targets': 2 },
+                             { 'searchable': false, 'orderable': true, 'data': 'birthday', 'targets': 3 },
+                             { 'searchable': true, 'orderable': true, 'data': 'pet_type_id', 'targets': 4 },
+                             { 'searchable': true, 'orderable': true, 'data': 'sex', 'targets': 5 },
+                             { 'searchable': false, 'orderable': false, 'data': 'weight', 'targets': 6 },
+                             { 'searchable': true, 'orderable': false, 'data': 'status', 'targets': 7 },
+                             { 'searchable': false, 'orderable': false, 'data': 'actions', 'targets': 8 } ] }
     }
     var datatable = $('.datatable').first()
     if (datatable.hasClass('clinics')){
@@ -133,8 +143,10 @@ function init_datatables(){
       init_datatable(table_rules['boardings']['url'], table_rules['boardings']['columns'])
     } else if (datatable.hasClass('additional_services')){
       init_datatable(table_rules['additional_services']['url'], table_rules['additional_services']['columns'])
-    } else {
+    } else if (datatable.hasClass('notifications')){
       init_datatable(table_rules['notifications']['url'], table_rules['notifications']['columns'])
+    } else {
+      init_datatable(table_rules['pets']['url'], table_rules['pets']['columns'])
     }
   };
 };

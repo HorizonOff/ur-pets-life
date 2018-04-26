@@ -1,10 +1,8 @@
 %tr
   %th{ scope: 'row' } #{pet.id}
   %td= pet.name
-  %td
-    -if pet.avatar.present?
-      =image_tag(pet.avatar.thumb.url, class: 'avatar')
-  %td= pet.birthday&.strftime('%e %b %Y')
+  %td= pet.avatar
+  %td= pet.birthday
   %td= pet.pet_type.name
   %td= pet.gender
   %td= link_to pet.weight, weight_history_admin_panel_pet_path(pet), remote: true if pet.weight.present?
