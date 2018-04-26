@@ -1,0 +1,41 @@
+%div
+  .row
+    .col-md-12.col-sm-12.col-xs-12
+      .x_panel
+        .x_title
+          %h2= @pet.name
+          .clearfix
+        .x_content
+          .col-md-3.col-sm-3.col-xs-12.profile_left
+            %ul.list-unstyled.user_data
+              %li
+                %i.fa.fa-birthday-cake.user-profile-icon
+                = @pet.birthday
+              %li
+                Gender: 
+                = @pet.gender
+
+            = link_to edit_admin_panel_pet_path(@pet), class: 'btn btn-warning' do
+              %i.fa.fa-edit.m-right-xs
+              Edit pet
+            = @pet.pet_vaccinations_path
+            = @pet.pet_diagnoses_path
+            %br
+
+          .col-md-9.col-sm-9.col-xs-12
+            .profile_title
+              .col-md-6.col-sm-6.col-xs-6
+                %h2 Total count of appointments #{@pet.appointments.count}
+            %table.table
+              %thead
+                %tr
+                  %th #
+                  %th User
+                  %th Booked object
+                  %th Vet
+                  %th Booked time
+                  %th Session start
+                  %th Status
+                  %th Actions
+              %tbody
+                = render @appointments

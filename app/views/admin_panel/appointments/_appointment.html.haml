@@ -1,16 +1,8 @@
 %tr
   %th{ scope: 'row' }= appointment.id
-  %td
-    %a= appointment.bookable.name
-    %br
-    %small= appointment.bookable_type
-  %td
-    -if appointment.vet_id.present?
-      = appointment.vet.name
-  %td= appointment.created_at.strftime('%-d %b %Y %I:%M %p')
-  %td= appointment.start_at.strftime('%-d %b %Y %I:%M %p')
-  %td 
-    %span{ class: "label #{status_class(appointment)}" }= appointment.status
-  %td
-    = link_to 'Show', admin_panel_appointment_path(appointment), class: 'btn btn-primary btn-xs'
-    = appointment_actions(appointment, 'btn-xs')
+  %td= appointment.booked_object
+  %td= appointment.vet_name
+  %td= appointment.created_at
+  %td= appointment.start_at
+  %td= appointment.status_label
+  %td= appointment.actions

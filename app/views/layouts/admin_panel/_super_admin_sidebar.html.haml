@@ -6,6 +6,10 @@
   = link_to admin_panel_users_path do
     %i.fa.fa-users
     Users
+%li{ class: "#{'current-page' if current_page?(admin_panel_pets_path)}" }
+  = link_to admin_panel_pets_path do
+    %i.fa.fa-paw
+    Pets
 %li{ class: "#{'current-page' if current_page?(admin_panel_clinics_path)}" }
   = link_to admin_panel_clinics_path do
     %i.fa.fa-plus-square

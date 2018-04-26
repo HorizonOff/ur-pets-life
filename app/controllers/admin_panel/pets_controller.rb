@@ -1,10 +1,22 @@
 module AdminPanel
   class PetsController < AdminPanelController
-    before_action :set_pet
+    before_action :authorize_super_admin, only: :index
+    before_action :set_pet, except: :index
+
+    def index
+      respond_to do |format|
+        format.html {}
+        format.json { filter_pets }
+      end
+    end
 
     def edit; end
 
-    def show; end
+    def show
+      @pet = ::AdminPanel::PetDecorator.decorate(@pet)
+      @appointments = ::AdminPanel::AppointmentDecorator.decorate_collection(@pet.appointments
+                                                                                 .includes(:bookable, :vet))
+    end
 
     def update
       @pet.assign_attributes(pet_params)
@@ -47,6 +59,21 @@ module AdminPanel
       params.require(:pet).permit(:name, :birthday, :breed_id, :weight, :avatar, :avatar_cache, :additional_type,
                                   :lost_at, :found_at, :description, :mobile_number, :additional_comment,
                                   :comment, :municipality_tag, :microchip, location_attributes: location_params)
+    end
+
+    def filter_pets
+      filtered_pets = filter_and_pagination_query.filter
+      pets = ::AdminPanel::PetDecorator.decorate_collection(filtered_pets)
+      serialized_pets = ActiveModel::Serializer::CollectionSerializer.new(
+        pets, serializer: ::AdminPanel::PetFilterSerializer, adapter: :attributes
+      )
+
+      render json: { draw: params[:draw], recordsTotal: Pet.count,
+                     recordsFiltered: filtered_pets.total_count, data: serialized_pets }
+    end
+
+    def filter_and_pagination_query
+      @filter_and_pagination_query ||= ::AdminPanel::FilterAndPaginationQuery.new('Pet', params)
     end
   end
 end
