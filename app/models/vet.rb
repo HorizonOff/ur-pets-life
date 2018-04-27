@@ -49,6 +49,12 @@ class Vet < ApplicationRecord
     joins(:pet_types).where(pet_types: { id: pet_type_ids }).group('vets.id').having('count(*) = ?', pet_type_ids.size)
   end)
 
+  after_commit :generate_default_calendars, on: :create
+
+  def generate_calendar(start_at, end_at)
+    calendars.create(start_at: start_at, end_at: end_at)
+  end
+
   private
 
   def work_as_emergency?
@@ -62,5 +68,9 @@ class Vet < ApplicationRecord
                                                             'updated_at', 'comment')
     build_location unless location
     location.assign_attributes(location_attributes)
+  end
+
+  def generate_default_calendars
+    VetTimingJob.perform_async(id)
   end
 end

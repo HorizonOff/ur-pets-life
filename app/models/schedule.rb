@@ -15,7 +15,7 @@ class Schedule < ApplicationRecord
   private
 
   def check_hours
-    return if day_and_night
+    return if day_and_night?
     check_monday
     check_tuesday
     check_wednesday
