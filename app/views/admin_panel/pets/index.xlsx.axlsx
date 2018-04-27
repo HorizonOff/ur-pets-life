@@ -1,0 +1,10 @@
+wb = xlsx_package.workbook
+
+wb.add_worksheet(name: "Users") do |sheet|
+  sheet.add_row %w(ID Pet\ Name Birthday Gender Pet\ Type Breed/Type Microchip\ Nuber Municipality\ Tag Weight(kg) Status Pet\ Owner Owner's\ Email)
+
+  @pets.each do |pet|
+   sheet.add_row [pet.id, pet.name, pet.birthday, pet.sex, pet.pet_type, pet.breed&.name || pet.additional_type, pet.microchip,
+                   pet.municipality_tag, pet.weight, pet.status_text, pet.user&.name, pet.user&.email]
+  end
+end

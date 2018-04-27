@@ -20,7 +20,7 @@ class Calendar < ApplicationRecord
   private
 
   def different_days
-    return if the_same_day? || end_at_minight?
+    return if the_same_day? || end_at_midnight?
     errors.add(:end_at, 'should be the same day as start at')
   end
 
@@ -28,7 +28,7 @@ class Calendar < ApplicationRecord
     start_at.yday == end_at.yday && start_at.year == end_at.year
   end
 
-  def end_at_minight?
+  def end_at_midnight?
     end_at.yday == start_at.next_day.midnight.yday
   end
 

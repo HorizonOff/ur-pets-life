@@ -3,7 +3,9 @@
 %div
   .page-title
     .title_left
-      %h3 Users 
+      %h3 Users
+    .title_right
+      = link_to 'Export in xlsx', admin_panel_users_path(format: :xlsx), class: 'btn btn-primary btn-round pull-right'
   .clearfix
 
   .row
