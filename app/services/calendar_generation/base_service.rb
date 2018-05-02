@@ -24,10 +24,11 @@ module CalendarGeneration
 
     def generate_clinic_time_slot(date)
       check_wday(date)
-      return if @open_at.blank?
-      beginning_of_time_slot = @open_at.change(year: date.year, month: date.month, day: date.day)
-      end_of_time_slot = @close_at.change(year: date.year, month: date.month, day: date.day)
-      @vet.generate_calendar(beginning_of_time_slot, end_of_time_slot)
+      unless @open_at.blank?
+        beginning_of_time_slot = @open_at.change(year: date.year, month: date.month, day: date.day)
+        end_of_time_slot = @close_at.change(year: date.year, month: date.month, day: date.day)
+        @vet.generate_calendar(beginning_of_time_slot, end_of_time_slot)
+      end
       @day += 1.day
     end
 
