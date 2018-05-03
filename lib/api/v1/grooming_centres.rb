@@ -82,6 +82,11 @@ module Api
               key :'$ref', :ServiceType
             end
           end
+          property :pictures do
+            items do
+              key :'$ref', :Picture
+            end
+          end
         end
       end
 
