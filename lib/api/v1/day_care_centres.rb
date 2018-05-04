@@ -130,6 +130,11 @@ module Api
           key :type, :string
           key :example, 'Pick Up'
         end
+        property :service_option_times do
+          items do
+            key :'$ref', :ServiceOptionTime
+          end
+        end
       end
 
       swagger_schema :ServiceDetail do

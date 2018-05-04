@@ -42,7 +42,11 @@ module AdminPanel
     end
 
     def service_option_params
-      %i[id service_option_id price _destroy]
+      [:id, :service_option_id, :price, :_destroy, service_option_times_attributes: service_option_time_params]
+    end
+
+    def service_option_time_params
+      %i[id start_at end_at _destroy]
     end
 
     def count_budges

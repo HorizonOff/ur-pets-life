@@ -61,6 +61,10 @@ Rails.application.routes.draw do
       end
       resources :favorites, only: %i[index create destroy]
 
+      resources :service_option_details, only: [] do
+        member { get :time_ranges }
+      end
+
       resources :sessions, only: :create do
         collection { post :facebook }
         collection { post :google }

@@ -43,7 +43,7 @@ $(document).on('turbolinks:load', function() {
   init_timepicker();
   init_select2();
 });
-	
+
 function init_icheck(){
   if ($("input.flat")[0]) {
     $('input.flat').iCheck({
@@ -105,6 +105,10 @@ function init_select2(){
     $('.select2.clinics_select').on('select2:select select2:unselect', check_clinic_location);
   }
 }
+
+$(document).on('cocoon:after-insert', '#service_option_times', function(e, added_element) {
+  init_timepicker();
+})
 
 function init_timepicker(){
   if ($('.single_cal1')){
@@ -173,12 +177,15 @@ $(document).on('ifChanged', 'input.service_option_switch', function() {
   destroy_checkbox.prop('checked', !destroy_checkbox.prop('checked'))
   var service_option_id_field = $(this).parents('.check_boxes').find('.service_option_id');
   var selector = $(this).parents('.check_boxes').siblings('.service_option_details_fields');
+  var times_selector = $(this).parents('.check_boxes').parent().siblings('.service_option_times_fields');
   if(selector.hasClass('hiden')) {
     selector.removeClass('hiden');
+    times_selector.removeClass('hiden');
     show_and_enable_inputs(selector)
     service_option_id_field.prop('disabled', false);
   } else {
     selector.addClass('hiden');
+    times_selector.addClass('hiden');
     hide_and_disable_inputs(selector);
     service_option_id_field.prop('disabled', true);
   }

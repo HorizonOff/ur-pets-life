@@ -1,0 +1,15 @@
+.nested-fields
+  .form-group
+    = f.label :start_at, 'From', class: 'control-label col-md-1 col-sm-3 col-xs-12'
+    .col-md-3.col-sm-3.col-xs-12
+      - if f.object.new_record?
+        = f.text_field :start_at, value: f.object.start_at.try(:strftime, '%I:%M %p'), class: 'form-control timepicker open'
+      - else
+        = f.object.start_at.strftime('%l:%M %p')
+    = f.label :end_at, 'To', class: 'control-label col-md-1 col-sm-3 col-xs-12'
+    .col-md-3.col-sm-3.col-xs-12
+      - if f.object.new_record?
+        = f.text_field :end_at, value: f.object.end_at.try(:strftime, '%I:%M %p'), class: 'form-control timepicker close_time'
+      - else
+        = f.object.end_at.strftime('%l:%M %p')
+    = link_to_remove_association 'Remove', f, { class: 'btn btn-danger col-md-2 col-sm-3 col-xs-12'}

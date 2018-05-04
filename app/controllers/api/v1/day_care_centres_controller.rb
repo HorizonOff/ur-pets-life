@@ -20,7 +20,7 @@ module Api
         @services = @day_care_centre.service_details.includes(:service_type)
                                     .group_by { |sd| [sd.service_type_id, sd.pet_type_id] }.values
 
-        render json: @day_care_centre,
+        render json: @day_care_centre, include: 'service_option_details,service_option_details.service_option_times,pictures',
                scope: serializable_params.merge(favorite: favorite,
                                                 service_types: service_type_serializer_service.serialize)
       end
