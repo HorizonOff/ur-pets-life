@@ -24,7 +24,8 @@ class CartItem < ApplicationRecord
   private
 
   def check_service_time
-    self.service_option_time_id = nil if serviceable_type == ' ServiceDetail'
+    return if service_option_time_id.blank?
+    self.service_option_time_id = nil if serviceable_type == 'ServiceDetail' || service_option_time_id < 1
   end
 
   def leave_default_quantity?
