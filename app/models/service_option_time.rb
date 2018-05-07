@@ -9,6 +9,10 @@ class ServiceOptionTime < ApplicationRecord
 
   validate :values_should_be_valid
 
+  def time_range
+    start_at.strftime('%l:%M %p').strip + ' - ' + end_at.strftime('%l:%M %p').strip
+  end
+
   private
 
   def set_same_date

@@ -65,11 +65,7 @@
                             %tr
                               %td= i + 1
                               %td= c.serviceable.name
-                              - if c.service_option_time
-                                - sot = c.service_option_time
-                                %td= sot.start_at.strftime('%l:%M %p') + ' - ' + sot.end_at.strftime('%l:%M %p')
-                              - else
-                                %td
+                              %td= c.service_option_time.try(:time_range)
                               %td= c.quantity
                               %td= c.price
                               %td= c.total_price
