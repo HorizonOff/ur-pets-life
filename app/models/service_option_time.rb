@@ -7,11 +7,17 @@ class ServiceOptionTime < ApplicationRecord
 
   validates :start_at, :end_at, presence: true
 
+  validate :values_should_be_valid
+
   private
 
   def set_same_date
     return if start_at.blank? || end_at.blank?
     self.start_at = start_at.change(year: 2018, month: 1, day: 1)
     self.end_at = end_at.change(year: 2018, month: 1, day: 1)
+  end
+
+  def values_should_be_valid
+    errors.add(:end_at, 'End time should be after start time') if start_at > end_at
   end
 end

@@ -51,10 +51,10 @@ function init_icheck(){
       radioClass: 'iradio_flat-green'
     });
     $('input.flat.day_and_night').on('ifChecked', function(event){
-      $('.timepicker').prop('disabled', true);
+      $('.working_hours .timepicker').prop('disabled', true);
     });
     $('input.flat.day_and_night').on('ifUnchecked', function(event){
-      $('.timepicker').prop('disabled', false);
+      $('.working_hours .timepicker').prop('disabled', false);
     });
     $('input.flat.optional_checkbox').on('ifChecked', function(event){
       hide_and_disable_inputs($('.user_ids'))
@@ -145,19 +145,19 @@ function init_timepicker(){
       format: 'hh:mm A'
     })
     $('.timepicker.close_time').datetimepicker({
-      format: 'hh:mm A',
-      useCurrent: false
+      format: 'hh:mm A'
+      // useCurrent: false
     })
 
-    $('.timepicker').on('dp.change', function(e) {
-      var element = $(e.target);
-      var related_element = element.parent().siblings('div').find('.timepicker');
-      if (element.hasClass('open')){
-        related_element.data("DateTimePicker").minDate(e.date);
-      } else {
-        related_element.data("DateTimePicker").maxDate(e.date);
-      }
-    });
+    // $('.timepicker').on('dp.change', function(e) {
+    //   var element = $(e.target);
+    //   var related_element = element.parent().siblings('div').find('.timepicker');
+    //   if (element.hasClass('open')){
+    //     related_element.data("DateTimePicker").minDate(e.date);
+    //   } else {
+    //     related_element.data("DateTimePicker").maxDate(e.date);
+    //   }
+    // });
   }
 }
 
