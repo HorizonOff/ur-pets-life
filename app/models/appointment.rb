@@ -19,6 +19,7 @@ class Appointment < ApplicationRecord
   accepts_nested_attributes_for :cart_items
 
   has_many :service_option_details, through: :cart_items, source: :serviceable, source_type: 'ServiceOptionDetail'
+  has_many :service_option_times, through: :cart_items
 
   has_and_belongs_to_many :pets, -> { with_deleted }
 

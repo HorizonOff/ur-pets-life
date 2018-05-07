@@ -27,7 +27,7 @@
                     %li
                       %i.fa.fa-envelope.user-profile-icon
                       = @appointment.user.email
-            .col-md-3.col-sm-3.col-xs-12
+            .col-md-6.col-sm-3.col-xs-12
               %section.panel
                 .x_title
                   %h4 Booking info
@@ -56,6 +56,7 @@
                           %tr
                             %th #
                             %th Service
+                            %th Time
                             %th Quantity
                             %th Price
                             %th Sum
@@ -64,10 +65,15 @@
                             %tr
                               %td= i + 1
                               %td= c.serviceable.name
+                              - if c.service_option_time
+                                - sot = c.service_option_time
+                                %td= sot.start_at.strftime('%l:%M %p') + ' - ' + sot.end_at.strftime('%l:%M %p')
+                              - else
+                                %td
                               %td= c.quantity
                               %td= c.price
                               %td= c.total_price
-                            
+
                     %p.title Total price
                     %p= @appointment.total_price
 
@@ -116,7 +122,7 @@
                           %i.fa.fa-birthday-cake.user-profile-icon
                           = pet.birthday.strftime('%-d %b %Y %I:%M %p')
                         %li
-                          Weight: 
+                          Weight:
                           = pet.weight
                         %li= link_to 'Vaccinations', vaccinations_admin_panel_pet_path(pet), class: 'btn btn-info btn-xs'
                         %li= link_to 'Diagnoses', diagnoses_admin_panel_pet_path(pet), class: 'btn btn-info btn-xs' if @appointment.for_clinic?
