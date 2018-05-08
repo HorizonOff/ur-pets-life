@@ -58,6 +58,7 @@ Rails.application.routes.draw do
       end
       resources :appointments, only: %i[index create show] do
         member { put :cancel }
+        resources :comments, only: %i[index create]
       end
       resources :favorites, only: %i[index create destroy]
 

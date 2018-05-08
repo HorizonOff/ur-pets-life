@@ -21,6 +21,8 @@ class Appointment < ApplicationRecord
   has_many :service_option_details, through: :cart_items, source: :serviceable, source_type: 'ServiceOptionDetail'
   has_many :service_option_times, through: :cart_items
 
+  has_many :comments, as: :commentable, dependent: :destroy
+
   has_and_belongs_to_many :pets, -> { with_deleted }
 
   after_initialize :set_defaults

@@ -15,6 +15,8 @@ class Admin < ApplicationRecord
   has_many :appointments, dependent: :nullify
   has_many :notifications
 
+  has_many :comments, as: :writable, dependent: :destroy
+
   acts_as_paranoid
 
   validates_uniqueness_of :email, conditions: -> { with_deleted }

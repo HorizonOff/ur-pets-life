@@ -2,7 +2,7 @@ class Post < ApplicationRecord
   belongs_to :user, -> { with_deleted }
   belongs_to :pet_type
 
-  has_many :comments, dependent: :destroy
+  has_many :comments, as: :commentable, dependent: :destroy
 
   acts_as_paranoid
 
