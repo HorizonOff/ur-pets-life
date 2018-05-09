@@ -140,6 +140,7 @@ Rails.application.routes.draw do
       member { put :reject }
       member { put :cancel }
       member { put :update_duration }
+      resources :comments, only: %i[index create]
     end
     resource :profile, only: %i[edit update]
     resource :password, only: %i[edit update]
@@ -148,8 +149,9 @@ Rails.application.routes.draw do
       member { post :send_reply }
     end
     resources :posts, only: %i[index show destroy], shallow: true do
-      resources :comments, only: %i[index destroy]
+      resources :comments, only: %i[index create]
     end
+    resources :comments, only: :destroy
     resources :notifications
   end
 end

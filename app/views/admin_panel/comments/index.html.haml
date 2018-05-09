@@ -3,7 +3,7 @@
     .col-md-12.col-sm-12.col-xs-12
       .x_panel
         .x_title
-          %h2 Post
+          %h2 Appointment
           .clearfix
         .x_content
           .col-md-3.col-sm-3.col-xs-12.profile_left
@@ -25,8 +25,7 @@
                 %span.comment_count= @parent_object.comments.size
 
           .col-md-9.col-sm-9.col-xs-12
-            %h1= @parent_object.title
             %blockquote
-              %p= @parent_object.message
+              %p= @parent_object.comment
     = render 'admin_panel/comments/form'
     = render 'admin_panel/comments/list'

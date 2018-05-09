@@ -1,0 +1,16 @@
+= form_for @comment, url: path_for_comment_creating,
+html: { method: :post, remote: true, class: 'form-horizontal form-label-left', autocomplete: 'off' } do |f|
+
+  .col-md-6.col-sm-6.col-xs-12
+    .x_panel
+      .x_title
+        %h2 New comment
+        .clearfix
+      .x_content
+        %br
+
+        .form-group
+          = f.label :message, class: 'control-label col-md-3 col-sm-3 col-xs-12'
+          .col-md-9.col-sm-9.col-xs-12
+            = f.text_area :message, required: true, rows: 5, class: 'form-control no-resize'
+        = f.submit 'Send', class: 'btn btn-success'

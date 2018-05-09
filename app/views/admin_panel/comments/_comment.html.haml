@@ -5,6 +5,6 @@
       Delete
   %a
     %span
-      %span= comment.user_name
+      %span= comment.writable.name
       %span.time= comment.created_at.strftime('%-d %b %Y %I:%M %p')
     %span.message= comment.message
