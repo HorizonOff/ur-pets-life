@@ -10,6 +10,6 @@ class PushSendingCommentJob
   private
 
   def push_sending_service
-    @push_sending_service ||= ::PushSendingService.new(@comment, @appointment)
+    @push_sending_service ||= ::PushSending::CommentService.new(@comment, @appointment)
   end
 end
