@@ -11,6 +11,8 @@ class PagesController < ApplicationController
     @contact_request.save
   end
 
+  def privacy_policy; end
+
   private
 
   def contact_request_params

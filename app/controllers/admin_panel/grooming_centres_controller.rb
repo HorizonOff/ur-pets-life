@@ -1,5 +1,6 @@
 module AdminPanel
   class GroomingCentresController < AdminPanelController
+    include AdminPanel::PictureParamsHelper
     before_action :set_grooming_centre, except: %i[index new create]
     before_action :can_create?, only: %i[new create]
     before_action :can_update?, except: %i[index new create]
@@ -23,6 +24,7 @@ module AdminPanel
     def show; end
 
     def create
+      parse_picture_params(:grooming_centre)
       @grooming_centre = if super_admin?
                            GroomingCentre.new(grooming_centre_params)
                          else
@@ -38,6 +40,7 @@ module AdminPanel
     end
 
     def update
+      parse_picture_params(:grooming_centre)
       if @grooming_centre.update(grooming_centre_params)
         flash[:success] = 'Grooming Centre was successfully updated'
         redirect_to admin_panel_grooming_centres_path
@@ -116,7 +119,8 @@ module AdminPanel
                                               :description, :picture_cache,
                                               service_option_details_attributes: service_option_params,
                                               location_attributes: location_params,
-                                              schedule_attributes: schedule_params)
+                                              schedule_attributes: schedule_params,
+                                              pictures_attributes: picture_params)
     end
 
     def filter_grooming_centres

@@ -1,5 +1,6 @@
 module AdminPanel
   class BoardingsController < AdminPanelController
+    include AdminPanel::PictureParamsHelper
     before_action :set_boarding, except: %i[index new create]
     before_action :can_create?, only: %i[new create]
     before_action :can_update?, except: %i[index new create]
@@ -24,6 +25,7 @@ module AdminPanel
     def show; end
 
     def create
+      parse_picture_params(:boarding)
       @boarding = if super_admin?
                     Boarding.new(boarding_params)
                   else
@@ -39,6 +41,7 @@ module AdminPanel
     end
 
     def update
+      parse_picture_params(:boarding)
       if @boarding.update(boarding_params)
         flash[:success] = 'Boarding was successfully updated'
         redirect_to admin_panel_boardings_path
@@ -92,7 +95,8 @@ module AdminPanel
       params.require(:boarding).permit(:admin_id, :name, :email, :picture, :mobile_number, :website, :description,
                                        :picture_cache, service_option_details_attributes: service_option_params,
                                                        location_attributes: location_params,
-                                                       schedule_attributes: schedule_params)
+                                                       schedule_attributes: schedule_params,
+                                                       pictures_attributes: picture_params)
     end
 
     def filter_boardings

@@ -49,6 +49,10 @@ module AdminPanel
       %i[id start_at end_at _destroy]
     end
 
+    def picture_params
+      %i[id attachment attachment_cache _destroy]
+    end
+
     def count_budges
       if current_admin.is_super_admin?
         @new_contact_requests_count = ContactRequest.where(is_viewed: false).count

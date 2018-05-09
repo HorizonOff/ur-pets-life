@@ -7,7 +7,7 @@
       .clearfix
     .x_content
       %br
-      
+
       - if current_admin.is_super_admin?
         .form-group
           = f.label :clinic_id, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
@@ -35,7 +35,7 @@
           -if @vet.avatar?
             =image_tag @vet.avatar.medium.url, class: 'avatar-show', style: ' display:block;margin:auto'
 
-          = f.file_field :avatar
+          = f.file_field :avatar, accept: '.jpg,.jpeg,.bmp,.png'
           = f.hidden_field :avatar_cache
       .form-group
         = f.label :mobile_number, class: 'control-label col-md-3 col-sm-3 col-xs-12' do

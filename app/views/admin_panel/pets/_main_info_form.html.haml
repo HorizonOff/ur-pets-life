@@ -7,7 +7,7 @@
       .clearfix
     .x_content
       %br
-      
+
       .form-group
         = f.label :avatar, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
           Avatar
@@ -15,9 +15,10 @@
         .col-md-9.col-sm-9.col-xs-12
           -if @pet.avatar?
             =image_tag @pet.avatar.medium.url, class: 'avatar-show', style: ' display:block;margin:auto'
-          = f.file_field :avatar
+
+          = f.file_field :avatar, accept: '.jpg,.jpeg,.bmp,.png'
           = f.hidden_field :avatar_cache
-      - if @pet.owned? 
+      - if @pet.owned?
         .form-group
           = f.label :name, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
             Name
@@ -37,7 +38,7 @@
         .form-group
           = f.label :pet_type, class: 'control-label col-md-3 col-sm-3 col-xs-12'
           %span.control-label.col-md-9.col-sm-9.col-xs-12{ style: 'text-align:left' }= @pet.pet_type.name
-       
+
         - if @pet.pet_type.is_additional_type?
           .form-group
             = f.label :additional_type, class: 'control-label col-md-3 col-sm-3 col-xs-12'
@@ -48,7 +49,7 @@
             = f.label :breed_id, class: 'control-label col-md-3 col-sm-3 col-xs-12'
             .col-md-9.col-sm-9.col-xs-12
               = f.collection_select :breed_id, @pet.pet_type.breeds, :id, :name, {}, { class: 'select2' }
-        
+
         .form-group
           = f.label :municipality_tag, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
             Municipality Tag
