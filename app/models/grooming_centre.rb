@@ -26,5 +26,4 @@ class GroomingCentre < ApplicationRecord
   end
 
   attr_accessor :attachments
-
 end
