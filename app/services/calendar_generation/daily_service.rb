@@ -4,7 +4,7 @@ module CalendarGeneration
       @vet = vet
       @schedule = vet.clinic.schedule
 
-      self.day = Date.today + 60.days
+      self.day = Date.today + 58.days
     end
 
     def generate_vet_time_slots
