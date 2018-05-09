@@ -7,7 +7,7 @@ class Pet < ApplicationRecord
 
   has_many :vaccine_types, through: :pet_type
   has_many :vaccinations, -> { order(done_at: :desc) }, inverse_of: :pet, dependent: :destroy
-  has_many :pictures, inverse_of: :pet, dependent: :destroy
+  has_many :pictures, as: :picturable, inverse_of: :picturable, dependent: :destroy
   has_many :diagnoses
   has_many :notifications, dependent: :destroy
   has_and_belongs_to_many :appointments

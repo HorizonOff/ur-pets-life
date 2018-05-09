@@ -1,5 +1,6 @@
 module AdminPanel
   class DayCareCentresController < AdminPanelController
+    include AdminPanel::PictureParamsHelper
     before_action :set_day_care_centre, except: %i[index new create]
     before_action :can_create?, only: %i[new create]
     before_action :can_update?, except: %i[index new create]
@@ -24,6 +25,7 @@ module AdminPanel
     def show; end
 
     def create
+      parse_picture_params(:day_care_centre)
       @day_care_centre = if super_admin?
                            DayCareCentre.new(day_care_centre_params)
                          else
@@ -39,6 +41,7 @@ module AdminPanel
     end
 
     def update
+      parse_picture_params(:day_care_centre)
       if @day_care_centre.update(day_care_centre_params)
         flash[:success] = 'DayCare Centre was successfully updated'
         redirect_to admin_panel_day_care_centres_path
@@ -93,7 +96,8 @@ module AdminPanel
                                               :description, :picture_cache,
                                               service_option_details_attributes: service_option_params,
                                               location_attributes: location_params,
-                                              schedule_attributes: schedule_params)
+                                              schedule_attributes: schedule_params,
+                                              pictures_attributes: picture_params)
     end
 
     def filter_day_care_centres

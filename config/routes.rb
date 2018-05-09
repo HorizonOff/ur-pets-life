@@ -80,7 +80,7 @@ Rails.application.routes.draw do
   end
 
   resource :terms_and_conditions, only: :show
-  get"privacy_policy", to: 'pages#privacy_policy'
+  get 'privacy_policy', to: 'pages#privacy_policy'
   devise_for :admins, path: 'admin_panel/admins', except: :registrations,
                       controllers: { invitations: 'admin_panel/admins/invitations' }
 
