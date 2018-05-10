@@ -11,9 +11,24 @@ class Comment < ApplicationRecord
   def send_notification
     return if Rails.env.test?
     PushSendingCommentJob.perform_async(id, commentable_id) if should_send_push?
+    EmailCommentJob.perform_async(commentable_id) if should_send_email?
   end
 
+  private
+
   def should_send_push?
-    commentable_type == 'Appointment' && writable_type == 'Admin'
+    for_appointment? && from_admin?
+  end
+
+  def should_send_email?
+    for_appointment? && !from_admin?
+  end
+
+  def for_appointment?
+    @for_appointment ||= commentable_type == 'Appointment'
+  end
+
+  def from_admin?
+    @from_admin ||= writable_type == 'Admin'
   end
 end
