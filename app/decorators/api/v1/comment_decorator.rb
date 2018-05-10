@@ -27,7 +27,8 @@ module Api
       end
 
       def app_icon
-        ENV['ORIGINAL_URL'] + '/images/AppIcon.png'
+        host = ENV['ORIGINAL_URL'].present? ? 'https://' + ENV['ORIGINAL_URL'] : 'localhost:3000'
+        host + '/images/AppIcon.png'
       end
     end
   end
