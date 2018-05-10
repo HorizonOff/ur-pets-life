@@ -11,7 +11,8 @@ module Api
         comments = ::Api::V1::CommentDecorator.decorate_collection(comments)
         serialized_comments = ActiveModel::Serializer::CollectionSerializer.new(comments, serializer: CommentSerializer)
 
-        render json: { comments: serialized_comments, total_count: @parent_object.comments_count }
+        render json: { title: title, message: message, created_at: created_at,
+                       comments: serialized_comments, total_count: @parent_object.comments_count }
       end
 
       def create
@@ -42,6 +43,22 @@ module Api
 
       def comment_params
         params.require(:comment).permit(:message)
+      end
+
+      def title
+        is_a_post? ? @parent_object.title : @parent_object.bookable.name
+      end
+
+      def message
+        is_a_post? ? @parent_object.message : @parent_object.comment
+      end
+
+      def created_at
+        @parent_object.created_at.to_i
+      end
+
+      def is_a_post?
+        @is_a_post ||= @parent_object.is_a?(Post)
       end
     end
   end

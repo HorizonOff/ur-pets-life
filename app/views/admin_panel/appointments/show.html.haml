@@ -92,6 +92,7 @@
 
                     %p.title Comment
                     %p= @appointment.comment
+                    = link_to 'View history', admin_panel_appointment_comments_path(@appointment), class: 'btn btn-info btn-xs'
                   .text-center.mtop20
                     = appointment_actions(@appointment)
             - if @appointment.for_clinic? && @appointment.past?
