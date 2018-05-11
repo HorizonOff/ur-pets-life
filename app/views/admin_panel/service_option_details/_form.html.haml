@@ -11,7 +11,7 @@
           .form-group
             .form-group
               .col-md-4.col-sm-4.col-xs-4.check_boxes
-                = check_box_tag nil, nil, f.object.persisted?, class: 'flat service_option_switch', id: f.index
+                = check_box_tag nil, nil, ff.object.persisted?, class: 'flat service_option_switch', id: f.index
                 = ff.check_box :_destroy, class: "_destroy hide" if ff.object.persisted?
                 = ff.hidden_field :service_option_id, class: 'service_option_id', disabled: ff.object.new_record?
                 = ff.object.name
