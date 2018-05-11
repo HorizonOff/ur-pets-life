@@ -9,6 +9,8 @@ class ServiceOptionTime < ApplicationRecord
 
   validate :values_should_be_valid, unless: :some_date_blank?
 
+  scope :ordered_by_start_at, -> { order(start_at: :asc) }
+
   def time_range
     start_at.strftime('%l:%M %p').strip + ' - ' + end_at.strftime('%l:%M %p').strip
   end
