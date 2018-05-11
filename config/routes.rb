@@ -81,6 +81,8 @@ Rails.application.routes.draw do
       resources :notifications, only: :index do
         collection { get :unread }
       end
+
+      get 'app_version', to: 'app_versions#show'
     end
   end
 
@@ -153,5 +155,7 @@ Rails.application.routes.draw do
     end
     resources :comments, only: :destroy
     resources :notifications
+
+    resource :app_version, only: %i[edit update]
   end
 end
