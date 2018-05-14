@@ -116,7 +116,12 @@ function init_datatables(){
                              { 'searchable': true, 'orderable': true, 'data': 'sex', 'targets': 5 },
                              { 'searchable': false, 'orderable': false, 'data': 'weight', 'targets': 6 },
                              { 'searchable': true, 'orderable': false, 'data': 'status', 'targets': 7 },
-                             { 'searchable': false, 'orderable': false, 'data': 'actions', 'targets': 8 } ] }
+                             { 'searchable': false, 'orderable': false, 'data': 'actions', 'targets': 8 } ] },
+      'specializations': { 'url': '/admin_panel/specializations',
+                           'columns': [ { 'searchable': true, 'orderable': true, 'data': 'id', 'targets': 0 },
+                                        { 'searchable': true, 'orderable': true, 'data': 'name', 'targets': 1 },
+                                        { 'searchable': true, 'orderable': true, 'data': 'is_for_trainer', 'targets': 2 },
+                                        { 'searchable': false, 'orderable': false, 'data': 'actions', 'targets': 3 } ] }
     }
     var datatable = $('.datatable').first()
     if (datatable.hasClass('clinics')){
@@ -145,8 +150,10 @@ function init_datatables(){
       init_datatable(table_rules['additional_services']['url'], table_rules['additional_services']['columns'])
     } else if (datatable.hasClass('notifications')){
       init_datatable(table_rules['notifications']['url'], table_rules['notifications']['columns'])
-    } else {
+    } else if (datatable.hasClass('pets')){
       init_datatable(table_rules['pets']['url'], table_rules['pets']['columns'])
+    } else {
+      init_datatable(table_rules['specializations']['url'], table_rules['specializations']['columns'])
     }
   };
 };
@@ -180,7 +187,7 @@ function init_datatable(url, column_rules, order_col, order_dir){
 
   $('.datatable thead .select2').on('select2:select select2:unselect', filter_again)
   $('.datatable thead input').on('keyup change', filter_again)
-  
+
   function draw_table(){
     setTimeout(function(){
       table.draw();

@@ -113,6 +113,7 @@ Rails.application.routes.draw do
       member { get :new_service_type }
     end
     resources :additional_services, except: :show
+    resources :specializations, except: :show
     resources :boardings do
       member { get :new_service_type }
     end
