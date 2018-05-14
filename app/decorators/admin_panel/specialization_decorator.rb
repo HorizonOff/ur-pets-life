@@ -3,7 +3,7 @@ module AdminPanel
     decorates :specialization
     delegate_all
 
-    def is_for_trainer
+    def for_trainer?
       model.is_for_trainer? ? 'Trainer' : 'Clinic / Vet'
     end
 
