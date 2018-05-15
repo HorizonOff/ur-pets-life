@@ -10,4 +10,8 @@ class NotificationSerializer < BaseMethodsSerializer
       object.appointment.bookable.picture.try(:url)
     end
   end
+
+  def pet_id
+    object.pet_id unless object.is_for_vaccine?
+  end
 end

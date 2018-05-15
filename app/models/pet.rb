@@ -10,6 +10,7 @@ class Pet < ApplicationRecord
   has_many :pictures, as: :picturable, inverse_of: :picturable, dependent: :destroy
   has_many :diagnoses
   has_many :notifications, dependent: :destroy
+  has_many :vaccination_notifications, -> { where(is_for_vaccine: true) }, class_name: 'Notification'
   has_and_belongs_to_many :appointments
 
   has_one :location, as: :place, inverse_of: :place, dependent: :destroy
