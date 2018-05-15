@@ -99,7 +99,8 @@ module Reminders
 
     def count_planned_vacinnation_fixed_date(vaccine_type)
       planned_date = last_vaccination_date + fixed_time_intervals(vaccine_type).last
-      planned_date = lead_to_current_time_with_recurring_interval(vaccine_type, planned_date) if current_date > planned_date
+      planned_date = lead_to_current_time_with_recurring_interval(vaccine_type, planned_date) \
+        if current_date > planned_date
       create_notification(vaccine_type) if its_time_for_vaccination?(planned_date)
     end
   end
