@@ -2,8 +2,10 @@ class PushSendingNotificationJob
   include SuckerPunch::Job
 
   def perform(id)
-    @notification = Notification.find_by(id: id)
-    push_sending_service.send_push
+    ActiveRecord::Base.connection_pool.with_connection do
+      @notification = Notification.find_by(id: id)
+      push_sending_service.send_push
+    end
   end
 
   private
