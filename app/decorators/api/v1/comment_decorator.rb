@@ -25,11 +25,6 @@ module Api
       def avatar_url_for_admin
         model.commentable_type == 'Post' ? app_icon : model.commentable.bookable.picture.try(:url)
       end
-
-      def app_icon
-        host = ENV['ORIGINAL_URL'].present? ? 'https://' + ENV['ORIGINAL_URL'] : 'localhost:3000'
-        host + '/images/AppIcon.png'
-      end
     end
   end
 end

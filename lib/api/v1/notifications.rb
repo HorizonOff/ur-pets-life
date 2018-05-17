@@ -21,11 +21,11 @@ module Api
               key :type, :string
               key :example, 'Message'
             end
-            property :pet_id do
-              key :type, :integer
-              key :example, 1
+            property :source_type do
+              key :type, :string
+              key :example, 'appointment, pet, lost'
             end
-            property :appointment_id do
+            property :source_id do
               key :type, :integer
               key :example, 1
             end

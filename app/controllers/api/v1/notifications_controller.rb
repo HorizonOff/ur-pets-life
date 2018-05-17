@@ -6,9 +6,12 @@ module Api
       def index
         notifications = @user.notifications.where('created_at < ?', @created_at).order(created_at: :desc)
                              .includes(:pet, :appointment, appointment: :bookable).limit(20)
-        serialized_notifications = ActiveModel::Serializer::CollectionSerializer.new(notifications)
-
         notifications.view
+
+        notifications = ::Api::V1::NotificationDecorator.decorate_collection(notifications)
+        serialized_notifications = ActiveModel::Serializer::CollectionSerializer.new(
+          notifications, serializer: NotificationSerializer
+        )
 
         render json: { notifications: serialized_notifications, total_count: @user.notifications_count,
                        unread_notifications_count: unread_notifications_count }

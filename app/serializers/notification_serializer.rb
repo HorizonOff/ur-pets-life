@@ -1,17 +1,5 @@
-class NotificationSerializer < BaseMethodsSerializer
+class NotificationSerializer < ActiveModel::Serializer
   type 'notification'
 
-  attributes :id, :message, :pet_id, :appointment_id, :avatar_url, :created_at, :viewed_at
-
-  def avatar_url
-    if object.pet_id
-      object.pet.avatar.try(:url)
-    elsif object.appointment_id
-      object.appointment.bookable.picture.try(:url)
-    end
-  end
-
-  def pet_id
-    object.pet_id unless object.is_for_vaccine?
-  end
+  attributes :id, :message, :pet_id, :appointment_id, :avatar_url, :created_at, :viewed_at, :source_type, :source_id
 end
