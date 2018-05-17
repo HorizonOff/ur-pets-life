@@ -14,8 +14,8 @@ module PushSending
       { alert: comment.message,
         sound: 'default',
         badge: unread_notifications_count,
-        appointment_id: appointment.id,
-        type: 'AppointmentComment' }
+        source_id: appointment.id,
+        source_type: 'AppointmentComment' }
     end
 
     def android_options
@@ -23,9 +23,9 @@ module PushSending
         collapse_key: 'type_a',
         data: { body: comment.message,
                 title: 'UrPetsLife',
-                appointment_id: appointment.id,
+                source_id: appointment.id,
                 badge: unread_notifications_count,
-                type: 'AppointmentComment' }
+                source_type: 'AppointmentComment' }
       }
     end
   end
