@@ -53,7 +53,8 @@ module Reminders
       planned_date = @starting_point
       if use_fixed_intervals
         planned_date = add_fixed_intervals(vaccine_type, planned_date)
-        lead_to_current_time_with_recurring_interval(vaccine_type, planned_date) if current_date > planned_date
+        return lead_to_current_time_with_recurring_interval(vaccine_type, planned_date) if current_date > planned_date
+        planned_date
       else
         lead_to_current_time_with_recurring_interval(vaccine_type, planned_date)
       end
