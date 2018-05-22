@@ -1,0 +1,13 @@
+%div
+  .page-title
+    .title_left
+      %h3 Edit specialization
+
+  .clearfix
+
+  = form_for @specialization, url: admin_panel_specialization_path(@specialization),
+  html: { method: :put, class: 'form-horizontal form-label-left', autocomplete: 'off' } do |f|
+
+    = render partial: 'form', locals: { f: f }
+
+    = f.submit 'Update specialization', class: 'btn btn-success pull-right'

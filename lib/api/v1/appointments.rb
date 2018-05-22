@@ -57,6 +57,10 @@ module Api
           key :type, :integer
           key :example, 1
         end
+        property :service_option_time_id do
+          key :type, :integer
+          key :example, 1
+        end
       end
 
       swagger_schema :AppointmentsResponse do
@@ -218,7 +222,9 @@ module Api
                               "vet_id & pet_ids - required if bookable_type - Clinic\n" +
                               "bookable_type, bookable_id, start_at, pet_id - required\n" +
                               "cart_items_attributes - required ib bookable type NOT A CLINIC\n" +
-                              'serviceable_type - ServiceDetail/ServiceOptionDetail'
+                              "serviceable_type - ServiceDetail/ServiceOptionDetail\n" +
+                              "service_option_time_id - required if serviceable_type ServiceOptionDetail"
+
 
             schema do
               key :'$ref', :AppointmentInput

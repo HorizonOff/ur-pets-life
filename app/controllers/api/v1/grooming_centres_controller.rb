@@ -21,6 +21,7 @@ module Api
                                     .group_by { |sd| [sd.service_type_id, sd.pet_type_id] }.values
 
         render json: @grooming_centre,
+               include: 'service_option_details,service_option_details.service_option_times,pictures',
                scope: serializable_params.merge(favorite: favorite,
                                                 service_types: service_type_serializer_service.serialize)
       end
@@ -63,7 +64,7 @@ module Api
       end
 
       def pet_services_serializer_service
-        @pet_services_serializer_service ||= ::Api::V1::PetServicesSerializerService.new(@services, @pets)
+        @pet_services_serializer_service ||= ::Api::V1::PetServicesSerializerService.new(@services, @pets, true)
       end
 
       def parse_date

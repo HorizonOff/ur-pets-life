@@ -1,9 +1,10 @@
 class CartItem < ApplicationRecord
-  belongs_to :pet, optional: true
+  belongs_to :pet, -> { with_deleted }, optional: true
+  belongs_to :service_option_time, -> { with_deleted }, optional: true
   belongs_to :appointment
   belongs_to :serviceable, -> { with_deleted }, polymorphic: true
 
-  before_validation :set_price, :set_quantity, :count_total_price, on: :create
+  before_validation :check_service_time, :set_price, :set_quantity, :count_total_price, on: :create
 
   validate :pet_should_be_valid, :weight_should_be_valid
 
@@ -21,6 +22,11 @@ class CartItem < ApplicationRecord
   end
 
   private
+
+  def check_service_time
+    return if service_option_time_id.blank?
+    self.service_option_time_id = nil if serviceable_type == 'ServiceDetail' || service_option_time_id < 1
+  end
 
   def leave_default_quantity?
     appointment.for_grooming? || appointment.for_clinic? ||

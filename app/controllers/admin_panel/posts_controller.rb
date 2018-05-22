@@ -1,7 +1,7 @@
 module AdminPanel
   class PostsController < AdminPanelController
     before_action :authorize_super_admin
-    before_action :set_post, except: :index
+    before_action :set_post, only: :destroy
 
     def index
       respond_to do |format|
@@ -11,7 +11,9 @@ module AdminPanel
     end
 
     def show
-      @comments = @post.comments.includes(:user).order(id: :desc).page(params[:page])
+      @parent_object = Post.find_by(id: params[:id])
+      @comments = @parent_object.comments.includes(:writable).order(id: :desc).page(params[:page])
+      @comment = @parent_object.comments.new
     end
 
     def destroy

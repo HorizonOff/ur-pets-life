@@ -5,7 +5,7 @@
       .clearfix
     .x_content
       %br
-      
+
       - if current_admin.is_super_admin?
         .form-group
           = f.label :admin_id, 'Admin', class: 'control-label col-md-3 col-sm-3 col-xs-12'
@@ -25,7 +25,7 @@
           -if @boarding.picture?
             =image_tag @boarding.picture.medium.url, class: 'avatar-show', style: ' display:block;margin:auto'
 
-          = f.file_field :picture
+          = f.file_field :picture, accept: '.jpg,.jpeg,.bmp,.png'
           = f.hidden_field :picture_cache
       .form-group
         = f.label :email, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
@@ -47,15 +47,4 @@
         = f.label :description, class: 'control-label col-md-3 col-sm-3 col-xs-12'
         .col-md-9.col-sm-9.col-xs-12
           = f.text_area :description, rows: 5, class: 'form-control no-resize'
-      .form-group
-        = label_tag :service_options, 'Service options', class: 'control-label col-md-3 col-sm-3 col-xs-12'
-        .col-md-9.col-sm-9.col-xs-12{ style: 'min-height:27px' }
-          = f.fields_for :service_option_details do |ff|
-            .form-group
-              .col-md-4.col-sm-4.col-xs-4.check_boxes
-                = check_box_tag nil, nil, ff.object.persisted?, class: 'flat service_option_switch', id: f.index
-                = ff.check_box :_destroy, class: "_destroy hide" if ff.object.persisted?
-                = ff.hidden_field :service_option_id, class: 'service_option_id', disabled: ff.object.new_record?
-                = ff.object.name
-              .col-md-4.col-sm-4.col-xs-4.service_option_details_fields{ class: "#{'hiden' if ff.object.new_record?}" }
-                = ff.number_field :price, step: '0.01', placeholder: 'Price', class: 'form-control', required: true, disabled: ff.object.new_record?
+

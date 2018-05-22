@@ -1,5 +1,8 @@
 class Schedule < ApplicationRecord
   belongs_to :schedulable, polymorphic: true
+
+  before_validation :set_same_date
+
   validate :check_hours
 
   acts_as_paranoid
@@ -12,51 +15,58 @@ class Schedule < ApplicationRecord
            '5' => 'friday',
            '6' => 'saturday' }.freeze
 
+  def self.open_at_field_name(day)
+    day + '_open_at'
+  end
+
+  def self.close_at_field_name(day)
+    day + '_close_at'
+  end
+
+  def open_at_field(day)
+    send(Schedule.open_at_field_name(day))
+  end
+
+  def close_at_field(day)
+    send(Schedule.close_at_field_name(day))
+  end
+
   private
+
+  def set_same_date
+    DAYS.each_value do |name|
+      next if open_at_field(name).blank? || close_at_field(name).blank?
+      self[Schedule.open_at_field_name(name)] = open_at_field(name).change(year: 2018, month: 1, day: 1)
+      self[Schedule.close_at_field_name(name)] = close_at_field(name).change(year: 2018, month: 1, day: 1)
+    end
+  end
 
   def check_hours
     return if day_and_night?
-    check_monday
-    check_tuesday
-    check_wednesday
-    check_thursday
-    check_friday
-    check_saturday
-    check_sunday
+    DAYS.each_value do |name|
+      check_day(name)
+      check_timeline(name)
+    end
   end
 
-  def check_monday
-    errors.add(:monday_open_at, 'is required') if monday_close_at.present? && monday_open_at.blank?
-    errors.add(:monday_close_at, 'is required') if monday_open_at.present? && monday_close_at.blank?
+  def check_day(name)
+    errors.add(Schedule.open_at_field_name(name).to_sym, 'is required') if open_at_blank?(name)
+    errors.add(Schedule.close_at_field_name(name).to_sym, 'is required') if close_at_blank?(name)
   end
 
-  def check_tuesday
-    errors.add(:tuesday_open_at, 'is required') if tuesday_close_at.present? && tuesday_open_at.blank?
-    errors.add(:tuesday_close_at, 'is required') if tuesday_open_at.present? && tuesday_close_at.blank?
+  def open_at_blank?(name)
+    close_at_field(name).present? && open_at_field(name).blank?
   end
 
-  def check_wednesday
-    errors.add(:wednesday_open_at, 'is required') if wednesday_close_at.present? && wednesday_open_at.blank?
-    errors.add(:wednesday_close_at, 'is required') if wednesday_open_at.present? && wednesday_close_at.blank?
+  def close_at_blank?(name)
+    open_at_field(name).present? && close_at_field(name).blank?
   end
 
-  def check_thursday
-    errors.add(:thursday_open_at, 'is required') if thursday_close_at.present? && thursday_open_at.blank?
-    errors.add(:thursday_close_at, 'is required') if thursday_open_at.present? && thursday_close_at.blank?
+  def check_timeline(name)
+    errors.add(Schedule.close_at_field_name(name).to_sym, 'should be after opening time') unless timeline_correct?(name)
   end
 
-  def check_friday
-    errors.add(:friday_open_at, 'is required') if friday_close_at.present? && friday_open_at.blank?
-    errors.add(:friday_close_at, 'is required') if friday_open_at.present? && friday_close_at.blank?
-  end
-
-  def check_saturday
-    errors.add(:saturday_open_at, 'is required') if saturday_close_at.present? && saturday_open_at.blank?
-    errors.add(:saturday_close_at, 'is required') if saturday_open_at.present? && saturday_close_at.blank?
-  end
-
-  def check_sunday
-    errors.add(:sunday_open_at, 'is required') if sunday_close_at.present? && sunday_open_at.blank?
-    errors.add(:sunday_close_at, 'is required') if sunday_open_at.present? && sunday_close_at.blank?
+  def timeline_correct?(name)
+    open_at_field(name) < close_at_field(name)
   end
 end

@@ -11,6 +11,10 @@ class GroomingCentre < ApplicationRecord
 
   has_many :blocked_times, as: :blockable
 
+  has_many :pictures, as: :picturable, inverse_of: :picturable, dependent: :destroy
+  accepts_nested_attributes_for :pictures, allow_destroy: true
+  validates :pictures, length: { maximum: 6, message: 'Should be maximum 6 pictures' }
+
   accepts_nested_attributes_for :schedule, update_only: true
 
   def admins_for_select
@@ -20,4 +24,6 @@ class GroomingCentre < ApplicationRecord
       Admin.for_grooming_centre.pluck(:email, :id)
     end
   end
+
+  attr_accessor :attachments
 end

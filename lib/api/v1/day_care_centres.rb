@@ -82,6 +82,11 @@ module Api
               key :'$ref', :ServiceType
             end
           end
+          property :pictures do
+            items do
+              key :'$ref', :Picture
+            end
+          end
         end
       end
 
@@ -124,6 +129,11 @@ module Api
         property :name do
           key :type, :string
           key :example, 'Pick Up'
+        end
+        property :service_option_times do
+          items do
+            key :'$ref', :ServiceOptionTime
+          end
         end
       end
 

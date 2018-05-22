@@ -1,0 +1,11 @@
+.col-md-12.col-sm-12.col-xs-12
+  .x_panel
+    .x_title
+      %h2 Comments
+      .clearfix
+    .x_content
+      %ul.list-unstyled.msg_list
+        = render @comments
+      .clearfix
+    .x_footer
+      = paginate @comments, remote: true, params: { controller: 'admin_panel/comments', action: 'index', post_id: @post&.id }

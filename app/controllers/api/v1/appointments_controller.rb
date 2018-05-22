@@ -13,9 +13,12 @@ module Api
       end
 
       def show
-        render json: @appointment, scope: serializable_params.merge(pets_services: pets_services,
-                                                                    pets_diagnoses: pets_diagnoses),
-               include: 'vet,service_option_details,pets,pets.service_details,pets.diagnosis'
+        render json: @appointment,
+               scope: serializable_params.merge(pets_services: pets_services,
+                                                pets_diagnoses: pets_diagnoses,
+                                                service_option_times: @appointment.service_option_times),
+               include: 'vet,service_option_details,service_option_details.service_option_times,
+                         pets,pets.service_details,pets.diagnosis'
       end
 
       def create
@@ -64,7 +67,11 @@ module Api
       def appointment_params
         params.require(:appointment).permit(:bookable_type, :bookable_id, :vet_id, :start_at, :number_of_days, :comment,
                                             pet_ids: [],
-                                            cart_items_attributes: %i[pet_id serviceable_type serviceable_id])
+                                            cart_items_attributes: cart_items_params)
+      end
+
+      def cart_items_params
+        %i[pet_id serviceable_type serviceable_id service_option_time_id]
       end
 
       def appointments_pagination_query

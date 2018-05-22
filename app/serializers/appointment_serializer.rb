@@ -33,7 +33,7 @@ class AppointmentSerializer < ActiveModel::Serializer
     object.next_appointment.start_at.to_i if object.next_appointment.present?
   end
 
-  has_many :service_option_details
+  has_many :service_option_details, serializer: ServiceOptionDetailAppointmentSerializer
 
   has_many :pets, serializer: PetAppointmentSerializer
 end

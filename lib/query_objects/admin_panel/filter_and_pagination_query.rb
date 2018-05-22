@@ -1,7 +1,7 @@
 module AdminPanel
   class FilterAndPaginationQuery
     INT_COLUMNS = %w[id vets_count status specialization_id pet_type_id experience sex].freeze
-    BOOLEAN_COLUMNS = %w[is_active is_answered is_super_admin skip_push_sending].freeze
+    BOOLEAN_COLUMNS = %w[is_active is_answered is_super_admin skip_push_sending is_for_trainer].freeze
     ADDITIONAL_PARAMS = { 'city' => { join_model: :location, field: 'locations.city' },
                           'specialization_id' => { join_model: :specializations, field: 'specializations.id' },
                           'pet_type_id' => { join_model: :pet_types, field: 'pet_types.id' } }.freeze

@@ -58,8 +58,13 @@ Rails.application.routes.draw do
       end
       resources :appointments, only: %i[index create show] do
         member { put :cancel }
+        resources :comments, only: %i[index create]
       end
       resources :favorites, only: %i[index create destroy]
+
+      resources :service_option_details, only: [] do
+        member { get :time_ranges }
+      end
 
       resources :sessions, only: :create do
         collection { post :facebook }
@@ -76,11 +81,13 @@ Rails.application.routes.draw do
       resources :notifications, only: :index do
         collection { get :unread }
       end
+
+      get 'app_version', to: 'app_versions#show'
     end
   end
 
   resource :terms_and_conditions, only: :show
-  get"privacy_policy", to: 'pages#privacy_policy'
+  get 'privacy_policy', to: 'pages#privacy_policy'
   devise_for :admins, path: 'admin_panel/admins', except: :registrations,
                       controllers: { invitations: 'admin_panel/admins/invitations' }
 
@@ -106,6 +113,7 @@ Rails.application.routes.draw do
       member { get :new_service_type }
     end
     resources :additional_services, except: :show
+    resources :specializations, except: :show
     resources :boardings do
       member { get :new_service_type }
     end
@@ -135,6 +143,7 @@ Rails.application.routes.draw do
       member { put :reject }
       member { put :cancel }
       member { put :update_duration }
+      resources :comments, only: %i[index create]
     end
     resource :profile, only: %i[edit update]
     resource :password, only: %i[edit update]
@@ -143,8 +152,11 @@ Rails.application.routes.draw do
       member { post :send_reply }
     end
     resources :posts, only: %i[index show destroy], shallow: true do
-      resources :comments, only: %i[index destroy]
+      resources :comments, only: %i[index create]
     end
+    resources :comments, only: :destroy
     resources :notifications
+
+    resource :app_version, only: %i[edit update]
   end
 end

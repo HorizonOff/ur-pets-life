@@ -55,7 +55,7 @@ class User < ApplicationRecord
 
   has_many :appointments
   has_many :posts
-  has_many :comments
+  has_many :comments, as: :writable, dependent: :destroy
   has_many :notifications
   has_many :unread_notifications, -> { where(viewed_at: nil) }, class_name: 'Notification'
 

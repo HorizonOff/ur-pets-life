@@ -10,32 +10,23 @@
             %ul.list-unstyled.user_data
               %li
                 %i.fa.fa-map-marker.user-profile-icon
-                = @post.user.name
+                = @parent_object.user.name
               %li
                 %i.fa.fa-phone.user-profile-icon
-                = @post.user.mobile_number
+                = @parent_object.user.mobile_number
               %li
                 %i.fa.fa-envelope.user-profile-icon
-                = @post.user.email
+                = @parent_object.user.email
               %li.m-top-xs
                 %i.fa.fa-external-link.user-profile-icon
-                = @post.created_at.strftime('%-d %b %Y %I:%M %p')
+                = @parent_object.created_at.strftime('%-d %b %Y %I:%M %p')
               %li
                 Comments:
-                %span.comment_count= @post.comments.size
+                %span.comment_count= @parent_object.comments.size
 
           .col-md-9.col-sm-9.col-xs-12
-            %h1= @post.title
+            %h1= @parent_object.title
             %blockquote
-              %p= @post.message
-    .col-md-12.col-sm-12.col-xs-12
-      .x_panel
-        .x_title
-          %h2 Comments
-          .clearfix
-        .x_content
-          %ul.list-unstyled.msg_list
-            = render @comments
-          .clearfix
-        .x_footer
-          = paginate @comments, remote: true, params: { controller: 'admin_panel/comments', action: 'index', post_id: @post.id }
+              %p= @parent_object.message
+    = render 'admin_panel/comments/form'
+    = render 'admin_panel/comments/list'

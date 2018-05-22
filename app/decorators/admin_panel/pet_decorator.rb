@@ -61,9 +61,7 @@ module AdminPanel
 
     def crud_actions
       (link_to 'Show', url_helpers.admin_panel_pet_path(model), class: 'btn btn-primary btn-xs') +
-        (link_to 'Edit', url_helpers.edit_admin_panel_pet_path(model), class: 'btn btn-warning btn-xs') +
-        (link_to 'Delete', url_helpers.admin_panel_pet_path(model),
-                 method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-xs')
+        (link_to 'Edit', url_helpers.edit_admin_panel_pet_path(model), class: 'btn btn-warning btn-xs')
     end
   end
 end

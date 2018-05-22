@@ -106,6 +106,76 @@ module Api
           end
         end
       end
+
+
+      swagger_path '/appointments/{id}/comments' do
+        operation :post do
+          key :description, 'Create comment'
+          key :consumes, %w[application/json]
+          key :produces, %w[application/json]
+          key :tags, %W[Comments]
+
+          security do
+            key :api_key, []
+          end
+
+          parameter do
+            key :name, :id
+            key :in, :path
+            key :type, :integer
+            key :example, 1
+            key :required, true
+          end
+
+          parameter do
+            key :name, :comment
+            key :in, :body
+            key :required, true
+
+            schema do
+              key :'$ref', :CommentInput
+            end
+          end
+
+          response 200 do
+            key :description, 'Success response'
+          end
+        end
+
+        operation :get do
+          key :description, 'Get all comments'
+          key :consumes, %w[application/json]
+          key :produces, %w[application/json]
+          key :tags, %W[Comments]
+
+          security do
+            key :api_key, []
+          end
+
+          parameter do
+            key :name, :id
+            key :in, :path
+            key :type, :integer
+            key :example, 1
+            key :required, true
+          end
+
+          parameter do
+            key :name, :created_at
+            key :in, :query
+            key :type, :integer
+            key :example, 1516217199
+            key :required, true
+          end
+
+          response 200 do
+            key :description, 'Success response'
+            schema do
+              key :'$ref', :CommentsResponse
+            end
+          end
+        end
+      end
     end
   end
 end
