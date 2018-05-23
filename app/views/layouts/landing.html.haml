@@ -1,6 +1,7 @@
 !!!
 %html
   %head
+    = render 'layouts/analytick' if ENV['SERVER'] == 'production'
     %title Ur Pets Life
     = favicon_link_tag asset_path('Favicon.ico'), rel: 'icon', type: 'image/x-icon'
     %meta{ name: 'title', content: 'Ur Pets Life' }
@@ -21,6 +22,8 @@
     = stylesheet_link_tag    'landing', media: 'all', 'data-turbolinks-track': 'reload'
     = javascript_include_tag 'landing', 'data-turbolinks-track': 'reload'
   %body
+    = render 'layouts/analytick_body' if ENV['SERVER'] == 'production'
+
     - unless flash.empty?
       %script{ type: "text/javascript" }
         - flash.each do |f|
