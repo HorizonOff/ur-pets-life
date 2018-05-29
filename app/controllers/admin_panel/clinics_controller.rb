@@ -1,5 +1,6 @@
 module AdminPanel
   class ClinicsController < AdminPanelController
+    include AdminPanel::PictureParamsHelper
     before_action :set_clinic, except: %i[index new create]
     before_action :can_create?, only: %i[new create]
     before_action :can_update?, except: %i[index new create]
@@ -19,6 +20,7 @@ module AdminPanel
     end
 
     def create
+      parse_picture_params(:clinic)
       @clinic = super_admin? ? Clinic.new(clinic_params) : current_admin.build_clinic(clinic_params)
       if @clinic.save
         flash[:success] = 'Clinic was successfully created'
@@ -33,6 +35,7 @@ module AdminPanel
     def edit; end
 
     def update
+      parse_picture_params(:clinic)
       if @clinic.update(clinic_params)
         flash[:success] = 'Clinic was successfully updated'
         redirect_to admin_panel_clinic_path(@clinic)
@@ -90,7 +93,7 @@ module AdminPanel
       params.require(:clinic).permit(:admin_id, :name, :email, :picture, :mobile_number, :consultation_fee, :website,
                                      :description, :is_emergency, :picture_cache,
                                      specialization_ids: [], pet_type_ids: [], location_attributes: location_params,
-                                     schedule_attributes: schedule_params)
+                                     schedule_attributes: schedule_params, pictures_attributes: picture_params)
     end
 
     def filter_clinics

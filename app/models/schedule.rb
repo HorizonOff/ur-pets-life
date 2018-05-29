@@ -67,6 +67,7 @@ class Schedule < ApplicationRecord
   end
 
   def timeline_correct?(name)
+    return if open_at_field(name).blank? || close_at_field(name).blank?
     open_at_field(name) < close_at_field(name)
   end
 end
