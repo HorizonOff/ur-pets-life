@@ -62,8 +62,12 @@ class Appointment < ApplicationRecord
     @for_day_care ||= bookable_type == 'DayCareCentre'
   end
 
+  def for_boarding?
+    @for_boarding ||= bookable_type == 'Boarding'
+  end
+
   def day_care_or_boarding?
-    @day_care_or_boarding = bookable_type == 'Boarding' || for_day_care?
+    @day_care_or_boarding = for_boarding? || for_day_care?
   end
 
   def past?

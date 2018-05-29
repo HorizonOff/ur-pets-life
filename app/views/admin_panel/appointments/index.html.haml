@@ -3,7 +3,9 @@
 %div
   .page-title
     .title_left
-      %h3 Appointments 
+      %h3 Appointments
+    .title_right
+      = link_to 'Export in xlsx', admin_panel_appointments_path(format: :xlsx), class: 'btn btn-primary btn-round pull-right'
 
   .clearfix
 
