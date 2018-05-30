@@ -8,6 +8,10 @@ module Api
           key :type, :string
           key :example, '1.1.1'
         end
+        property :ios_version do
+           key :type, :string
+          key :example, '1.1.1'
+        end
       end
 
       swagger_path '/app_version' do
