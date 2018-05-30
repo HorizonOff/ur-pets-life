@@ -67,9 +67,10 @@ module AdminPanel
     end
 
     def export_data
-      @appointments = Appointment.all.order(:id).includes(:user, :bookable, :vet, :service_option_times,
-                                                          service_option_times: [:service_option_detail,
-                                                          service_option_detail: :service_option])
+      @appointments = AppointmentPolicy::Scope.order(:id)
+                                              .includes(:user, :bookable, :vet, :service_option_times,
+                                                        service_option_times: [:service_option_detail,
+                                                                               service_option_detail: :service_option])
       name = "appointments #{Time.now.utc.strftime('%d-%M-%Y')}.xlsx"
       response.headers['Content-Disposition'] = "attachment; filename*=UTF-8''#{name}"
     end
