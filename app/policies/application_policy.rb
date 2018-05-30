@@ -20,9 +20,9 @@ class ApplicationPolicy
 
     def resolve
       if user.is_super_admin?
-        scope.constantize.all
+        scope.all
       else
-        scope.constantize.joins(:admin).where(admins: { id: user.id })
+        scope.joins(:admin).where(admins: { id: user.id })
       end
     end
   end

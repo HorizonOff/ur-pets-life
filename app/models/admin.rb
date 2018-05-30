@@ -17,6 +17,8 @@ class Admin < ApplicationRecord
 
   has_many :comments, as: :writable, dependent: :destroy
 
+  has_many :vets, through: :clinic
+
   acts_as_paranoid
 
   validates_uniqueness_of :email, conditions: -> { with_deleted }
