@@ -15,12 +15,12 @@ module AdminPanel
     def show; end
 
     def accept
-      @appointment.update(status: :accepted)
+      @appointment.update(status: :accepted) if @appointment.can_be_accepted?
       render :show
     end
 
     def reject
-      @appointment.update(status: :rejected)
+      @appointment.update(status: :rejected) if appointment.can_be_rejected?
       render :show
     end
 

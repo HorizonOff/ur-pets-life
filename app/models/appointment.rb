@@ -71,7 +71,11 @@ class Appointment < ApplicationRecord
   end
 
   def past?
-    start_at <= current_time
+    @past ||= if day_care_or_boarding?
+                start_at.end_of_day == current_time.end_of_day
+              else
+                start_at <= current_time
+              end
   end
 
   def start_at=(value)
@@ -80,7 +84,15 @@ class Appointment < ApplicationRecord
   end
 
   def can_be_canceled?
-    !past? && (pending? || accepted?)
+    can_be_rejected? || (accepted? && !past?)
+  end
+
+  def can_be_rejected?
+    @can_be_rejected ||= pending?
+  end
+
+  def can_be_accepted?
+    pending? && !past?
   end
 
   private

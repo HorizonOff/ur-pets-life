@@ -55,7 +55,7 @@ module AdminPanel
 
     def status_actions
       if model.pending?
-        link_for_accepting + link_for_rejecting
+        model.can_be_accepted? ? (link_for_accepting + link_for_rejecting) : link_for_rejecting
       elsif model.accepted?
         link_for_canceling
       end
