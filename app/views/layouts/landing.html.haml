@@ -21,6 +21,8 @@
     = csrf_meta_tags
     = stylesheet_link_tag    'landing', media: 'all', 'data-turbolinks-track': 'reload'
     = javascript_include_tag 'landing', 'data-turbolinks-track': 'reload'
+    = render 'layouts/facebook_pixel' if ENV['SERVER'] == 'production'
+
   %body
     = render 'layouts/analytick_body' if ENV['SERVER'] == 'production'
 
