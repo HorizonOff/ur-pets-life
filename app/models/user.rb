@@ -89,6 +89,12 @@ class User < ApplicationRecord
     self[:gender] = nil
   end
 
+  def update_counters
+    self.commented_appointments_count = appointments.where('comments_count > 0').count
+    self.unread_commented_appointments_count = appointments.where('unread_comments_count_by_user > 0').count
+    save
+  end
+
   private
 
   def check_location

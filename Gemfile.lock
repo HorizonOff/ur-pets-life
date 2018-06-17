@@ -74,6 +74,9 @@ GEM
     addressable (2.5.2)
       public_suffix (>= 2.0.2, < 4.0)
     aes_key_wrap (1.0.1)
+    after_commit_action (1.1.0)
+      activerecord (>= 3.0.0)
+      activesupport (>= 3.0.0)
     arel (8.0.0)
     ast (2.4.0)
     attr_required (1.0.1)
@@ -113,6 +116,10 @@ GEM
       execjs
     coffee-script-source (1.12.2)
     concurrent-ruby (1.0.5)
+    counter_culture (1.12.0)
+      activerecord (>= 3.0.0)
+      activesupport (>= 3.0.0)
+      after_commit_action (~> 1.0)
     crass (1.0.4)
     database_cleaner (1.7.0)
     debug_inspector (0.0.3)
@@ -475,6 +482,7 @@ DEPENDENCIES
   ckeditor
   cocoon
   coffee-rails (~> 4.2)
+  counter_culture (~> 1.8)
   database_cleaner
   devise
   devise_invitable (~> 1.7.0)

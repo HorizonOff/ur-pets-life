@@ -60,6 +60,7 @@ Rails.application.routes.draw do
         member { put :cancel }
         resources :comments, only: %i[index create]
       end
+      resources :commented_appointments, only: :index
       resources :favorites, only: %i[index create destroy]
 
       resources :service_option_details, only: [] do

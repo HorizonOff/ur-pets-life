@@ -95,6 +95,35 @@ module Api
         end
       end
 
+      swagger_schema :CommentedAppointmentsResponse do
+        property :appointments do
+          items do
+            property :id do
+              key :type, :integer
+              key :example, 10
+            end
+             property :booked_object_name do
+              key :type, :string
+              key :example, 'Clinic'
+            end
+            property :picture_url do
+              key :type, :string
+            end
+            property :last_comment do
+              key :type, :string
+            end
+            property :last_comment_created_at do
+              key :type, :integer
+              key :example, 12345324323
+            end
+          end
+        end
+        property :total_count do
+          key :type, :integer
+          key :example, 35
+        end
+      end
+
       swagger_schema :PetAppointmentResponse do
         property :id do
           key :type, :integer
@@ -285,6 +314,33 @@ module Api
             key :description, 'Success response'
             schema do
               key :'$ref', :AppointmentsResponse
+            end
+          end
+        end
+      end
+
+      swagger_path '/commented_appointments' do
+        operation :get do
+          key :description, 'Get commente4d appointments list'
+          key :consumes, %w[application/json]
+          key :produces, %w[application/json]
+          key :tags, %W[Appointments Comments]
+
+          security do
+            key :api_key, []
+          end
+
+          parameter do
+            key :name, :created_at
+            key :in, :query
+            key :required, true
+            key :example, 12345324323
+          end
+
+          response 200 do
+            key :description, 'Success response'
+            schema do
+              key :'$ref', :CommentedAppointmentsResponse
             end
           end
         end

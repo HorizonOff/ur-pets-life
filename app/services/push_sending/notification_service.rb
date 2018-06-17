@@ -12,7 +12,7 @@ module PushSending
     def ios_options
       { alert: notification.message,
         sound: 'default',
-        badge: unread_notifications_count }
+        badge: badge }
     end
 
     def android_options
@@ -20,7 +20,7 @@ module PushSending
         collapse_key: 'type_a',
         data: { body: notification.message,
                 title: 'UrPetsLife',
-                badge: unread_notifications_count }
+                badge: badge }
       }
     end
   end

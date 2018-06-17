@@ -52,3 +52,5 @@
     Appointments
     - if @new_appointments_count.present? && !@new_appointments_count.zero?
       %span.badge.bg-green= @new_appointments_count
+    - if current_admin.unread_commented_appointments_count.present? && !current_admin.unread_commented_appointments_count.zero?
+      %span.fa.fa-comment{ style: 'color:orange' }= current_admin.unread_commented_appointments_count

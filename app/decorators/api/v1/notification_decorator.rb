@@ -27,11 +27,7 @@ module Api
       end
 
       def source_id
-        if model.appointment_id
-          model.appointment_id
-        elsif model.pet_id
-          model.pet_id
-        end
+        model.appointment_id || model.pet_id
       end
 
       def avatar_url

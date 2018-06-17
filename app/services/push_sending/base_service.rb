@@ -33,8 +33,16 @@ module PushSending
       fcm.send(tokens, android_options)
     end
 
+    def badge
+      @badge ||= unread_notifications_count + unread_commented_appointments_count
+    end
+
     def unread_notifications_count
       @unread_notifications_count ||= user.unread_notifications.count
+    end
+
+    def unread_commented_appointments_count
+      @unread_commented_appointments_count ||= user.unread_commented_appointments_count
     end
 
     def certificate_path
