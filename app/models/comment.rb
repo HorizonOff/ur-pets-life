@@ -23,7 +23,8 @@ class Comment < ApplicationRecord
 
   def update_counters
     return if commentable_type != 'Appointment'
-    writable_type == 'User' ? commentable.admin.update_counters : commentable.user.update_counters
+    commentable.admin&.update_counters if writable_type == 'User'
+    commentable.user.update_counters
   end
 
   def self.read_by_user
