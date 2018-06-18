@@ -54,6 +54,8 @@ class User < ApplicationRecord
   has_one :pet_avatar, -> { order(id: :asc) }, class_name: 'Pet'
 
   has_many :appointments
+  has_many :commented_appointments, -> { where('comments_count > 0') }, class_name: 'Appointment'
+  has_many :appointments_with_new_comments, -> { where('unread_comments_count_by_user > 0') }, class_name: 'Appointment'
   has_many :posts
   has_many :comments, as: :writable, dependent: :destroy
   has_many :notifications
@@ -90,8 +92,8 @@ class User < ApplicationRecord
   end
 
   def update_counters
-    self.commented_appointments_count = appointments.where('comments_count > 0').count
-    self.unread_commented_appointments_count = appointments.where('unread_comments_count_by_user > 0').count
+    self.commented_appointments_count = commented_appointments.count
+    self.unread_commented_appointments_count = appointments_with_new_comments.count
     save
   end
 

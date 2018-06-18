@@ -4,7 +4,7 @@ module Api
       before_action :parse_date
 
       def index
-        appointments = current_user.appointments.joins(:last_comment).where('comments.created_at < ?', @created_at)
+        appointments = current_user.commented_appointments.joins(:last_comment).where('comments.created_at < ?', @created_at)
                                    .order('comments.created_at DESC').includes(:last_comment).limit(20)
 
         serialized_appointments = ActiveModel::Serializer::CollectionSerializer.new(
