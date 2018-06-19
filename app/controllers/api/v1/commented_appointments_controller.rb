@@ -5,9 +5,9 @@ module Api
 
       def index
         appointments = current_user.commented_appointments.joins(:comments)
-                                   .where('comments.created_at < ?', @created_at)
+                                   .where('max (comments.created_at) < ?', @created_at)
                                    .order('max (comments.created_at) DESC').group('appointments.id')
-                                   .preload(:last_comment, :bookable).limit(20)
+                                   .includes(:last_comment, :bookable).limit(20)
 
         serialized_appointments = ActiveModel::Serializer::CollectionSerializer.new(
           appointments, serializer: CommentedAppointmentSerializer
