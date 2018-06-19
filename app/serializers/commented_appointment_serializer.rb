@@ -1,5 +1,5 @@
 class CommentedAppointmentSerializer < WorkingHoursSerializer
-  attributes :id, :booked_object_name, :picture_url, :last_comment, :last_comment_created_at,
+  attributes :id, :booked_object, :picture_url, :last_comment, :last_comment_created_at,
              :unread_comments_count_by_user
 
   def picture_url
