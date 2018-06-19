@@ -102,7 +102,7 @@ module Api
               key :type, :integer
               key :example, 10
             end
-             property :booked_object_name do
+             property :booked_object do
               key :type, :string
               key :example, 'Clinic'
             end
