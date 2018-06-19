@@ -5,7 +5,7 @@ module Api
 
       def index
         appointments = current_user.commented_appointments.joins(:comments)
-                                   .where('max (comments.created_at) < ?', @created_at)
+                                   .having('max (comments.created_at) < ?', @created_at)
                                    .order('max (comments.created_at) DESC').group('appointments.id')
                                    .includes(:last_comment, :bookable).limit(20)
 

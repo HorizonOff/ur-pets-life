@@ -116,6 +116,10 @@ module Api
               key :type, :integer
               key :example, 12345324323
             end
+            property :unread_comments_count_by_user do
+              key :type, :integer
+              key :example, 1
+            end
           end
         end
         property :total_count do
@@ -321,7 +325,7 @@ module Api
 
       swagger_path '/commented_appointments' do
         operation :get do
-          key :description, 'Get commente4d appointments list'
+          key :description, 'Get commented appointments list'
           key :consumes, %w[application/json]
           key :produces, %w[application/json]
           key :tags, %W[Appointments Comments]

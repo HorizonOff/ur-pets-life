@@ -6,7 +6,7 @@ class CommentedAppointmentSerializer < WorkingHoursSerializer
     object.bookable.picture.try(:url)
   end
 
-  def booked_object_name
+  def booked_object
     object.bookable.name
   end
 

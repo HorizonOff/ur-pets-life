@@ -5,7 +5,7 @@ class CommentSerializer < ActiveModel::Serializer
   attribute :read_at, if: :appointment_comment?
 
   def read_at
-    object.read_at.to_i
+    object.read_at.present? ? object.read_at.to_i : nil
   end
 
   def appointment_comment?

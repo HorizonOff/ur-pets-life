@@ -9,7 +9,7 @@ module Api
       end
 
       def viewed_at
-        model.viewed_at.to_i
+        model.viewed_at.present? ? model.viewed_at.to_i : nil
       end
 
       def pet_id
