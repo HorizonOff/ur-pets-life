@@ -6,7 +6,6 @@ module AdminPanel
     before_action :can_update?, except: %i[index new create]
     before_action :parse_params, only: %i[create update]
 
-
     def index
       authorize_super_admin
       respond_to do |format|
