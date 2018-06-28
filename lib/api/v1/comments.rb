@@ -12,7 +12,7 @@ module Api
         end
       end
 
-      swagger_schema :CommentsResponse do
+      swagger_schema :PostCommentsResponse do
         property :comments do
           items do
             property :id do
@@ -39,6 +39,57 @@ module Api
         property :total_count do
           key :type, :integer
           key :example, 35
+        end
+      end
+
+      swagger_schema :AppointmentCommentsResponse do
+        property :comments do
+          items do
+            property :id do
+              key :type, :integer
+              key :example, 1
+            end
+            property :message do
+              key :type, :string
+              key :example, 'Message'
+            end
+            property :user_name do
+              key :type, :string
+              key :example, 'Batman'
+            end
+            property :avatar_url do
+              key :type, :string
+            end
+            property :created_at do
+              key :type, :integer
+              key :example, 345324323
+            end
+          end
+        end
+
+        property :total_count do
+          key :type, :integer
+          key :example, 35
+        end
+        property :title do
+          key :type, :string
+          key :example, 'Clinic'
+        end
+        property :message do
+          key :type, :string
+          key :example, 'message'
+        end
+        property :created_at do
+          key :type, :integer
+          key :example, 345324323
+        end
+        property :unread_comments_count_by_user do
+          key :type, :integer
+          key :example, 1
+        end
+        property :unread_commented_appointments_count do
+          key :type, :integer
+          key :example, 2
         end
       end
 
@@ -101,7 +152,7 @@ module Api
           response 200 do
             key :description, 'Success response'
             schema do
-              key :'$ref', :CommentsResponse
+              key :'$ref', :PostCommentsResponse
             end
           end
         end
@@ -171,7 +222,7 @@ module Api
           response 200 do
             key :description, 'Success response'
             schema do
-              key :'$ref', :CommentsResponse
+              key :'$ref', :AppointmentCommentsResponse
             end
           end
         end

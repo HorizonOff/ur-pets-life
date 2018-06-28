@@ -24,6 +24,9 @@ class Appointment < ApplicationRecord
   has_many :service_option_times, through: :cart_items
 
   has_many :comments, as: :commentable, dependent: :destroy
+  has_many :user_comments, -> { where(writable_type: 'User') }, as: :commentable, class_name: 'Comment'
+  has_many :admin_comments, -> { where(writable_type: 'Admin') }, as: :commentable, class_name: 'Comment'
+  has_one :last_comment, -> { order(id: :desc) }, as: :commentable, class_name: 'Comment'
 
   has_and_belongs_to_many :pets, -> { with_deleted }
 
@@ -79,6 +82,13 @@ class Appointment < ApplicationRecord
 
   def can_be_canceled?
     !past? && (pending? || accepted?)
+  end
+
+  def update_counters
+    unread_comments_count_by_user = admin_comments.where(read_at: nil).count
+    unread_comments_count_by_admin = user_comments.where(read_at: nil).count
+    update_columns(unread_comments_count_by_user: unread_comments_count_by_user,
+                   unread_comments_count_by_admin: unread_comments_count_by_admin)
   end
 
   private

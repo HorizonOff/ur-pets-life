@@ -1,16 +1,19 @@
 Metrics/LineLength:
   Max: 120
+  Exclude:
+    - app/models/comment.rb
 Documentation:
  Enabled: false
 Metrics/BlockLength:
  Enabled: true
  Exclude:
-   - config/routes.rb
-   - config/environments/*.rb
+    - config/routes.rb
+    - config/environments/*.rb
 Metrics/AbcSize:
  Enabled: true
  Exclude:
    - app/controllers/api/v1/sessions_controller.rb
+   - app/controllers/api/v1/comments_controller.rb
    - app/controllers/api/base_controller.rb
    - app/controllers/admin_panel/clinics_controller.rb
    - app/controllers/admin_panel/day_care_centres_controller.rb

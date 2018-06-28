@@ -17,6 +17,7 @@ class GroomingCentre < ApplicationRecord
   validates :pictures, length: { maximum: 6, message: 'Should be maximum 6 pictures' }
 
   accepts_nested_attributes_for :schedule, update_only: true
+  accepts_nested_attributes_for :service_option_details, allow_destroy: true
 
   def admins_for_select
     if admin_id?

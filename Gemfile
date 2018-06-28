@@ -99,3 +99,4 @@ end
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem 'gmaps4rails'
 gem "cocoon"
+gem 'counter_culture', '~> 1.8'

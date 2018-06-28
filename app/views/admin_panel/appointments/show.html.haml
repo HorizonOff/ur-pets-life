@@ -92,7 +92,11 @@
 
                     %p.title Comment
                     %p= @appointment.comment
-                    = link_to 'View history', admin_panel_appointment_comments_path(@appointment), class: 'btn btn-info btn-xs'
+                    = link_to admin_panel_appointment_comments_path(@appointment), class: 'btn btn-info btn-xs' do
+                      View history
+                      - if @appointment.unread_comments_count_by_admin.present? && !@appointment.unread_comments_count_by_admin.zero?
+                        %span.badge= @appointment.unread_comments_count_by_admin
+
                   .text-center.mtop20
                     = appointment_actions(@appointment)
             - if @appointment.for_clinic? && @appointment.past?

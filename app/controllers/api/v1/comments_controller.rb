@@ -6,10 +6,15 @@ module Api
       before_action :parse_date, only: :index
 
       def index
+        authenticate_user if @parent_object.is_a?(Appointment)
         comments = @parent_object.comments.where('created_at < ?', @created_at).order(created_at: :desc)
-                                 .includes(:writable).limit(20)
-        comments = ::Api::V1::CommentDecorator.decorate_collection(comments)
-        serialized_comments = ActiveModel::Serializer::CollectionSerializer.new(comments, serializer: CommentSerializer)
+                                 .includes(:writable, :commentable).limit(20)
+
+        decorated_comments = ::Api::V1::CommentDecorator.decorate_collection(comments)
+        serialized_comments = ActiveModel::Serializer::CollectionSerializer.new(decorated_comments,
+                                                                                serializer: CommentSerializer)
+
+        read_comments(comments) if @parent_object.is_a? Appointment
 
         render json: { comments: serialized_comments, total_count: @parent_object.comments_count }.merge(default_fields)
       end
@@ -26,6 +31,12 @@ module Api
       end
 
       private
+
+      def read_comments(comments)
+        comments.read_by_user
+        @parent_object.update_counters
+        current_user.update_counters
+      end
 
       def parse_date
         @created_at = Time.zone.at(params[:created_at].to_i)
@@ -49,7 +60,12 @@ module Api
       end
 
       def default_fields
-        { title: title, message: message, created_at: created_at }
+        @default_fields ||= { title: title, message: message, created_at: created_at }
+        unless a_post?
+          @default_fields[:unread_comments_count_by_user] = @parent_object.unread_comments_count_by_user
+          @default_fields[:unread_commented_appointments_count] = @user.unread_commented_appointments_count
+        end
+        @default_fields
       end
 
       def title

@@ -8,6 +8,10 @@ module Api
           key :type, :integer
           key :example, 35
         end
+        property :unread_commented_appointments_count do
+          key :type, :integer
+          key :example, 35
+        end
       end
 
       swagger_schema :NotificationsResponse do

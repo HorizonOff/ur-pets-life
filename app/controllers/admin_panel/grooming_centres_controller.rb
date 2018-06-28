@@ -1,9 +1,10 @@
 module AdminPanel
   class GroomingCentresController < AdminPanelController
-    include AdminPanel::PictureParamsHelper
+    include AdminPanel::ParamsHelper
     before_action :set_grooming_centre, except: %i[index new create]
     before_action :can_create?, only: %i[new create]
     before_action :can_update?, except: %i[index new create]
+    before_action :parse_params, only: %i[create update]
 
     def index
       respond_to do |format|
@@ -24,7 +25,6 @@ module AdminPanel
     def show; end
 
     def create
-      parse_picture_params(:grooming_centre)
       @grooming_centre = if super_admin?
                            GroomingCentre.new(grooming_centre_params)
                          else
@@ -40,7 +40,6 @@ module AdminPanel
     end
 
     def update
-      parse_picture_params(:grooming_centre)
       if @grooming_centre.update(grooming_centre_params)
         flash[:success] = 'Grooming Centre was successfully updated'
         redirect_to admin_panel_grooming_centres_path
@@ -101,6 +100,10 @@ module AdminPanel
     end
 
     private
+
+    def parse_params
+      parse_params_for(:grooming_centre)
+    end
 
     def set_grooming_centre
       @grooming_centre = GroomingCentre.find_by(id: params[:id])

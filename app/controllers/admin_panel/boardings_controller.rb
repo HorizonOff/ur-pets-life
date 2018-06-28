@@ -1,9 +1,10 @@
 module AdminPanel
   class BoardingsController < AdminPanelController
-    include AdminPanel::PictureParamsHelper
+    include AdminPanel::ParamsHelper
     before_action :set_boarding, except: %i[index new create]
     before_action :can_create?, only: %i[new create]
     before_action :can_update?, except: %i[index new create]
+    before_action :parse_params, only: %i[create update]
 
     def index
       authorize_super_admin
@@ -25,7 +26,6 @@ module AdminPanel
     def show; end
 
     def create
-      parse_picture_params(:boarding)
       @boarding = if super_admin?
                     Boarding.new(boarding_params)
                   else
@@ -41,7 +41,6 @@ module AdminPanel
     end
 
     def update
-      parse_picture_params(:boarding)
       if @boarding.update(boarding_params)
         flash[:success] = 'Boarding was successfully updated'
         redirect_to admin_panel_boardings_path
@@ -81,6 +80,10 @@ module AdminPanel
 
     def set_boarding
       @boarding = Boarding.find_by(id: params[:id])
+    end
+
+    def parse_params
+      parse_params_for(:boarding)
     end
 
     def can_create?

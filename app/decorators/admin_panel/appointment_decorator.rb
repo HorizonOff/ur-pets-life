@@ -6,7 +6,7 @@ module AdminPanel
     attr_accessor :output_buffer
 
     def user_name
-      model.user.name
+      model.unread_comments_count_by_admin.zero? ? model.user.name : model.user.name + comments_icon
     end
 
     def status_label
@@ -41,6 +41,12 @@ module AdminPanel
     end
 
     private
+
+    def comments_icon
+      content_tag(
+        :span, model.unread_comments_count_by_admin, class: 'fa fa-comment pull-right', style: 'color:orange;'
+      )
+    end
 
     def status_class
       case model.status
