@@ -27,6 +27,10 @@ module ServiceCentreConcern
     has_one :location, as: :place, inverse_of: :place
     accepts_nested_attributes_for :location, update_only: true
 
+    has_many :pictures, as: :picturable, inverse_of: :picturable, dependent: :destroy
+    accepts_nested_attributes_for :pictures, allow_destroy: true
+    validates :pictures, length: { maximum: 10, message: 'Should be maximum 10 pictures' }
+
     acts_as_paranoid
 
     mount_uploader :picture, PhotoUploader

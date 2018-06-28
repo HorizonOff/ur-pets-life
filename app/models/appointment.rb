@@ -67,12 +67,20 @@ class Appointment < ApplicationRecord
     @for_day_care ||= bookable_type == 'DayCareCentre'
   end
 
+  def for_boarding?
+    @for_boarding ||= bookable_type == 'Boarding'
+  end
+
   def day_care_or_boarding?
-    @day_care_or_boarding = bookable_type == 'Boarding' || for_day_care?
+    @day_care_or_boarding = for_boarding? || for_day_care?
   end
 
   def past?
-    start_at <= current_time
+    @past ||= if day_care_or_boarding?
+                start_at.end_of_day == current_time.end_of_day
+              else
+                start_at <= current_time
+              end
   end
 
   def start_at=(value)
@@ -81,7 +89,15 @@ class Appointment < ApplicationRecord
   end
 
   def can_be_canceled?
-    !past? && (pending? || accepted?)
+    can_be_rejected? || (accepted? && !past?)
+  end
+
+  def can_be_rejected?
+    @can_be_rejected ||= pending?
+  end
+
+  def can_be_accepted?
+    pending? && !past?
   end
 
   def update_counters

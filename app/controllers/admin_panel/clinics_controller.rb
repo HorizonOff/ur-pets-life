@@ -1,8 +1,10 @@
 module AdminPanel
   class ClinicsController < AdminPanelController
+    include AdminPanel::ParamsHelper
     before_action :set_clinic, except: %i[index new create]
     before_action :can_create?, only: %i[new create]
     before_action :can_update?, except: %i[index new create]
+    before_action :parse_params, only: %i[create update]
 
     def index
       authorize_super_admin
@@ -74,6 +76,10 @@ module AdminPanel
 
     private
 
+    def parse_params
+      parse_params_for(:clinic)
+    end
+
     def set_clinic
       @clinic = Clinic.find_by(id: params[:id])
     end
@@ -90,7 +96,7 @@ module AdminPanel
       params.require(:clinic).permit(:admin_id, :name, :email, :picture, :mobile_number, :consultation_fee, :website,
                                      :description, :is_emergency, :picture_cache,
                                      specialization_ids: [], pet_type_ids: [], location_attributes: location_params,
-                                     schedule_attributes: schedule_params)
+                                     schedule_attributes: schedule_params, pictures_attributes: picture_params)
     end
 
     def filter_clinics

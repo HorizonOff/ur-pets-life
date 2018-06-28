@@ -7,6 +7,7 @@ module AdminPanel
     def index
       respond_to do |format|
         format.html {}
+        format.xlsx { export_data }
         format.json { filter_appointments }
       end
     end
@@ -14,12 +15,12 @@ module AdminPanel
     def show; end
 
     def accept
-      @appointment.update(status: :accepted)
+      @appointment.update(status: :accepted) if @appointment.can_be_accepted?
       render :show
     end
 
     def reject
-      @appointment.update(status: :rejected)
+      @appointment.update(status: :rejected) if appointment.can_be_rejected?
       render :show
     end
 
@@ -63,6 +64,15 @@ module AdminPanel
     def view_appointment
       return if current_admin.is_super_admin?
       @appointment.update_attribute(:is_viewed, true)
+    end
+
+    def export_data
+      @appointments = AppointmentPolicy::Scope.order(:id)
+                                              .includes(:user, :bookable, :vet, :service_option_times,
+                                                        service_option_times: [:service_option_detail,
+                                                                               service_option_detail: :service_option])
+      name = "appointments #{Time.now.utc.strftime('%d-%M-%Y')}.xlsx"
+      response.headers['Content-Disposition'] = "attachment; filename*=UTF-8''#{name}"
     end
   end
 end

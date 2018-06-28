@@ -19,7 +19,11 @@ module AdminPanel
       @params = params
       @admin = admin
 
-      self.scope = admin ? (model + 'Policy::Scope').constantize.new(admin, model).resolve : model.constantize.all
+      self.scope = if admin
+                     (model + 'Policy::Scope').constantize.new(admin, model.constantize).resolve
+                   else
+                     model.constantize.all
+                   end
     end
 
     def filter

@@ -1,0 +1,29 @@
+wb = xlsx_package.workbook
+
+wb.add_worksheet(name: "Appointments") do |sheet|
+  sheet.add_row %w(ID User Service Vet Booked\ Time Session\ Start Dates Pick\ up\ Time Drop\ off\ Time)
+
+  @appointments.each do |a|
+    bookable_service = a.bookable_type + ' ' + a.bookable.name
+    session_start = a.day_care_or_boarding? ? a.start_at.strftime('%-d %b %Y') : a.start_at.strftime('%-d %b %Y %I:%M')
+    if a.for_day_care?
+      dates = []
+      a.dates.each do |d|
+        dates << Time.zone.parse(d).strftime('%e %b %Y')
+      end
+      dates = dates.join(',')
+    elsif a.for_boarding?
+      dates = a.start_at.strftime('%e %b %Y') + ' - ' + a.end_at.strftime('%e %b %Y')
+    end
+    times = a.service_option_times
+    pick_up_time = times.select { |t| t.service_option_detail.service_option.name = 'Pick Up' }&.first
+    pick_up_time = pick_up_time.start_at.strftime('%I:%M') + ' - ' + pick_up_time.end_at.strftime('%I:%M') if pick_up_time
+
+    drop_off_time = times.select { |t| t.service_option_detail.service_option.name = 'Drop Off' }&.first
+    drop_off_time = drop_off_time.start_at.strftime('%I:%M') + ' - ' + drop_off_time.end_at.strftime('%I:%M') if drop_off_time
+
+    sheet.add_row [a.id, a.user.name, bookable_service, a.vet&.name,
+                   a.created_at.strftime('%-d %b %Y %I:%M %p'), session_start, dates, pick_up_time, drop_off_time]
+
+  end
+end
