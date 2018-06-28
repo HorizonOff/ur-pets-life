@@ -40,4 +40,9 @@ class Admin < ApplicationRecord
   scope :for_boarding, (lambda do
     simple.left_joins(:boarding).having('count(boardings.id) = 0').group('admins.id')
   end)
+
+  def update_counters
+    self.unread_commented_appointments_count = appointments.where('unread_comments_count_by_admin > 0').count
+    save
+  end
 end

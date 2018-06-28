@@ -13,9 +13,10 @@ class Notification < ApplicationRecord
   delegate :name, to: :user
 
   def self.view
-    select { |n| n.viewed_at.blank? }.each do |n|
-      n.update_column(:viewed_at, Time.current)
-    end
+    # select { |n| n.viewed_at.blank? }.each do |n|
+    #   n.update_column(:viewed_at, Time.current)
+    # end
+    where(viewed_at: nil).update_all(viewed_at: Time.current)
   end
 
   private

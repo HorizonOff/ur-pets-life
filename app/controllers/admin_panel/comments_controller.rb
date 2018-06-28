@@ -6,6 +6,7 @@ module AdminPanel
 
     def index
       @comments = @parent_object.comments.includes(:writable).order(id: :desc).page(params[:page])
+      read_comments if !current_admin.is_super_admin? && @parent_object.is_a?(Appointment)
       @comment = @parent_object.comments.new
     end
 
@@ -21,6 +22,12 @@ module AdminPanel
     end
 
     private
+
+    def read_comments
+      @comments.read_by_admin
+      @parent_object.update_counters
+      current_admin.update_counters
+    end
 
     def set_parent_object
       @parent_object = params[:post_id].present? ? set_post : set_appointment

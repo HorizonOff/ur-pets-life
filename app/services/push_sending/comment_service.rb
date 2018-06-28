@@ -13,9 +13,11 @@ module PushSending
     def ios_options
       { alert: comment.message,
         sound: 'default',
-        badge: unread_notifications_count,
         source_id: appointment.id,
-        source_type: 'AppointmentComment' }
+        source_type: 'AppointmentComment',
+        badge: ios_badge,
+        unread_commented_appointments_count: unread_commented_appointments_count,
+        unread_notifications_count: unread_notifications_count }
     end
 
     def android_options
@@ -24,8 +26,9 @@ module PushSending
         data: { body: comment.message,
                 title: 'UrPetsLife',
                 source_id: appointment.id,
-                badge: unread_notifications_count,
-                source_type: 'AppointmentComment' }
+                source_type: 'AppointmentComment',
+                badge: android_badge,
+                unread_commented_appointments_count: unread_commented_appointments_count }
       }
     end
   end

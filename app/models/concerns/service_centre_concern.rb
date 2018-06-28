@@ -23,10 +23,6 @@ module ServiceCentreConcern
     has_many :appointments, as: :bookable
     has_many :favorites, as: :favoritable, dependent: :destroy
 
-    has_many :service_option_details, as: :serviceable, inverse_of: :serviceable
-    has_many :service_options, through: :service_option_details
-    accepts_nested_attributes_for :service_option_details, allow_destroy: true
-
     has_one :schedule, as: :schedulable, inverse_of: :schedulable
     has_one :location, as: :place, inverse_of: :place
     accepts_nested_attributes_for :location, update_only: true
