@@ -13,9 +13,17 @@ module AdminPanel
 
     def appointment_actions(appointment, btn_class = '')
       if appointment.pending?
-        appointment.can_be_accepted? ? (link_for_accepting(appointment, btn_class) + link_for_rejecting(appointment, btn_class)) : link_for_rejecting(appointment, btn_class)
+        accept_reject_links
       elsif appointment.accepted?
         link_for_canceling(appointment, btn_class)
+      end
+    end
+
+    def accept_reject_links(appointment)
+      if appointment.can_be_accepted?
+        (link_for_accepting(appointment, btn_class) + link_for_rejecting(appointment, btn_class))
+      else
+        link_for_rejecting(appointment, btn_class)
       end
     end
 
@@ -31,7 +39,7 @@ module AdminPanel
       end
     end
 
-    def link_for_rejecting(appointment, btn_class)
+    def link_for_canceling(appointment, btn_class)
       link_to cancel_admin_panel_appointment_path(appointment), class: "btn btn-danger #{btn_class}", method: :put do
         content_tag(:i, nil, class: 'fa fa-close') + 'Cancel'
       end

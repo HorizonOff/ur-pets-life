@@ -1,9 +1,10 @@
 module AdminPanel
   class ClinicsController < AdminPanelController
-    include AdminPanel::PictureParamsHelper
+    include AdminPanel::ParamsHelper
     before_action :set_clinic, except: %i[index new create]
     before_action :can_create?, only: %i[new create]
     before_action :can_update?, except: %i[index new create]
+    before_action :parse_params, only: %i[create update]
 
     def index
       authorize_super_admin
@@ -20,7 +21,6 @@ module AdminPanel
     end
 
     def create
-      parse_picture_params(:clinic)
       @clinic = super_admin? ? Clinic.new(clinic_params) : current_admin.build_clinic(clinic_params)
       if @clinic.save
         flash[:success] = 'Clinic was successfully created'
@@ -35,7 +35,6 @@ module AdminPanel
     def edit; end
 
     def update
-      parse_picture_params(:clinic)
       if @clinic.update(clinic_params)
         flash[:success] = 'Clinic was successfully updated'
         redirect_to admin_panel_clinic_path(@clinic)
@@ -76,6 +75,10 @@ module AdminPanel
     end
 
     private
+
+    def parse_params
+      parse_params_for(:clinic)
+    end
 
     def set_clinic
       @clinic = Clinic.find_by(id: params[:id])
