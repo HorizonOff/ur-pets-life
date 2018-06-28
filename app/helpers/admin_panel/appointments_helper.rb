@@ -13,7 +13,7 @@ module AdminPanel
 
     def appointment_actions(appointment, btn_class = '')
       if appointment.pending?
-        accept_reject_links
+        accept_reject_links(appointment)
       elsif appointment.accepted?
         link_for_canceling(appointment, btn_class)
       end
