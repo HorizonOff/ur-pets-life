@@ -231,6 +231,15 @@
   }
 }
 
+.btn-violet {
+  color: #fff;
+  border-color: #d85f76;
+}
+
+.btn-violet:hover {
+  border-color: #d81f78;
+}
+
 #container-6 {
   height: 361px;
   background-image: image_url('landing/bg-footer.png');
@@ -257,7 +266,11 @@
     background-position-y: 11px;
     background-position-x: 17px;
     background-color: #4568B0;
+  }
 
+  .ins-button {
+    background-image: image_url('landing/instagram-logo.png');
+    background-size: cover;
   }
 
   .tw-button {
@@ -266,7 +279,6 @@
     background-position-y: 14px;
     background-position-x: 12px;
     background-color: #2AA3F0;
-
   }
 
   .gl-button {
