@@ -77,7 +77,7 @@ class Appointment < ApplicationRecord
 
   def past?
     @past ||= if day_care_or_boarding?
-                start_at.end_of_day == current_time.end_of_day
+                start_at.end_of_day <= current_time
               else
                 start_at <= current_time
               end
