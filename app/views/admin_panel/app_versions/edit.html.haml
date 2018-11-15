@@ -1,0 +1,21 @@
+.row
+  = form_for @app_version, url: admin_panel_app_version_path,
+  html: { method: :put, class: 'form-horizontal form-label-left', autocomplete: 'off' } do |f|
+
+    .col-md-6.col-sm-6.col-xs-12
+      .x_panel
+        .x_title
+          %h2 Edit version
+          .clearfix
+        .x_content
+          %br
+
+          .form-group
+            = f.label :android_version, class: 'control-label col-md-3 col-sm-3 col-xs-12'
+            .col-md-9.col-sm-9.col-xs-12
+              = f.text_field :android_version, class: 'form-control'
+          .form-group
+            = f.label :ios_version, class: 'control-label col-md-3 col-sm-3 col-xs-12'
+            .col-md-9.col-sm-9.col-xs-12
+              = f.text_field :ios_version, class: 'form-control'
+          = f.submit 'Save', class: 'btn btn-success'

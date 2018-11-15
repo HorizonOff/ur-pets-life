@@ -1,0 +1,12 @@
+%p#notice= notice
+
+%p
+  %b User:
+  = @wishlist.user
+%p
+  %b Item:
+  = @wishlist.item
+
+= link_to 'Edit', edit_wishlist_path(@wishlist)
+\|
+= link_to 'Back', wishlists_path

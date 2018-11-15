@@ -1,0 +1,13 @@
+%div
+  .page-title
+    .title_left
+      %h3 New service for #{@service_type.serviceable_type}
+
+  .clearfix
+  
+  = form_for @service_type, url: admin_panel_service_types_path,
+  html: { method: :post, class: 'form-horizontal form-label-left', autocomplete: 'off'} do |f|
+
+    = render partial: 'admin_panel/service_types/form', locals: { f: f }
+    
+    = f.submit 'Create service', class: 'btn btn-success pull-right'

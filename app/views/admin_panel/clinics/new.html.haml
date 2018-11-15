@@ -1,0 +1,16 @@
+%div
+  .page-title
+    .title_left
+      %h3 New clinic 
+
+  .clearfix
+  
+  = form_for @clinic, url: admin_panel_clinics_path,
+  html: { multipart: true, method: :post, class: 'form-horizontal form-label-left with_location', autocomplete: 'off' } do |f|
+
+    = render partial: 'form', locals: { f: f }
+    
+    = f.submit 'Create clinic', class: 'btn btn-success pull-right'
+
+:javascript
+  init_map();

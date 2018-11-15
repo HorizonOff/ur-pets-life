@@ -1,0 +1,76 @@
+class Vet < ApplicationRecord
+  include EmailCheckable
+  validates :email, format: { with: Devise.email_regexp, message: 'Email address is invalid' },
+                    length: { maximum: 50, message: 'Email address should contain not more than 50 symbols' },
+                    presence: { message: 'Email adress is required' }
+
+  validates :name, presence: { message: 'Name is required' }
+
+  validates :mobile_number, format: { with: /\A\+\d+\z/, message: 'Mobile Number is invalid' },
+                            length: { within: 11..13,
+                                      too_short: 'Mobile number should contain at least 10 symbols',
+                                      too_long: 'Mobile number should contain not more than 12 symbols' },
+                            allow_blank: true
+
+  validates :session_duration, presence: { message: 'Session duration is required' },
+                               numericality: { only_integer: true, greater_than: 0, less_than: 1440 }
+
+  validates :location, presence: { message: 'Location is required' }, if: :work_as_emergency?
+
+  belongs_to :clinic, counter_cache: true
+
+  has_one :location, as: :place, inverse_of: :place
+  has_one :schedule, as: :schedulable, inverse_of: :schedulable
+
+  has_one :admin, through: :clinic
+
+  has_many :calendars, -> { order(start_at: :asc) }, dependent: :destroy
+  has_many :appointments
+  has_many :qualifications, as: :skill, inverse_of: :skill, dependent: :destroy
+  has_many :favorites, as: :favoritable, dependent: :destroy
+
+  has_and_belongs_to_many :specializations
+  has_and_belongs_to_many :pet_types
+
+  accepts_nested_attributes_for :qualifications, allow_destroy: true
+  accepts_nested_attributes_for :location, update_only: true, allow_destroy: true
+
+  acts_as_paranoid
+
+  mount_uploader :avatar, PhotoUploader
+  validates_presence_of :avatar
+
+  delegate :address, to: :location, allow_nil: true
+  reverse_geocoded_by 'locations.latitude', 'locations.longitude'
+
+  before_validation :check_location
+
+  scope :with_pet_types, (lambda do |pet_type_ids|
+    joins(:pet_types).where(pet_types: { id: pet_type_ids }).group('vets.id').having('count(*) = ?', pet_type_ids.size)
+  end)
+
+  after_commit :generate_default_calendars, on: :create
+
+  def generate_calendar(start_at, end_at)
+    calendars.create(start_at: start_at, end_at: end_at)
+  end
+
+  private
+
+  def work_as_emergency?
+    is_emergency?
+  end
+
+  def check_location
+    return location.really_destroy! if !is_emergency? && location
+    return unless use_clinic_location?
+    location_attributes = clinic.location.attributes.except('id', 'place_type', 'place_id', 'created_at',
+                                                            'updated_at', 'comment')
+    build_location unless location
+    location.assign_attributes(location_attributes)
+  end
+
+  def generate_default_calendars
+    VetTimingJob.perform_async(id)
+  end
+end

@@ -1,0 +1,38 @@
+I"_(function() {
+  var $, csrfParam, csrfToken;
+
+  $ = Rails.$;
+
+  csrfToken = Rails.csrfToken = function() {
+    var meta;
+    meta = document.querySelector('meta[name=csrf-token]');
+    return meta && meta.content;
+  };
+
+  csrfParam = Rails.csrfParam = function() {
+    var meta;
+    meta = document.querySelector('meta[name=csrf-param]');
+    return meta && meta.content;
+  };
+
+  Rails.CSRFProtection = function(xhr) {
+    var token;
+    token = csrfToken();
+    if (token != null) {
+      return xhr.setRequestHeader('X-CSRF-Token', token);
+    }
+  };
+
+  Rails.refreshCSRFTokens = function() {
+    var param, token;
+    token = csrfToken();
+    param = csrfParam();
+    if ((token != null) && (param != null)) {
+      return $('form input[name="' + param + '"]').forEach(function(input) {
+        return input.value = token;
+      });
+    }
+  };
+
+}).call(this);
+:ET

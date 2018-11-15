@@ -1,0 +1,26 @@
+- content_for :head do
+  %meta{name: "turbolinks-cache-control", content:"no-cache"}
+.row
+  .col-md-12.col-sm-12.col-xs-12
+    .x_panel
+      .x_title
+        %h2= t "devise.invitations.new.header"
+        .clearfix
+      .x_content
+        %br
+        = form_for resource, as: resource_name, url: invitation_path(resource_name),
+        html: { method: :post, class: 'form-horizontal form-label-left', autocomplete: 'off'} do |f|
+          = devise_error_messages!
+
+          .form-group
+            = f.label :email, class: 'control-label col-md-3 col-sm-3 col-xs-12'
+            .col-md-6.col-sm-6.col-xs-12
+              = f.email_field :email, class: 'form-control col-md-7 col-xs-12', required: true
+          .form-group
+            = f.label :is_super_admin, 'Super admin', class: 'control-label col-md-3 col-sm-3 col-xs-12'
+            .col-md-9.col-sm-9.col-xs-12
+              = f.check_box :is_super_admin, class: 'flat'
+          .ln_solid
+          .form-group
+            .col-md-9.col-sm-9.col-xs-12.col-md-offset-3
+              = f.submit t("devise.invitations.new.submit_button"), class: 'btn btn-success'

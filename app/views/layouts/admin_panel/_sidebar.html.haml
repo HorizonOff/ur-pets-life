@@ -1,0 +1,19 @@
+.col-md-3.left_col
+  .left_col.scroll-view
+    .navbar.nav_title{style: "border: 0;"}
+    
+      = link_to admin_panel_root_path, class: 'site_title' do
+        %img{src: '/images/AppIcon.png', style: 'height:80%; border-radius:50%'}
+        %span UrPetsLife
+
+    .clearfix
+
+    %br
+
+    #sidebar-menu.main_menu_side.hidden-print.main_menu
+      .menu_section
+        %ul.nav.side-menu
+          - if current_admin.is_super_admin?
+            = render 'layouts/admin_panel/super_admin_sidebar'
+          - else
+            = render 'layouts/admin_panel/simple_admin_sidebar' 

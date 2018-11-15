@@ -1,0 +1,36 @@
+%div
+  .page-title
+    .title_left
+      %h3
+        Contact request
+        = @contact_request.status
+  .clearfix
+
+  .x_panel
+    .x_content
+
+      .form-group
+        = label_tag :user_name, 'User name', class: 'control-label col-md-3 col-sm-3 col-xs-12'
+        .col-md-9.col-sm-9.col-xs-12
+          %p= @contact_request.user_name
+      %br
+      .form-group
+        = label_tag :user_email, 'User email', class: 'control-label col-md-3 col-sm-3 col-xs-12'
+        .col-md-9.col-sm-9.col-xs-12
+          %p= @contact_request.email
+      %br
+      .form-group
+        = label_tag :user_phone, 'User mobile number', class: 'control-label col-md-3 col-sm-3 col-xs-12'
+        .col-md-9.col-sm-9.col-xs-12
+          %p= @contact_request.user_mobile_number
+      %br
+      .form-group
+        = label_tag :subject, 'Subject', class: 'control-label col-md-3 col-sm-3 col-xs-12'
+        .col-md-9.col-sm-9.col-xs-12
+          %p= @contact_request.subject
+      %br
+      .form-group
+        = label_tag :message, 'Message', class: 'control-label col-md-3 col-sm-3 col-xs-12'
+        .col-md-9.col-sm-9.col-xs-12
+          %p= @contact_request.message
+  = link_to 'Reply', new_reply_admin_panel_contact_request_path(@contact_request), class: 'btn btn-info', remote: true

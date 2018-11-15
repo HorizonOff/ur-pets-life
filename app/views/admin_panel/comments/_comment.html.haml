@@ -1,0 +1,11 @@
+%li.full_width{ data: { comment_id: comment.id}}
+  .image
+    = link_to admin_panel_comment_path(comment), method: :delete,
+    remote: true, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-xs' do
+      %span.fa.fa-trash
+      Delete
+  %a
+    %span
+      %span= comment.writable.name
+      %span.time= comment.created_at.strftime('%-d %b %Y %I:%M %p')
+    %span.message= comment.message

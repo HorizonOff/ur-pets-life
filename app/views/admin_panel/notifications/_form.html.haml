@@ -1,0 +1,29 @@
+- content_for :head do
+  %meta{name: "turbolinks-cache-control", content:"no-cache"}
+.row
+  - if @notification_creation_service && @notification_creation_service.error.present?
+    .form-group
+      .col-md-12.col-sm-12.col-xs-12.error
+        %label= @notification_creation_service.error[:message]
+        %br
+  .col-md-6.col-sm-6.col-xs-12
+  .x_panel
+    .x_content
+      %br
+      
+      .form-group
+        = label_tag :all_users, 'All users', class: 'control-label col-md-3 col-sm-3 col-xs-12'
+        .col-md-9.col-sm-9.col-xs-12
+          = check_box_tag :all_users, 1, params[:all_users], class: 'form-control optional_checkbox flat'
+      .form-group.user_ids{class: "#{'hiden' if params[:all_users].present?}"}
+        = label_tag :user_ids, 'Users', class: 'control-label col-md-3 col-sm-3 col-xs-12'
+        .col-md-9.col-sm-9.col-xs-12
+          = select_tag :user_ids, options_from_collection_for_select(User.all, :id, :name, params[:user_ids]), multiple: true, class: 'select2 optional_select', required: true, disabled: params[:all_users].present?
+      .form-group
+        = label_tag :message, 'Message', class: 'control-label col-md-3 col-sm-3 col-xs-12'
+        .col-md-9.col-sm-9.col-xs-12
+          = text_area_tag :message, params[:message], rows: 5, class: 'form-control no-resize', required: true
+      .form-group
+        = label_tag :skip_push_sending, 'Skip push sending', class: 'control-label col-md-3 col-sm-3 col-xs-12'
+        .col-md-9.col-sm-9.col-xs-12
+          = check_box_tag :skip_push_sending, 1, params[:skip_push_sending], class: 'form-control flat'

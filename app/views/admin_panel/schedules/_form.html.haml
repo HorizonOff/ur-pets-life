@@ -1,0 +1,23 @@
+.col-md-6.col-sm-6.col-xs-12
+  .x_panel
+    .x_title
+      %h2 Working hours
+      .clearfix
+    .x_content.working_hours
+      %br
+      = f.fields_for :schedule do |ff|
+        .form-group
+          = ff.label :day_and_night, 'Open 24/7', class: 'control-label col-md-3 col-sm-3 col-xs-12'
+          .col-md-9.col-sm-9.col-xs-12
+            = ff.check_box :day_and_night, class: 'flat day_and_night'
+
+        - Schedule::DAYS.each_value do |day|
+
+          .form-group
+            = ff.label Schedule.open_at_field_name(day).to_sym, "#{day.capitalize} open", class: 'control-label col-md-3 col-sm-3 col-xs-12'
+            .col-md-3.col-sm-3.col-xs-12
+              = ff.text_field Schedule.open_at_field_name(day).to_sym, value: ff.object.open_at_field(day).try(:strftime, '%I:%M %p'), class: 'form-control timepicker open', disabled: ff.object.day_and_night?
+            = ff.label Schedule.close_at_field_name(day).to_sym, "#{day.capitalize} close", class: 'control-label col-md-3 col-sm-3 col-xs-12'
+            .col-md-3.col-sm-3.col-xs-12
+              = ff.text_field Schedule.close_at_field_name(day).to_sym, value: ff.object.close_at_field(day).try(:strftime, '%I:%M %p'), class: 'form-control timepicker close_time', disabled: ff.object.day_and_night?
+

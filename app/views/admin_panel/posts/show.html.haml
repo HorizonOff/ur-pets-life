@@ -1,0 +1,32 @@
+%div
+  .row
+    .col-md-12.col-sm-12.col-xs-12
+      .x_panel
+        .x_title
+          %h2 Post
+          .clearfix
+        .x_content
+          .col-md-3.col-sm-3.col-xs-12.profile_left
+            %ul.list-unstyled.user_data
+              %li
+                %i.fa.fa-map-marker.user-profile-icon
+                = @parent_object.user.name
+              %li
+                %i.fa.fa-phone.user-profile-icon
+                = @parent_object.user.mobile_number
+              %li
+                %i.fa.fa-envelope.user-profile-icon
+                = @parent_object.user.email
+              %li.m-top-xs
+                %i.fa.fa-external-link.user-profile-icon
+                = @parent_object.created_at.strftime('%-d %b %Y %I:%M %p')
+              %li
+                Comments:
+                %span.comment_count= @parent_object.comments.size
+
+          .col-md-9.col-sm-9.col-xs-12
+            %h1= @parent_object.title
+            %blockquote
+              %p= @parent_object.message
+    = render 'admin_panel/comments/form'
+    = render 'admin_panel/comments/list'

@@ -1,0 +1,6 @@
+%tr{ id: "service_type#{service_type.id}" }
+  %th{ scope: 'row' } #{service_type.id}
+  %td #{service_type.name}
+  %td
+    =link_to 'Edit', edit_admin_panel_service_type_path(service_type), class: 'btn btn-warning'
+    =link_to 'Delete', admin_panel_service_type_path(service_type), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger', remote: true

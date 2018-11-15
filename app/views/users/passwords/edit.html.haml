@@ -1,0 +1,28 @@
+%div
+  .login_wrapper
+    .form.login_form
+      %section.login_content.password
+        = form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f|
+          = f.hidden_field :reset_password_token
+          %h1 Change your password
+          = devise_error_messages!
+          
+          %div
+            = f.password_field :password, autofocus: true, class: 'form-control', placeholder: 'Password', required: true
+
+          %div
+            = f.password_field :password_confirmation, autocomplete: 'off', class: 'form-control', placeholder: 'Password confirmation', required: true
+
+          %div
+            = f.submit "Change my password", class: 'btn btn-success'
+            %br
+
+          .clearfix
+
+          .separator
+            %div
+              %img{src: '/images/AppIcon.png', style: 'height:80px;border-radius:50%;display:inline'}
+              %h1{style: 'display:inline'}
+                Ur Pets Life
+              %br
+              %p ©2017 All Rights Reserved. Powered by Foxtrapp

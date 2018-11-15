@@ -1,0 +1,29 @@
+!!!
+%html
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    - if content_for?(:head)
+      = yield(:head)
+    %title UrPetsLife
+    = csrf_meta_tags
+    = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload'
+    = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
+    %script{src: "//maps.google.com/maps/api/js?key=#{ENV['GOOGLE_WEB_API_KEY']}&libraries=places"}
+    %script{src: "//cdn.rawgit.com/mahnunchik/markerclustererplus/master/dist/markerclusterer.min.js"}
+    %script{type: 'text/javascript', src: "//cdn.rawgit.com/printercu/google-maps-utility-library-v3-read-only/master/infobox/src/infobox_packed.js"}
+
+  -if current_admin
+    %body.nav-md
+      .container.body
+        .main_container
+          = render partial: 'layouts/admin_panel/sidebar'
+          = render partial: 'layouts/admin_panel/header'
+          .right_col{role: 'main'}
+            = yield
+          %footer
+            .pull-right UrPetsLife 2017
+            .clearfix
+      = render 'layouts/admin_panel/modal'
+  -else
+    %body.login
+      = yield

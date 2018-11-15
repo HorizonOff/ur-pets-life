@@ -1,0 +1,18 @@
+= f.hidden_field :pet_id
+.form-group
+  = f.label :condition, class: 'control-label col-md-3 col-sm-3 col-xs-12'
+  .col-md-6.col-sm-6.col-xs-12
+    = f.text_field :condition, class: 'form-control col-md-7 col-xs-12', required: true
+.form-group
+  = f.label :message, class: 'control-label col-md-3 col-sm-3 col-xs-12'
+  .col-md-9.col-sm-9.col-xs-12
+    = f.text_area :message, rows: 5, class: 'form-control no-resize'
+#recipes
+= f.fields_for :recipes do |r|
+  = render partial: 'admin_panel/recipes/fields', locals: { f: r }
+.links
+  = link_to_add_association 'Add recipe', f, :recipes, { class: 'btn btn-info', partial: 'admin_panel/recipes/fields' }
+
+.ln_solid
+.row
+  = f.submit 'Save', class: 'btn btn-success center-block', style: 'margin:auto'

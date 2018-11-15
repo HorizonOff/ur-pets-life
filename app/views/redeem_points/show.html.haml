@@ -1,0 +1,27 @@
+%p#notice= notice
+
+%p
+  %b Net worth:
+  = @redeem_point.net_worth
+%p
+  %b Last net worth:
+  = @redeem_point.last_net_worth
+%p
+  %b Last reward type:
+  = @redeem_point.last_reward_type
+%p
+  %b Last reward worth:
+  = @redeem_point.last_reward_worth
+%p
+  %b Last reward update:
+  = @redeem_point.last_reward_update
+%p
+  %b Last net update:
+  = @redeem_point.last_net_update
+%p
+  %b User:
+  = @redeem_point.user
+
+= link_to 'Edit', edit_redeem_point_path(@redeem_point)
+\|
+= link_to 'Back', redeem_points_path

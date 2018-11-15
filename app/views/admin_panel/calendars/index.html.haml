@@ -1,0 +1,25 @@
+%div
+  .row
+    .col-md-12.col-sm-12.col-xs-12
+      .x_panel
+        .x_title
+          %h2 Vet schedule
+          .clearfix
+        .x_content
+          #calendar{ 'vet-id' => @vet.id }
+
+#CalenderModalDestroy.modal.fade{ tabindex: "-1", role: "dialog", aria: { labelledby: "myModalLabel", hidden:"true" } }
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button.close.autoclose{ type: "button", data: { dismiss: "modal" }, aria: { hidden: "true" } }
+          ×
+        %h4.modal-title#myModalLabel2 Schedule for #{@vet.name}
+      .modal-body
+        #testmodal2{ style: "padding: 5px 20px;" }
+          %p.time_slot
+      .modal-footer
+        %button.btn.btn-default.autoclose{ type: "button", data: { dismiss: "modal" } } Close
+        %a.btn.btn-danger.destroy_link{ href: 'javascript:;' } Delete this schedule
+
+#fc_destroy{ data: { toggle: "modal", target: "#CalenderModalDestroy" } }

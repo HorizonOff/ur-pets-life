@@ -1,0 +1,16 @@
+%div
+  .page-title
+    .title_left
+      %h3 New trainer 
+
+  .clearfix
+  
+  = form_for @trainer, url: admin_panel_trainers_path,
+  html: { multipart: true, method: :post, class: 'form-horizontal form-label-left with_location', autocomplete: 'off'} do |f|
+
+    = render partial: 'admin_panel/trainers/form', locals: { f: f }
+    
+    = f.submit 'Create trainer', class: 'btn btn-success pull-right'
+
+:javascript
+  init_map();

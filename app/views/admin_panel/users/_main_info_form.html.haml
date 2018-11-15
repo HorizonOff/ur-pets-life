@@ -1,0 +1,38 @@
+.col-md-6.col-sm-6.col-xs-12
+  .x_panel
+    .x_title
+      %h2 Main Info
+      .clearfix
+    .x_content
+      %br
+      
+      .form-group
+        = f.label :first_name, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
+          First Name
+          %span.required *
+        .col-md-9.col-sm-9.col-xs-12
+          = f.text_field :first_name, class: 'form-control', required: true
+      .form-group
+        = f.label :last_name, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
+          Last Name
+          %span.required *
+        .col-md-9.col-sm-9.col-xs-12
+          = f.text_field :last_name, class: 'form-control', required: true
+      .form-group
+        = f.label :email, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
+          Email
+          %span.required *
+        .col-md-9.col-sm-9.col-xs-12
+          = f.email_field :email, class: 'form-control', required: true
+      .form-group
+        = f.label :mobile_number, 'Phone', class: 'control-label col-md-3 col-sm-3 col-xs-12'
+        .col-md-9.col-sm-9.col-xs-12
+          = f.text_field :mobile_number, class: 'form-control'
+      .form-group
+        = f.label :birthday, class: 'control-label col-md-3 col-sm-3 col-xs-12'
+        .col-md-9.col-sm-9.col-xs-12
+          = f.text_field :birthday, value: f.object.birthday&.strftime("%d/%m/%Y"), class: 'form-control single_cal1'
+      .form-group
+        = f.label :gender, class: 'control-label col-md-3 col-sm-3 col-xs-12'
+        .col-md-9.col-sm-9.col-xs-12
+          = f.select :gender, options_for_select([['male', 0], ['female', 1]], User.genders[@user.gender]), { include_blank: true }, { class: 'form-control select2' }

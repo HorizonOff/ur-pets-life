@@ -1,0 +1,15 @@
+.row
+  .col-md-12.col-sm-12.col-xs-12
+    %table.table
+      %thead
+        %tr
+          %th #
+          %th Name
+          %th Picture
+          %th Done at
+      %tbody
+        = render @vaccinations
+
+#photo_preview.modal.fade{ tabindex: "-1", role: "dialog", aria: { labelledby: "myModalLabel", hidden:"true" } }
+  .modal-dialog
+    .modal-body{ style: 'text-align:center' }

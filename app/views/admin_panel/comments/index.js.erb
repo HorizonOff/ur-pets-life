@@ -1,0 +1,2 @@
+$('ul.list-unstyled.msg_list').html('<%= j render @comments %>');
+$('.x_footer').html("<%= j paginate @comments, remote: true, params: { controller: 'admin_panel/comments', action: 'index', post_id: @post.id } %>");

@@ -1,0 +1,42 @@
+- content_for :head do
+  %meta{name: "turbolinks-cache-control", content:"no-cache"}
+%div
+  .page-title
+    .title_left
+      %h3 Pets
+    .title_right
+      = link_to 'Export in xlsx', admin_panel_pets_path(format: :xlsx), class: 'btn btn-primary btn-round pull-right'
+  .clearfix
+
+  .row
+    .col-md-12.col-sm-12.col-xs-12
+      .x_panel
+        .x_content
+          %table.table.datatable.pets
+            %thead
+              %tr
+                %th{style: 'width:30px'}  #
+                %th Name
+                %th Picture
+                %th Birthday
+                %th Species
+                %th Gender
+                %th Weight
+                %th Status
+                %th Actions
+              %tr
+                %th{style: 'width:30px'}
+                  = text_field_tag :id, '', class: 'form-control', style: 'width:100%'
+                %th
+                  = text_field_tag :name, '', class: 'form-control', style: 'width:100%'
+                %th
+                %th
+                %th
+                  = select_tag :pet_type_id, options_for_select([[], ['Cat', 1], ['Dog', 2], ['Other', 3]]),  class: 'form-control select2'
+                %th
+                  = select_tag :sex, options_for_select([[], ['Male', 0], ['Female', 1]]),  class: 'form-control select2'
+                %th
+                %th
+                  = select_tag :status, options_for_select([[], ['For adoption', 'for_adoption'], ['Lost', 'lost'], ['Found', 'found']]),  class: 'form-control select2'
+                %th
+            %tbody

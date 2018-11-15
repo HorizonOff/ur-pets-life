@@ -1,0 +1,48 @@
+.col-md-12.col-sm-12.col-xs-12.location_tab{style: "display:#{'none' if !@vet.is_emergency?}" }
+  .x_panel
+    .x_title
+      %h2 Address for emergency
+      .clearfix
+    .x_content
+      %br
+
+      .form-group
+        = f.label :use_clinic_location, class: 'control-label col-md-6 col-sm-6 col-xs-6'
+        .col-md-6.col-sm-6.col-xs-6
+          = f.check_box :use_clinic_location, class: 'flat', disabled: f.object.clinic_id.blank?
+      .form-group
+        = f.fields_for :location do |ff|
+          = ff.check_box :_destroy, value: 1, checked: ff.object.new_record?, class: 'destroy_location', style: 'display:none'
+          .col-md-3.col-sm-3.col-xs-12.location_tab_fields
+            = ff.hidden_field :latitude
+            = ff.hidden_field :longitude
+            .form-group
+              = ff.label :city
+              = ff.text_field :city, class: 'form-control check_geocoder'
+            .form-group
+              = ff.label :area
+              = ff.text_field :area, class: 'form-control check_geocoder'
+            .form-group
+              = ff.label :street
+              = ff.text_field :street, class: 'form-control check_geocoder'
+            .form-group
+              = label_tag 'Building'
+              = ff.radio_button :building_type, :building, id: 'building_type', class: 'flat check_geocoder building'
+              = label_tag 'Villa'
+              = ff.radio_button :building_type, :villa, id: 'building_type', class: 'flat check_geocoder villa'
+            .form-group.building{style: "display:#{'none' if ff.object.villa?}"}
+              = ff.label :building_name
+              = ff.text_field :building_name, class: 'form-control check_geocoder'
+            .form-group.building{style: "display:#{'none' if ff.object.villa?}"}
+              = ff.label :unit_number
+              = ff.text_field :unit_number, class: 'form-control check_geocoder'
+            .form-group.villa{style: "display:#{'none' if ff.object.building?}"}
+              = ff.label :villa_number
+              = ff.text_field :villa_number, class: 'form-control check_geocoder'
+            .form-group
+              = ff.label :comment
+              = ff.text_area :comment, rows: 5, class: 'form-control no-resize'
+        #map.col-md-9.col-sm-9.col-xs-12{style: 'height:550px'}
+      .form-group
+        .col-md-12.col-sm-12.col-xs-12#geocoding_error
+          %label We can not parse your address. You still can save it but some application features may not work correct

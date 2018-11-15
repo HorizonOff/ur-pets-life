@@ -1,0 +1,64 @@
+%div
+  .row
+    .col-md-12.col-sm-12.col-xs-12
+      .x_panel
+        .x_title
+          %h2= @boarding.name
+          .clearfix
+        .x_content
+          .col-md-3.col-sm-3.col-xs-12.profile_left
+            .profile_img
+              #crop-avatar
+                = image_tag(@boarding.picture.medium.url, class: 'img-responsive avatar-view', title: @boarding.name) if @boarding.picture.present?
+
+            %ul.list-unstyled.user_data
+              %li
+                %i.fa.fa-map-marker.user-profile-icon
+                = @boarding.address
+              %li
+                %i.fa.fa-phone.user-profile-icon
+                = @boarding.mobile_number
+              %li
+                %i.fa.fa-envelope.user-profile-icon
+                = @boarding.email
+              %li.m-top-xs
+                %i.fa.fa-external-link.user-profile-icon
+                = @boarding.website
+              %li
+                %i.fa.fa-user.user-profile-icon
+                = @boarding.admin.try(:name)
+
+              - if @boarding.service_option_details.present?
+                %li
+                  Service options:
+                  - @boarding.service_option_details.each do |sod|
+                    %br
+                    = "#{sod.name}: #{sod.price} AED"
+
+            = link_to edit_admin_panel_boarding_path(@boarding), class: 'btn btn-warning' do
+              %i.fa.fa-edit.m-right-xs
+              Edit Boarding
+            %br
+
+            = link_to admin_panel_boarding_path(@boarding), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' do
+              %i.fa.fa-trash.m-right-xs
+              Delete Boarding
+            %br
+
+          .col-md-9.col-sm-9.col-xs-12
+            -if @boarding.location.longitude && @boarding.location.latitude 
+              %div{ style: 'width: 100%; height: 300px; position: relative;' }
+                %img{ src: generate_static_map_url(@boarding.location), style: 'max-widrth: 100%; display: block; margin: 0 auto;'}
+            .profile_title
+              .col-md-6.col-sm-6.col-xs-6
+                %h2 Total count of services #{@boarding.service_types.size}
+              .col-md-6.col-sm-6.col-xs-6
+                =link_to 'Add a service', new_service_type_admin_panel_boarding_path(@boarding), class: 'btn btn-info pull-right'
+            %table.table
+              %thead
+                %tr
+                  %th #
+                  %th Name
+                  %th Actions
+              %tbody
+                = render @boarding.service_types 

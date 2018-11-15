@@ -1,0 +1,36 @@
+- content_for :head do
+  %meta{name: "turbolinks-cache-control", content:"no-cache"}
+%div
+  .page-title
+    .title_left
+      %h3 Contact Requests
+  .clearfix
+
+  .row
+    .col-md-12.col-sm-12.col-xs-12
+      .x_panel
+        .x_content
+          %table.table.datatable.contact_requests
+            %thead
+              %tr
+                %th{style: 'width:30px'}  #
+                %th User Name
+                %th User Email
+                %th User Phone
+                %th Subject
+                %th Send_at
+                %th Status
+                %th Actions
+              %tr
+                %th{style: 'width:30px'}
+                  = text_field_tag :id, '', class: 'form-control', style: 'width:100%'
+                %th
+                %th
+                  = text_field_tag :email, '', class: 'form-control', style: 'width:100%'
+                %th
+                %th
+                %th
+                %th
+                  = select_tag :is_answered, options_for_select([[], ['Answered', true], ['Not answered', false]]),  class: 'form-control select2'
+                %th
+            %tbody

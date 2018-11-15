@@ -1,0 +1,16 @@
+%div
+  .page-title
+    .title_left
+      %h3 Edit user 
+
+  .clearfix
+  
+  = form_for @user, url: admin_panel_user_path(@user),
+  html: { method: :put, class: 'form-horizontal form-label-left', autocomplete: 'off'} do |f|
+
+    = render partial: 'form', locals: { f: f }
+    
+    = f.submit 'Update user', class: 'btn btn-success pull-right'
+
+:javascript
+  init_map();

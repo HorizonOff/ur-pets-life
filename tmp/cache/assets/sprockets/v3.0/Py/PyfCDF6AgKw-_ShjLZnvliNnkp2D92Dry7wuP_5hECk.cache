@@ -1,0 +1,122 @@
+I"J(function() {
+  var AcceptHeaders, CSRFProtection, createXHR, fire, prepareOptions, processResponse;
+
+  CSRFProtection = Rails.CSRFProtection, fire = Rails.fire;
+
+  AcceptHeaders = {
+    '*': '*/*',
+    text: 'text/plain',
+    html: 'text/html',
+    xml: 'application/xml, text/xml',
+    json: 'application/json, text/javascript',
+    script: 'text/javascript, application/javascript, application/ecmascript, application/x-ecmascript'
+  };
+
+  Rails.ajax = function(options) {
+    var xhr;
+    options = prepareOptions(options);
+    xhr = createXHR(options, function() {
+      var response;
+      response = processResponse(xhr.response, xhr.getResponseHeader('Content-Type'));
+      if (Math.floor(xhr.status / 100) === 2) {
+        if (typeof options.success === "function") {
+          options.success(response, xhr.statusText, xhr);
+        }
+      } else {
+        if (typeof options.error === "function") {
+          options.error(response, xhr.statusText, xhr);
+        }
+      }
+      return typeof options.complete === "function" ? options.complete(xhr, xhr.statusText) : void 0;
+    });
+    if (!(typeof options.beforeSend === "function" ? options.beforeSend(xhr, options) : void 0)) {
+      return false;
+    }
+    if (xhr.readyState === XMLHttpRequest.OPENED) {
+      return xhr.send(options.data);
+    }
+  };
+
+  prepareOptions = function(options) {
+    options.url = options.url || location.href;
+    options.type = options.type.toUpperCase();
+    if (options.type === 'GET' && options.data) {
+      if (options.url.indexOf('?') < 0) {
+        options.url += '?' + options.data;
+      } else {
+        options.url += '&' + options.data;
+      }
+    }
+    if (AcceptHeaders[options.dataType] == null) {
+      options.dataType = '*';
+    }
+    options.accept = AcceptHeaders[options.dataType];
+    if (options.dataType !== '*') {
+      options.accept += ', */*; q=0.01';
+    }
+    return options;
+  };
+
+  createXHR = function(options, done) {
+    var xhr;
+    xhr = new XMLHttpRequest();
+    xhr.open(options.type, options.url, true);
+    xhr.setRequestHeader('Accept', options.accept);
+    if (typeof options.data === 'string') {
+      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+    }
+    if (!options.crossDomain) {
+      xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    }
+    CSRFProtection(xhr);
+    xhr.withCredentials = !!options.withCredentials;
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === XMLHttpRequest.DONE) {
+        return done(xhr);
+      }
+    };
+    return xhr;
+  };
+
+  processResponse = function(response, type) {
+    var parser, script;
+    if (typeof response === 'string' && typeof type === 'string') {
+      if (type.match(/\bjson\b/)) {
+        try {
+          response = JSON.parse(response);
+        } catch (error) {}
+      } else if (type.match(/\b(?:java|ecma)script\b/)) {
+        script = document.createElement('script');
+        script.text = response;
+        document.head.appendChild(script).parentNode.removeChild(script);
+      } else if (type.match(/\b(xml|html|svg)\b/)) {
+        parser = new DOMParser();
+        type = type.replace(/;.+/, '');
+        try {
+          response = parser.parseFromString(response, type);
+        } catch (error) {}
+      }
+    }
+    return response;
+  };
+
+  Rails.href = function(element) {
+    return element.href;
+  };
+
+  Rails.isCrossDomain = function(url) {
+    var e, originAnchor, urlAnchor;
+    originAnchor = document.createElement('a');
+    originAnchor.href = location.href;
+    urlAnchor = document.createElement('a');
+    try {
+      urlAnchor.href = url;
+      return !(((!urlAnchor.protocol || urlAnchor.protocol === ':') && !urlAnchor.host) || (originAnchor.protocol + '//' + originAnchor.host === urlAnchor.protocol + '//' + urlAnchor.host));
+    } catch (error) {
+      e = error;
+      return true;
+    }
+  };
+
+}).call(this);
+:ET

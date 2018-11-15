@@ -1,0 +1,19 @@
+.form-group
+  = label_tag :date, 'Date', class: 'control-label col-md-3 col-sm-3 col-xs-12'
+  .col-md-6.col-sm-6.col-xs-12
+    = text_field_tag :date, nil, data: { vet_id: @appointment.vet_id }, class: 'form-control col-md-7 col-xs-12 single_cal1', required: true
+.form-group
+  = f.label :start_at, 'Time', class: 'control-label col-md-3 col-sm-3 col-xs-12'
+  .col-md-6.col-sm-6.col-xs-12
+    = f.select :start_at, [], {}, { class: 'form-control col-md-7 col-xs-12 select2', required: true }
+.form-group
+  = f.label :comment, class: 'control-label col-md-3 col-sm-3 col-xs-12'
+  .col-md-6.col-sm-6.col-xs-12
+    = f.text_area :comment, rows: 5, class: 'form-control no-resize'
+.ln_solid
+.row
+  = f.submit 'Save', class: 'btn btn-success center-block', style: 'margin:auto'
+
+:javascript
+  init_timepicker();
+  init_select2();

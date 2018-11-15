@@ -1,0 +1,4 @@
+= form_for @diagnosis, url: admin_panel_appointment_diagnoses_path(@appointment),
+  html: { method: :post, class: 'form-horizontal form-label-left', autocomplete: 'off', remote: true } do |f|
+
+  = render partial: 'form', locals: { f: f }

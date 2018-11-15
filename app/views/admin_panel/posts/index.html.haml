@@ -1,0 +1,34 @@
+- content_for :head do
+  %meta{name: "turbolinks-cache-control", content:"no-cache"}
+%div
+  .page-title
+    .title_left
+      %h3 Posts
+  .clearfix
+
+  .row
+    .col-md-12.col-sm-12.col-xs-12
+      .x_panel
+        .x_content
+          %table.table.datatable.posts
+            %thead
+              %tr
+                %th{style: 'width:30px'}  #
+                %th Name
+                %th Title
+                %th Pet type
+                %th Date
+                %th Actions
+              %tr
+                %th{style: 'width:30px'}
+                  = text_field_tag :id, '', class: 'form-control', style: 'width:100%'
+                %th
+                  = text_field_tag :user_name, '', class: 'form-control', style: 'width:100%'
+                %th
+                  = text_field_tag :title, '', class: 'form-control', style: 'width:100%'
+                %th
+                  = select_tag :pet_type_id, options_from_collection_for_select(PetType.all, :id, :name),
+                    class: 'form-control select2', include_blank: true
+                %th
+                %th
+            %tbody

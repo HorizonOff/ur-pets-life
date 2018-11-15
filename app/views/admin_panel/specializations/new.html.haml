@@ -1,0 +1,13 @@
+%div
+  .page-title
+    .title_left
+      %h3 New specialization
+
+  .clearfix
+
+  = form_for @specialization, url: admin_panel_specializations_path,
+  html: { method: :post, class: 'form-horizontal form-label-left', autocomplete: 'off'} do |f|
+
+    = render partial: 'form', locals: { f: f }
+
+    = f.submit 'Create specialization', class: 'btn btn-success pull-right'

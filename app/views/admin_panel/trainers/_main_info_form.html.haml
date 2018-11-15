@@ -1,0 +1,52 @@
+- content_for :head do
+  %meta{name: "turbolinks-cache-control", content:"no-cache"}
+.col-md-6.col-sm-6.col-xs-12
+  .x_panel
+    .x_title
+      %h2 Main Info
+      .clearfix
+    .x_content
+      %br
+      
+      .form-group
+        = f.label :name, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
+          Name
+          %span.required *
+        .col-md-9.col-sm-9.col-xs-12
+          = f.text_field :name, class: 'form-control', required: true
+      .form-group
+        = f.label :email, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
+          Email
+          %span.required *
+        .col-md-9.col-sm-9.col-xs-12
+          = f.email_field :email, class: 'form-control', required: true
+      .form-group
+        = f.label :picture, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
+          Picture
+          %span.required *
+        .col-md-9.col-sm-9.col-xs-12
+          -if @trainer.picture?
+            =image_tag @trainer.picture.medium.url, class: 'avatar-show', style: ' display:block;margin:auto'
+
+          = f.file_field :picture
+          = f.hidden_field :picture_cache
+      .form-group
+        = f.label :mobile_number, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
+          Phone
+          %span.required *
+        .col-md-9.col-sm-9.col-xs-12
+          = f.text_field :mobile_number, class: 'form-control', required: true
+      .form-group
+        = f.label :specialization_ids, 'Specializations', class: 'control-label col-md-3 col-sm-3 col-xs-12'
+        .col-md-9.col-sm-9.col-xs-12
+          = f.collection_select :specialization_ids, Specialization.for_trainer, :id, :name, {}, { multiple: true, class: 'select2' }
+      .form-group
+        = f.label :pet_type_ids, 'Pet types', class: 'control-label col-md-3 col-sm-3 col-xs-12'
+        .col-md-9.col-sm-9.col-xs-12
+          = f.collection_check_boxes :pet_type_ids, PetType.all, :id, :name do |pt|
+            = pt.check_box(id: pt.object.name.downcase, class: "check_box_picture #{pt.object.name.downcase}")
+            %label{for: pt.object.name.downcase, class: 'check_box_picture', title: pt.object.name}
+      .form-group
+        = f.label :experience, class: 'control-label col-md-3 col-sm-3 col-xs-12'
+        .col-md-9.col-sm-9.col-xs-12
+          = f.number_field :experience, class: 'form-control'

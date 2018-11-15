@@ -1,0 +1,21 @@
+.nested-fields
+  .form-group
+    = f.label :min_weight, class: 'control-label col-md-4 col-sm-4 col-xs-12'
+    .col-md-6.col-sm-6.col-xs-12
+      = f.number_field :min_weight, class: 'form-control col-md-4 col-xs-12', required: true
+  .form-group
+    = f.label :weight, 'Max weight', class: 'control-label col-md-4 col-sm-4 col-xs-12'
+    .col-md-6.col-sm-6.col-xs-12
+      = f.number_field :weight, class: 'form-control col-md-4 col-xs-12', required: true
+  - unless @service_type.serviceable_type == 'GroomingCentre'
+    .form-group
+      = f.label :total_space, class: 'control-label col-md-4 col-sm-4 col-xs-12'
+      .col-md-6.col-sm-6.col-xs-12
+        = f.number_field :total_space, class: 'form-control col-md-4 col-xs-12'
+  .form-group
+    = f.label :price, class: 'control-label col-md-4 col-sm-4 col-xs-12'
+    .col-md-6.col-sm-6.col-xs-12
+      = f.number_field :price, class: 'form-control col-md-4 col-xs-12', required: true
+
+  .form-group{ style: 'text-align:center' }
+    = link_to_remove_association "Remove service", f, { class: 'btn btn-danger' }

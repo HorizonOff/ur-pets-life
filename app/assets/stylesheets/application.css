@@ -1,0 +1,105 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, or any plugin's
+ * vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any other CSS/SCSS
+ * files in this directory. Styles in this file should be added after the last require_* statement.
+ * It is generally better to create a new file per style scope.
+ *
+ *= require bootstrap.min
+ *= require custom
+ *= require font-awesome
+ *= require green
+ *= require select2
+ *= require bootstrap-datetimepicker.min
+ *= require fullcalendar
+ *= require daterangepicker
+ *= require dataTables.bootstrap.min
+ *= require buttons.bootstrap.min
+ *= require_self
+ */
+
+
+input[type="checkbox"].check_box_picture{
+  display: none;
+}
+label.check_box_picture{
+  cursor: pointer;
+}
+input[type="checkbox"].check_box_picture + label {
+  height:100px;
+  width:100px;
+  border-radius: 50%;
+  background-size: 100%;
+}
+
+input[type="checkbox"].check_box_picture.cat + label{
+  background-image: url('/images/ic_cat_default@2x.png');
+}
+input[type="checkbox"].check_box_picture.dog + label{
+  background-image: url('/images/ic_dog_default@2x.png');
+}
+input[type="checkbox"].check_box_picture.other + label{
+  background-image: url('/images/ic_other_default@2x.png');
+}
+
+input[type="checkbox"].check_box_picture.cat:checked + label{
+  background-image: url('/images/ic_cat_active@2x.png');
+}
+input[type="checkbox"].check_box_picture.dog:checked + label{
+  background-image: url('/images/ic_dog_active@2x.png');
+}
+input[type="checkbox"].check_box_picture.other:checked + label{
+  background-image: url('/images/ic_other_active@2x.png');
+}
+
+td.separator {
+  border: none;
+}
+
+textarea.no-resize {
+  resize: none;
+}
+
+#geocoding_error {
+  display: none;
+  color: red;
+}
+div.error label {
+  color: red;
+}
+
+.vcenter {
+  vertical-align: middle;
+}
+.service_details_fields {
+  line-height: 100px;
+  height: 100px;
+}
+.service_details_fields input,
+.service_details_fields label {
+  display: inline-block;
+}
+
+.dataTables_wrapper .dataTables_filter {
+  visibility: hidden;
+}
+
+ul.msg_list li.full_width {
+  width: 100% !important;
+}
+
+.hiden {
+  display: none;
+}
+
+.pet_type_icon {
+  height:100px;
+  width:100px;
+  border-radius: 50%;
+  background-size: 100%;
+}

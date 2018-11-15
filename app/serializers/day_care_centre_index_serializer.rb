@@ -1,0 +1,2 @@
+class DayCareCentreIndexSerializer < ServiceCentreIndexSerializer
+end

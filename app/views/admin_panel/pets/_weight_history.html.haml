@@ -1,0 +1,12 @@
+.row
+  .col-md-12.col-sm-12.col-xs-12
+    .x_panel
+      .x_content
+        %table.table
+          %thead
+            %tr
+              %th Date
+              %th Weight
+          %tbody
+            - @pet.versions.each do |v|
+              = render partial: 'weight_item', locals: { weight_item: v } 

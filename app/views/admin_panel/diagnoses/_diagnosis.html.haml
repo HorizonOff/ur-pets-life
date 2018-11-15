@@ -1,0 +1,24 @@
+.diagnosis_block.col-md-6.col-sm-6.col-xs-12{data: {pet_id: pet_id}}
+  %section.panel
+    .x_title
+      %h2 Diagnosis
+      - if diagnosis.present?
+        = link_to edit_admin_panel_diagnosis_path(diagnosis), remote: true, class: 'btn btn-warning pull-right' do
+          Edit diagnosis
+      -else
+        = link_to new_admin_panel_appointment_diagnosis_path(@appointment, pet_id: pet_id),
+          remote: true, class: "btn btn-primary pull-right #{'disabled' unless @appointment.accepted?}" do
+          Write diagnosis
+      .clearfix
+    - if diagnosis.present?
+      .panel-body
+        .project_detail
+          %p.title Condition
+          %p= diagnosis.condition
+
+          %p.title Message
+          %p= diagnosis.message
+
+          %p.title Recipes
+          - diagnosis.recipes.each do |r|
+            %p= r.instruction

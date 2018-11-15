@@ -1,0 +1,2 @@
+class GroomingCentreIndexSerializer < ServiceCentreIndexSerializer
+end

@@ -1,0 +1,70 @@
+I")(function() {
+  var $, CSRFProtection, delegate, disableElement, enableElement, fire, formSubmitButtonClick, getData, handleConfirm, handleDisabledElement, handleMetaClick, handleMethod, handleRemote, refreshCSRFTokens;
+
+  fire = Rails.fire, delegate = Rails.delegate, getData = Rails.getData, $ = Rails.$, refreshCSRFTokens = Rails.refreshCSRFTokens, CSRFProtection = Rails.CSRFProtection, enableElement = Rails.enableElement, disableElement = Rails.disableElement, handleDisabledElement = Rails.handleDisabledElement, handleConfirm = Rails.handleConfirm, handleRemote = Rails.handleRemote, formSubmitButtonClick = Rails.formSubmitButtonClick, handleMetaClick = Rails.handleMetaClick, handleMethod = Rails.handleMethod;
+
+  if ((typeof jQuery !== "undefined" && jQuery !== null) && (jQuery.ajax != null) && !jQuery.rails) {
+    jQuery.rails = Rails;
+    jQuery.ajaxPrefilter(function(options, originalOptions, xhr) {
+      if (!options.crossDomain) {
+        return CSRFProtection(xhr);
+      }
+    });
+  }
+
+  Rails.start = function() {
+    if (window._rails_loaded) {
+      throw new Error('rails-ujs has already been loaded!');
+    }
+    window.addEventListener('pageshow', function() {
+      $(Rails.formEnableSelector).forEach(function(el) {
+        if (getData(el, 'ujs:disabled')) {
+          return enableElement(el);
+        }
+      });
+      return $(Rails.linkDisableSelector).forEach(function(el) {
+        if (getData(el, 'ujs:disabled')) {
+          return enableElement(el);
+        }
+      });
+    });
+    delegate(document, Rails.linkDisableSelector, 'ajax:complete', enableElement);
+    delegate(document, Rails.linkDisableSelector, 'ajax:stopped', enableElement);
+    delegate(document, Rails.buttonDisableSelector, 'ajax:complete', enableElement);
+    delegate(document, Rails.buttonDisableSelector, 'ajax:stopped', enableElement);
+    delegate(document, Rails.linkClickSelector, 'click', handleDisabledElement);
+    delegate(document, Rails.linkClickSelector, 'click', handleConfirm);
+    delegate(document, Rails.linkClickSelector, 'click', handleMetaClick);
+    delegate(document, Rails.linkClickSelector, 'click', disableElement);
+    delegate(document, Rails.linkClickSelector, 'click', handleRemote);
+    delegate(document, Rails.linkClickSelector, 'click', handleMethod);
+    delegate(document, Rails.buttonClickSelector, 'click', handleDisabledElement);
+    delegate(document, Rails.buttonClickSelector, 'click', handleConfirm);
+    delegate(document, Rails.buttonClickSelector, 'click', disableElement);
+    delegate(document, Rails.buttonClickSelector, 'click', handleRemote);
+    delegate(document, Rails.inputChangeSelector, 'change', handleDisabledElement);
+    delegate(document, Rails.inputChangeSelector, 'change', handleConfirm);
+    delegate(document, Rails.inputChangeSelector, 'change', handleRemote);
+    delegate(document, Rails.formSubmitSelector, 'submit', handleDisabledElement);
+    delegate(document, Rails.formSubmitSelector, 'submit', handleConfirm);
+    delegate(document, Rails.formSubmitSelector, 'submit', handleRemote);
+    delegate(document, Rails.formSubmitSelector, 'submit', function(e) {
+      return setTimeout((function() {
+        return disableElement(e);
+      }), 13);
+    });
+    delegate(document, Rails.formSubmitSelector, 'ajax:send', disableElement);
+    delegate(document, Rails.formSubmitSelector, 'ajax:complete', enableElement);
+    delegate(document, Rails.formInputClickSelector, 'click', handleDisabledElement);
+    delegate(document, Rails.formInputClickSelector, 'click', handleConfirm);
+    delegate(document, Rails.formInputClickSelector, 'click', formSubmitButtonClick);
+    document.addEventListener('DOMContentLoaded', refreshCSRFTokens);
+    return window._rails_loaded = true;
+  };
+
+  if (window.Rails === Rails && fire(document, 'rails:attachBindings')) {
+    Rails.start();
+  }
+
+}).call(this);
+:ET

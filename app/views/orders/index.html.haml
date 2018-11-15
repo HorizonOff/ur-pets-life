@@ -1,0 +1,39 @@
+%h1 Listing orders
+
+%table
+  %thead
+    %tr
+      %th References
+      %th References
+      %th Delivery date
+      %th Order notes
+      %th Delivery charges
+      %th Vat charges
+      %th Total
+      %th Iscash
+      %th Order status
+      %th Payment status
+      %th
+      %th
+      %th
+
+  %tbody
+    - @orders.each do |order|
+      %tr
+        %td= order.references
+        %td= order.references
+        %td= order.Delivery_Date
+        %td= order.Order_Notes
+        %td= order.Delivery_Charges
+        %td= order.Vat_Charges
+        %td= order.Total
+        %td= order.IsCash
+        %td= order.Order_Status
+        %td= order.Payment_Status
+        %td= link_to 'Show', order
+        %td= link_to 'Edit', edit_order_path(order)
+        %td= link_to 'Destroy', order, method: :delete, data: { confirm: 'Are you sure?' }
+
+%br
+
+= link_to 'New Order', new_order_path

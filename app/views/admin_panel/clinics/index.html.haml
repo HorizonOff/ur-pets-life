@@ -1,0 +1,55 @@
+- content_for :head do
+  %meta{name: "turbolinks-cache-control", content:"no-cache"}
+%div
+  .page-title
+    .title_left
+      %h3 Clinics 
+    .title_right
+      = link_to 'Create clinic', new_admin_panel_clinic_path, class: 'btn btn-info btn-round pull-right'
+
+  .clearfix
+
+  .row
+    .col-md-12.col-sm-12.col-xs-12
+      .x_panel
+        .x_content
+          .form-horizontal.additional_parameters
+            .form-group
+              = label_tag :specialization_id, 'Specialization', class: 'control-label col-md-2 col-sm-2 col-xs-6'
+              .col-md-3.col-sm-3.col-xs-6
+                = select_tag :specialization_id, options_from_collection_for_select(Specialization.for_clinic, :id, :name), class: 'form-control select2 additional_parameter', include_blank: true
+              
+              = label_tag :pet_type_id, 'Pet type', class: 'control-label col-md-1 col-sm-1 col-xs-6'
+              .col-md-1.col-sm-1.col-xs-6
+                = select_tag :pet_type_id, options_from_collection_for_select(PetType.all, :id, :name), class: 'form-control select2 additional_parameter', include_blank: true
+
+              = label_tag :city, 'City', class: 'control-label col-md-1 col-sm-1 col-xs-6'
+              .col-md-4.col-sm-4.col-xs-6
+                = text_field_tag :city, '', class: 'form-control additional_parameter'
+          %table.table.datatable.clinics
+            %thead
+              %tr
+                %th{style: 'width:30px'} #
+                %th Name
+                %th Picture
+                %th Email
+                %th Phone
+                %th{style: 'width:30px'} Number of vets
+                %th Status
+                %th Actions
+              %tr
+                %th{style: 'width:30px'}
+                  = text_field_tag :id, '', class: 'form-control', style: 'width:100%'
+                %th
+                  = text_field_tag :name, '', class: 'form-control', style: 'width:100%'
+                %th
+                %th
+                  = text_field_tag :email, '', class: 'form-control', style: 'width:100%'
+                %th
+                  = text_field_tag :mobile_number, '', class: 'form-control', style: 'width:100%'
+                %th{style: 'width:30px'}
+                  = text_field_tag :vets_count, '', class: 'form-control', style: 'width:100%'
+                %th
+                  = select_tag :is_active, options_for_select([[], ['Active', true], ['Inactive', false]]),  class: 'form-control select2'
+                %th
+            %tbody

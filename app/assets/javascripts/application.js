@@ -1,0 +1,198 @@
+// This is a manifest file that'll be compiled into application.js, which will include all the files
+// listed below.
+//
+// Any JavaScript/Coffee file within this directory, lib/assets/javascripts, or any plugin's
+// vendor/assets/javascripts directory can be referenced here using a relative path.
+//
+// It's not advisable to add code directly here, but if you do, it'll appear at the bottom of the
+// compiled file. JavaScript code in this file should be added after the last require_* statement.
+//
+// Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
+// about supported directives.
+//
+//= require jquery
+//= require rails-ujs
+//= require turbolinks
+//= require bootstrap.min
+//= require custom
+//= require icheck.min
+//= require select2.full
+//= require moment
+//= require bootstrap-datetimepicker.min
+//= require underscore
+//= require gmaps/google
+//= require cocoon
+//= require fullcalendar
+//= require daterangepicker
+//= require ckeditor/init
+//= require datatables
+//= require dataTables.bootstrap.min
+//= require dataTables.buttons.min
+//= require buttons.bootstrap.min
+//= require location.js
+//= require datatable.js
+
+//= require_self
+$(document).on('turbolinks:load', function() {
+  init_all_functions()
+});
+
+$(document).on('turbolinks:load', function() {
+  init_datatables();
+  init_icheck();
+  init_timepicker();
+  init_select2();
+});
+
+function init_icheck(){
+  if ($("input.flat")[0]) {
+    $('input.flat').iCheck({
+      checkboxClass: 'icheckbox_flat-green',
+      radioClass: 'iradio_flat-green'
+    });
+    $('input.flat.day_and_night').on('ifChecked', function(event){
+      $('.working_hours .timepicker').prop('disabled', true);
+    });
+    $('input.flat.day_and_night').on('ifUnchecked', function(event){
+      $('.working_hours .timepicker').prop('disabled', false);
+    });
+    $('input.flat.optional_checkbox').on('ifChecked', function(event){
+      hide_and_disable_inputs($('.user_ids'))
+      $('.optional_select').prop('disabled', true);
+    });
+    $('input.flat.optional_checkbox').on('ifUnchecked', function(event){
+      show_and_enable_inputs($('.user_ids'))
+      $('.optional_select').prop('disabled', false);
+    });
+    $('input.flat#building_type').on('ifToggled', function(event){
+      if ($(this).val() == 'building') {
+        show_and_enable_inputs($('div.building'))
+        hide_and_disable_inputs($('div.villa'))
+      } else {
+        show_and_enable_inputs($('div.villa'))
+        hide_and_disable_inputs($('div.building'))
+      }
+    });
+    $('input.flat[name*="use_clinic_location"]').on('ifChecked', function(){
+      use_clinic_location = true;
+      disable_inputs($('.location_tab_fields'));
+      check_clinic_location();
+    });
+    $('input.flat[name*="use_clinic_location"]').on('ifUnchecked', function(){
+      use_clinic_location = false;
+      enable_inputs($('.location_tab_fields'));
+    });
+  }
+}
+
+function show_and_enable_inputs(element) {
+  element.show()
+  element.find('input:disabled').prop('disabled', false);
+}
+
+function hide_and_disable_inputs(element) {
+  element.hide()
+  element.find('input:enabled').prop('disabled', true);
+}
+
+function init_select2(){
+  if ($('.select2')[0]) {
+    $('.select2').select2({
+      placeholder: 'Select ...',
+      allowClear: true,
+      width: '100%'
+    });
+    $('.select2.clinics_select').on('select2:select select2:unselect', check_clinic_location);
+  }
+}
+
+$(document).on('cocoon:after-insert', '#service_option_times', function(e, added_element) {
+  init_timepicker();
+})
+
+function init_timepicker(){
+  if ($('.single_cal1')){
+    $('.single_cal1').daterangepicker({
+      singleDatePicker: true,
+      singleClasses: "picker_1",
+      autoUpdateInput: false,
+      locale: {
+        "format": "DD/MM/YYYY"
+      }
+    });
+
+    $('.single_cal1').on('apply.daterangepicker', function(ev, picker) {
+      var new_date = picker.startDate.format('DD/MM/YYYY')
+      var vet_id = $(this).data('vet-id');
+      $(this).val(new_date);
+      $.ajax({
+        type: 'get',
+        url: '/admin_panel/vets/' + vet_id + '/schedule?date=' + new_date,
+        success: function(response){
+          $('.select2').empty();
+          $('.select2').select2({
+            placeholder: 'Select ...',
+            allowClear: true,
+            data: response.time_slots
+          });
+        }
+      });
+    });
+  };
+
+  if ($('.timepicker')[0]) {
+    $('.timepicker.open').datetimepicker({
+      format: 'hh:mm A'
+    })
+    $('.timepicker.close_time').datetimepicker({
+      format: 'hh:mm A'
+      // useCurrent: false
+    })
+
+    // $('.timepicker').on('dp.change', function(e) {
+    //   var element = $(e.target);
+    //   var related_element = element.parent().siblings('div').find('.timepicker');
+    //   if (element.hasClass('open')){
+    //     related_element.data("DateTimePicker").minDate(e.date);
+    //   } else {
+    //     related_element.data("DateTimePicker").maxDate(e.date);
+    //   }
+    // });
+  }
+}
+
+$(document).on('change', 'input.service_detail_switch', function() {
+  var destroy_checkbox = $(this).siblings('.destroy_service_detail')
+  destroy_checkbox.prop('checked', !destroy_checkbox.prop('checked'))
+  var selector = $(this).parent('.control-label').siblings('.service_details_fields');
+  if (selector.css('display') == 'none') {
+    show_and_enable_inputs(selector)
+  } else {
+    hide_and_disable_inputs(selector)
+  }
+});
+
+$(document).on('ifChanged', 'input.service_option_switch', function() {
+  var destroy_checkbox = $(this).parent().siblings('._destroy')
+  destroy_checkbox.prop('checked', !destroy_checkbox.prop('checked'))
+  var service_option_id_field = $(this).parents('.check_boxes').find('.service_option_id');
+  var selector = $(this).parents('.check_boxes').siblings('.service_option_details_fields');
+  var times_selector = $(this).parents('.check_boxes').parent().siblings('.service_option_times_fields');
+  if(selector.hasClass('hiden')) {
+    selector.removeClass('hiden');
+    times_selector.removeClass('hiden');
+    show_and_enable_inputs(selector)
+    service_option_id_field.prop('disabled', false);
+  } else {
+    selector.addClass('hiden');
+    times_selector.addClass('hiden');
+    hide_and_disable_inputs(selector);
+    service_option_id_field.prop('disabled', true);
+  }
+});
+
+$(document).on('click', '.photo_preview', function() {
+  html_text = '<img src="' + $(this).data('url') + '" alt="photo preview" style="max-width:100%;">'
+  $('.modal-body').html(html_text)
+  $('#photo_preview').modal('show');
+});

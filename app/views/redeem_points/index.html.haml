@@ -1,0 +1,33 @@
+%h1 Listing redeem_points
+
+%table
+  %thead
+    %tr
+      %th Net worth
+      %th Last net worth
+      %th Last reward type
+      %th Last reward worth
+      %th Last reward update
+      %th Last net update
+      %th User
+      %th
+      %th
+      %th
+
+  %tbody
+    - @redeem_points.each do |redeem_point|
+      %tr
+        %td= redeem_point.net_worth
+        %td= redeem_point.last_net_worth
+        %td= redeem_point.last_reward_type
+        %td= redeem_point.last_reward_worth
+        %td= redeem_point.last_reward_update
+        %td= redeem_point.last_net_update
+        %td= redeem_point.user
+        %td= link_to 'Show', redeem_point
+        %td= link_to 'Edit', edit_redeem_point_path(redeem_point)
+        %td= link_to 'Destroy', redeem_point, method: :delete, data: { confirm: 'Are you sure?' }
+
+%br
+
+= link_to 'New Redeem point', new_redeem_point_path

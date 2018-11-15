@@ -1,0 +1,16 @@
+<footer style="background-image:url(<%= asset_path 'newlanding/footer.png' %>)">
+	<div class="container">
+		<ul>
+			<li><a href="https://www.facebook.com/urpetslife" target="_blank"><img src="<%= asset_path 'newlanding/fb.png' %>" alt=""></a></li>
+			<li><a href="https://www.instagram.com/urpetslife/" target="_blank"><img src="<%= asset_path 'newlanding/ins.png' %>" alt=""></a></li>
+		</ul>
+		<img src="<%= asset_path 'newlanding/logo.png' %>" alt="" class="logo">
+		<ul class="links">
+			<li> <%= link_to 'Terms & Condition', { controller: "pages", action: "term_conditions" }%> | </li>
+			<li><%= link_to 'Privacy Policy', { controller: "pages", action: "new_privacy_policy" }%> | </li>
+			<li><%= link_to 'Cancellation policy', { controller: "pages", action: "cancelation_policy" }%> </li>
+		</ul>
+		<p>© Ur Pets Life 2018</p>
+		<img src="<%= asset_path 'newlanding/btm.jpg' %>" alt=""> <img src="<%= asset_path 'newlanding/visa.jpg' %>" alt="" class="card">
+	</div>
+</footer>

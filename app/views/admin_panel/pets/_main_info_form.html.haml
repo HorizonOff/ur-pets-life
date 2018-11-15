@@ -1,0 +1,100 @@
+- content_for :head do
+  %meta{name: "turbolinks-cache-control", content:"no-cache"}
+.col-md-6.col-sm-6.col-xs-12
+  .x_panel
+    .x_title
+      %h2 Main Info
+      .clearfix
+    .x_content
+      %br
+
+      .form-group
+        = f.label :avatar, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
+          Avatar
+          %span.required *
+        .col-md-9.col-sm-9.col-xs-12
+          -if @pet.avatar?
+            =image_tag @pet.avatar.medium.url, class: 'avatar-show', style: ' display:block;margin:auto'
+
+          = f.file_field :avatar, accept: '.jpg,.jpeg,.bmp,.png'
+          = f.hidden_field :avatar_cache
+      - if @pet.owned?
+        .form-group
+          = f.label :name, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
+            Name
+            %span.required *
+          .col-md-9.col-sm-9.col-xs-12
+            = f.text_field :name, class: 'form-control', required: true
+        .form-group
+          = f.label :birthday, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
+            Birthday
+            %span.required *
+          .col-md-9.col-sm-9.col-xs-12
+            = f.text_field :birthday, value: (f.object.birthday&.strftime("%d/%m/%Y") if f.object.persisted?), class: 'form-control single_cal1', required: true
+        .form-group
+          = f.label :weight, class: 'control-label col-md-3 col-sm-3 col-xs-12'
+          .col-md-9.col-sm-9.col-xs-12
+            = f.number_field :weight, step: '0.01'
+        .form-group
+          = f.label :pet_type, class: 'control-label col-md-3 col-sm-3 col-xs-12'
+          %span.control-label.col-md-9.col-sm-9.col-xs-12{ style: 'text-align:left' }= @pet.pet_type.name
+
+        - if @pet.pet_type.is_additional_type?
+          .form-group
+            = f.label :additional_type, class: 'control-label col-md-3 col-sm-3 col-xs-12'
+            .col-md-9.col-sm-9.col-xs-12
+              = f.text_field :additional_type, class: 'form-control'
+        - else
+          .form-group
+            = f.label :breed_id, class: 'control-label col-md-3 col-sm-3 col-xs-12'
+            .col-md-9.col-sm-9.col-xs-12
+              = f.collection_select :breed_id, @pet.pet_type.breeds, :id, :name, {}, { class: 'select2' }
+
+        .form-group
+          = f.label :municipality_tag, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
+            Municipality Tag
+            %span.required *
+          .col-md-9.col-sm-9.col-xs-12
+            = f.text_field :municipality_tag, class: 'form-control', required: true
+        .form-group
+          = f.label :microchip, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
+            Microchip number
+            %span.required *
+          .col-md-9.col-sm-9.col-xs-12
+            = f.text_field :microchip, class: 'form-control', required: true
+        .form-group
+          = f.label :comment, class: 'control-label col-md-3 col-sm-3 col-xs-12'
+          .col-md-9.col-sm-9.col-xs-12
+            = f.text_area :comment, rows: 5, class: 'form-control no-resize'
+
+      - if @pet.lost_or_found?
+        - if @pet.lost?
+          .form-group
+            = f.label :lost_at, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
+              Lost at
+              %span.required *
+            .col-md-9.col-sm-9.col-xs-12
+              = f.text_field :lost_at, value: f.object.lost_at&.strftime("%d/%m/%Y"), class: 'form-control single_cal1', required: true
+        - else
+          .form-group
+            = f.label :found_at, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
+              Found at
+              %span.required *
+            .col-md-9.col-sm-9.col-xs-12
+              = f.text_field :found_at, value: f.object.found_at&.strftime("%d/%m/%Y"), class: 'form-control single_cal1', required: true
+        .form-group
+          = f.label :description, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
+            Description
+            %span.required *
+          .col-md-9.col-sm-9.col-xs-12
+            = f.text_field :description, class: 'form-control', required: true
+        .form-group
+          = f.label :mobile_number, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
+            Phone
+            %span.required *
+          .col-md-9.col-sm-9.col-xs-12
+            = f.text_field :mobile_number, class: 'form-control', required: true
+        .form-group
+          = f.label :additional_comment, class: 'control-label col-md-3 col-sm-3 col-xs-12'
+          .col-md-9.col-sm-9.col-xs-12
+            = f.text_area :additional_comment, rows: 5, class: 'form-control no-resize'

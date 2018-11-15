@@ -1,0 +1,189 @@
+module Api
+  module V1
+    class Schedules < ActionController::Base
+      include Swagger::Blocks
+
+      swagger_schema :ScheduleResponse do
+        property :time_slots do
+          items do
+            property :start_at do
+              key :type, :integer
+              key :example, 1516217199
+            end
+          end
+        end
+      end
+
+      swagger_schema :DaysScheduleResponse do
+        property :time_slots do
+          items do
+            property :start_at do
+              key :type, :integer
+              key :example, 1516217199
+            end
+            property :end_at do
+              key :type, :integer
+              key :example, 1516217199
+            end
+            property :number_of_days do
+              key :type, :integer
+              key :example, 10
+            end
+          end
+        end
+      end
+
+      swagger_schema :ScheduleWithEndResponse do
+        property :time_slots do
+          items do
+            property :start_at do
+              key :type, :integer
+              key :example, 1516217199
+            end
+
+            property :end_at do
+              key :type, :integer
+              key :example, 1516217200
+            end
+          end
+        end
+      end
+
+      swagger_path '/grooming_centres/{id}/schedule' do
+        operation :get do
+          key :description, 'Get grooming centre schedule. All params are required'
+          key :consumes, %w[application/json]
+          key :produces, %w[application/json]
+          key :tags, %W[Grooming\ Centres Schedules]
+
+          security do
+            key :api_key, []
+          end
+
+          parameter do
+            key :name, :id
+            key :in, :path
+            key :type, :integer
+            key :example, 1
+          end
+
+          parameter do
+            key :name, :date
+            key :in, :query
+            key :type, :integer
+            key :example, 1516217199
+          end
+
+          response 200 do
+            key :description, 'Success response'
+            schema do
+              key :'$ref', :ScheduleResponse
+            end
+          end
+        end
+      end
+
+      swagger_path '/day_care_centres/{id}/schedule' do
+        operation :get do
+          key :description, 'Get daycare centre schedule. All params are required'
+          key :consumes, %w[application/json]
+          key :produces, %w[application/json]
+          key :tags, %W[Day\ Care\ Centres Schedules]
+
+          security do
+            key :api_key, []
+          end
+
+          parameter do
+            key :name, :id
+            key :in, :path
+            key :type, :integer
+            key :example, 1
+          end
+
+          parameter do
+            key :name, :date
+            key :in, :query
+            key :type, :integer
+            key :example, 1516217199
+          end
+
+          response 200 do
+            key :description, 'Success response'
+            schema do
+              key :'$ref', :DaysScheduleResponse
+            end
+          end
+        end
+      end
+
+      swagger_path '/boardings/{id}/schedule' do
+        operation :get do
+          key :description, 'Get boarding schedule. All params are required'
+          key :consumes, %w[application/json]
+          key :produces, %w[application/json]
+          key :tags, %W[Boardings Schedules]
+
+          security do
+            key :api_key, []
+          end
+
+          parameter do
+            key :name, :id
+            key :in, :path
+            key :type, :integer
+            key :example, 1
+          end
+
+          parameter do
+            key :name, :date
+            key :in, :query
+            key :type, :integer
+            key :example, 1516217199
+          end
+
+          response 200 do
+            key :description, 'Success response'
+            schema do
+              key :'$ref', :DaysScheduleResponse
+            end
+          end
+        end
+      end
+
+      swagger_path '/vets/{id}/schedule' do
+        operation :get do
+          key :description, 'Get vet schedule. All params are required'
+          key :consumes, %w[application/json]
+          key :produces, %w[application/json]
+          key :tags, %W[Vets Schedules]
+
+          security do
+            key :api_key, []
+          end
+
+          parameter do
+            key :name, :id
+            key :in, :path
+            key :type, :integer
+            key :example, 1
+          end
+
+          parameter do
+            key :name, :date
+            key :in, :query
+            key :type, :integer
+            key :example, 1516217199
+          end
+
+          response 200 do
+            key :description, 'Success response'
+            schema do
+              key :'$ref', :ScheduleWithEndResponse
+            end
+          end
+        end
+      end
+    end
+  end
+end

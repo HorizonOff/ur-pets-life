@@ -1,0 +1,2 @@
+class BoardingIndexSerializer < ServiceCentreIndexSerializer
+end

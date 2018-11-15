@@ -1,0 +1,13 @@
+.form-group
+  .control-label.col-md-3.col-sm-3.col-xs-12
+    = check_box_tag nil, nil, f.object.persisted?, id: f.object.pet_type.name.downcase, class: "service_detail_switch check_box_picture #{f.object.pet_type.name.downcase}"
+    %label{for: f.object.pet_type.name.downcase, class: 'check_box_picture', title: f.object.pet_type.name}
+    - if f.object.persisted?
+      = f.check_box :_destroy, value: 1, checked: false, class: 'destroy_service_detail hide'
+
+  .service_details_fields.col-md-6.col-sm-6.col-xs-12{ style: "display:#{'none' if f.object.new_record?}" }
+    = f.hidden_field :pet_type_id, disabled: f.object.new_record?
+    .form-group
+      = f.label :price, class: 'col-md-3 col-sm-3 col-xs-6'
+      .col-md-6.col-sm-6.col-xs-6
+        = f.number_field :price, class: 'form-control vcenter', disabled: f.object.new_record?

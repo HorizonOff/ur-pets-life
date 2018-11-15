@@ -1,0 +1,4 @@
+<% if flash[:success].present? %>
+  $("li.full_width[data-comment-id='<%= @comment.id %>']").remove();
+  $('span.comment_count').text('<%= @parent_object.comments.size %>');
+<% end %>

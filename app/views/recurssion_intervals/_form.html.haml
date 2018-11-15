@@ -1,0 +1,16 @@
+= form_for @recurssion_interval do |f|
+  - if @recurssion_interval.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@recurssion_interval.errors.count, "error")} prohibited this recurssion_interval from being saved:"
+      %ul
+        - @recurssion_interval.errors.full_messages.each do |message|
+          %li= message
+
+  .field
+    = f.label :weeks
+    = f.number_field :weeks
+  .field
+    = f.label :days
+    = f.number_field :days
+  .actions
+    = f.submit 'Save'

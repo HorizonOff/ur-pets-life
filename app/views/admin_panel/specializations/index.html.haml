@@ -1,0 +1,30 @@
+- content_for :head do
+  %meta{name: "turbolinks-cache-control", content:"no-cache"}
+%div
+  .page-title
+    .title_left
+      %h3 Specializations
+    .title_right
+      = link_to 'Create specialization', new_admin_panel_specialization_path, class: 'btn btn-info btn-round pull-right'
+  .clearfix
+
+  .row
+    .col-md-12.col-sm-12.col-xs-12
+      .x_panel
+        .x_content
+          %table.table.datatable.specializations
+            %thead
+              %tr
+                %th{style: 'width:30px'}  #
+                %th Name
+                %th Clinic / Vet / Trainer
+                %th Actions
+              %tr
+                %th{style: 'width:30px'}
+                  = text_field_tag :id, '', class: 'form-control', style: 'width:100%'
+                %th
+                  = text_field_tag :name, '', class: 'form-control', style: 'width:100%'
+                %th
+                  = select_tag :is_for_trainer, options_for_select([[], ['Clinic / Vet', false], ['Trainer', true]]),  class: 'form-control select2'
+                %th
+            %tbody
