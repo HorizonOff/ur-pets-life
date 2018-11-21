@@ -120,6 +120,7 @@ Rails.application.routes.draw do
   end
 
   resource :terms_and_conditions, only: :show
+  get 'loyalty_program', to:'pages#loyalty_program'
   get 'privacy_policy', to: 'pages#privacy_policy'
   get 'cancelation_policy', to: 'pages#cancelation_policy'
   get 'term_conditions', to:'pages#term_conditions'

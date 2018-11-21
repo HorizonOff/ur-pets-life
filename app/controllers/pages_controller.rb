@@ -15,6 +15,7 @@ class PagesController < ApplicationController
     @contact_request.save
   end
 
+  def loyalty_program; end
   def privacy_policy; end
   def term_conditions; end
   def new_privacy_policy; end
