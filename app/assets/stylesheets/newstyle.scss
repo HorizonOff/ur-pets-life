@@ -88,18 +88,32 @@ header .custbtn span {font-size: 14px;display: block;}
 
 
 
-footer {height: 428px;background-repeat: no-repeat;width: 100%;background-size: cover;margin: 50px 0 0;text-align: center;padding: 40px 0;}
+footer {height: auto;background-repeat: no-repeat;width: 100%;background-size: cover;margin: 50px 0 0;text-align: left;padding: 70px 0 50px;}
 footer ul {margin: 0px 0px 40px;}
 footer ul li {display: inline-block;margin: 0 10px;}
 footer ul li a {}
 footer ul li a img {width: 53px;}
-footer ul.links {margin: 20px 0;}
-footer ul.links li {color: #ffffff;font-size: 14px;margin: 0;}
-footer ul.links li a {color: #ffffff;font-size: 14px;padding: 0 10px;}
+footer ul.links {margin: 0px 0;display: block;}
+footer ul.links li {color: #ffffff;font-size: 12px;margin: 0;}
+footer ul.links li a {color: #ffffff;font-size: 12px;padding: 0 10px;}
 footer p {color: #ffffff;font-size:14px;margin: 0 0 20px;}
+footer .logo {    margin-bottom: 30px;}
+.cardBr {text-align: center;margin-top: 30px;}
+
 
 .inner-pages {}
-.inner-pages .banner {height: 130px;margin-bottom: 20px;}
+.inner-pages .banner {height: 100vh;margin-bottom: 20px;position: relative;}
+.inner-pages .banner h1 {
+    font-size: 40px;
+    color: #fff;
+    line-height: 50px;
+    text-transform: uppercase;
+    position: absolute;
+    display: inline-block;
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%);
+}
 .contentPage {}
 .contentPage h2 {font-size: 24px;color: #1C5879;margin: 40px 0 30px;}
 .contentPage p {color: #536873;font-size: 14px;line-height: 24px;margin-bottom: 20px;}
@@ -239,6 +253,7 @@ footer p {color: #ffffff;font-size:14px;margin: 0 0 20px;}
 
 	
 }
+
 
 
 
