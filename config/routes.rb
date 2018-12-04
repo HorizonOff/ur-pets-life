@@ -121,10 +121,14 @@ Rails.application.routes.draw do
 
   resource :terms_and_conditions, only: :show
   get 'loyalty_program', to:'pages#loyalty_program'
+  get 'app_loyalty_program', to:'pages#app_loyalty_program'
   get 'privacy_policy', to: 'pages#privacy_policy'
   get 'cancelation_policy', to: 'pages#cancelation_policy'
+  get 'app_cancelation_policy', to: 'pages#app_cancelation_policy'
   get 'term_conditions', to:'pages#term_conditions'
+  get 'app_term_conditions', to:'pages#app_term_conditions'
   get 'pets_life_privacy_policy', to: 'pages#new_privacy_policy'
+  get 'app_pets_life_privacy_policy', to: 'pages#app_new_privacy_policy'
   devise_for :admins, path: 'admin_panel/admins', except: :registrations,
                       controllers: { invitations: 'admin_panel/admins/invitations' }
 

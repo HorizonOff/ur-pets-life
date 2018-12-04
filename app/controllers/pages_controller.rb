@@ -20,6 +20,12 @@ class PagesController < ApplicationController
   def term_conditions; end
   def new_privacy_policy; end
   def cancelation_policy; end
+
+  def app_loyalty_program; end
+  def app_new_privacy_policy; end
+  def app_cancelation_policy; end
+  def app_term_conditions; end
+
   private
 
   def contact_request_params
