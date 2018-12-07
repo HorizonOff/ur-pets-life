@@ -1,0 +1,94 @@
+%div
+  .row
+    .col-md-12.col-sm-12.col-xs-12
+      .x_panel
+        .x_title
+          %h2
+            Order Item #
+            = @admin_panel_order.id
+          .clearfix
+        .x_content
+          .col-md-12.col-sm-12.col-xs-12.col-md-offset-3.col-sm-offset-3
+            .profile_img
+              #crop-avatar
+                = image_tag(@orderiteminfo.picture.url, class: 'img-responsive avatar-view', title: @orderiteminfo.name) if @orderiteminfo.picture.present?
+            .col-md-3.col-sm-3.col-xs-12
+              .x_title
+                %h2 Order Details
+                .clearfix
+              %ul.list-unstyled.user_data
+                %li
+                  %label
+                    Item Name:
+                  = @orderiteminfo.name
+                %li
+                  %label
+                    Quantity Ordered:
+                  = @admin_panel_order.Quantity
+                %li
+                  %label
+                    Price:
+                  = @admin_panel_order.Total_Price
+                %li
+                  %label
+                    IsRecurring:
+                  = @admin_panel_order.IsRecurring
+                %li
+                  %label
+                    Status:
+                  = @admin_panel_order.status
+                %li
+                  %label
+                    Order Date:
+                  = @admin_panel_order.created_at.to_date
+                %li
+                  %label
+                    Parent Order Id:
+                  = @parentorderinfo.id
+                %li
+                  %label
+                    Shipping Address:
+                  = @shippingaddress
+                %li
+                  %label
+                    Order Notes:
+                  = @parentorderinfo.Order_Notes
+
+            .col-md-3.col-sm-3.col-xs-12
+              .x_title
+                %h2 Customer Info
+                .clearfix
+              %ul.list-unstyled.user_data
+                %li
+                  %label
+                    Name:
+                  = @parentorderinfo.user.first_name + ' ' + @parentorderinfo.user.first_name
+                %li
+                  %label
+                    Mobile:
+                  = @parentorderinfo.user.mobile_number
+                %li
+                  %label
+                    Email:
+                  = @parentorderinfo.user.email
+
+- if (@admin_panel_order.status != 'delivered' and @admin_panel_order.status != 'cancelled')
+  %div
+    .row
+      = render partial: 'layouts/admin_panel/errors', locals: { object: @admin_panel_order }
+      .col-md-12.col-sm-12.col-xs-12
+        .x_panel
+          .x_title
+            %h2 Update Status
+            .clearfix
+          .x_content
+            .col-md-6.col-sm-6.col-xs-12.col-md-offset-3.col-sm-offset-3
+              = form_for @admin_panel_order, url: admin_panel_order_path(@admin_panel_order), html: { multipart: true, method: :put, class: 'form-horizontal form-label-left with_location', autocomplete: 'off'} do |f|
+
+                .form-group
+                  = f.label :updated_status, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
+                    Select Status
+                    %span.required *
+                  .col-md-9.col-sm-9.col-xs-12
+                    = f.select :updated_status, options_for_select(@statusoption), {}, { class: 'select2 clinics_select', required: true, id: 'updated_status'}
+                = f.submit 'Update Status', class: 'btn btn-success col-md-offset-5'

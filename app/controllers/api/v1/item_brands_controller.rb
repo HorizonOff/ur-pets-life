@@ -19,7 +19,7 @@ class ItemBrandsController < Api::BaseController
   def item_cat_brands
     if ItemCategory.where(:id => params[:id]).exists?
     category = ItemCategory.find(params[:id])
-    @brands = category.item_brands
+    @brands = category.item_brands.order(:id)
     render json: @brands
   else
     render json: {

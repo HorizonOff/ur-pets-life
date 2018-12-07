@@ -37,7 +37,7 @@ class ItemReviewsController < Api::BaseController
     else
       format.json do
         render json: @item.item_reviews.as_json(
-          :only => [:id, :rating, :comment],
+          :only => [:id, :rating, :comment, :created_at],
           :include => {
             :user => {
               :only => [:id, :first_name, :last_name, :email, :mobile_number, :gender]

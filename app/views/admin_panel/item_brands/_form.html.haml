@@ -1,0 +1,32 @@
+.row
+  = render partial: 'layouts/admin_panel/errors', locals: { object: @admin_panel_item_brand }
+- content_for :head do
+  %meta{name: "turbolinks-cache-control", content:"no-cache"}
+.col-md-6.col-sm-6.col-xs-12
+  .x_panel
+    .x_title
+      %h2 Main Info
+      .clearfix
+    .x_content
+      %br
+      .form-group
+        = f.label :name, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
+          Brand Name
+          %span.required *
+        .col-md-9.col-sm-9.col-xs-12
+          = f.text_field :name, class: 'form-control', required: true
+
+      .form-group
+        = f.label :name, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
+          Discount On Brand Items (%)
+        .col-md-9.col-sm-9.col-xs-12
+          = f.number_field :brand_discount, class: 'form-control', step: ".01", min: 1, max: 100
+
+      .form-group
+        = f.label :picture, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
+          Picture
+          %span.required *
+        .col-md-9.col-sm-9.col-xs-12
+          - if @admin_panel_item_brand.picture?
+            = image_tag @admin_panel_item_brand.picture.url, class: 'avatar-show', style: 'display:block;margin:8px 0px;width:inherit;height:inherit;'
+          = f.file_field :picture, accept: '.jpg,.jpeg,.bmp,.png'

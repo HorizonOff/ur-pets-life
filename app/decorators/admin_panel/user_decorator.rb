@@ -16,5 +16,5 @@ module AdminPanel
                  data: { confirm: 'Are you sure?' }, method: :delete, remote: true,
                  class: 'btn btn-danger btn-xs check_response')
     end
-  end
+  end 
 end

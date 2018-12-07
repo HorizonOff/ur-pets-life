@@ -5,6 +5,7 @@
     %title Ur Pets Life
     = favicon_link_tag asset_path('Favicon.ico'), rel: 'icon', type: 'image/x-icon'
     %meta{ name: 'title', content: 'Ur Pets Life' }
+
     %meta{ name: 'description', content: 'Ur Pets Life is an awesome new app for managing your pets life in real-time, anytime anywhere, at no cost.' }
     %meta{ name: 'viewport', content: 'width=device-width, initial-scale=1.0' }
     %meta{ property: 'og:title', content: 'Ur Pets Life' }
@@ -39,7 +40,6 @@
           toastr["#{ type }"]("#{ f[1] }")
     = render 'layouts/appheader' if controller.action_name.include? "app_"
     = render 'layouts/header' if !controller.action_name.include? "app_"
-
     = yield
 
     = render 'layouts/footer'

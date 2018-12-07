@@ -1,0 +1,40 @@
+- content_for :head do
+  %meta{name: "turbolinks-cache-control", content:"no-cache"}
+%div
+  .page-title
+    .title_left
+      %h3 Order Items
+  .clearfix
+
+  .row
+    .col-md-12.col-sm-12.col-xs-12
+      .x_panel
+        .x_content
+          %table.table.datatable.orders
+            %thead
+              %tr
+                %th{style: 'width:30px'}  #
+                %th Order Id
+                %th Item Name
+                %th Picture
+                %th Order Date
+                %th Quantity
+                %th Price
+                %th IsRecurring
+                %th Status
+                %th Actions
+              %tr
+                %th{style: 'width:30px'}
+                  = text_field_tag :id, '', class: 'form-control', style: 'width:100%'
+                %th
+                  = text_field_tag :order_id, '', class: 'form-control', style: 'width:100%'
+                %th
+                %th
+                %th
+                %th
+                %th
+                %th
+                %th
+                  = select_tag :status, options_for_select([[], ['Pending', 'pending'], ['On The Way', 'on_the_way'], ['Delivered', 'delivered'], ['Cancelled', 'cancelled']]), class: 'form-control select2'
+                %th
+            %tbody

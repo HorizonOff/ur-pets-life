@@ -93,7 +93,7 @@ module AdminPanel
                                   :is_emergency, :use_clinic_location, :clinic_id, :session_duration, :avatar_cache,
                                   specialization_ids: [], pet_type_ids: [], qualifications_attributes:
                                   qualifications_params, location_attributes: location_params)
-    end
+    end 
 
     def parse_date
       @date = Time.zone.parse(params[:date])

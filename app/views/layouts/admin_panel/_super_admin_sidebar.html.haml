@@ -10,6 +10,28 @@
   = link_to admin_panel_pets_path do
     %i.fa.fa-paw
     Pets
+
+%li{ class: "#{'current-page' if current_page?(admin_panel_pettypes_path)}" }
+  = link_to admin_panel_pettypes_path do
+    %i.fa.fa-paw
+    Pet Types
+%li{ class: "#{'current-page' if current_page?(admin_panel_item_categories_path)}" }
+  = link_to admin_panel_item_categories_path do
+    %i.fa.fa-table
+    Item Categories
+%li{ class: "#{'current-page' if current_page?(admin_panel_item_brands_path)}" }
+  = link_to admin_panel_item_brands_path do
+    %i.fa.fa-table
+    Category Brands
+%li{ class: "#{'current-page' if current_page?(admin_panel_items_path)}" }
+  = link_to admin_panel_items_path do
+    %i.fa.fa-table
+    Catalog
+%li{ class: "#{'current-page' if current_page?(admin_panel_orders_path)}" }
+  = link_to admin_panel_orders_path do
+    %i.fa.fa-table
+    Orders
+
 %li{ class: "#{'current-page' if current_page?(admin_panel_clinics_path)}" }
   = link_to admin_panel_clinics_path do
     %i.fa.fa-plus-square

@@ -72,7 +72,7 @@ module AdminPanel
       render json: { draw: params[:draw], recordsTotal: Pet.count,
                      recordsFiltered: filtered_pets.total_count, data: serialized_pets }
     end
-
+ 
     def filter_and_pagination_query
       @filter_and_pagination_query ||= ::AdminPanel::FilterAndPaginationQuery.new('Pet', params)
     end

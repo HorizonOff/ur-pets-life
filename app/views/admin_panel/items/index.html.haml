@@ -1,0 +1,50 @@
+- content_for :head do
+  %meta{name: "turbolinks-cache-control", content:"no-cache"}
+%div
+  .page-title
+    .title_left
+      %h3 Items Inventory
+    .title_right
+      = link_to 'Add New', new_admin_panel_item_path, class: 'btn btn-info btn-round pull-right'
+
+  .clearfix
+ 
+  .row
+    .col-md-12.col-sm-12.col-xs-12
+      .x_panel
+        .x_content
+          %table.table.datatable.items
+            %thead
+              %tr
+                %th{style: 'width:30px'}  #
+                %th Name
+                %th Picture
+                %th Description
+                %th Unit Price
+                %th Discount (%)
+                %th Buying Price
+                / %th Weight
+                %th In Stock
+                %th Rating
+                %th Actions
+              %tr
+                %th{style: 'width:30px'}
+                  = text_field_tag :id, '', class: 'form-control', style: 'width:100%'
+                %th
+                  = text_field_tag :name, '', class: 'form-control', style: 'width:100%'
+                %th
+                %th
+                  = text_field_tag :short_description, '', class: 'form-control', style: 'width:100%'
+                %th
+                /  = text_field_tag :unit_price, '', class: 'form-control', style: 'width:100%'
+                %th
+                /  = text_field_tag :discount, '', class: 'form-control', style: 'width:100%'
+                %th
+                /  = text_field_tag :price, '', class: 'form-control', style: 'width:100%'
+                / %th
+                /  = text_field_tag :weight, '', class: 'form-control', style: 'width:100%'
+                %th
+                %th
+                  = text_field_tag :avg_rating, '', class: 'form-control', style: 'width:100%'
+                %th
+            %tbody

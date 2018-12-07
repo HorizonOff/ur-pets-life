@@ -18,7 +18,7 @@ class ShoppingCartItemsController < Api::BaseController
           :only => [:id, :quantity, :IsRecurring],
           :include => {
             :item => {
-              :only => [:id, :name, :price, :picture, :discount, :weight, :description, :unit]
+              :only => [:id, :name, :price, :picture, :discount, :weight, :description, :unit, :quantity, :short_description]
             },
             :recurssion_interval => {
               :only => [:id, :days, :weeks, :label]
@@ -60,7 +60,7 @@ class ShoppingCartItemsController < Api::BaseController
       :only => [:id, :quantity, :IsRecurring],
       :include => {
         :item => {
-          :only => [:id, :name, :price, :picture, :discount, :weight, :description, :unit]
+          :only => [:id, :name, :price, :picture, :discount, :weight, :description, :unit, :short_description]
         },
         :recurssion_interval =>  {
           :only => [:id, :days, :weeks, :label]

@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+
   resources :redeem_points
   resources :recurssion_intervals
   resources :item_reviews
@@ -36,8 +37,18 @@ Rails.application.routes.draw do
       resources :item_categories
       resources :item_brands
       resources :shopping_cart_items
+      get 'test_email_notifications', to:'orders#test_email'
+      get 'get_app_base_path_url', to:'order_items#app_base_end_point'
+      post 'order_item_change_status', to:'order_items#changer_order_status'
+      get 'recurring_item/:id/cancel', to:'order_items#order_item_cancel_recurring'
+      get 'order_item/:id/cancelorder', to:'order_items#order_item_cancel_order'
+      get 'order_item/:id/reorder', to:'order_items#order_item_reorder'
+      get 'get_current_orders', to:'order_items#get_pending_order_items'
+      get 'get_orders_history', to:'order_items#get_completed_order_items'
+      get 'get_recurring_orders', to:'order_items#get_recurring_order_items'
       post 'search_items_by_keywords', to:'items#search_items_by_keywords'
       get 'get_shopping_cart_stats', to:'shopping_cart_items#get_cart_stats'
+      get 'get_vat_percentage', to:'order_items#get_vat_percentage'
       get 'pets_life_documentations', to:'order_items#gen_api_end_points'
       post 'order/:id/reorder', to:'orders#re_oder_on_order_id'
       get 'item_category/:id/items', to:'items#get_items_by_item_category'
@@ -139,6 +150,11 @@ Rails.application.routes.draw do
       member { put :change_status }
       member { put :restore }
     end
+    resources :orders
+    resources :items
+    resources :item_brands
+    resources :item_categories
+    resources :pettypes
     resource :terms_and_conditions, only: %i[edit update]
     resources :users, except: %i[new ceate]
     resources :pets, except: %i[new ceate] do

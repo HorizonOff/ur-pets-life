@@ -8,6 +8,7 @@ module Api
         else
           pet_types = PetType.all
         end
+        pet_types = pet_types.order(id: :asc)
         if (!params[:pageno].nil? and !params[:size].nil?)
           size = params[:size].to_i
           page = params[:pageno].to_i

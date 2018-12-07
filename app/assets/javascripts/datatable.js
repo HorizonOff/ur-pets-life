@@ -50,6 +50,7 @@ function init_datatables(){
                               { 'searchable': false, 'orderable': false, 'data': 'mobile_number', 'targets': 3 },
                               { 'searchable': true, 'orderable': true, 'data': 'is_active', 'targets': 4 },
                               { 'searchable': false, 'orderable': false, 'data': 'actions', 'targets': 5 } ] },
+
       'contact_requests': { 'url': '/admin_panel/contact_requests', 'order_col': 5, 'order_dir': 'desc',
                             'columns': [ { 'searchable': true, 'orderable': true, 'data': 'id', 'targets': 0 },
                                          { 'searchable': false, 'orderable': false, 'data': 'user_name', 'targets': 1 },
@@ -89,7 +90,7 @@ function init_datatables(){
                  'columns': [ { 'searchable': true, 'orderable': true, 'data': 'id', 'targets': 0 },
                               { 'searchable': true, 'orderable': false, 'data': 'name', 'targets': 1 },
                               { 'searchable': true, 'orderable': false, 'data': 'title', 'targets': 2 },
-                              { 'searchable': true, 'orderable': true, 'data': 'pet_type_id', 'targets': 3 },
+                               { 'searchable': true, 'orderable': true, 'data': 'pet_type_id', 'targets': 3 },
                               { 'searchable': false, 'orderable': true, 'data': 'created_at', 'targets': 4 },
                               { 'searchable': false, 'orderable': false, 'data': 'actions', 'targets': 5 } ] },
       'additional_services': { 'url': '/admin_panel/additional_services',
@@ -117,6 +118,56 @@ function init_datatables(){
                              { 'searchable': false, 'orderable': false, 'data': 'weight', 'targets': 6 },
                              { 'searchable': true, 'orderable': false, 'data': 'status', 'targets': 7 },
                              { 'searchable': false, 'orderable': false, 'data': 'actions', 'targets': 8 } ] },
+
+      'pettypes': { 'url': '/admin_panel/pettypes',
+                'columns': [ { 'searchable': true, 'orderable': true, 'data': 'id', 'targets': 0 },
+                             { 'searchable': true, 'orderable': false, 'data': 'name', 'targets': 1 },
+                             { 'searchable': false, 'orderable': false, 'data': 'picture', 'targets': 2 },
+                             { 'searchable': false, 'orderable': false, 'data': 'IsHaveCategories', 'targets': 3 },
+                             { 'searchable': false, 'orderable': false, 'data': 'actions', 'targets': 4 } ] },
+
+      'itemcategories': { 'url': '/admin_panel/item_categories',
+                'columns': [ { 'searchable': true, 'orderable': true, 'data': 'id', 'targets': 0 },
+                             { 'searchable': true, 'orderable': false, 'data': 'name', 'targets': 1 },
+                             { 'searchable': false, 'orderable': false, 'data': 'picture', 'targets': 2 },
+                             { 'searchable': false, 'orderable': false, 'data': 'IsHaveBrand', 'targets': 3 },
+                             { 'searchable': false, 'orderable': false, 'data': 'actions', 'targets': 4 } ] },
+
+      'itembrands': { 'url': '/admin_panel/item_brands',
+                'columns': [ { 'searchable': true, 'orderable': true, 'data': 'id', 'targets': 0 },
+                             { 'searchable': true, 'orderable': false, 'data': 'name', 'targets': 1 },
+                             { 'searchable': false, 'orderable': false, 'data': 'picture', 'targets': 2 },
+                             { 'searchable': false, 'orderable': true, 'data': 'brand_discount', 'targets': 3 },
+                             { 'searchable': false, 'orderable': false, 'data': 'actions', 'targets': 4 } ] },
+
+      'items': { 'url': '/admin_panel/items',
+                'columns': [ { 'searchable': true, 'orderable': true, 'data': 'id', 'targets': 0 },
+                             { 'searchable': true, 'orderable': true, 'data': 'name', 'targets': 1 },
+                             { 'searchable': false, 'orderable': false, 'data': 'picture', 'targets': 2 },
+                             { 'searchable': true, 'orderable': false, 'data': 'short_description', 'targets': 3 },
+                             { 'searchable': false, 'orderable': true, 'data': 'unit_price', 'targets': 4 },
+                             { 'searchable': false, 'orderable': true, 'data': 'discount', 'targets': 5 },
+                             { 'searchable': false, 'orderable': true, 'data': 'buying_price', 'targets': 6 },
+                             { 'searchable': false, 'orderable': true, 'data': 'quantity', 'targets': 7 },
+                             // { 'searchable': false, 'orderable': true, 'data': 'weight', 'targets': 4 },
+                             // { 'searchable': false, 'orderable': false, 'data': 'description', 'targets': 5 },
+                             // { 'searchable': false, 'orderable': false, 'data': 'unit', 'targets': 6 },
+                             { 'searchable': true, 'orderable': true, 'data': 'avg_rating', 'targets': 8 },
+                             { 'searchable': false, 'orderable': false, 'data': 'actions', 'targets': 9 } ] },
+
+      'orders': { 'url': '/admin_panel/orders',
+                'columns': [ { 'searchable': true, 'orderable': true, 'data': 'id', 'targets': 0 },
+                             { 'searchable': true, 'orderable': true, 'data': 'order_id', 'targets': 1 },
+                             { 'searchable': false, 'orderable': false, 'data': 'name', 'targets': 2 },
+                             { 'searchable': false, 'orderable': false, 'data': 'picture', 'targets': 3 },
+                             { 'searchable': false, 'orderable': false, 'data': 'created_at', 'targets': 4 },
+                             { 'searchable': false, 'orderable': false, 'data': 'Quantity', 'targets': 5 },
+                             { 'searchable': false, 'orderable': false, 'data': 'Total_Price', 'targets': 6 },
+                             { 'searchable': false, 'orderable': false, 'data': 'IsRecurring', 'targets': 7},
+                             { 'searchable': true, 'orderable': true, 'data': 'status', 'targets': 8 },
+                             { 'searchable': false, 'orderable': false, 'data': 'actions', 'targets': 9 } ] },
+
+
       'specializations': { 'url': '/admin_panel/specializations',
                            'columns': [ { 'searchable': true, 'orderable': true, 'data': 'id', 'targets': 0 },
                                         { 'searchable': true, 'orderable': true, 'data': 'name', 'targets': 1 },
@@ -152,6 +203,16 @@ function init_datatables(){
       init_datatable(table_rules['notifications']['url'], table_rules['notifications']['columns'])
     } else if (datatable.hasClass('pets')){
       init_datatable(table_rules['pets']['url'], table_rules['pets']['columns'])
+    } else if (datatable.hasClass('pettypes')){
+      init_datatable(table_rules['pettypes']['url'], table_rules['pettypes']['columns'])
+    } else if (datatable.hasClass('itemcategories')){
+      init_datatable(table_rules['itemcategories']['url'], table_rules['itemcategories']['columns'])
+    } else if (datatable.hasClass('itembrands')){
+      init_datatable(table_rules['itembrands']['url'], table_rules['itembrands']['columns'])
+    } else if (datatable.hasClass('items')){
+      init_datatable(table_rules['items']['url'], table_rules['items']['columns'])
+    } else if (datatable.hasClass('orders')){
+      init_datatable(table_rules['orders']['url'], table_rules['orders']['columns'])
     } else {
       init_datatable(table_rules['specializations']['url'], table_rules['specializations']['columns'])
     }

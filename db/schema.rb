@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181112083001) do
+ActiveRecord::Schema.define(version: 20181206073249) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -339,6 +339,7 @@ ActiveRecord::Schema.define(version: 20181112083001) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "picture"
+    t.float "brand_discount"
   end
 
   create_table "item_brands_categories", id: false, force: :cascade do |t|
@@ -374,8 +375,8 @@ ActiveRecord::Schema.define(version: 20181112083001) do
 
   create_table "items", force: :cascade do |t|
     t.string "name"
-    t.integer "price"
-    t.integer "discount"
+    t.float "price"
+    t.float "discount"
     t.integer "weight"
     t.string "description"
     t.datetime "created_at", null: false
@@ -388,6 +389,10 @@ ActiveRecord::Schema.define(version: 20181112083001) do
     t.bigint "item_categories_id"
     t.bigint "pet_type_id"
     t.integer "avg_rating"
+    t.integer "quantity"
+    t.string "short_description"
+    t.float "unit_price"
+    t.float "buying_price"
     t.index ["item_brand_id"], name: "index_items_on_item_brands_id"
     t.index ["item_categories_id"], name: "index_items_on_item_categories_id"
     t.index ["pet_type_id"], name: "index_items_on_pet_type_id"
@@ -432,32 +437,18 @@ ActiveRecord::Schema.define(version: 20181112083001) do
     t.index ["viewed_at"], name: "index_notifications_on_viewed_at"
   end
 
-  create_table "order_items", force: :cascade do |t|
-    t.bigint "order_id"
-    t.bigint "item_id"
-    t.integer "Quantity"
-    t.integer "Unit_Price"
-    t.integer "Total_Price"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.boolean "IsRecurring"
-    t.integer "Interval"
-    t.bigint "recurssion_interval_id"
-    t.boolean "IsReviewed"
-    t.index ["item_id"], name: "index_order_items_on_item_id"
-    t.index ["order_id"], name: "index_order_items_on_order_id"
-    t.index ["recurssion_interval_id"], name: "index_order_items_on_recurssion_intervals_id"
-  end
+# Could not dump table "order_items" because of following StandardError
+#   Unknown type 'order_item_status' for column 'status'
 
   create_table "orders", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "location_id"
     t.datetime "Delivery_Date"
     t.string "Order_Notes"
-    t.integer "Subtotal"
-    t.integer "Delivery_Charges"
-    t.integer "Vat_Charges"
-    t.integer "Total"
+    t.float "Subtotal"
+    t.float "Delivery_Charges"
+    t.float "Vat_Charges"
+    t.float "Total"
     t.boolean "IsCash"
     t.integer "Order_Status"
     t.integer "Payment_Status"
@@ -467,6 +458,7 @@ ActiveRecord::Schema.define(version: 20181112083001) do
     t.integer "RedeemPoints"
     t.string "TransactionId"
     t.datetime "TransactionDate"
+    t.integer "earned_points"
     t.index ["location_id"], name: "index_orders_on_location_id"
     t.index ["user_id"], name: "index_orders_on_user_id"
   end

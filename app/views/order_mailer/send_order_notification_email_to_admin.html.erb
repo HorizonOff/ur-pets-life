@@ -1,0 +1,136 @@
+<body>
+    <div class="boxcontainer">
+        <div class="companinfo">
+            <div>
+              <%= image_tag 'newlanding/invoicelogo.png' %>
+            </div>
+            <div class="text-right">
+                <strong>U R Pets Life Animal Feed Trading L.L.C</strong>
+                <p>Dubai, UAE, P.O.Box 454742</p>
+                <p>TRN : 100603851500003</p>
+            </div>
+        </div>
+
+        <div class="invoice-info">
+            <div class="hdbox">
+                <h3 class="invoice-hd"><span>TAX INVOICE</span></h3>
+            </div>
+            <div class="invoice-info-bottom">
+                <div class="customer-info" style="float:left">
+                    <h4>Invoiced To </h4>
+                    <p><%= @order.user.first_name + ' ' + @order.user.last_name %></p>
+                    <p><%= @order.user.mobile_number %></p>
+                    <p><%= @userAddress %></p>
+                </div>
+                <div class="info-detail" style="float:right">
+                    <table>
+                        <tr>
+                            <td><strong>Invoice#</strong></td>
+                            <td>UPL - <%= @order.id %></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Invoice Date</strong></td>
+                            <td><%= DateTime.now.to_date %></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Terms</strong></td>
+                            <td>Due on Receipt</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Due Date</strong></td>
+                            <td><%= DateTime.now.to_date %></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="invoice-data">
+            <table class="invoice-datatble">
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Weight/Size</th>
+                        <th>Qty</th>
+                        <th>Rate</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                  <% @order.order_items.each do |orderitem| %>
+                    <tr>
+                        <td>
+                            <p><%= orderitem.item.name %></p>
+                        </td>
+                        <td>
+                            <p><%= orderitem.item.unit %></p>
+                        </td>
+                        <td>
+                            <p><%= orderitem.Quantity %></p>
+                        </td>
+                        <td>
+                            <p><%= orderitem.Unit_Price %></p>
+                        </td>
+
+                        <td>
+                            <p><%= orderitem.Total_Price %></p>
+                        </td>
+                    </tr>
+                 <% end %>
+                </tbody>
+            </table>
+            <div class="invoiceTotal">
+                <table>
+                    <tbody>
+                        <tr style="border-bottom: 2px solid #d8d8d7;">
+                            <td>Sub Total <span>(Tax Exclusive)</span>
+                            </td>
+                            <td><%= @order.Subtotal %></td>
+                        </tr>
+                        <tr style="border-bottom: 2px solid #d8d8d7;">
+                            <td>VAT Standard Rate (5%)</td>
+                            <td><%= @order.Vat_Charges %></td>
+                        </tr>
+                        <tr style="border-bottom: 2px solid #d8d8d7;">
+                            <td>Delivery Charges </td>
+                            <td><%= @order.Delivery_Charges %></td>
+                        </tr>
+                        <tr style="border-bottom: 2px solid #d8d8d7;">
+                            <td><strong>Total</strong></td>
+                            <td><strong>AED <%= @order.Total %></strong></td>
+                        </tr>
+                        <tr style="border-bottom: 2px solid #d8d8d7;">
+                            <td>Payment Made</td>
+                            <td>0.0</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="balance-lbl">Balance Due</p>
+                            </td>
+                            <td>
+                                <p class="balance-amt">AED <%= @order.Total %></p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="clearfix"></div>
+            <p class="notepoints">This is a computer generated document and does not need a signature.</p>
+            <p class="notepoints">NB: All payments made are non-refundable </p>
+        </div>
+        <div class="invoice-footer">
+            <div class="">
+                <p>Phone#</p>
+                <p>04 8849449</p>
+            </div>
+            <div class="">
+                <p>Email</p>
+                <p><a href="mailto:shopping@urpetslife.com">shopping@urpetslife.com</a></p>
+                <p><a href="mailto:info@urpetslife.com">info@urpetslife.com</a></p>
+            </div>
+            <div class="">
+                <p>Website</p>
+                <p><a href="www.urpetslife.com">www.urpetslife.com</a></p>
+            </div>
+        </div>
+    </div>
+</body>

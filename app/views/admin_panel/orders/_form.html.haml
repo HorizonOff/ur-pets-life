@@ -1,0 +1,11 @@
+.row
+  = render partial: 'layouts/admin_panel/errors', locals: { object: @admin_panel_order }
+- content_for :head do
+  %meta{name: "turbolinks-cache-control", content:"no-cache"}
+.col-md-6.col-sm-6.col-xs-12
+  .x_panel
+    .x_title
+      %h2 Order Item
+      .clearfix
+    .x_content
+      %br

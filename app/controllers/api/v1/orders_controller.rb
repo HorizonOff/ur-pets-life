@@ -19,16 +19,16 @@ module Api
         @orders = @orders.limit(size).offset(page * size)
       end
     render json: @orders.as_json(
-      :only => [:id, :Subtotal, :shipmenttime, :Delivery_Charges, :Vat_Charges, :Total, :Delivery_Date, :Order_Notes, :IsCash],
+      :only => [:id, :Subtotal, :shipmenttime, :Delivery_Charges, :Vat_Charges, :Total, :Delivery_Date, :Order_Notes, :IsCash, :RedeemPoints, :earned_points],
       :include => {
         :location => {
           :only => [:id, :latitude, :longitude, :city, :area, :street, :building_name, :unit_number, :villa_number]
         },
         :order_items => {
-          :only => [:id, :Quantity, :IsRecurring, :IsReviewed],
+          :only => [:id, :Quantity, :IsRecurring, :IsReviewed, :status],
           :include => {
             :item => {
-              :only => [:id, :picture, :name, :price, :discount, :description, :weight, :unit]
+              :only => [:id, :picture, :name, :price, :discount, :description, :weight, :unit, :short_description]
             },
             :recurssion_interval =>  {
               :only => [:id, :days, :weeks, :label]
@@ -47,27 +47,31 @@ module Api
   # GET /orders/1.json
   def show
     render json: @order.as_json(
-      :only => [:id, :Subtotal, :shipmenttime, :Delivery_Charges, :Vat_Charges, :Total, :Delivery_Date, :Order_Notes, :IsCash],
-      :include => {
-        :location => {
-          :only => [:id, :latitude, :longitude, :city, :area, :street, :building_name, :unit_number, :villa_number]
-        },
-        :order_items => {
-          :only => [:id, :Quantity, :IsRecurring, :IsReviewed],
-          :include => {
-            :item => {
-              :only => [:id, :picture, :name, :price, :discount, :description, :weight, :unit]
-            },
-            :recurssion_interval =>  {
-              :only => [:id, :days, :weeks, :label]
-            },
-            :item_reviews => {
-              :only => [:id, :user_id, :item_id, :rating, :comment]
-            }
+    :only => [:id, :Subtotal, :shipmenttime, :Delivery_Charges, :Vat_Charges, :Total, :Delivery_Date, :Order_Notes, :IsCash, :RedeemPoints, :earned_points],
+    :include => {
+      :location => {
+        :only => [:id, :latitude, :longitude, :city, :area, :street, :building_name, :unit_number, :villa_number]
+      },
+      :order_items => {
+        :only => [:id, :Quantity, :IsRecurring, :IsReviewed, :status],
+        :include => {
+          :item => {
+            :only => [:id, :picture, :name, :price, :discount, :description, :weight, :unit, :short_description]
+          },
+          :recurssion_interval =>  {
+            :only => [:id, :days, :weeks, :label]
+          },
+          :item_reviews => {
+            :only => [:id, :user_id, :item_id, :rating, :comment]
           }
         }
       }
-    )
+    }
+  )
+  #  render json: {
+  #    VatPercentage: "5",
+  #    OrderDetails:
+  #}
   end
 
   # GET /orders/new
@@ -99,7 +103,7 @@ module Api
         end
         RedeemPoint.where(:user_id => @user.id).update(:net_worth => (user_redeem_points +  discount_per_transaction), :last_net_worth => user_redeem_points, :last_reward_type => "Discount Per Transaction", :last_reward_worth => discount_per_transaction, :last_reward_update => Time.now)
         @order.order_items.each do |orderitem|
-          @neworderitem = OrderItem.new(:IsRecurring => false, :order_id => @neworder.id, :item_id => orderitem.item_id, :Quantity => orderitem.Quantity, :Unit_Price => orderitem.Unit_Price, :Total_Price => orderitem.Total_Price, :IsReviewed => false)
+          @neworderitem = OrderItem.new(:IsRecurring => false, :order_id => @neworder.id, :item_id => orderitem.item_id, :Quantity => orderitem.Quantity, :Unit_Price => orderitem.Unit_Price, :Total_Price => orderitem.Total_Price, :IsReviewed => false, :status => :pending)
           @neworderitem.save
           #if !orderitem.recurssion_interval_id.nil?
           #  @neworderitem.update(:recurssion_interval_id => orderitem.recurssion_interval_id)
@@ -165,107 +169,131 @@ end
         }
       end
     else
+      isoutofstock = false
       @itemsprice = 0
+      @discounted_items_amount = 0
       @usercartitems.each do |cartitem|
         @itemsprice += (cartitem.item.price * cartitem.quantity)
+        if cartitem.item.discount > 0
+          @discounted_items_amount += (cartitem.item.price * cartitem.quantity)
+        end
+        if cartitem.item.quantity < cartitem.quantity
+          isoutofstock = true
+        end
       end
-      subTotal = @itemsprice
-      deliveryCharges = subTotal > 100 ? 0 : 20
-      vatCharges = (@itemsprice/100).to_f * 5
-      total = @itemsprice + deliveryCharges + (@itemsprice/100).to_f * 5
-      user_redeem_points = 0
-      requested_redeem_points = params[:RedeemPoints].to_i
-      permitted_redeem_points = 0
-      paymentStatus = 0
-
-      if RedeemPoint.where(:user_id => @user.id).exists?
-        @user_redeem_point_record = RedeemPoint.where(:user_id => @user.id).first
+      if isoutofstock == true
+        format.json do
+          render json: {
+            Message: 'Out of Stock',
+            status: :out_of_stock
+          }
+        end
       else
-        @user_redeem_point_record = RedeemPoint.new(:user_id => @user.id, :net_worth => 0, :last_net_worth => 0, :totalearnedpoints => 0, :totalavailedpoints => 0)
-        @user_redeem_point_record.save
-      end
-      user_redeem_points = @user_redeem_point_record.net_worth
-      
-      if requested_redeem_points > 0
-        if requested_redeem_points <= user_redeem_points
-          permitted_redeem_points = requested_redeem_points
+        subTotal = @itemsprice
+        deliveryCharges = (subTotal > 100 ? 0 : 20)
+        vatCharges = (@itemsprice/100).to_f * 5
+        total = @itemsprice + deliveryCharges + (@itemsprice/100).to_f * 5
+        user_redeem_points = 0
+        requested_redeem_points = params[:RedeemPoints].to_i
+        permitted_redeem_points = 0
+        paymentStatus = 0
+
+        if RedeemPoint.where(:user_id => @user.id).exists?
+          @user_redeem_point_record = RedeemPoint.where(:user_id => @user.id).first
         else
-          permitted_redeem_points = user_redeem_points
+          @user_redeem_point_record = RedeemPoint.new(:user_id => @user.id, :net_worth => 0, :last_net_worth => 0, :totalearnedpoints => 0, :totalavailedpoints => 0)
+          @user_redeem_point_record.save
         end
-      end
+        user_redeem_points = @user_redeem_point_record.net_worth
 
-      if params[:IsCash] == "false"
-        paymentStatus = 1
-      end
-
-    @order = Order.new(:user_id => @user.id, :RedeemPoints => permitted_redeem_points, :TransactionId => params[:TransactionId], :TransactionDate => params[:TransactionDate], :Subtotal => subTotal, :Delivery_Charges => deliveryCharges, :shipmenttime => 'with in 7 days', :Vat_Charges => vatCharges, :Total => total, :Order_Status => 1, :Payment_Status => paymentStatus, :Delivery_Date => params[:Delivery_Date], :Order_Notes => params[:Order_Notes], :IsCash => params[:IsCash],  :location_id => params[:location_id])
-      if @order.save
-
-        if permitted_redeem_points > 0
-          @user_redeem_point_record.update(:net_worth => (user_redeem_points - permitted_redeem_points), :last_net_worth => user_redeem_points, :last_reward_type => "Order Deduction", :last_reward_worth => permitted_redeem_points, :last_reward_update => Time.now, :totalavailedpoints => (@user_redeem_point_record.totalavailedpoints + permitted_redeem_points))
+        if requested_redeem_points > 0
+          if requested_redeem_points <= user_redeem_points
+            permitted_redeem_points = requested_redeem_points
+          else
+            permitted_redeem_points = user_redeem_points
+          end
         end
 
-        discount_per_transaction = 0
-        if subTotal <= 500
-          discount_per_transaction =+ (3*subTotal)/100
-        elsif subTotal > 500 and subTotal <= 1000
-          discount_per_transaction =+ (5*subTotal)/100
-        elsif subTotal > 1000 and subTotal <= 2000
-          discount_per_transaction =+ (7.5*subTotal)/100
-        elsif subTotal > 2000
-          discount_per_transaction =+ (10*subTotal)/100
+        if params[:IsCash] == "false"
+          paymentStatus = 1
         end
 
-        @user_redeem_point_record.update(:net_worth => (user_redeem_points - permitted_redeem_points +  discount_per_transaction), :last_net_worth => (user_redeem_points - permitted_redeem_points), :last_reward_type => "Discount Per Transaction", :last_reward_worth => discount_per_transaction, :last_reward_update => Time.now, :totalearnedpoints => (@user_redeem_point_record.totalearnedpoints + discount_per_transaction))
+        @order = Order.new(:user_id => @user.id, :RedeemPoints => permitted_redeem_points, :TransactionId => params[:TransactionId], :TransactionDate => params[:TransactionDate], :Subtotal => subTotal, :Delivery_Charges => deliveryCharges, :shipmenttime => 'with in 7 days', :Vat_Charges => vatCharges, :Total => total, :Order_Status => 1, :Payment_Status => paymentStatus, :Delivery_Date => params[:Delivery_Date], :Order_Notes => params[:Order_Notes], :IsCash => params[:IsCash],  :location_id => params[:location_id])
+        if @order.save
 
-        @usercartitems.each do |cartitem|
-          @neworderitemcreate = OrderItem.new(:IsRecurring => cartitem.IsRecurring, :order_id => @order.id, :item_id => cartitem.item_id, :Quantity => cartitem.quantity, :Unit_Price => cartitem.item.price, :Total_Price => (cartitem.item.price * cartitem.quantity), :IsReviewed => false)
+          if permitted_redeem_points > 0
+            @user_redeem_point_record.update(:net_worth => (user_redeem_points - permitted_redeem_points), :last_net_worth => user_redeem_points, :last_reward_type => "Order Deduction", :last_reward_worth => permitted_redeem_points, :last_reward_update => Time.now, :totalavailedpoints => (@user_redeem_point_record.totalavailedpoints + permitted_redeem_points))
+          end
+
+          discount_per_transaction = 0
+          amount_to_be_awarded = subTotal - permitted_redeem_points - @discounted_items_amount
+          if amount_to_be_awarded > 0
+            if amount_to_be_awarded <= 500
+              discount_per_transaction =+ (3*amount_to_be_awarded)/100
+            elsif amount_to_be_awarded > 500 and amount_to_be_awarded <= 1000
+              discount_per_transaction =+ (5*amount_to_be_awarded)/100
+            elsif amount_to_be_awarded > 1000 and amount_to_be_awarded <= 2000
+              discount_per_transaction =+ (7.5*amount_to_be_awarded)/100
+            elsif amount_to_be_awarded > 2000
+              discount_per_transaction =+ (10*amount_to_be_awarded)/100
+            end
+          end
+          @user_redeem_point_record.update(:net_worth => (user_redeem_points - permitted_redeem_points +  discount_per_transaction), :last_net_worth => (user_redeem_points - permitted_redeem_points), :last_reward_type => "Discount Per Transaction", :last_reward_worth => discount_per_transaction, :last_reward_update => Time.now, :totalearnedpoints => (@user_redeem_point_record.totalearnedpoints + discount_per_transaction))
+          @order.update(:earned_points => discount_per_transaction)
+          @usercartitems.each do |cartitem|
+          @neworderitemcreate = OrderItem.new(:IsRecurring => cartitem.IsRecurring, :order_id => @order.id, :item_id => cartitem.item_id, :Quantity => cartitem.quantity, :Unit_Price => cartitem.item.price, :Total_Price => (cartitem.item.price * cartitem.quantity), :IsReviewed => false, :status => :pending, :isdiscounted => (cartitem.item.discount > 0 ? true : false))
           @neworderitemcreate.save
+          item = Item.where(:id => cartitem.item_id).first
+          item.decrement!(:quantity, cartitem.quantity)
           if !cartitem.recurssion_interval_id.nil?
             @neworderitemcreate.update(:recurssion_interval_id => cartitem.recurssion_interval_id)
           end
-        end
-        @user.shopping_cart_items.destroy_all
-        format.json do
-          render json: {
-            Message: 'Order was successfully created.',
-            status: :created,
-            OrderDetails: @order.as_json(
-              :only => [:id, :Subtotal, :Delivery_Charges, :Vat_Charges, :Total, :Delivery_Date, :Order_Notes, :IsCash, :shipmenttime],
-              :include => {
-                :location => {
-                  :only => [:id, :latitude, :longitude, :city, :area, :street, :building_name, :unit_number, :villa_number]
-                },
-                :order_items => {
-                  :only => [:id, :Quantity, :IsRecurring, :IsReviewed],
-                  :include => {
-                    :item => {
-                      :only => [:id, :picture, :name, :price, :discount, :description, :weight, :unit]
-                    },
-                    :recurssion_interval =>  {
-                      :only => [:id, :days, :weeks, :label]
-                    },
-                    :item_reviews => {
-                      :only => [:id, :user_id, :item_id, :rating, :comment]
+          end
+          @user.shopping_cart_items.destroy_all
+          set_order_notifcation_email(@order.id)
+          format.json do
+            render json: {
+              Message: 'Order was successfully created.',
+              status: :created,
+              VatPercentage: "5",
+              #EarnedPoints: discount_per_transaction,
+              OrderDetails: @order.as_json(
+                :only => [:id, :Subtotal, :Delivery_Charges, :Vat_Charges, :Total, :Delivery_Date, :Order_Notes, :IsCash, :shipmenttime, :RedeemPoints, :earned_points],
+                :include => {
+                  :location => {
+                    :only => [:id, :latitude, :longitude, :city, :area, :street, :building_name, :unit_number, :villa_number]
+                  },
+                  :order_items => {
+                    :only => [:id, :Quantity, :IsRecurring, :IsReviewed, :status],
+                    :include => {
+                      :item => {
+                        :only => [:id, :picture, :name, :price, :discount, :description, :weight, :unit, :quantity, :short_description]
+                      },
+                      :recurssion_interval =>  {
+                        :only => [:id, :days, :weeks, :label]
+                      },
+                      :item_reviews => {
+                        :only => [:id, :user_id, :item_id, :rating, :comment]
+                      }
                     }
                   }
                 }
-              }
-            )
-          }
-        end
-      else
-        format.json do
-          render json: {
-            Message: 'Error creating order',
-            status: :unprocessable_entity,
-            errors: @order.errors
-          }
+              )
+            }
+            end
+        else
+          format.json do
+            render json: {
+              Message: 'Error creating order',
+              status: :unprocessable_entity,
+              errors: @order.errors
+            }
+          end
         end
       end
     end
-    end
   end
+end
 
   # PATCH/PUT /orders/1
   # PATCH/PUT /orders/1.json
@@ -295,6 +323,19 @@ end
     end
   end
 
+  def test_email
+    begin
+      set_order_notifcation_email
+      render json: {
+        Messgae: :sent
+      }
+    rescue => ex
+      render json: {
+        :Messgae => ex.message
+      }
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_order
@@ -302,6 +343,9 @@ end
       return render_404 unless @order
     end
 
+    def set_order_notifcation_email(orderid)
+      OrderMailer.send_order_notification_email_to_admin(orderid).deliver
+    end
     # Never trust parameters from the scary internet, only allow the white list through.
     def order_params
       params.require(:order).permit(:Delivery_Date, :Order_Notes, :IsCash,  :location_id, :RedeemPoints)

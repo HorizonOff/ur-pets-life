@@ -6,5 +6,5 @@ class Item < ApplicationRecord
   has_many :order_items
   has_many :item_reviews
   belongs_to :item_category, optional: true
-  belongs_to :pet_type, optional: true
+  belongs_to :pet_type, optional: true 
 end

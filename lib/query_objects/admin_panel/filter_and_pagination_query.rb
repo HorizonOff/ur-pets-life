@@ -1,7 +1,7 @@
 module AdminPanel
   class FilterAndPaginationQuery
-    INT_COLUMNS = %w[id vets_count status specialization_id pet_type_id experience sex].freeze
-    BOOLEAN_COLUMNS = %w[is_active is_answered is_super_admin skip_push_sending is_for_trainer].freeze
+    INT_COLUMNS = %w[id Total_Price Quantity order_id item_id unit_price discount price quantity avg_rating weight vets_count status specialization_id pet_type_id experience sex].freeze
+    BOOLEAN_COLUMNS = %w[IsRecurring IsHaveCategories is_active is_answered is_super_admin skip_push_sending is_for_trainer].freeze
     ADDITIONAL_PARAMS = { 'city' => { join_model: :location, field: 'locations.city' },
                           'specialization_id' => { join_model: :specializations, field: 'specializations.id' },
                           'pet_type_id' => { join_model: :pet_types, field: 'pet_types.id' } }.freeze
@@ -13,6 +13,7 @@ module AdminPanel
                                    sql: '(vets.name ILIKE :value)' }] }.freeze
 
     PET_SCOPES = %w[for_adoption lost found].freeze
+    ORDER_STATUS = %w[pending on_the_way delivered cancelled].freeze
 
     def initialize(model, params, admin = nil)
       @model = model
@@ -80,7 +81,9 @@ module AdminPanel
     end
 
     def check_field_type(name)
-      if name.in?(INT_COLUMNS)
+      if (model == 'OrderItem' and name == 'status')
+        :order_item_status
+      elsif name.in?(INT_COLUMNS)
         :integer
       elsif name.in?(BOOLEAN_COLUMNS)
         :boolean
@@ -135,6 +138,8 @@ module AdminPanel
         use_sql_rule(column)
       elsif model == 'Pet' && column[:name] == 'status'
         pet_status_rule(column[:value])
+      elsif model == 'OrderItem' && column[:name] == 'status'
+        order_status_rule(column[:value], field)
       elsif column_type == :integer
         @scope.where("#{field} = :value", value: column_value.to_i)
       elsif column_type == :boolean
@@ -146,6 +151,10 @@ module AdminPanel
 
     def pet_status_rule(value)
       @scope.send(value) if value.in?(PET_SCOPES)
+    end
+
+    def order_status_rule(value, field)
+      @scope.where("#{field} = :value", value: value.to_s) if value.in?(ORDER_STATUS)
     end
 
     def specific_sql_rule_for?(column_name)

@@ -37,7 +37,7 @@ class Pet < ApplicationRecord
                                       too_long: 'Mobile number should contain not more than 12 symbols' },
                             if: :lost_or_found?
 
-  validates :municipality_tag, format: { with: /\A[A-Z]\d{5,5}\s\d{4,4}\z/, message: 'Municipality Tag is invalid' },
+  validates :municipality_tag, format: { with: /\A[A-Z]\d{3,5}\s\d{4,4}\z/, message: 'Municipality Tag is invalid' },
                                allow_blank: true
   #                             presence: { message: 'Municipality Tag is required' }, if: :owned_main_type_pet?
 

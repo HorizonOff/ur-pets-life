@@ -22,21 +22,29 @@ class ItemsController < Api::BaseController
         status: :unprocessable_entity
       }
     elsif  params[:keyword].nil?
+      pet_filter = params[:pet_type_id].nil?
+      cat_filter = params[:category_id].nil?
+      brand_filter = params[:brand_id].nil?
+
       if (!params[:pageno].nil? and !params[:size].nil?)
         size = params[:size].to_i
         page = params[:pageno].to_i
-        @items = Item.where("price BETWEEN (?) AND  (?) AND avg_rating BETWEEN (?) AND (?)", params[:lowerprice], params[:upperprice], params[:minrating], params[:maxrating]).limit(size).offset(page * size)
+        @items = Item.where("price BETWEEN (?) AND  (?) AND avg_rating BETWEEN (?) AND (?) AND (#{brand_filter} OR item_brand_id = (?)) AND (#{cat_filter} OR item_categories_id = (?)) AND (#{pet_filter} OR pet_type_id = (?))", params[:lowerprice], params[:upperprice], params[:minrating], params[:maxrating], params[:brand_id], params[:category_id], params[:pet_type_id]).limit(size).offset(page * size)
       else
-        @items = Item.where("price BETWEEN (?) AND  (?) AND avg_rating BETWEEN (?) AND (?)", params[:lowerprice], params[:upperprice], params[:minrating], params[:maxrating])
+        @items = Item.where("price BETWEEN (?) AND  (?) AND avg_rating BETWEEN (?) AND (?) AND (#{brand_filter} OR item_brand_id = (?)) AND (#{cat_filter} OR item_categories_id = (?)) AND (#{pet_filter} OR pet_type_id = (?))", params[:lowerprice], params[:upperprice], params[:minrating], params[:maxrating], params[:brand_id], params[:category_id], params[:pet_type_id])
       end
     else
       key = "%#{params[:keyword]}%"
+      pet_filter = params[:pet_type_id].nil?
+      cat_filter = params[:category_id].nil?
+      brand_filter = params[:brand_id].nil?
       if (!params[:pageno].nil? and !params[:size].nil?)
         size = params[:size].to_i
         page = params[:pageno].to_i
-        @items = Item.where("lower(name) LIKE (?) AND price BETWEEN (?) AND  (?) AND avg_rating BETWEEN (?) AND (?)", key.downcase, params[:lowerprice], params[:upperprice], params[:minrating], params[:maxrating]).limit(size).offset(page * size)
+
+        @items = Item.where("lower(name) LIKE (?) AND price BETWEEN (?) AND  (?) AND avg_rating BETWEEN (?) AND (?) AND (#{brand_filter} OR item_brand_id = (?)) AND (#{cat_filter} OR item_categories_id = (?)) AND (#{pet_filter} OR pet_type_id = (?))", key.downcase, params[:lowerprice], params[:upperprice], params[:minrating], params[:maxrating], params[:brand_id], params[:category_id], params[:pet_type_id]).limit(size).offset(page * size)
       else
-        @items = Item.where("lower(name) LIKE (?) AND price BETWEEN (?) AND  (?) AND avg_rating BETWEEN (?) AND (?)", key.downcase, params[:lowerprice], params[:upperprice], params[:minrating], params[:maxrating])
+        @items = Item.where("lower(name) LIKE (?) AND price BETWEEN (?) AND  (?) AND avg_rating BETWEEN (?) AND (?) AND (#{brand_filter} OR item_brand_id = (?)) AND (#{cat_filter} OR item_categories_id = (?)) AND (#{pet_filter} OR pet_type_id = (?))", key.downcase, params[:lowerprice], params[:upperprice], params[:minrating], params[:maxrating], params[:brand_id], params[:category_id], params[:pet_type_id])
       end
 
     end
@@ -58,7 +66,7 @@ class ItemsController < Api::BaseController
     else
     @items.each do |myitem|
       json_to_render << ({
-        :item => myitem.as_json(:only => [:id, :picture, :name, :price, :discount, :description, :weight, :unit, :rating, :review_count, :avg_rating]),
+        :item => myitem.as_json(:only => [:id, :picture, :name, :price, :discount, :description, :weight, :unit, :rating, :review_count, :avg_rating, :quantity, :short_description]),
         :IsFavorite => get_wish_list_flag(myitem),
         :WishlistId => get_wish_list_id(myitem)
         }
@@ -90,7 +98,7 @@ class ItemsController < Api::BaseController
     json_to_render = []
     @items.each do |myitem|
       json_to_render << ({
-        :item => myitem.as_json(:only => [:id, :picture, :name, :price, :discount, :description, :weight, :unit, :rating, :review_count, :avg_rating]),
+        :item => myitem.as_json(:only => [:id, :picture, :name, :price, :discount, :description, :weight, :unit, :rating, :review_count, :avg_rating, :quantity, :short_description]),
         :IsFavorite => get_wish_list_flag(myitem),
         :WishlistId => get_wish_list_id(myitem)
         }
@@ -104,7 +112,7 @@ class ItemsController < Api::BaseController
   def get_items_by_pet_type
     respond_to do |format|
     if PetType.where(:id => params[:id], :IsHaveCategories => false).exists?
-    brand =  Item.where(:pet_type_id => params[:id])
+    brand =  Item.where(:pet_type_id => params[:id]).order(id: :asc)
     json_to_render = []
     @items = brand
     if @items.nil? or @items.empty?
@@ -116,7 +124,7 @@ class ItemsController < Api::BaseController
     else
     @items.each do |myitem|
       json_to_render << ({
-        :item => myitem.as_json(:only => [:id, :picture, :name, :price, :discount, :description, :weight, :unit, :rating, :review_count, :avg_rating]),
+        :item => myitem.as_json(:only => [:id, :picture, :name, :price, :discount, :description, :weight, :unit, :rating, :review_count, :avg_rating, :quantity, :short_description]),
         :IsFavorite => get_wish_list_flag(myitem),
         :WishlistId => get_wish_list_id(myitem)
         }
@@ -139,13 +147,13 @@ end
 
 def get_items_by_item_category
   respond_to do |format|
-  if ItemCategory.where(:id => params[:id], :IsHaveBrand => false).exists?
+  if (!params[:pet_type_id].nil? and ItemCategory.where(:id => params[:id], :IsHaveBrand => false).exists?)
     if (!params[:pageno].nil? and !params[:size].nil?)
       size = params[:size].to_i
       page = params[:pageno].to_i
-      brand =  Item.where(:item_categories_id => params[:id]).limit(size).offset(page * size)
+      brand =  Item.where(:item_categories_id => params[:id], :pet_type_id => params[:pet_type_id]).limit(size).offset(page * size)
     else
-      brand =  Item.where(:item_categories_id => params[:id])
+      brand =  Item.where(:item_categories_id => params[:id], :pet_type_id => params[:pet_type_id])
     end
 
   json_to_render = []
@@ -159,7 +167,7 @@ def get_items_by_item_category
   else
   @items.each do |myitem|
     json_to_render << ({
-      :item => myitem.as_json(:only => [:id, :picture, :name, :price, :discount, :description, :weight, :unit, :rating, :review_count, :avg_rating]),
+      :item => myitem.as_json(:only => [:id, :picture, :name, :price, :discount, :description, :weight, :unit, :rating, :review_count, :avg_rating, :quantity, :short_description]),
       :IsFavorite => get_wish_list_flag(myitem),
       :WishlistId => get_wish_list_id(myitem)
       }
@@ -182,21 +190,24 @@ end
   # GET /items/1
   # GET /items/1.json
   def show
-    render json: @item
+    render json: {
+      :Item => @item,
+      :IsFavorite => get_wish_list_flag(@item),
+      :WishlistId => get_wish_list_id(@item)
+      }
   end
 
   def item_by_brand_id
     respond_to do |format|
-    if ItemBrand.where(:id => params[:id]).exists?
-    brand =  ItemBrand.find(params[:id])
+    if (!params[:pet_type_id].nil? and !params[:category_id].nil? and !params[:id].nil?)
     json_to_render = []
 
     if (!params[:pageno].nil? and !params[:size].nil?)
       size = params[:size].to_i
       page = params[:pageno].to_i
-      @items = brand.items.limit(size).offset(page * size)
+      @items = Item.where(:item_brand_id => params[:id], :item_categories_id => params[:category_id], :pet_type_id => params[:pet_type_id]).limit(size).offset(page * size)
     else
-      @items = brand.items
+      @items = Item.where(:item_brand_id => params[:id], :item_categories_id => params[:category_id], :pet_type_id => params[:pet_type_id])
     end
     if @items.nil? or @items.empty?
       format.json do
@@ -207,7 +218,7 @@ end
     else
     @items.each do |myitem|
       json_to_render << ({
-        :item => myitem.as_json(:only => [:id, :picture, :name, :price, :discount, :description, :weight, :unit, :rating, :review_count, :avg_rating]),
+        :item => myitem.as_json(:only => [:id, :picture, :name, :price, :discount, :description, :weight, :unit, :rating, :review_count, :avg_rating, :quantity, :short_description]),
         :IsFavorite => get_wish_list_flag(myitem),
         :WishlistId => get_wish_list_id(myitem)
         }

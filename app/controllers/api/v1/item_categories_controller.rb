@@ -18,7 +18,7 @@ class ItemCategoriesController < Api::BaseController
   def item_cat_for_pet_type
     if PetType.where(:id => params[:id]).exists?
     pettype = PetType.find(params[:id])
-    @categories = pettype.item_categories
+    @categories = pettype.item_categories.order(:id)
     render json: @categories
   else
     render json: {

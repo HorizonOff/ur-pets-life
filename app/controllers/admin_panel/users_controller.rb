@@ -11,7 +11,7 @@ module AdminPanel
         format.json { filter_users }
       end
     end
-
+ 
     def edit; end
 
     def show
