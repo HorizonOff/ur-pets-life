@@ -1,6 +1,8 @@
 module Api
   module V1
     class PetTypesController < Api::BaseController
+      skip_before_action :authenticate_user, only: :index
+
       def index
         if !params[:search].nil?
           key = "%#{params[:search]}%"

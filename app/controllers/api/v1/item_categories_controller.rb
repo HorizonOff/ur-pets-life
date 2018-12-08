@@ -2,7 +2,7 @@ module Api
   module V1
 class ItemCategoriesController < Api::BaseController
   before_action :set_item_category, only: [:show, :edit, :update, :destroy]
-
+  skip_before_action :authenticate_user, only: [:index, :item_cat_for_pet_type]
   # GET /item_categories
   # GET /item_categories.json
   def index

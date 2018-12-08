@@ -2,7 +2,7 @@ module Api
   module V1
 class ItemBrandsController < Api::BaseController
   before_action :set_item_brand, only: [:show, :edit, :update, :destroy]
-
+  skip_before_action :authenticate_user, only: [:index, :show, :item_cat_brands]
   # GET /item_brands
   # GET /item_brands.json
   def index
