@@ -2,7 +2,7 @@ module Api
   module V1
 class ItemsController < Api::BaseController
   before_action :set_item, only: [:show, :edit, :update, :destroy]
-  skip_before_action :authenticate_user, only: [:index, :show, :item_by_brand_id, :get_items_by_item_category, :get_items_by_pet_type, :search_items_using_filters, :search_items_by_keywords, :item_cat_brands]
+
   # GET /items
   # GET /items.json
   def index
@@ -66,7 +66,7 @@ class ItemsController < Api::BaseController
     else
     @items.each do |myitem|
       json_to_render << ({
-        :item => myitem.as_json(:only => [:id, :picture, :name, :price, :discount, :description, :weight, :unit, :rating, :review_count, :avg_rating, :quantity, :short_description]),
+        :item => myitem.as_json(:only => [:id, :picture, :name, :price, :unit_price, :discount, :description, :weight, :unit, :rating, :review_count, :avg_rating, :quantity, :short_description]),
         :IsFavorite => get_wish_list_flag(myitem),
         :WishlistId => get_wish_list_id(myitem)
         }
@@ -98,7 +98,7 @@ class ItemsController < Api::BaseController
     json_to_render = []
     @items.each do |myitem|
       json_to_render << ({
-        :item => myitem.as_json(:only => [:id, :picture, :name, :price, :discount, :description, :weight, :unit, :rating, :review_count, :avg_rating, :quantity, :short_description]),
+        :item => myitem.as_json(:only => [:id, :picture, :name, :price, :unit_price, :discount, :description, :weight, :unit, :rating, :review_count, :avg_rating, :quantity, :short_description]),
         :IsFavorite => get_wish_list_flag(myitem),
         :WishlistId => get_wish_list_id(myitem)
         }
@@ -124,7 +124,7 @@ class ItemsController < Api::BaseController
     else
     @items.each do |myitem|
       json_to_render << ({
-        :item => myitem.as_json(:only => [:id, :picture, :name, :price, :discount, :description, :weight, :unit, :rating, :review_count, :avg_rating, :quantity, :short_description]),
+        :item => myitem.as_json(:only => [:id, :picture, :name, :price, :unit_price, :discount, :description, :weight, :unit, :rating, :review_count, :avg_rating, :quantity, :short_description]),
         :IsFavorite => get_wish_list_flag(myitem),
         :WishlistId => get_wish_list_id(myitem)
         }
@@ -167,7 +167,7 @@ def get_items_by_item_category
   else
   @items.each do |myitem|
     json_to_render << ({
-      :item => myitem.as_json(:only => [:id, :picture, :name, :price, :discount, :description, :weight, :unit, :rating, :review_count, :avg_rating, :quantity, :short_description]),
+      :item => myitem.as_json(:only => [:id, :picture, :name, :price, :unit_price, :discount, :description, :weight, :unit, :rating, :review_count, :avg_rating, :quantity, :short_description]),
       :IsFavorite => get_wish_list_flag(myitem),
       :WishlistId => get_wish_list_id(myitem)
       }
@@ -218,7 +218,7 @@ end
     else
     @items.each do |myitem|
       json_to_render << ({
-        :item => myitem.as_json(:only => [:id, :picture, :name, :price, :discount, :description, :weight, :unit, :rating, :review_count, :avg_rating, :quantity, :short_description]),
+        :item => myitem.as_json(:only => [:id, :picture, :name, :price, :unit_price, :discount, :description, :weight, :unit, :rating, :review_count, :avg_rating, :quantity, :short_description]),
         :IsFavorite => get_wish_list_flag(myitem),
         :WishlistId => get_wish_list_id(myitem)
         }

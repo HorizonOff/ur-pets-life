@@ -21,7 +21,9 @@ module AdminPanel
     @shippingaddress = (@shippinglocation.villa_number.blank? ? '' : (@shippinglocation.villa_number + ' '))  + (@shippinglocation.unit_number.blank? ? '' : (@shippinglocation.unit_number + ' ')) + (@shippinglocation.building_name.blank? ? '' : (@shippinglocation.building_name + ' ')) + (@shippinglocation.street.blank? ? '' : (@shippinglocation.street + ' ')) + (@shippinglocation.area.blank? ? '' : (@shippinglocation.area + ' ')) + (@shippinglocation.city.blank? ? '' : @shippinglocation.city)
 
     if @admin_panel_order.status == 'pending'
-      @statusoption = [['On The Way', 'on_the_way'], ['Cancel', 'cancelled']]
+      @statusoption = [['Comfirm', 'confirmed'], ['Cancel', 'cancelled']]
+    elsif @admin_panel_order.status == 'confirmed'
+      @statusoption = [['On The Way', 'on_the_way']]
     elsif @admin_panel_order.status == 'on_the_way'
       @statusoption = [['Delievered', 'delivered']]
     end
@@ -76,6 +78,10 @@ module AdminPanel
         end
       end
 
+      if statustoupdate == 'confirmed'
+        send_order_confirmation_email_to_customer(@admin_panel_order.id)
+      end
+
       if statustoupdate == 'cancelled'
         orderitem = @admin_panel_order
         order = Order.where(:id => orderitem.order_id).first
@@ -115,6 +121,7 @@ module AdminPanel
         end
 
         order.update(:earned_points => (order.earned_points - points_to_be_deducted_on_cancel))
+        send_order_cancellation_email_to_customer(@admin_panel_order.id)
       end
 
       flash[:success] = 'Order Item was successfully updated'
@@ -143,6 +150,14 @@ module AdminPanel
     def set_order_delivery_invoice(orderid, userEmail)
       OrderMailer.send_order_delivery_invoice(orderid, ENV['ADMIN']).deliver
       OrderMailer.send_order_delivery_invoice(orderid, userEmail).deliver
+    end
+
+    def send_order_confirmation_email_to_customer(orderitemid)
+      OrderMailer.send_order_confimation_notification_to_customer(orderitemid).deliver
+    end
+
+    def send_order_cancellation_email_to_customer(orderitemid)
+      OrderMailer.send_order_cancellation_notification_to_customer(orderitemid).deliver
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

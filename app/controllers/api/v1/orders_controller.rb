@@ -345,6 +345,7 @@ end
 
     def set_order_notifcation_email(orderid)
       OrderMailer.send_order_notification_email_to_admin(orderid).deliver
+      OrderMailer.send_order_placement_notification_to_customer(@user.email).deliver
     end
     # Never trust parameters from the scary internet, only allow the white list through.
     def order_params

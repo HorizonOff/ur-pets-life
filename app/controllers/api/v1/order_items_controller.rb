@@ -9,7 +9,7 @@ class OrderItemsController < Api::BaseController
     @order_items = OrderItem.all
   end
   def get_pending_order_items
-    pending_orders = OrderItem.includes(:order).where(order_items: {status: [:pending, :on_the_way]}, orders: {user_id: @user.id})
+    pending_orders = OrderItem.includes(:order).where(order_items: {status: [:pending, :confirmed, :on_the_way]}, orders: {user_id: @user.id})
     if pending_orders.count > 0
     render json: pending_orders.order(created_at: :desc).as_json(
       :only => [:id, :status, :Quantity, :IsRecurring, :IsReviewed, :Unit_Price, :Total_Price],

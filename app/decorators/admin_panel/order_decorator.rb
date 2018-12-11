@@ -28,6 +28,9 @@ module AdminPanel
     elsif model.status == "cancelled"
       span_class = 'label-danger'
       text = "Cancelled"
+    elsif model.status == "confirmed"
+      span_class = 'label-primary'
+      text = "Confirmed"
     end
     content_tag(:span, text, class: "label #{span_class}")
   end

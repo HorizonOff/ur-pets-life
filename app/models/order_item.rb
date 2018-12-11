@@ -4,5 +4,5 @@ class OrderItem < ApplicationRecord
   belongs_to :item
   has_many :item_reviews
   belongs_to :recurssion_interval, optional: true
-  enum status: { pending: "pending", on_the_way: "on_the_way", delivered: "delivered", cancelled: "cancelled" }, _prefix: :status
+  enum status: { pending: "pending", confirmed: "confirmed", on_the_way: "on_the_way", delivered: "delivered", cancelled: "cancelled" }, _prefix: :status
 end
