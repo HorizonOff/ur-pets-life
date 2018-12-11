@@ -35,6 +35,14 @@ class ItemReviewsController < Api::BaseController
         }
       end
     else
+      if @item.item_reviews.count <= 0
+        format.json do
+          render json: {
+            Message: 'No Reviews found.',
+            status: :empty
+          }
+        end
+      else
       format.json do
         render json: @item.item_reviews.as_json(
           :only => [:id, :rating, :comment, :created_at],
@@ -46,6 +54,8 @@ class ItemReviewsController < Api::BaseController
         )
       end
     end
+    end
+
     end
   end
   # GET /item_reviews/1
