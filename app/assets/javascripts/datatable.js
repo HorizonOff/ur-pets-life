@@ -212,7 +212,7 @@ function init_datatables(){
     } else if (datatable.hasClass('items')){
       init_datatable(table_rules['items']['url'], table_rules['items']['columns'])
     } else if (datatable.hasClass('orders')){
-      init_datatable(table_rules['orders']['url'], table_rules['orders']['columns'])
+      init_datatable(table_rules['orders']['url'], table_rules['orders']['columns'], 0, 'desc')
     } else {
       init_datatable(table_rules['specializations']['url'], table_rules['specializations']['columns'])
     }

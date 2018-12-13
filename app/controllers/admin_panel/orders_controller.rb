@@ -2,7 +2,7 @@ module AdminPanel
   class OrdersController < AdminPanelController
     before_action :authorize_super_admin, only: :index
     before_action :set_admin_panel_order, only: [:show, :edit, :update, :destroy]
-
+    before_action :view_new_order, only: :show
   # GET /admin_panel/orders
   # GET /admin_panel/orders.json
   def index
@@ -62,6 +62,11 @@ module AdminPanel
     statustoupdate = params["order_item"]["updated_status"].to_s
 
     if @admin_panel_order.update(:status => statustoupdate)
+      parentorder = Order.where(:id => @admin_panel_order.order_id).first
+      orderuser = User.where(:id => parentorder.user_id).first
+      itemordered = Item.where(:id => @admin_panel_order.item_id).first
+
+      orderuser.notifications.create(order: parentorder, message: 'Your Order status for ' + itemordered.name + ' has been updated to ' + statustoupdate)
 
       if statustoupdate == 'delivered'
         sendInvoice = true
@@ -160,6 +165,11 @@ module AdminPanel
       OrderMailer.send_order_cancellation_notification_to_customer(orderitemid).deliver
     end
 
+    def view_new_order
+      orderdetails = Order.where(:id => @admin_panel_order.order_id).first
+      orderdetails.update_attribute(:is_viewed, true)
+    end
+
     # Never trust parameters from the scary internet, only allow the white list through.
     def admin_panel_order_params
       params.fetch(:admin_panel_order, {})
@@ -167,6 +177,7 @@ module AdminPanel
 
     def filter_orders
       filtered_orders = filter_and_pagination_query.filter
+      filtered_orders = filtered_orders.order(id: :desc)
       decorated_data = ::AdminPanel::OrderDecorator.decorate_collection(filtered_orders)
       serialized_data = ActiveModel::Serializer::CollectionSerializer.new(
         decorated_data, serializer: ::AdminPanel::OrderSerializer, adapter: :attributes

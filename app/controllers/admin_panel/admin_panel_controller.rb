@@ -56,6 +56,7 @@ module AdminPanel
     def count_budges
       if current_admin.is_super_admin?
         @new_contact_requests_count = ContactRequest.where(is_viewed: false).count
+        @new_orders_count = Order.where(is_viewed: false).count
       else
         @new_appointments_count = current_admin.appointments.where(is_viewed: false).count
       end

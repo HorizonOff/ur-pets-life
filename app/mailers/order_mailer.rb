@@ -33,4 +33,10 @@ class OrderMailer < ApplicationMailer
     @itemName = Item.where(:id => orderitem.item_id).first.name
     mail(to: toAddress, subject: 'Order Cancellation')
   end
+
+  def send_low_inventory_alert(itemid)
+    @iteminfo = Item.where(:id => itemid).first
+    mail(to: ENV['ADMIN'], subject: 'Inventory Alert')
+  end
+
 end

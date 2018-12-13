@@ -2,13 +2,15 @@
 
 $(document).ready(function() {
 
-	
-	
-	
+
+
+
 	$('.proslider').slick({
-  slidesToShow: 4,
-  slidesToScroll: 1,
-  dots: true,
+  slidesToShow: 6,
+  slidesToScroll: 6,
+  arrows: true,
+  dots: false,
+  autoplay: true,
   responsive: [
     {
       breakpoint: 1024,
@@ -36,14 +38,14 @@ $(document).ready(function() {
     // instead of a settings object
   ]
 });
-	
-	
+
+
 		//*****************************
     // Responsive Slider
     //*****************************
     var respsliders = {
       1: {slider : '.multiple-items'}
-     
+
     };
     $.each(respsliders, function() {
         $(this.slider).slick({
@@ -64,11 +66,7 @@ $(document).ready(function() {
                 }
             ]
         });
-	
-});	
-	
-	});	
 
+});
 
-
-
+	});

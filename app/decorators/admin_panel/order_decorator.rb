@@ -32,7 +32,12 @@ module AdminPanel
       span_class = 'label-primary'
       text = "Confirmed"
     end
-    content_tag(:span, text, class: "label #{span_class}")
+    content = content_tag(:span, text, class: "label #{span_class}")
+    if model.order.is_viewed == false
+      content += ' '
+      content += content_tag(:span, 'New', class: 'label label-primary')
+    end
+    content
   end
 
   def IsRecurring

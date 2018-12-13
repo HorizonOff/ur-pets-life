@@ -19,14 +19,15 @@ header .custbtn span {font-size: 14px;display: block;}
 
 .whatsknow {text-align: center;padding: 40px 0;}
 .whatsknow h2 {font-size: 36px;color: #1C5879;}
+.whatsknow .col-md-4.col-sm-4 {display: inline-block;text-align: center;float: none;vertical-align: top;}
 .whatsknow p {text-align: center;color: #536873;margin-top: 30px;font-size: 14px; line-height: 24px;}
-.whatsknow .bx {min-height: 350px; margin: 21px 0 0;}
-.whatsknow .bx figure {height: 120px;}
+.whatsknow .bx {min-height: 350px;margin: 0 0 0;}
+.whatsknow .bx figure {height: 70px;}
 .whatsknow .bx img {width: 25%;}
 .whatsknow .bx h3 {color: #1C5879;text-align: center;margin-top: 44px; font-size:24px}
 .whatsknow .bx p {}
-.whatsknow h5 {color: #F8951D;font-size: 24px; margin-top: 100px;}
-.marginTop {margin-top: 50px;}
+.whatsknow h5 {color: #F8951D;font-size: 24px;margin-top: 50px;}
+.marginTop {margin-top: 40px;}
 
 
 .supersimple {background-repeat: no-repeat;background-size: cover;width: 100%;background-position: top center;height: 880px;margin: 100px 0 0;background-attachment: fixed;}
@@ -50,25 +51,33 @@ header .custbtn span {font-size: 14px;display: block;}
 .getintouch .form input[type=submit] {background: #EB8E30;color: white;border-radius: 50px;height: 50px;width: 250px;border: 0px;}
 
 .proSec {margin: 50px 0 0;}
-.proSec .product {width: 24%;display: inline-block;background: #e8e8e8;padding: 20px;vertical-align: top;height: 420px;margin-right: 9px;}
-.proSec .product figure {width: 100%;height: 230px;background-position: 50% 50%;background-size: cover;}
+.proSec .product {width: 24%;display: inline-block;background: #e8e8e8;padding: 20px;vertical-align: top;min-height: 150px;margin-right: 9px;}
+.proSec .product figure {width: 100%;min-height: 110px;background-position: center top;background-size: contain;background-repeat: no-repeat;}
 .proSec .product article {text-align: center;margin: 30px 0 0;}
 .proSec .product article h3 {font-size: 14px;font-weight: bold;color: #000;margin: 0 0 20px;}
 .proSec .product article h3 span {font-weight: 400;}
 .proSec .product article p {white-space: pre;overflow: hidden;text-overflow: ellipsis;margin: 0 0 21px;}
 .proSec .product article h5 {color: #1e7a97;font-weight: 700;font-size: 18px;}
 
+
+.proSec .slick-prev {color: #f13734;z-index: 999;left: -60px;width: 50px;height: 50px;border-radius: 0;border: 0;text-align: center;opacity: 1;background: #eb8e30;}
+.proSec .slick-next {color: #f13734;z-index: 999;right: -53px;width: 50px;height: 50px;border-radius: 0;border: 0;text-align: center;opacity: 1;background: #eb8e30;}
+.proSec .slick-prev:before {content: "<";opacity: 1;color: #fff;text-align: center;margin: 0 auto;display: table;width: initial;height: initial;font-size: 28px;font-family: monospace;font-weight: 700;}
+.proSec .slick-next:before {content: ">";opacity: 1;color: #fff;text-align: center;margin: 0 auto;display: table;width: initial;height: initial;font-size: 28px;font-family: monospace;font-weight: 700;}
+.proSec .slick-next:hover, .proSec .slick-prev:hover { opacity: 1; }
+
+
 .thrdSec {background: #f8951d;padding: 50px 0;}
 .thrdSec h2 {font-size: 28px;color: #005c84;margin: 40px 0;}
 .thrdSec ul {}
-.thrdSec ul li {font-size: 12px;display: inline-block;color: #313131;padding: 10px 0 10px 0px; width: 100%;}
+.thrdSec ul li {font-size: 12px;display: inline-block;color: #313131;padding: 10px 0px; width: 100%;}
 .thrdSec ul li:before {content: "\f054";font-family: FontAwesome;display: inline-block;width: 22px;vertical-align: top;     padding: 3px 0 0 5px;}
 .thrdSec ul li span {width: 90%;display: inline-block; font-size: 16px;}
 .thrdSec img {margin: 50px 0 0;}
 
 .forth {text-align: center;margin: 10px 0;}
 .forth figure {width: 100%;height: 356px;position: relative;background-size: cover;background-repeat: no-repeat;background-position: 50% 50%;}
-.forth figure figcaption {position: absolute;bottom: 30px;width: 100%; padding: 0 20px;}
+.forth figure figcaption {position: absolute;bottom: 30px;width: 100%;padding: 10px 20px;background: #f8951d78;}
 .forth figure figcaption p {color: #ffffff;font-size: 24px;font-weight: bold;}
 
 .cta {text-align: left;margin: 10px 0;}
@@ -83,45 +92,29 @@ header .custbtn span {font-size: 14px;display: block;}
 .cta2 article h2 strong {font-size: 20px;display: block;}
 .cta2 article h2:nth-child(3) {width: 52%;border-right: 0px;}
 
-
-
-
-
-
-footer {height: auto;background-repeat: no-repeat;width: 100%;background-size: cover;margin: 50px 0 0;text-align: left;padding: 70px 0 50px;}
+footer {height: 510px;background-repeat: no-repeat;width: 100%;background-size: cover;margin: 50px 0 0;text-align: left;padding: 70px 0 50px;}
 footer ul {margin: 0px 0px 40px;}
-footer ul li {display: inline-block;margin: 0 10px;}
+footer ul li {display: inline-block;margin: 0 10px 0 0;}
 footer ul li a {}
 footer ul li a img {width: 53px;}
 footer ul.links {margin: 0px 0;display: block;}
 footer ul.links li {color: #ffffff;font-size: 12px;margin: 0;}
-footer ul.links li a {color: #ffffff;font-size: 12px;padding: 0 10px;}
-footer p {color: #ffffff;font-size:14px;margin: 0 0 20px;}
+footer ul.links li a {color: #ffffff;font-size: 12px;padding: 0 6px 0 0;}
+footer p {color: #ffffff;font-size: 12px;margin: 0 0 20px;}
 footer .logo {    margin-bottom: 30px;}
 .cardBr {text-align: center;margin-top: 30px;}
 
-
 .inner-pages {}
 .inner-pages .banner {height: 100vh;margin-bottom: 20px;position: relative;}
-.inner-pages .banner h1 {
-    font-size: 40px;
-    color: #fff;
-    line-height: 50px;
-    text-transform: uppercase;
-    position: absolute;
-    display: inline-block;
-    left: 50%;
-    top: 50%;
-    transform: translateX(-50%) translateY(-50%);
-}
+.inner-pages .banner h1 {font-size: 40px;color: #fff;line-height: 50px;text-transform: uppercase;position: absolute;display: inline-block;left: 50%;top: 50%;transform: translateX(-50%) translateY(-50%);}
 .contentPage {}
 .contentPage h2 {font-size: 24px;color: #1C5879;margin: 40px 0 30px;}
 .contentPage p {color: #536873;font-size: 14px;line-height: 24px;margin-bottom: 20px;}
 .contentPage ul {margin: 30px 10px;padding: 0 0px;}
 .contentPage ul li {color: #536873;font-size: 14px;line-height: 24px;}
-
+.contentPage p a:hover {color: #536873;}
 .contentPage ul li:before {content: "\f054";font-family: FontAwesome;display: inline-block;width: 22px;padding: 0px 0 0 5px;font-size: 10px;vertical-align: top;}
-.contentPage ol {margin: 30px 20px 30px;padding: 0 0px;}
+.contentPage ol {    margin: 30px 0px 30px 12px;padding: 0 0px;}
 .contentPage ol li {color: #536873;font-size: 14px;line-height: 24px;list-style: decimal-leading-zero;margin: 0 0 30px;}
 
 
@@ -145,8 +138,8 @@ footer .logo {    margin-bottom: 30px;}
 
 @media (min-width:768px) and (max-width:1024px) {
 
- .forth figure figcaption p {   font-size: 15px;}
- .forth figure {height: 196px;}
+ 	.forth figure figcaption p {   font-size: 15px;}
+ 	.forth figure {height: 196px;}
 	.cta figure {height: 200px;}
 	.cta figure figcaption p {font-size: 16px;line-height: 20px;}
 	.cta figure figcaption {top: 40px;width: 32%;}
@@ -177,10 +170,12 @@ footer .logo {    margin-bottom: 30px;}
 	.banner article a img {width: 100%;margin-top: 0;}
 	.banner {height: 480px;}
 	.banner img {margin-top: 50px;}
+	.whatsknow .bx figure {height: 40px;}
+	footer {height: auto;}
+
+
+
 	}
-
-
-
 
 
 
@@ -189,12 +184,17 @@ footer .logo {    margin-bottom: 30px;}
 
 @media only screen and (device-width:1024px) {
 
+	.thrdSec img {display: block;width: 100%;}
+
+
 
 }
 
 
 @media only screen and (device-width: 812px) {
 
+	footer p {font-size: 12px;}
+	footer ul.links li a {font-size: 12px;}
 
 }
 
@@ -203,6 +203,7 @@ footer .logo {    margin-bottom: 30px;}
 
 @media screen and (max-width: 767px) {
 
+	footer {height: auto;padding: 30px 0 30px;}
 	header .logo {float: inherit;text-align: center;}
 	header .custbtn {float: inherit;text-align: center;display: table; margin:30px auto 0;}
 	.banner {padding: 150px 0 0;height: 490px;}
@@ -216,7 +217,7 @@ footer .logo {    margin-bottom: 30px;}
 	.supersimple {height: auto;}
 	.thrdSec img {width: 100%;}
 	.supersimple img { width: 100%;}
-	footer img {width: 100%;}
+	footer img {width: 90%;}
 	.Easyaccess img {width: 100%;margin-top: 30px;}
 	.supersimple article {padding: 8% 0 30px;}
 	.Easyaccess p {font-size: 14px;}
@@ -239,9 +240,15 @@ footer .logo {    margin-bottom: 30px;}
 	footer ul.links li a { font-size: 14px;}
 	footer p {font-size: 14px;}
 	footer ul {margin: 0px 0px 30px;}
-
-	footer img.logo {width: 200px;}
+	footer ul.links {margin: 0px 0px;}
+	footer img.logo {width: 200px;margin-left: 16px;}
 	footer img.card {display: none;}
+	.contentPage ol li {font-size: 12px;}
+	.contentPage ul li {font-size: 12px;}
+	.contentPage ol {margin: 30px 18px 30px;}
+	.contentPage p {font-size: 12px;line-height: inherit;}
+	.banner article { padding: 30% 0 0;}
+
 
 
 
@@ -250,6 +257,6 @@ footer .logo {    margin-bottom: 30px;}
 
 
 @media (min-width:568px) and (max-width:767px) {
-
+	.whatsknow .bx figure {height: 130px;}
 
 }

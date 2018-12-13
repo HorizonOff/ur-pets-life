@@ -147,7 +147,7 @@ class OrderItemsController < Api::BaseController
           total = subTotal + deliveryCharges + vatCharges
           paymentStatus = existingorder.IsCash == true ? 0 : 1
           # TransactionId and TransactionDate to be inserted while Telr integration
-          neworder = Order.new(:user_id => @user.id, :RedeemPoints => 0, :Subtotal => subTotal, :Delivery_Charges => deliveryCharges, :shipmenttime => 'with in 7 days', :Vat_Charges => vatCharges, :Total => total, :Order_Status => 1, :Payment_Status => paymentStatus, :Order_Notes => existingorder.Order_Notes, :IsCash => existingorder.IsCash,  :location_id => existingorder.location_id)
+          neworder = Order.new(:user_id => @user.id, :RedeemPoints => 0, :Subtotal => subTotal, :Delivery_Charges => deliveryCharges, :shipmenttime => 'with in 7 days', :Vat_Charges => vatCharges, :Total => total, :Order_Status => 1, :Payment_Status => paymentStatus, :Order_Notes => existingorder.Order_Notes, :IsCash => existingorder.IsCash,  :location_id => existingorder.location_id, :is_viewed => false)
           if neworder.save
             newitem = OrderItem.new(:IsRecurring => false, :order_id => neworder.id, :item_id => item.id, :Quantity => permitted_quantity, :Unit_Price => item.price, :Total_Price => subTotal, :IsReviewed => false, :status => :pending, :isdiscounted => (item.discount > 0 ? true : false)).save
 
@@ -165,7 +165,12 @@ class OrderItemsController < Api::BaseController
 
             user_redeem_point_record.update(:net_worth => (user_redeem_point_record.net_worth +  discount_per_transaction), :last_net_worth => user_redeem_point_record.net_worth, :last_reward_type => "Discount Per Transaction (Re-Order)", :last_reward_worth => discount_per_transaction, :last_reward_update => Time.now, :totalearnedpoints => (user_redeem_point_record.totalearnedpoints + discount_per_transaction))
             item.decrement!(:quantity, permitted_quantity)
+            if item.quantity < 3
+              send_inventory_alerts(item.id)
+            end
             neworder.update(:earned_points => discount_per_transaction)
+            set_order_notifcation_email(neworder.id)
+            @user.notifications.create(order: neworder, message: 'Your Order has been placed successfully')
             render json: {
               Message: "New Order Placed successfully",
               status: :created
@@ -236,7 +241,7 @@ class OrderItemsController < Api::BaseController
             end
             orderitem.update(:status => "cancelled")
             order.update(:earned_points => (order.earned_points - points_to_be_deducted_on_cancel))
-
+            @user.notifications.create(order: order, message: 'Your Order for ' + item.name + ' has been cancelled')
             #if !OrderItem.where(:order_id => order.id).exists?
             #  order.destroy
             #end
@@ -344,6 +349,15 @@ class OrderItemsController < Api::BaseController
     # Use callbacks to share common setup or constraints between actions.
     def set_order_item
       @order_item = OrderItem.find(params[:id])
+    end
+
+    def send_inventory_alerts(itemid)
+      OrderMailer.send_low_inventory_alert(itemid).deliver
+    end
+
+    def set_order_notifcation_email(orderid)
+      OrderMailer.send_order_notification_email_to_admin(orderid).deliver
+      OrderMailer.send_order_placement_notification_to_customer(@user.email).deliver
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

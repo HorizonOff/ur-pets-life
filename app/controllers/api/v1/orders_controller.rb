@@ -218,7 +218,7 @@ end
           paymentStatus = 1
         end
 
-        @order = Order.new(:user_id => @user.id, :RedeemPoints => permitted_redeem_points, :TransactionId => params[:TransactionId], :TransactionDate => params[:TransactionDate], :Subtotal => subTotal, :Delivery_Charges => deliveryCharges, :shipmenttime => 'with in 7 days', :Vat_Charges => vatCharges, :Total => total, :Order_Status => 1, :Payment_Status => paymentStatus, :Delivery_Date => params[:Delivery_Date], :Order_Notes => params[:Order_Notes], :IsCash => params[:IsCash],  :location_id => params[:location_id])
+        @order = Order.new(:user_id => @user.id, :RedeemPoints => permitted_redeem_points, :TransactionId => params[:TransactionId], :TransactionDate => params[:TransactionDate], :Subtotal => subTotal, :Delivery_Charges => deliveryCharges, :shipmenttime => 'with in 7 days', :Vat_Charges => vatCharges, :Total => total, :Order_Status => 1, :Payment_Status => paymentStatus, :Delivery_Date => params[:Delivery_Date], :Order_Notes => params[:Order_Notes], :IsCash => params[:IsCash],  :location_id => params[:location_id], :is_viewed => false)
         if @order.save
 
           if permitted_redeem_points > 0
@@ -245,12 +245,16 @@ end
           @neworderitemcreate.save
           item = Item.where(:id => cartitem.item_id).first
           item.decrement!(:quantity, cartitem.quantity)
+          if item.quantity < 3
+            send_inventory_alerts(item.id)
+          end 
           if !cartitem.recurssion_interval_id.nil?
             @neworderitemcreate.update(:recurssion_interval_id => cartitem.recurssion_interval_id)
           end
           end
           @user.shopping_cart_items.destroy_all
           set_order_notifcation_email(@order.id)
+          @user.notifications.create(order: @order, message: 'Your Order has been placed successfully')
           format.json do
             render json: {
               Message: 'Order was successfully created.',
@@ -341,6 +345,10 @@ end
     def set_order
       @order = Order.find_by_id(params[:id])
       return render_404 unless @order
+    end
+
+    def send_inventory_alerts(itemid)
+      OrderMailer.send_low_inventory_alert(itemid).deliver
     end
 
     def set_order_notifcation_email(orderid)
