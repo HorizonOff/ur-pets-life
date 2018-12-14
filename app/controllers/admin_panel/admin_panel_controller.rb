@@ -35,6 +35,10 @@ module AdminPanel
       %i[latitude longitude city area street building_type building_name unit_number villa_number comment _destroy]
     end
 
+    def redeem_point_params
+      %i[net_worth]
+    end
+
     def schedule_params
       %i[day_and_night monday_open_at monday_close_at tuesday_open_at tuesday_close_at wednesday_open_at
          wednesday_close_at thursday_open_at thursday_close_at friday_open_at friday_close_at saturday_open_at

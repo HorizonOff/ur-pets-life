@@ -11,10 +11,19 @@ module AdminPanel
         format.json { filter_users }
       end
     end
- 
-    def edit; end
+
+    def edit
+      if !RedeemPoint.where(:user_id => @user.id).exists?
+        @redeempoint = RedeemPoint.create(:user_id => @user.id, :net_worth => 0, :last_net_worth => 0, :totalearnedpoints => 0, :totalavailedpoints => 0)
+        @user.redeem_point = @redeempoint
+      end
+    end
 
     def show
+      if !RedeemPoint.where(:user_id => @user.id).exists?
+        @redeempoint = RedeemPoint.create(:user_id => @user.id, :net_worth => 0, :last_net_worth => 0, :totalearnedpoints => 0, :totalavailedpoints => 0)
+        @user.redeem_point = @redeempoint
+      end
       @pets = ::AdminPanel::PetDecorator.decorate_collection(@user.pets)
     end
 
@@ -61,7 +70,8 @@ module AdminPanel
 
     def user_params
       params.require(:user).permit(:first_name, :last_name, :mobile_number, :gender, :birthday, :email,
-                                   location_attributes: location_params)
+                                   location_attributes: location_params,
+                                   redeem_point_attributes: redeem_point_params)
     end
 
     def filter_users

@@ -30,7 +30,7 @@ module AdminPanel
     def filter
       select_additional_fields
       if draw_first?
-        if model.in? %w[Appointment ContactRequest]
+        if model.in? %w[Appointment ContactRequest OrderItem]
           scope.order(created_at: :desc).page(params[:page]).per(10)
         else
           scope.order(id: :asc).page(params[:page]).per(10)

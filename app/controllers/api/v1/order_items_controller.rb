@@ -242,6 +242,7 @@ class OrderItemsController < Api::BaseController
             orderitem.update(:status => "cancelled")
             order.update(:earned_points => (order.earned_points - points_to_be_deducted_on_cancel))
             @user.notifications.create(order: order, message: 'Your Order for ' + item.name + ' has been cancelled')
+            send_order_cancellation_email(orderitem.id)
             #if !OrderItem.where(:order_id => order.id).exists?
             #  order.destroy
             #end
@@ -353,6 +354,11 @@ class OrderItemsController < Api::BaseController
 
     def send_inventory_alerts(itemid)
       OrderMailer.send_low_inventory_alert(itemid).deliver
+    end
+
+    def send_order_cancellation_email(orderitemid)
+      OrderMailer.send_order_cancellation_notification_to_customer(orderitemid).deliver
+      OrderMailer.send_order_cancellation_notification_to_admin(orderitemid).deliver
     end
 
     def set_order_notifcation_email(orderid)

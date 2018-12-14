@@ -33,6 +33,12 @@
                   %label
                     IsRecurring:
                   = @admin_panel_order.IsRecurring
+
+                - if @admin_panel_order.IsRecurring?
+                  %li
+                    %label
+                      Recurssion Interval:
+                    = @admin_panel_order.recurssion_interval.label
                 %li
                   %label
                     Status:

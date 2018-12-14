@@ -64,7 +64,7 @@ class User < ApplicationRecord
   has_many :unread_notifications, -> { where(viewed_at: nil) }, class_name: 'Notification'
 
   accepts_nested_attributes_for :location, update_only: true, reject_if: :all_blank
-
+  accepts_nested_attributes_for :redeem_point, update_only: true, reject_if: :all_blank
   delegate :address, to: :location, allow_nil: true
   delegate :avatar, to: :pet_avatar, allow_nil: true
 

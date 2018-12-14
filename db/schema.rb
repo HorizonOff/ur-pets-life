@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181206073249) do
+ActiveRecord::Schema.define(version: 20181214120540) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -393,6 +393,7 @@ ActiveRecord::Schema.define(version: 20181206073249) do
     t.string "short_description"
     t.float "unit_price"
     t.float "buying_price"
+    t.boolean "is_active", default: true
     t.index ["item_brand_id"], name: "index_items_on_item_brands_id"
     t.index ["item_categories_id"], name: "index_items_on_item_categories_id"
     t.index ["pet_type_id"], name: "index_items_on_pet_type_id"
@@ -430,8 +431,10 @@ ActiveRecord::Schema.define(version: 20181206073249) do
     t.datetime "updated_at", null: false
     t.datetime "viewed_at"
     t.boolean "is_for_vaccine", default: false
+    t.bigint "order_id"
     t.index ["admin_id"], name: "index_notifications_on_admin_id"
     t.index ["appointment_id"], name: "index_notifications_on_appointment_id"
+    t.index ["order_id"], name: "index_notifications_on_order_id"
     t.index ["pet_id"], name: "index_notifications_on_pet_id"
     t.index ["user_id"], name: "index_notifications_on_user_id"
     t.index ["viewed_at"], name: "index_notifications_on_viewed_at"
@@ -459,6 +462,7 @@ ActiveRecord::Schema.define(version: 20181206073249) do
     t.string "TransactionId"
     t.datetime "TransactionDate"
     t.integer "earned_points"
+    t.boolean "is_viewed"
     t.index ["location_id"], name: "index_orders_on_location_id"
     t.index ["user_id"], name: "index_orders_on_user_id"
   end
@@ -470,6 +474,7 @@ ActiveRecord::Schema.define(version: 20181206073249) do
     t.datetime "updated_at", null: false
     t.string "picture"
     t.boolean "IsHaveCategories"
+    t.integer "seq"
   end
 
   create_table "pet_types_trainers", id: false, force: :cascade do |t|
@@ -855,6 +860,7 @@ ActiveRecord::Schema.define(version: 20181206073249) do
   add_foreign_key "items", "pet_types"
   add_foreign_key "notifications", "admins"
   add_foreign_key "notifications", "appointments"
+  add_foreign_key "notifications", "orders"
   add_foreign_key "notifications", "pets"
   add_foreign_key "notifications", "users"
   add_foreign_key "order_items", "items"

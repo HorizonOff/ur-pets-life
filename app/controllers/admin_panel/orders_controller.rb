@@ -126,7 +126,7 @@ module AdminPanel
         end
 
         order.update(:earned_points => (order.earned_points - points_to_be_deducted_on_cancel))
-        send_order_cancellation_email_to_customer(@admin_panel_order.id)
+        send_order_cancellation_email(@admin_panel_order.id)
       end
 
       flash[:success] = 'Order Item was successfully updated'
@@ -161,8 +161,9 @@ module AdminPanel
       OrderMailer.send_order_confimation_notification_to_customer(orderitemid).deliver
     end
 
-    def send_order_cancellation_email_to_customer(orderitemid)
+    def send_order_cancellation_email(orderitemid)
       OrderMailer.send_order_cancellation_notification_to_customer(orderitemid).deliver
+      OrderMailer.send_order_cancellation_notification_to_admin(orderitemid).deliver
     end
 
     def view_new_order
@@ -177,7 +178,7 @@ module AdminPanel
 
     def filter_orders
       filtered_orders = filter_and_pagination_query.filter
-      filtered_orders = filtered_orders.order(id: :desc)
+      filtered_orders = filtered_orders
       decorated_data = ::AdminPanel::OrderDecorator.decorate_collection(filtered_orders)
       serialized_data = ActiveModel::Serializer::CollectionSerializer.new(
         decorated_data, serializer: ::AdminPanel::OrderSerializer, adapter: :attributes

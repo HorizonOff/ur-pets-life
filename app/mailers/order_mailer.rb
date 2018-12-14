@@ -28,15 +28,22 @@ class OrderMailer < ApplicationMailer
 
   def send_order_cancellation_notification_to_customer(orderitemid)
     orderitem = OrderItem.where(:id => orderitemid).first
-    order = Order.where(:id => orderitem.order_id).first
-    toAddress = User.where(:id => order.user_id).first.email
+    @order = Order.where(:id => orderitem.order_id).first
+    toAddress = User.where(:id => @order.user_id).first.email
     @itemName = Item.where(:id => orderitem.item_id).first.name
-    mail(to: toAddress, subject: 'Order Cancellation')
+    mail(to: toAddress, subject: 'Order Cancelled')
   end
 
   def send_low_inventory_alert(itemid)
     @iteminfo = Item.where(:id => itemid).first
     mail(to: ENV['ADMIN'], subject: 'Inventory Alert')
   end
+
+  def send_order_cancellation_notification_to_admin(orderitemid)
+    @orderitem = OrderItem.where(:id => orderitemid).first
+    @itemName = Item.where(:id => @orderitem.item_id).first.name
+    mail(to: ENV['ADMIN'], subject: 'Order Cancelled')
+  end
+
 
 end

@@ -1,0 +1,15 @@
+.col-md-6.col-sm-6.col-xs-12
+  .x_panel
+    .x_title
+      %h2 Redeem Points
+      .clearfix
+    .x_content
+      %br
+
+      = f.fields_for :redeem_point do |ff|
+        .form-group
+          = ff.label :net_worth, class: 'control-label col-md-4 col-sm-4 col-xs-12' do
+            Available Points
+            %span.required *
+          .col-md-8.col-sm-8.col-xs-12
+            = ff.text_field :net_worth, class: 'form-control', required: true

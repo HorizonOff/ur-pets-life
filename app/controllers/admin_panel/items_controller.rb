@@ -70,7 +70,7 @@ module AdminPanel
   # DELETE /admin_panel/items/1
   # DELETE /admin_panel/items/1.json
   def destroy
-    @admin_panel_item.destroy
+    @admin_panel_item.update_attribute(:is_active, false)
     respond_to do |format|
       format.html { redirect_to admin_panel_items_url, notice: 'Item was successfully destroyed.' }
       format.json { head :no_content }
@@ -90,6 +90,7 @@ module AdminPanel
 
     def filter_items
       filtered_items = filter_and_pagination_query.filter
+      filtered_items = filtered_items.where(:is_active => true)
       decorated_data = ::AdminPanel::ItemDecorator.decorate_collection(filtered_items)
       serialized_data = ActiveModel::Serializer::CollectionSerializer.new(
         decorated_data, serializer: ::AdminPanel::ItemSerializer, adapter: :attributes

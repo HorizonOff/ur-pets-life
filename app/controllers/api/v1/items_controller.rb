@@ -6,7 +6,7 @@ class ItemsController < Api::BaseController
   # GET /items
   # GET /items.json
   def index
-    @items = Item.all
+    @items = Item.where(:is_active => true)
     if (!params[:pageno].nil? and !params[:size].nil?)
       size = params[:size].to_i
       page = params[:pageno].to_i
@@ -42,9 +42,9 @@ class ItemsController < Api::BaseController
         size = params[:size].to_i
         page = params[:pageno].to_i
 
-        @items = Item.where("lower(name) LIKE (?) AND price BETWEEN (?) AND  (?) AND avg_rating BETWEEN (?) AND (?) AND (#{brand_filter} OR item_brand_id = (?)) AND (#{cat_filter} OR item_categories_id = (?)) AND (#{pet_filter} OR pet_type_id = (?))", key.downcase, params[:lowerprice], params[:upperprice], params[:minrating], params[:maxrating], params[:brand_id], params[:category_id], params[:pet_type_id]).limit(size).offset(page * size)
+        @items = Item.includes(:item_brand).where("(lower(item_brands.name) LIKE (?) OR lower(items.name) LIKE (?)) AND price BETWEEN (?) AND  (?) AND avg_rating BETWEEN (?) AND (?) AND (#{brand_filter} OR item_brand_id = (?)) AND (#{cat_filter} OR item_categories_id = (?)) AND (#{pet_filter} OR pet_type_id = (?))", key.downcase, key.downcase, params[:lowerprice], params[:upperprice], params[:minrating], params[:maxrating], params[:brand_id], params[:category_id], params[:pet_type_id]).references(:item_brand).limit(size).offset(page * size)
       else
-        @items = Item.where("lower(name) LIKE (?) AND price BETWEEN (?) AND  (?) AND avg_rating BETWEEN (?) AND (?) AND (#{brand_filter} OR item_brand_id = (?)) AND (#{cat_filter} OR item_categories_id = (?)) AND (#{pet_filter} OR pet_type_id = (?))", key.downcase, params[:lowerprice], params[:upperprice], params[:minrating], params[:maxrating], params[:brand_id], params[:category_id], params[:pet_type_id])
+        @items = Item.includes(:item_brand).where("(lower(item_brands.name) LIKE (?) OR lower(items.name) LIKE (?)) AND price BETWEEN (?) AND  (?) AND avg_rating BETWEEN (?) AND (?) AND (#{brand_filter} OR item_brand_id = (?)) AND (#{cat_filter} OR item_categories_id = (?)) AND (#{pet_filter} OR pet_type_id = (?))", key.downcase, key.downcase, params[:lowerprice], params[:upperprice], params[:minrating], params[:maxrating], params[:brand_id], params[:category_id], params[:pet_type_id]).references(:item_brand)
       end
 
     end
@@ -58,6 +58,7 @@ class ItemsController < Api::BaseController
     elsif sort_filter == 4
       @items = @items.order(created_at: :asc)
     end
+    @items = @items.where(:is_active => true)
     json_to_render = []
     if @items.nil? or @items.empty?
         render json: {
@@ -88,6 +89,7 @@ class ItemsController < Api::BaseController
       item_brand_ids << brand.id
     end
     @items = Item.where("price >= (?) AND price <= (?) AND item_brand_id IN (?)", params[:lowerprice], params[:upperprice], item_brand_ids)
+    @items = @items.where(:is_active => true)
     if @items.nil? or @items.empty?
       format.json do
         render json: {
@@ -114,7 +116,7 @@ class ItemsController < Api::BaseController
     if PetType.where(:id => params[:id], :IsHaveCategories => false).exists?
     brand =  Item.where(:pet_type_id => params[:id]).order(id: :asc)
     json_to_render = []
-    @items = brand
+    @items = brand.where(:is_active => true)
     if @items.nil? or @items.empty?
       format.json do
         render json: {
@@ -157,7 +159,7 @@ def get_items_by_item_category
     end
 
   json_to_render = []
-  @items = brand
+  @items = brand.where(:is_active => true)
   if @items.nil? or @items.empty?
     format.json do
       render json: {
@@ -209,6 +211,7 @@ end
     else
       @items = Item.where(:item_brand_id => params[:id], :item_categories_id => params[:category_id], :pet_type_id => params[:pet_type_id])
     end
+    @items = @items.where(:is_active => true)
     if @items.nil? or @items.empty?
       format.json do
         render json: {

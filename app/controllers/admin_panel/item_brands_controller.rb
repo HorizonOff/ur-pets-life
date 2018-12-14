@@ -30,7 +30,6 @@ module AdminPanel
   # POST /admin_panel/item_brands
   # POST /admin_panel/item_brands.json
   def create
-    params[:item_brand][:brand_discount] = 0
     @admin_panel_item_brand = ItemBrand.new(brand_params)
     if @admin_panel_item_brand.save
       flash[:success] = 'Item Brand was successfully created'
@@ -91,7 +90,7 @@ module AdminPanel
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def brand_params
-      params.require(:item_brand).permit(:name, :picture, :brand_discount)
+      params.require(:item_brand).permit(:name, :picture, :brand_discount, item_category_ids: [])
     end
 
     def filter_brands
