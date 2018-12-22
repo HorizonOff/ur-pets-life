@@ -12,8 +12,22 @@ module AdminPanel
       current_admin.is_super_admin?
     end
 
+    def employee_or_super_admin?
+      if current_admin.is_super_admin?
+        true
+      elsif current_admin.is_employee?
+        true
+      else
+        false
+      end
+    end
+
     def authorize_super_admin
       authorize :application, :super_admin?
+    end
+
+    def authorize_super_admin_employee
+      authorize :application, :employee_or_super_admin?
     end
 
     def pundit_user

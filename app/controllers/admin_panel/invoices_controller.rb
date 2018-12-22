@@ -1,7 +1,7 @@
 module AdminPanel
 class InvoicesController < AdminPanelController
   before_action :set_admin_panel_invoice, only: [:show, :edit, :update, :destroy]
-
+  before_action :authorize_super_admin_employee, only: :index
   # GET /admin_panel/invoices
   # GET /admin_panel/invoices.json
   def index

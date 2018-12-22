@@ -1,6 +1,6 @@
 module AdminPanel
   class OrdersController < AdminPanelController
-    before_action :authorize_super_admin, only: :index
+    before_action :authorize_super_admin_employee, only: :index
     before_action :set_admin_panel_order, only: [:show, :edit, :update, :destroy]
     before_action :view_new_order, only: :show
 

@@ -1,6 +1,6 @@
 module AdminPanel
   class ItemsController < AdminPanelController
-    before_action :authorize_super_admin, only: :index
+    before_action :authorize_super_admin_employee, only: :index
     before_action :set_admin_panel_item, only: [:show, :edit, :update, :destroy]
 
   # GET /admin_panel/items

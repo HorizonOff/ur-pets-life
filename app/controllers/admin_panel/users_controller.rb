@@ -1,6 +1,6 @@
 module AdminPanel
   class UsersController < AdminPanelController
-    before_action :authorize_super_admin
+    before_action :authorize_super_admin_employee
     before_action :set_user, except: %i[index new create]
     before_action :set_location, only: %i[edit]
 
