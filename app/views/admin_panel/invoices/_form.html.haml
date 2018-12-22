@@ -1,0 +1,10 @@
+= form_for @admin_panel_invoice do |f|
+  - if @admin_panel_invoice.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@admin_panel_invoice.errors.count, "error")} prohibited this admin_panel_invoice from being saved:"
+      %ul
+        - @admin_panel_invoice.errors.full_messages.each do |message|
+          %li= message
+
+  .actions
+    = f.submit 'Save'

@@ -3,11 +3,15 @@ module AdminPanel
     before_action :authorize_super_admin, only: :index
     before_action :set_admin_panel_order, only: [:show, :edit, :update, :destroy]
     before_action :view_new_order, only: :show
+
+    @@filtered_user_id = 0
   # GET /admin_panel/orders
   # GET /admin_panel/orders.json
   def index
+    set_filtered_user
     respond_to do |format|
       format.html {}
+      format.xlsx { export_data }
       format.json { filter_orders }
     end
   end
@@ -15,16 +19,16 @@ module AdminPanel
   # GET /admin_panel/orders/1
   # GET /admin_panel/orders/1.json
   def show
-    @parentorderinfo = Order.includes(:user).where(:id => @admin_panel_order.order_id).first
-    @orderiteminfo = Item.where(:id => @admin_panel_order.item_id).first
-    @shippinglocation = Location.where(:id => @parentorderinfo.location_id).first
-    @shippingaddress = (@shippinglocation.villa_number.blank? ? '' : (@shippinglocation.villa_number + ' '))  + (@shippinglocation.unit_number.blank? ? '' : (@shippinglocation.unit_number + ' ')) + (@shippinglocation.building_name.blank? ? '' : (@shippinglocation.building_name + ' ')) + (@shippinglocation.street.blank? ? '' : (@shippinglocation.street + ' ')) + (@shippinglocation.area.blank? ? '' : (@shippinglocation.area + ' ')) + (@shippinglocation.city.blank? ? '' : @shippinglocation.city)
 
-    if @admin_panel_order.status == 'pending'
+    @shippinglocation = Location.where(:id => @admin_panel_order.location_id).first
+    @shippingaddress = (@shippinglocation.villa_number.blank? ? '' : (@shippinglocation.villa_number + ' '))  + (@shippinglocation.unit_number.blank? ? '' : (@shippinglocation.unit_number + ' ')) + (@shippinglocation.building_name.blank? ? '' : (@shippinglocation.building_name + ' ')) + (@shippinglocation.street.blank? ? '' : (@shippinglocation.street + ' ')) + (@shippinglocation.area.blank? ? '' : (@shippinglocation.area + ' ')) + (@shippinglocation.city.blank? ? '' : @shippinglocation.city)
+    @orderitems = OrderItem.includes(:item).where(:order_id => @admin_panel_order.id)
+
+    if @admin_panel_order.order_status_flag == 'pending'
       @statusoption = [['Comfirm', 'confirmed'], ['Cancel', 'cancelled']]
-    elsif @admin_panel_order.status == 'confirmed'
+    elsif @admin_panel_order.order_status_flag == 'confirmed'
       @statusoption = [['On The Way', 'on_the_way']]
-    elsif @admin_panel_order.status == 'on_the_way'
+    elsif @admin_panel_order.order_status_flag == 'on_the_way'
       @statusoption = [['Delievered', 'delivered']]
     end
 
@@ -56,31 +60,83 @@ module AdminPanel
     end
   end
 
+  def cancel
+    orderitem = OrderItem.where(:id => params[:id]).first
+    orderitem.update_attributes(status: :cancelled)
+
+    updateordertocancel = true
+    allorderitems = OrderItem.where(:order_id => orderitem.order_id)
+    allorderitems.each do |items|
+      if items.status != 'cancelled'
+        updateordertocancel = false
+      end
+    end
+
+    order = Order.where(:id => orderitem.order_id).first
+
+    if updateordertocancel == true
+      order.update(:Subtotal => 0, :Delivery_Charges => 0, :Vat_Charges => 0, :Total => 0, :order_status_flag => 'cancelled', :earned_points => 0)
+    else
+      subTotal = order.Subtotal - orderitem.Total_Price
+      deliveryCharges = subTotal > 100 ? 0 : 20
+      vatCharges = (subTotal/100).to_f * 5
+      total = subTotal + deliveryCharges + vatCharges
+      order.update(:Subtotal => subTotal, :Delivery_Charges => deliveryCharges, :Vat_Charges => vatCharges, :Total => total)
+    end
+
+    user_redeem_point_record = RedeemPoint.where(:user_id => order.user_id).first
+    userpoints = user_redeem_point_record.net_worth
+    discount_per_transaction = 0
+    target_revert_price = orderitem.Total_Price
+
+    if target_revert_price <= 500
+      discount_per_transaction =+ (3*target_revert_price)/100
+    elsif target_revert_price > 500 and target_revert_price <= 1000
+      discount_per_transaction =+ (5*target_revert_price)/100
+    elsif target_revert_price > 1000 and target_revert_price <= 2000
+      discount_per_transaction =+ (7.5*target_revert_price)/100
+    elsif target_revert_price > 2000
+      discount_per_transaction =+ (10*target_revert_price)/100
+    end
+
+    points_to_be_deducted_on_cancel = 0
+    if (userpoints > 0 and userpoints < discount_per_transaction)
+      points_to_be_deducted_on_cancel = userpoints
+    elsif userpoints >= discount_per_transaction
+      points_to_be_deducted_on_cancel = discount_per_transaction
+    end
+    user_redeem_point_record.update(:net_worth => (userpoints -  points_to_be_deducted_on_cancel), :last_net_worth => userpoints, :last_reward_type => "Discount Per Transaction (Order Cancel Roll Back)", :last_reward_worth => discount_per_transaction, :last_reward_update => Time.now, :totalearnedpoints => (user_redeem_point_record.totalearnedpoints - points_to_be_deducted_on_cancel))
+
+    item = Item.where(:id => orderitem.item_id).first
+    if !item.nil?
+      item.increment!(:quantity, orderitem.Quantity)
+    end
+    if updateordertocancel != true
+      order.update(:earned_points => (order.earned_points - points_to_be_deducted_on_cancel))
+      send_order_cancellation_email(orderitem.id)
+    else
+      OrderMailer.send_complete_cancel_order_email_to_customer(order.id, order.user.email).deliver
+    end
+
+    redirect_to action: 'show', id: orderitem.order_id
+  end
   # PATCH/PUT /admin_panel/orders/1
   # PATCH/PUT /admin_panel/orders/1.json
   def update
-    statustoupdate = params["order_item"]["updated_status"].to_s
+    statustoupdate = params["order"]["order_status_flag"].to_s
 
-    if @admin_panel_order.update(:status => statustoupdate)
-      parentorder = Order.where(:id => @admin_panel_order.order_id).first
-      orderuser = User.where(:id => parentorder.user_id).first
-      itemordered = Item.where(:id => @admin_panel_order.item_id).first
-
-      orderuser.notifications.create(order: parentorder, message: 'Your Order status for ' + itemordered.name + ' has been updated to ' + statustoupdate)
+    if @admin_panel_order.update(:order_status_flag => statustoupdate)
+      @admin_panel_order.order_items.each do |orderitem|
+        if orderitem.status != 'cancelled'
+          orderitem.update(:status => statustoupdate)
+        end
+      end
+      orderuser = User.where(:id => @admin_panel_order.user_id).first
+      orderuser.notifications.create(order: @admin_panel_order, message: 'Your Order status for Order # ' + @admin_panel_order.id.to_s + ' has been ' + (statustoupdate == 'cancelled' ? 'Cancelled' : 'updated to ' + statustoupdate))
 
       if statustoupdate == 'delivered'
-        sendInvoice = true
-        orderItems = OrderItem.where(:order_id => @admin_panel_order.order_id)
-        orderItems.each do |itemtocheck|
-          if (itemtocheck.status != 'delivered' and itemtocheck.status != 'cancelled')
-            sendInvoice = false
-          end
-        end
-        if sendInvoice == true
-          orderinfo = Order.where(:id => @admin_panel_order.order_id).first
-          customerInfo = User.where(:id => orderinfo.user_id).first
-          set_order_delivery_invoice(orderinfo.id, customerInfo.email)
-        end
+        set_order_delivery_invoice(@admin_panel_order.id, orderuser.email)
+        @admin_panel_order.update_attributes(Payment_Status: 1)
       end
 
       if statustoupdate == 'confirmed'
@@ -88,45 +144,7 @@ module AdminPanel
       end
 
       if statustoupdate == 'cancelled'
-        orderitem = @admin_panel_order
-        order = Order.where(:id => orderitem.order_id).first
-        subTotal = order.Subtotal - orderitem.Total_Price
-        deliveryCharges = subTotal > 100 ? 0 : 20
-        vatCharges = (subTotal/100).to_f * 5
-        total = subTotal + deliveryCharges + vatCharges
-
-        order.update(:Subtotal => subTotal, :Delivery_Charges => deliveryCharges, :Vat_Charges => vatCharges, :Total => total)
-
-        user_redeem_point_record = RedeemPoint.where(:user_id => order.user_id).first
-        userpoints = user_redeem_point_record.net_worth
-        discount_per_transaction = 0
-        target_revert_price = orderitem.Total_Price
-
-        if target_revert_price <= 500
-          discount_per_transaction =+ (3*target_revert_price)/100
-        elsif target_revert_price > 500 and target_revert_price <= 1000
-          discount_per_transaction =+ (5*target_revert_price)/100
-        elsif target_revert_price > 1000 and target_revert_price <= 2000
-          discount_per_transaction =+ (7.5*target_revert_price)/100
-        elsif target_revert_price > 2000
-          discount_per_transaction =+ (10*target_revert_price)/100
-        end
-
-        points_to_be_deducted_on_cancel = 0
-        if (userpoints > 0 and userpoints < discount_per_transaction)
-          points_to_be_deducted_on_cancel = userpoints
-        elsif userpoints >= discount_per_transaction
-          points_to_be_deducted_on_cancel = discount_per_transaction
-        end
-        user_redeem_point_record.update(:net_worth => (userpoints -  points_to_be_deducted_on_cancel), :last_net_worth => userpoints, :last_reward_type => "Discount Per Transaction (Order Cancel Roll Back)", :last_reward_worth => discount_per_transaction, :last_reward_update => Time.now, :totalearnedpoints => (user_redeem_point_record.totalearnedpoints - points_to_be_deducted_on_cancel))
-
-        item = Item.where(:id => orderitem.item_id).first
-        if !item.nil?
-          item.increment!(:quantity, orderitem.Quantity)
-        end
-
-        order.update(:earned_points => (order.earned_points - points_to_be_deducted_on_cancel))
-        send_order_cancellation_email(@admin_panel_order.id)
+        OrderMailer.send_complete_cancel_order_email_to_customer(@admin_panel_order.id, @admin_panel_order.user.email).deliver
       end
 
       flash[:success] = 'Order Item was successfully updated'
@@ -149,7 +167,7 @@ module AdminPanel
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_admin_panel_order
-      @admin_panel_order = OrderItem.find(params[:id])
+      @admin_panel_order = Order.find(params[:id])
     end
 
     def set_order_delivery_invoice(orderid, userEmail)
@@ -157,8 +175,8 @@ module AdminPanel
       OrderMailer.send_order_delivery_invoice(orderid, userEmail).deliver
     end
 
-    def send_order_confirmation_email_to_customer(orderitemid)
-      OrderMailer.send_order_confimation_notification_to_customer(orderitemid).deliver
+    def send_order_confirmation_email_to_customer(orderid)
+      OrderMailer.send_order_confimation_notification_to_customer(orderid).deliver
     end
 
     def send_order_cancellation_email(orderitemid)
@@ -167,14 +185,14 @@ module AdminPanel
     end
 
     def view_new_order
-      orderdetails = Order.where(:id => @admin_panel_order.order_id).first
+      orderdetails = Order.where(:id => @admin_panel_order.id).first
       orderdetails.update_attribute(:is_viewed, true)
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
-    def admin_panel_order_params
-      params.fetch(:admin_panel_order, {})
-    end
+    #def admin_panel_order_params
+    #  params.fetch(:admin_panel_order, {})
+    #end
 
     def filter_orders
       filtered_orders = filter_and_pagination_query.filter
@@ -189,7 +207,28 @@ module AdminPanel
     end
 
     def filter_and_pagination_query
-      @filter_and_pagination_query ||= ::AdminPanel::FilterAndPaginationQuery.new('OrderItem', params)
+      @filter_and_pagination_query ||= ::AdminPanel::FilterAndPaginationQuery.new('Order', params)
+    end
+
+    def set_filtered_user
+      if !params.has_key?(:request_type)
+        if !params[:user_id].blank?
+          @@filtered_user_id = params[:user_id].to_i
+        else
+          @@filtered_user_id = 0
+        end
+      end
+    end
+
+    def export_data
+      is_user_present = @@filtered_user_id > 0 ? false : true
+
+      @orders = Order.order(:id).includes({user: [:location]}, {order_items: [item: :item_brand]})
+                                      .where("users.id = (?) OR #{is_user_present}", @@filtered_user_id).references(:user)
+
+      user_name = @@filtered_user_id > 0 ? User.where(:id => @@filtered_user_id).first.first_name + '_' : 'all_'
+      name = "Orders_for_#{user_name} #{Time.now.utc.strftime('%d-%M-%Y')}.xlsx"
+      response.headers['Content-Disposition'] = "attachment; filename*=UTF-8''#{name}"
     end
 
 end

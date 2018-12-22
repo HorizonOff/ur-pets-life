@@ -1,0 +1,23 @@
+wb = xlsx_package.workbook
+
+wb.add_worksheet(name: "Orders") do |sheet|
+  sheet.merge_cells "A1:O1"
+  sheet.add_row %w(SALES)
+  sheet.add_row %w(Date Invoice\ Number Jurisdiction Item\ Name Brand\ Name Qty Buying\ Rate VAT-% VAT-AED Selling\ Rate VAT-% VAT-AED Amount\ Buying Amount\ Selling Total\ Buying Total\ Selling)
+
+  @orders.each do |orderinfo|
+    order_date = orderinfo.created_at.to_date.to_s
+    invoice_no = 'INV-' + orderinfo.id.to_s
+
+    orderinfo.order_items.each do |orderitem|
+      vat_buying = (5*orderitem.item.buying_price)/100
+      vat_selling = (5*orderitem.item.price)/100
+      amount_buying = orderitem.item.buying_price * orderitem.Quantity
+      amount_selling = orderitem.item.price * orderitem.Quantity
+      total_buying = amount_buying + vat_buying
+      total_selling = amount_selling + vat_selling
+
+      sheet.add_row [order_date, invoice_no, orderinfo.location.city, orderitem.item.name, orderitem.item.item_brand.name, orderitem.Quantity, orderitem.item.buying_price, '5%', vat_buying, orderitem.item.price, '5%', vat_selling, amount_buying, amount_selling, total_buying, total_selling]
+    end
+  end
+end

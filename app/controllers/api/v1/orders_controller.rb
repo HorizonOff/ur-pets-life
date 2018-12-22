@@ -218,7 +218,7 @@ end
           paymentStatus = 1
         end
 
-        @order = Order.new(:user_id => @user.id, :RedeemPoints => permitted_redeem_points, :TransactionId => params[:TransactionId], :TransactionDate => params[:TransactionDate], :Subtotal => subTotal, :Delivery_Charges => deliveryCharges, :shipmenttime => 'with in 7 days', :Vat_Charges => vatCharges, :Total => total, :Order_Status => 1, :Payment_Status => paymentStatus, :Delivery_Date => params[:Delivery_Date], :Order_Notes => params[:Order_Notes], :IsCash => params[:IsCash],  :location_id => params[:location_id], :is_viewed => false)
+        @order = Order.new(:user_id => @user.id, :RedeemPoints => permitted_redeem_points, :TransactionId => params[:TransactionId], :TransactionDate => params[:TransactionDate], :Subtotal => subTotal, :Delivery_Charges => deliveryCharges, :shipmenttime => 'with in 7 days', :Vat_Charges => vatCharges, :Total => total, :Order_Status => 1, :Payment_Status => paymentStatus, :Delivery_Date => params[:Delivery_Date], :Order_Notes => params[:Order_Notes], :IsCash => params[:IsCash],  :location_id => params[:location_id], :is_viewed => false, :order_status_flag => 'pending')
         if @order.save
 
           if permitted_redeem_points > 0
@@ -247,7 +247,7 @@ end
           item.decrement!(:quantity, cartitem.quantity)
           if item.quantity < 3
             send_inventory_alerts(item.id)
-          end 
+          end
           if !cartitem.recurssion_interval_id.nil?
             @neworderitemcreate.update(:recurssion_interval_id => cartitem.recurssion_interval_id)
           end

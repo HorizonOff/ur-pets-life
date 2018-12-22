@@ -150,7 +150,12 @@ Rails.application.routes.draw do
       member { put :change_status }
       member { put :restore }
     end
-    resources :orders
+    resources :orders do
+      member { delete :cancel }
+    end
+    resources :invoices do
+      member { post :download_invoices}
+    end
     resources :items
     resources :item_brands
     resources :item_categories

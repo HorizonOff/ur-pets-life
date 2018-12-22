@@ -2,7 +2,7 @@ wb = xlsx_package.workbook
 
 wb.add_worksheet(name: "Appointments") do |sheet|
   sheet.add_row %w(ID User Service Vet Booked\ Time Session\ Start Dates Pick\ up\ Time Drop\ off\ Time)
-
+ 
   @appointments.each do |a|
     bookable_service = a.bookable_type + ' ' + a.bookable.name
     session_start = a.day_care_or_boarding? ? a.start_at.strftime('%-d %b %Y') : a.start_at.strftime('%-d %b %Y %I:%M')

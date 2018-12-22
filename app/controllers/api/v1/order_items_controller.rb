@@ -147,7 +147,7 @@ class OrderItemsController < Api::BaseController
           total = subTotal + deliveryCharges + vatCharges
           paymentStatus = existingorder.IsCash == true ? 0 : 1
           # TransactionId and TransactionDate to be inserted while Telr integration
-          neworder = Order.new(:user_id => @user.id, :RedeemPoints => 0, :Subtotal => subTotal, :Delivery_Charges => deliveryCharges, :shipmenttime => 'with in 7 days', :Vat_Charges => vatCharges, :Total => total, :Order_Status => 1, :Payment_Status => paymentStatus, :Order_Notes => existingorder.Order_Notes, :IsCash => existingorder.IsCash,  :location_id => existingorder.location_id, :is_viewed => false)
+          neworder = Order.new(:user_id => @user.id, :RedeemPoints => 0, :Subtotal => subTotal, :Delivery_Charges => deliveryCharges, :shipmenttime => 'with in 7 days', :Vat_Charges => vatCharges, :Total => total, :Order_Status => 1, :Payment_Status => paymentStatus, :Order_Notes => existingorder.Order_Notes, :IsCash => existingorder.IsCash,  :location_id => existingorder.location_id, :is_viewed => false, :order_status_flag => 'pending')
           if neworder.save
             newitem = OrderItem.new(:IsRecurring => false, :order_id => neworder.id, :item_id => item.id, :Quantity => permitted_quantity, :Unit_Price => item.price, :Total_Price => subTotal, :IsReviewed => false, :status => :pending, :isdiscounted => (item.discount > 0 ? true : false)).save
 
@@ -203,16 +203,25 @@ class OrderItemsController < Api::BaseController
         if !orderitem.nil?
           order = Order.where(:id => orderitem.order_id).first
           if !order.nil?
-            #order_redeem_points = order.RedeemPoints
-            #points_to_be_revert = 0
-            subTotal = order.Subtotal - orderitem.Total_Price
-            deliveryCharges = subTotal > 100 ? 0 : 20
-            vatCharges = (subTotal/100).to_f * 5
-            total = subTotal + deliveryCharges + vatCharges
-            #if order_redeem_points > subTotal
-            #  points_to_be_revert = order_redeem_points - subTotal
-            #end
-            order.update(:Subtotal => subTotal, :Delivery_Charges => deliveryCharges, :Vat_Charges => vatCharges, :Total => total)
+            orderitem.update_attributes(status: :cancelled)
+
+            updateordertocancel = true
+            allorderitems = OrderItem.where(:order_id => orderitem.order_id)
+            allorderitems.each do |items|
+              if items.status != 'cancelled'
+                updateordertocancel = false
+              end
+            end
+
+            if updateordertocancel == true
+              order.update(:Subtotal => 0, :Delivery_Charges => 0, :Vat_Charges => 0, :Total => 0, :order_status_flag => 'cancelled', :earned_points => 0)
+            else
+              subTotal = order.Subtotal - orderitem.Total_Price
+              deliveryCharges = subTotal > 100 ? 0 : 20
+              vatCharges = (subTotal/100).to_f * 5
+              total = subTotal + deliveryCharges + vatCharges
+              order.update(:Subtotal => subTotal, :Delivery_Charges => deliveryCharges, :Vat_Charges => vatCharges, :Total => total)
+            end
 
             user_redeem_point_record = RedeemPoint.where(:user_id => @user.id).first
             userpoints = user_redeem_point_record.net_worth
@@ -227,6 +236,7 @@ class OrderItemsController < Api::BaseController
             elsif target_revert_price > 2000
               discount_per_transaction =+ (10*target_revert_price)/100
             end
+
             points_to_be_deducted_on_cancel = 0
             if (userpoints > 0 and userpoints < discount_per_transaction)
               points_to_be_deducted_on_cancel = userpoints
@@ -239,10 +249,16 @@ class OrderItemsController < Api::BaseController
             if !item.nil?
               item.increment!(:quantity, orderitem.Quantity)
             end
-            orderitem.update(:status => "cancelled")
-            order.update(:earned_points => (order.earned_points - points_to_be_deducted_on_cancel))
-            @user.notifications.create(order: order, message: 'Your Order for ' + item.name + ' has been cancelled')
-            send_order_cancellation_email(orderitem.id)
+
+            if updateordertocancel != true
+              order.update(:earned_points => (order.earned_points - points_to_be_deducted_on_cancel))
+              @user.notifications.create(order: order, message: 'Your Order for ' + item.name + ' has been cancelled')
+              send_order_cancellation_email(orderitem.id)
+            else
+              @user.notifications.create(order: order, message: 'Your Order # ' + order.id + ' has been cancelled')
+              OrderMailer.send_complete_cancel_order_email_to_customer(order.id, order.user.email).deliver
+            end
+
             #if !OrderItem.where(:order_id => order.id).exists?
             #  order.destroy
             #end

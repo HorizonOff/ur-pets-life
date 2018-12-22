@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181214120540) do
+ActiveRecord::Schema.define(version: 20181218101755) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -443,29 +443,8 @@ ActiveRecord::Schema.define(version: 20181214120540) do
 # Could not dump table "order_items" because of following StandardError
 #   Unknown type 'order_item_status' for column 'status'
 
-  create_table "orders", force: :cascade do |t|
-    t.bigint "user_id"
-    t.bigint "location_id"
-    t.datetime "Delivery_Date"
-    t.string "Order_Notes"
-    t.float "Subtotal"
-    t.float "Delivery_Charges"
-    t.float "Vat_Charges"
-    t.float "Total"
-    t.boolean "IsCash"
-    t.integer "Order_Status"
-    t.integer "Payment_Status"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "shipmenttime"
-    t.integer "RedeemPoints"
-    t.string "TransactionId"
-    t.datetime "TransactionDate"
-    t.integer "earned_points"
-    t.boolean "is_viewed"
-    t.index ["location_id"], name: "index_orders_on_location_id"
-    t.index ["user_id"], name: "index_orders_on_user_id"
-  end
+# Could not dump table "orders" because of following StandardError
+#   Unknown type 'order_item_status' for column 'order_status_flag'
 
   create_table "pet_types", force: :cascade do |t|
     t.string "name"

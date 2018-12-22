@@ -157,15 +157,16 @@ function init_datatables(){
 
       'orders': { 'url': '/admin_panel/orders',
                 'columns': [ { 'searchable': true, 'orderable': true, 'data': 'id', 'targets': 0 },
-                             { 'searchable': true, 'orderable': true, 'data': 'order_id', 'targets': 1 },
-                             { 'searchable': false, 'orderable': false, 'data': 'name', 'targets': 2 },
-                             { 'searchable': false, 'orderable': false, 'data': 'picture', 'targets': 3 },
-                             { 'searchable': false, 'orderable': false, 'data': 'created_at', 'targets': 4 },
-                             { 'searchable': false, 'orderable': false, 'data': 'Quantity', 'targets': 5 },
-                             { 'searchable': false, 'orderable': false, 'data': 'Total_Price', 'targets': 6 },
-                             { 'searchable': false, 'orderable': false, 'data': 'IsRecurring', 'targets': 7},
-                             { 'searchable': true, 'orderable': true, 'data': 'status', 'targets': 8 },
-                             { 'searchable': false, 'orderable': false, 'data': 'actions', 'targets': 9 } ] },
+                             { 'searchable': false, 'orderable': false, 'data': 'user_id', 'targets': 1 },
+                             { 'searchable': false, 'orderable': false, 'data': 'location_id', 'targets': 2 },
+                             { 'searchable': false, 'orderable': false, 'data': 'Order_Notes', 'targets': 3 },
+                             { 'searchable': false, 'orderable': false, 'data': 'Subtotal', 'targets': 4 },
+                             { 'searchable': false, 'orderable': false, 'data': 'Total', 'targets': 5 },
+                             { 'searchable': false, 'orderable': false, 'data': 'IsCash', 'targets': 6 },
+                             { 'searchable': false, 'orderable': false, 'data': 'Payment_Status', 'targets': 7},
+                             { 'searchable': true, 'orderable': false, 'data': 'is_viewed', 'targets': 8 },
+                             { 'searchable': true, 'orderable': false, 'data': 'order_status_flag', 'targets': 9 },
+                             { 'searchable': false, 'orderable': false, 'data': 'actions', 'targets': 10 } ] },
 
 
       'specializations': { 'url': '/admin_panel/specializations',
@@ -234,6 +235,7 @@ function init_datatable(url, column_rules, order_col, order_dir){
         d.specialization_id = $(".additional_parameter[name*='specialization_id']").val();
         d.pet_type_id = $(".additional_parameter[name*='pet_type_id']").val();
         d.city = $(".additional_parameter[name*='city']").val();
+        d.user_id = $(".additional_parameter[name*='user_id']").val();
       }
     },
     "order": [[ order_col, order_dir ]],

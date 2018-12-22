@@ -1,0 +1,31 @@
+%div
+  .page-title
+    .title_left
+      %h3 Invoices
+
+  .clearfix
+
+  = form_for :anything, url: download_invoices_admin_panel_invoice_path(id: 1, format: :pdf),
+  html: { multipart: true, method: :post,:onsubmit => 'ResetForm()', :format => 'pdf', class: 'form-horizontal form-label-left with_location', autocomplete: 'off'} do |f|
+
+    .row
+      .col-md-6.col-sm-6.col-xs-12.col-md-offset-3.col-sm-offset-3
+        .x_panel
+          .x_content
+
+          %br
+          .form-group
+            = f.label :from_date, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
+              From Date
+              %span.required *
+            .col-md-9.col-sm-9.col-xs-12
+              = f.text_field :from_date, class: 'form-control single_cal1', required: true
+          .form-group
+            = f.label :to_date, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
+              To Date
+              %span.required *
+            .col-md-9.col-sm-9.col-xs-12
+              = f.text_field :to_date, class: 'form-control single_cal1', required: true, step: ".01", min: 1
+          %br
+          %br
+          = f.submit 'Download Invoices', disabled: false, class: 'btn btn-success col-sm-offset-5 col-md-offset-5 pull-right'

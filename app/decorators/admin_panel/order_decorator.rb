@@ -2,47 +2,52 @@ module AdminPanel
   class OrderDecorator < ApplicationDecorator
   delegate_all
 
-  def name
-    model.item.name
+  def user_id
+    model.user.name
   end
 
-  def picture
-    content_tag(:image, '', src: model.item.picture.url, class: 'avatar') if model.item.picture?
+  def location_id
+    shippinglocation = model.location
+    shippingaddress = (shippinglocation.villa_number.blank? ? '' : (shippinglocation.villa_number + ' '))  + (shippinglocation.unit_number.blank? ? '' : (shippinglocation.unit_number + ' ')) + (shippinglocation.building_name.blank? ? '' : (shippinglocation.building_name + ' ')) + (shippinglocation.street.blank? ? '' : (shippinglocation.street + ' ')) + (shippinglocation.area.blank? ? '' : (shippinglocation.area + ' ')) + (shippinglocation.city.blank? ? '' : shippinglocation.city)
+    shippingaddress
   end
 
-  def created_at
-    model.created_at.to_date
-  end
-
-  def status
-    text = model.status
-    if model.status == "pending"
+  def order_status_flag
+    text = model.order_status_flag
+    if model.order_status_flag == "pending"
       span_class = 'label-warning'
       text = "Pending"
-    elsif model.status == "on_the_way"
+    elsif model.order_status_flag == "on_the_way"
       span_class = 'label-info'
       text = "On The Way"
-    elsif model.status == "delivered"
+    elsif model.order_status_flag == "delivered"
       span_class = 'label-success'
       text = "Delivered"
-    elsif model.status == "cancelled"
+    elsif model.order_status_flag == "cancelled"
       span_class = 'label-danger'
       text = "Cancelled"
-    elsif model.status == "confirmed"
+    elsif model.order_status_flag == "confirmed"
       span_class = 'label-primary'
       text = "Confirmed"
     end
     content = content_tag(:span, text, class: "label #{span_class}")
-    if model.order.is_viewed == false
-      content += ' '
-      content += content_tag(:span, 'New', class: 'label label-primary')
-    end
-    content
   end
 
-  def IsRecurring
-    text = model.IsRecurring? ? 'Yes' : 'No'
-    span_class = model.IsRecurring? ? 'label-success' : 'label-default'
+  def IsCash
+    text = model.IsCash? ? 'Yes' : 'No'
+    span_class = model.IsCash? ? 'label-default' : 'label-info'
+    content_tag(:span, text, class: "label #{span_class}")
+  end
+
+  def Payment_Status
+    text = model.Payment_Status == 1 ? 'confirmed' : 'pending'
+    span_class = model.Payment_Status == 1 ? 'label-success' : 'label-warning'
+    content_tag(:span, text, class: "label #{span_class}")
+  end
+
+  def is_viewed
+    text = model.is_viewed? ? 'viewed' : 'new'
+    span_class = model.is_viewed? ? 'label-primary' : 'label-danger'
     content_tag(:span, text, class: "label #{span_class}")
   end
 

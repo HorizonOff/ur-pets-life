@@ -60,7 +60,7 @@ module AdminPanel
     def filter_and_pagination_query
       @filter_and_pagination_query ||= ::AdminPanel::FilterAndPaginationQuery.new('Appointment', params, current_admin)
     end
-
+ 
     def view_appointment
       return if current_admin.is_super_admin?
       @appointment.update_attribute(:is_viewed, true)

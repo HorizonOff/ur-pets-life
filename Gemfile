@@ -11,6 +11,10 @@ gem 'omniauth-facebook'
 gem 'omniauth-google-oauth2'
 gem 'google-api-client', '~> 0.11'
 
+#PDF gem
+gem 'wicked_pdf'
+gem 'wkhtmltopdf-binary'
+
 gem 'fb_graph2'
 gem 'rest-client'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'

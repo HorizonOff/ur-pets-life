@@ -4,97 +4,92 @@
       .x_panel
         .x_title
           %h2
-            Order Item #
+            Order #
             = @admin_panel_order.id
+            Details
           .clearfix
         .x_content
-          .col-md-12.col-sm-12.col-xs-12.col-md-offset-3.col-sm-offset-3
-            .profile_img
-              #crop-avatar
-                = image_tag(@orderiteminfo.picture.url, class: 'img-responsive avatar-view', title: @orderiteminfo.name) if @orderiteminfo.picture.present?
-            .col-md-3.col-sm-3.col-xs-12
-              .x_title
-                %h2 Order Details
-                .clearfix
-              %ul.list-unstyled.user_data
-                %li
-                  %label
-                    Item Name:
-                  = @orderiteminfo.name
-                %li
-                  %label
-                    Quantity Ordered:
-                  = @admin_panel_order.Quantity
-                %li
-                  %label
-                    Price:
-                  = @admin_panel_order.Total_Price
-                %li
-                  %label
-                    IsRecurring:
-                  = @admin_panel_order.IsRecurring
 
-                - if @admin_panel_order.IsRecurring?
-                  %li
-                    %label
-                      Recurssion Interval:
-                    = @admin_panel_order.recurssion_interval.label
-                %li
-                  %label
-                    Status:
-                  = @admin_panel_order.status
-                %li
-                  %label
-                    Order Date:
-                  = @admin_panel_order.created_at.to_date
-                %li
-                  %label
-                    Parent Order Id:
-                  = @parentorderinfo.id
-                %li
-                  %label
-                    Shipping Address:
-                  = @shippingaddress
-                %li
-                  %label
-                    Order Notes:
-                  = @parentorderinfo.Order_Notes
+          .col-md-3.col-sm-3.col-xs-12.profile_left
+            %ul.list-unstyled.user_data
+              %li
+                Shipping Address:
+                = @shippingaddress
+              %li
+                Customer Name:
+                = @admin_panel_order.user.first_name + ' ' + @admin_panel_order.user.last_name
+              %li
+                Email:
+                = @admin_panel_order.user.email
+              %li
+                Mobile:
+                = @admin_panel_order.user.mobile_number
+              %li
+                Subtotal:
+                = @admin_panel_order.Subtotal
+              %li
+                Delivery Charges:
+                = @admin_panel_order.Delivery_Charges
+              %li
+                Total:
+                = @admin_panel_order.Total
+              %li
+                Cash On Delivery:
+                = @admin_panel_order.IsCash? ? 'Yes': 'No'
+              %li
+                Order Status:
+                = @admin_panel_order.order_status_flag == 'on_the_way' ? 'on the way' : @admin_panel_order.order_status_flag
 
-            .col-md-3.col-sm-3.col-xs-12
-              .x_title
-                %h2 Customer Info
-                .clearfix
-              %ul.list-unstyled.user_data
-                %li
-                  %label
-                    Name:
-                  = @parentorderinfo.user.first_name + ' ' + @parentorderinfo.user.first_name
-                %li
-                  %label
-                    Mobile:
-                  = @parentorderinfo.user.mobile_number
-                %li
-                  %label
-                    Email:
-                  = @parentorderinfo.user.email
+          .col-md-9.col-sm-9.col-xs-12
+            .profile_title
+              .col-md-6.col-sm-6.col-xs-6
+                %h2 Total count of Items #{@admin_panel_order.order_items.size}
+            %table.table
+              %thead
+                %tr
+                  %th #
+                  %th Picture
+                  %th Name
+                  %th Price
+                  %th Quantity
+                  %th Total
+                  %th Recurring
+                  %th Recurring Interval
+                  %th Status
+                  %th Actions
+              %tbody
+                - @orderitems.each do |q|
+                  %tr
+                    %td{ scope: 'row' } #{q.id}
+                    %td
+                      = image_tag(q.item.picture.medium.url, class: 'img-responsive avatar-view', title: q.item.name) if q.item.picture.present?
+                    %td #{q.item.name}
+                    %td #{q.Unit_Price}
+                    %td #{q.Quantity}
+                    %td #{q.Total_Price}
+                    %td #{q.IsRecurring? ? 'Yes' : 'No'}
+                    %td #{q.recurssion_interval_id? ? q.recurssion_interval.label : 'N/A'}
+                    %td #{q.status == "on_the_way" ? 'on the way' : q.status}
+                    %td
+                      = link_to 'Cancel', cancel_admin_panel_order_path(q), data: { confirm: 'Are you sure?' }, method: :delete, remote: true, class: 'btn btn-danger btn-xs check_response' if q.status == 'pending'
 
-- if (@admin_panel_order.status != 'delivered' and @admin_panel_order.status != 'cancelled')
+- if (@admin_panel_order.order_status_flag != 'delivered' and @admin_panel_order.order_status_flag != 'cancelled')
   %div
     .row
       = render partial: 'layouts/admin_panel/errors', locals: { object: @admin_panel_order }
       .col-md-12.col-sm-12.col-xs-12
         .x_panel
           .x_title
-            %h2 Update Status
+            %h2 Update Order Status
             .clearfix
           .x_content
             .col-md-6.col-sm-6.col-xs-12.col-md-offset-3.col-sm-offset-3
               = form_for @admin_panel_order, url: admin_panel_order_path(@admin_panel_order), html: { multipart: true, method: :put, class: 'form-horizontal form-label-left with_location', autocomplete: 'off'} do |f|
 
                 .form-group
-                  = f.label :updated_status, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
+                  = f.label :order_status_flag, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
                     Select Status
                     %span.required *
                   .col-md-9.col-sm-9.col-xs-12
-                    = f.select :updated_status, options_for_select(@statusoption), {}, { class: 'select2 clinics_select', required: true, id: 'updated_status'}
+                    = f.select :order_status_flag, options_for_select(@statusoption), {}, { class: 'select2 clinics_select', required: true, id: 'updated_status'}
                 = f.submit 'Update Status', class: 'btn btn-success col-md-offset-5'
