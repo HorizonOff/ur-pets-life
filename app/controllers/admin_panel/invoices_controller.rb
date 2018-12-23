@@ -21,7 +21,7 @@ class InvoicesController < AdminPanelController
     from_date = Date.strptime(params[:anything][:from_date].to_s, '%d/%m/%Y')
     formatted_to = to_date.strftime('%m/%d/%Y')
     formatted_from = from_date.strftime('%m/%d/%Y')
-    @invorders = Order.includes({user: [:location]}, {order_items: [:item]}).where("created_at BETWEEN (?) AND (?)", formatted_from, formatted_to)
+    @invorders = Order.includes({user: [:location]}, {order_items: [:item]}).where("created_at BETWEEN (?) AND (?) AND order_status_flag = (?)", formatted_from, formatted_to, 'delivered')
     respond_to do |format|
       format.pdf do
         zip_file_name = "Invoices_#{Time.now.utc.strftime('%d-%M-%Y')}.zip"
