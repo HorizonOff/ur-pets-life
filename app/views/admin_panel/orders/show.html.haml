@@ -62,7 +62,7 @@
                   %tr
                     %td{ scope: 'row' } #{q.id}
                     %td
-                      = image_tag(q.item.picture.medium.url, class: 'img-responsive avatar-view', title: q.item.name) if q.item.picture.present?
+                      = image_tag(q.item.picture.url, class: 'avatar', title: q.item.name) if q.item.picture.present?
                     %td #{q.item.name}
                     %td #{q.Unit_Price}
                     %td #{q.Quantity}
