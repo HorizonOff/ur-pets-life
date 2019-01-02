@@ -10,10 +10,10 @@ wb.add_worksheet(name: "Orders") do |sheet|
     invoice_no = 'INV-' + orderinfo.id.to_s
 
     orderinfo.order_items.each do |orderitem|
-      vat_buying = (5*orderitem.item.buying_price)/100
-      vat_selling = (5*orderitem.item.price)/100
+      vat_buying = (5*orderitem.item.buying_price*orderitem.Quantity)/100
+      vat_selling = (5*orderitem.Total_Price)/100
       amount_buying = orderitem.item.buying_price * orderitem.Quantity
-      amount_selling = orderitem.item.price * orderitem.Quantity
+      amount_selling = orderitem.Total_Price
       total_buying = amount_buying + vat_buying
       total_selling = amount_selling + vat_selling
       customer_name = orderinfo.user.first_name + ' ' + orderinfo.user.last_name

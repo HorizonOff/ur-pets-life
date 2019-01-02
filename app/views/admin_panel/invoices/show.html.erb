@@ -2,7 +2,7 @@
     <div class="boxcontainer">
         <div class="companinfo">
             <div>
-                <%= image_tag 'newlanding/invoicelogo.png' %>
+                <%= wicked_pdf_image_tag 'newlanding/invoicelogo.png' %>
             </div>
             <div class="text-right">
                 <strong>U R Pets Life Animal Feed Trading L.L.C</strong>
@@ -31,7 +31,7 @@
                         </tr>
                         <tr>
                             <td><strong>Invoice Date</strong></td>
-                            <td><%= DateTime.now.to_date %></td>
+                            <td><%= @order.created_at.strftime('%d/%m/%Y') %></td>
                         </tr>
                         <tr>
                             <td><strong>Terms</strong></td>
@@ -39,7 +39,7 @@
                         </tr>
                         <tr>
                             <td><strong>Due Date</strong></td>
-                            <td><%= DateTime.now.to_date %></td>
+                            <td><%= @order.created_at.strftime('%d/%m/%Y') %></td>
                         </tr>
                     </table>
                 </div>
