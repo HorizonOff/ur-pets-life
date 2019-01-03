@@ -52,11 +52,11 @@ module AdminPanel
   end
 
   def actions
-    (link_to 'View Details', url_helpers.admin_panel_order_path(model), class: 'btn btn-primary btn-xs')
-    #(link_to 'Update Status', url_helpers.edit_admin_panel_order_path(model), class: 'btn btn-warning btn-xs')
-      #(link_to 'Delete', url_helpers.admin_panel_item_path(model),
-            #   data: { confirm: 'Are you sure?' }, method: :delete, remote: true,
-            #   class: 'btn btn-danger btn-xs check_response')
+    links = (link_to 'View Details', url_helpers.admin_panel_order_path(model), class: 'btn btn-primary btn-xs')
+    if model.order_status_flag == 'delivered'
+      links += (link_to 'Download Invoice', url_helpers.invoice_admin_panel_order_path(model, :format => :pdf), class: 'btn btn-info btn-xs')
+    end
+    links
   end
 
 

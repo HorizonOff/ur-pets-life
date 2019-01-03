@@ -151,6 +151,7 @@ Rails.application.routes.draw do
       member { put :restore }
     end
     resources :orders do
+      member { get :invoice }
       member { delete :cancel }
     end
     resources :invoices do

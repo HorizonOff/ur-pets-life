@@ -10,14 +10,16 @@ wb.add_worksheet(name: "Orders") do |sheet|
     invoice_no = 'INV-' + orderinfo.id.to_s
 
     orderinfo.order_items.each do |orderitem|
-      vat_buying = (5*orderitem.item.buying_price*orderitem.Quantity)/100
-      vat_selling = (5*orderitem.Total_Price)/100
-      amount_buying = orderitem.item.buying_price * orderitem.Quantity
-      amount_selling = orderitem.Total_Price
-      total_buying = amount_buying + vat_buying
-      total_selling = amount_selling + vat_selling
-      customer_name = orderinfo.user.first_name + ' ' + orderinfo.user.last_name
-      sheet.add_row [order_date, invoice_no, customer_name, orderinfo.location.city, orderitem.item.name, orderitem.item.item_brand.name, orderitem.Quantity, orderitem.item.buying_price, '5%', vat_buying, orderitem.Unit_Price, '5%', vat_selling, amount_buying, amount_selling, total_buying, total_selling]
+      if orderitem.status != 'cancelled'
+        vat_buying = (5*orderitem.item.buying_price*orderitem.Quantity)/100
+        vat_selling = (5*orderitem.Total_Price)/100
+        amount_buying = orderitem.item.buying_price * orderitem.Quantity
+        amount_selling = orderitem.Total_Price
+        total_buying = amount_buying + vat_buying
+        total_selling = amount_selling + vat_selling
+        customer_name = orderinfo.user.first_name + ' ' + orderinfo.user.last_name
+        sheet.add_row [order_date, invoice_no, customer_name, orderinfo.location.city, orderitem.item.name, orderitem.item.item_brand.name, orderitem.Quantity, orderitem.item.buying_price, '5%', vat_buying, orderitem.Unit_Price, '5%', vat_selling, amount_buying, amount_selling, total_buying, total_selling]
+      end 
     end
   end
 end

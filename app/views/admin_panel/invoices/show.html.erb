@@ -58,7 +58,8 @@
                 </thead>
                 <tbody>
                   <% @order.order_items.each do |orderitem| %>
-                    <tr>
+                    <% if orderitem.status != 'cancelled' %>
+                      <tr>
                         <td>
                             <p><%= orderitem.item.name %></p>
                         </td>
@@ -75,7 +76,8 @@
                         <td>
                             <p><%= orderitem.Total_Price %></p>
                         </td>
-                    </tr>
+                      </tr>
+                    <% end %>
                  <% end %>
                 </tbody>
             </table>

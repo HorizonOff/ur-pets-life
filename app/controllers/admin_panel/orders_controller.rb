@@ -60,6 +60,20 @@ module AdminPanel
     end
   end
 
+  def invoice
+    @order = Order.where(:id => params[:id]).first
+    respond_to do |format|
+      format.pdf do
+        pdf = render_to_string  pdf: "INV-#{@order.id}.pdf",
+                                layout: "pdf.html.erb",
+                                show_as_html: false,
+                                encoding: "UTF-8",
+                                template: "admin_panel/invoices/show.html.erb"
+      send_data pdf, filename: "INV-#{@order.id}.pdf", type: "application/pdf", disposition: "attachment"
+      end
+    end
+  end
+
   def cancel
     orderitem = OrderItem.where(:id => params[:id]).first
     orderitem.update_attributes(status: :cancelled)
