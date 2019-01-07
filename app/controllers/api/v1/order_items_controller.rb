@@ -244,7 +244,17 @@ class OrderItemsController < Api::BaseController
               points_to_be_deducted_on_cancel = discount_per_transaction
             end
 
-            user_redeem_point_record.update(:net_worth => (userpoints -  points_to_be_deducted_on_cancel), :last_net_worth => userpoints, :last_reward_type => "Discount Per Transaction (Order Cancel Roll Back)", :last_reward_worth => discount_per_transaction, :last_reward_update => Time.now, :totalearnedpoints => (user_redeem_point_record.totalearnedpoints - points_to_be_deducted_on_cancel))
+	    deduct_from_earned_points_to = 0
+            if user_redeem_point_record.totalearnedpoints > 0
+               if user_redeem_point_record.totalearnedpoints >= points_to_be_deducted_on_cancel
+                 deduct_from_earned_points_to = points_to_be_deducted_on_cancel
+               else
+                 deduct_from_earned_points_to = user_redeem_point_record.totalearnedpoints
+               end
+            end
+
+
+            user_redeem_point_record.update(:net_worth => (userpoints -  points_to_be_deducted_on_cancel), :last_net_worth => userpoints, :last_reward_type => "Discount Per Transaction (Order Cancel Roll Back)", :last_reward_worth => discount_per_transaction, :last_reward_update => Time.now, :totalearnedpoints => (user_redeem_point_record.totalearnedpoints - deduct_from_earned_points_to))
             item = Item.where(:id => orderitem.item_id).first
             if !item.nil?
               item.increment!(:quantity, orderitem.Quantity)
