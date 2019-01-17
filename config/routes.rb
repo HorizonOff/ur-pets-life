@@ -30,7 +30,9 @@ Rails.application.routes.draw do
       resources :redeem_points
       resources :recurssion_intervals
       resources :item_reviews
-      resources :orders
+      resources :orders do
+        resources :comments, only: %i[index create]
+      end
       resources :items
       resources :shipping_addresses
       resources :wishlists
@@ -149,10 +151,12 @@ Rails.application.routes.draw do
     resources :admins, only: %w[index destroy] do
       member { put :change_status }
       member { put :restore }
-    end
+    end    
     resources :orders do
       member { get :invoice }
       member { delete :cancel }
+      member { get :ordercomments}
+      resources :comments, only: %i[index create]
     end
     resources :invoices do
       member { post :download_invoices}
