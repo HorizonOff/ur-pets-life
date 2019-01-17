@@ -21,7 +21,7 @@
                     <p><%= @order.user.first_name + ' ' + @order.user.last_name %></p>
                     <p><%= @order.user.mobile_number %></p>
                     <p><%= @userAddress %></p>
-                    <% if @order.IsCash == true %>
+                    <% if @order.IsCash == false %>
                       <div class="paid">Paid</div>
                     <% end %>
                 </div>
@@ -115,10 +115,10 @@
                         </tr>
                         <tr style="border-bottom: 2px solid #d8d8d7;">
                             <td>Payment Made</td>
-                            <% if @order.IsCash == true %>
+                            <% if @order.IsCash == false %>
                               <td><%= @order.Total - (@order.RedeemPoints? ? @order.RedeemPoints : 0) %></td>
                             <% end %>
-                            <% if @order.IsCash == false %>
+                            <% if @order.IsCash == true %>
                               <td><%= @order.Total - (@order.RedeemPoints? ? @order.RedeemPoints : 0) %></td>
                             <% end %>
 
