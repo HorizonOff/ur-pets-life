@@ -33,6 +33,8 @@
 //= require datatable.js
 
 //= require_self
+
+
 $(document).on('turbolinks:load', function() {
   init_all_functions()
 });

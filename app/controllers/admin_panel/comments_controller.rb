@@ -30,11 +30,22 @@ module AdminPanel
     end
 
     def set_parent_object
-      @parent_object = params[:post_id].present? ? set_post : set_appointment
+      if  params[:post_id].present?
+        @parent_object = set_post
+      elsif params[:order_id].present?
+        @parent_object = set_order
+      else
+        @parent_object = set_appointment
+      end
+
     end
 
     def set_post
       Post.find_by_id(params[:post_id])
+    end
+
+    def set_order
+      Order.find_by_id(params[:order_id])
     end
 
     def set_appointment

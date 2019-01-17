@@ -8,7 +8,7 @@ module AdminPanel
     def user_name
       model.unread_comments_count_by_admin.zero? ? model.user.name : model.user.name + comments_icon
     end
-
+  
     def status_label
       text = model.status.humanize
       content = content_tag(:span, text, class: "label #{status_class}")

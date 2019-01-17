@@ -16,6 +16,9 @@
                 Shipping Address:
                 = @shippingaddress
               %li
+                Order Notes:
+                = @admin_panel_order.Order_Notes
+              %li
                 Customer Name:
                 = @admin_panel_order.user.first_name + ' ' + @admin_panel_order.user.last_name
               %li
@@ -25,20 +28,44 @@
                 Mobile:
                 = @admin_panel_order.user.mobile_number
               %li
+                Cash On Delivery:
+                = @admin_panel_order.IsCash? ? 'Yes': 'No'
+              %li
+                Order Date:
+                = @admin_panel_order.created_at.strftime('%d/%m/%Y')
+              %li
                 Subtotal:
                 = @admin_panel_order.Subtotal
               %li
                 Delivery Charges:
                 = @admin_panel_order.Delivery_Charges
               %li
+                VAT Charges:
+                = @admin_panel_order.Vat_Charges
+              %li
                 Total:
                 = @admin_panel_order.Total
               %li
-                Cash On Delivery:
-                = @admin_panel_order.IsCash? ? 'Yes': 'No'
+                Earned Points:
+                = @admin_panel_order.earned_points
+              %li
+                Availed Points:
+                = @admin_panel_order.RedeemPoints? ? @admin_panel_order.RedeemPoints : 0
+              %li
+                Net Payable Amount:
+                = @admin_panel_order.order_status_flag == 'cancelled' ? 0 : @admin_panel_order.Total - (@admin_panel_order.RedeemPoints? ? @admin_panel_order.RedeemPoints : 0)
               %li
                 Order Status:
                 = @admin_panel_order.order_status_flag == 'on_the_way' ? 'on the way' : @admin_panel_order.order_status_flag
+
+              %p.title
+                %b Comments:
+                = @admin_panel_order.comments_count
+              %p= @admin_panel_order.last_comment.nil? ? '' : @admin_panel_order.last_comment.message
+              = link_to ordercomments_admin_panel_order_path(@admin_panel_order), class: 'btn btn-info btn-xs' do
+                View history
+                - if @admin_panel_order.unread_comments_count_by_admin.present? && !@admin_panel_order.unread_comments_count_by_admin.zero?
+                  %span.badge= @admin_panel_order.unread_comments_count_by_admin
 
           .col-md-9.col-sm-9.col-xs-12
             .profile_title

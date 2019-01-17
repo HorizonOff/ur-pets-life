@@ -14,10 +14,10 @@ module AdminPanel
 
   def actions
     # (link_to 'Show', url_helpers.admin_panel_item_category_path(model), class: 'btn btn-primary btn-xs') +
-      (link_to 'Edit', url_helpers.edit_admin_panel_item_category_path(model), class: 'btn btn-warning btn-xs') +
-      (link_to 'Delete', url_helpers.admin_panel_item_category_path(model),
-               data: { confirm: 'Are you sure?' }, method: :delete, remote: true,
-               class: 'btn btn-danger btn-xs check_response')
+      (link_to 'Edit', url_helpers.edit_admin_panel_item_category_path(model), class: 'btn btn-warning btn-xs')
+      #(link_to 'Delete', url_helpers.admin_panel_item_category_path(model),
+      #         data: { confirm: 'Are you sure?' }, method: :delete, remote: true,
+      #         class: 'btn btn-danger btn-xs check_response')
   end
 
 end

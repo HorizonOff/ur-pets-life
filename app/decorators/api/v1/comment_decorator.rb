@@ -19,11 +19,19 @@ module Api
       private
 
       def user_name_for_admin
-        model.commentable_type == 'Post' ? 'UrPetsLife' : model.commentable.bookable.name
+        if model.commentable_type == 'Order'
+          'UrPetsLife'
+        else
+          model.commentable_type == 'Post' ? 'UrPetsLife' : model.commentable.bookable.name
+        end
       end
 
       def avatar_url_for_admin
-        model.commentable_type == 'Post' ? app_icon : model.commentable.bookable.picture.try(:url)
+        if model.commentable_type == 'Order'
+          app_icon
+        else
+          model.commentable_type == 'Post' ? app_icon : model.commentable.bookable.picture.try(:url)
+        end
       end
     end
   end

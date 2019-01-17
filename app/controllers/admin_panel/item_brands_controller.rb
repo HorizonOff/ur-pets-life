@@ -20,17 +20,28 @@ module AdminPanel
   # GET /admin_panel/item_brands/new
   def new
     @admin_panel_item_brand = ItemBrand.new
+    @categories = ItemCategory.includes(:pet_types).where(:IsHaveBrand => true)
+
+    @categories.each do |category|
+      category.name = category.pet_types.first.name + ' '  + category.name
+    end
   end
 
   # GET /admin_panel/item_brands/1/edit
   def edit
     @discountonbrand = @admin_panel_item_brand.brand_discount
+    @categories = ItemCategory.includes(:pet_types).where(:IsHaveBrand => true)
+
+    @categories.each do |category|
+      category.name = category.pet_types.first.name + ' '  + category.name
+    end
   end
 
   # POST /admin_panel/item_brands
   # POST /admin_panel/item_brands.json
   def create
     @admin_panel_item_brand = ItemBrand.new(brand_params)
+    @itemcategoriesforpettype = []
     if @admin_panel_item_brand.save
       flash[:success] = 'Item Brand was successfully created'
       redirect_to admin_panel_item_brands_path

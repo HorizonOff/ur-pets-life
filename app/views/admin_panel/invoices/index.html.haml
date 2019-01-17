@@ -6,7 +6,7 @@
   .clearfix
 
   = form_for :anything, url: download_invoices_admin_panel_invoice_path(id: 1, format: :pdf),
-  html: { multipart: true, method: :post,:onsubmit => 'ResetForm()', :format => 'pdf', class: 'form-horizontal form-label-left with_location', autocomplete: 'off'} do |f|
+  html: { multipart: true, method: :post, id: :invoicesform, :onsubmit => 'ResetForm()', :format => 'pdf', class: 'form-horizontal form-label-left with_location', autocomplete: 'off'} do |f|
 
     .row
       .col-md-6.col-sm-6.col-xs-12.col-md-offset-3.col-sm-offset-3
@@ -28,4 +28,12 @@
               = f.text_field :to_date, class: 'form-control single_cal1', required: true, step: ".01", min: 1
           %br
           %br
-          = f.submit 'Download Invoices', disabled: false, class: 'btn btn-success col-sm-offset-5 col-md-offset-5 pull-right'
+          = f.submit 'Download Invoices', data: { disable_with: false }, class: 'btn btn-success col-sm-offset-5 col-md-offset-5 pull-right formsubmit'
+
+:javascript
+  $('#invoicesform').submit(function(e) {
+    e.preventDefault();
+    this.submit();
+    $('#anything_to_date').val('');
+    $('#anything_from_date').val('');
+  });

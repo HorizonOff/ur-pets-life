@@ -200,6 +200,12 @@ end
 
     def update_quantity_if_cart_has_item
       if @shopping_cart_item.increment!(:quantity, params[:quantity].to_f)
+        if params[:IsRecurring] == "true"
+          @shopping_cart_item.update(:IsRecurring => params[:IsRecurring], :recurssion_interval_id => params[:IntervalId].to_f)
+        elsif params[:IsRecurring] == "false"
+          @shopping_cart_item.update(:IsRecurring => params[:IsRecurring])
+        end
+
         @update = true
       else
         @update = false

@@ -17,10 +17,10 @@ class InvoicesController < AdminPanelController
 
   def download_invoices
     @pdfs_files_path = []
-    to_date = Date.strptime(params[:anything][:to_date].to_s, '%d/%m/%Y')
-    from_date = Date.strptime(params[:anything][:from_date].to_s, '%d/%m/%Y')
-    formatted_to = to_date.strftime('%m/%d/%Y')
-    formatted_from = from_date.strftime('%m/%d/%Y')
+    to_date = Date.strptime(params[:anything][:to_date].to_s, '%d/%m/%Y').to_datetime
+    from_date = Date.strptime(params[:anything][:from_date].to_s, '%d/%m/%Y').to_datetime
+    formatted_to = to_date.end_of_day
+    formatted_from = from_date.beginning_of_day
     @invorders = Order.includes({user: [:location]}, {order_items: [:item]}).where("created_at BETWEEN (?) AND (?) AND order_status_flag = (?)", formatted_from, formatted_to, 'delivered')
     respond_to do |format|
       format.pdf do

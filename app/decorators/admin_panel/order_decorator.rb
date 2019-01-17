@@ -45,10 +45,20 @@ module AdminPanel
     content_tag(:span, text, class: "label #{span_class}")
   end
 
+  def Order_Notes
+    model.Order_Notes.truncate(50)
+  end
+
   def is_viewed
     text = model.is_viewed? ? 'viewed' : 'new'
     span_class = model.is_viewed? ? 'label-primary' : 'label-danger'
-    content_tag(:span, text, class: "label #{span_class}")
+    tags = content_tag(:span, text, class: "label #{span_class}")
+    tags += comments_icon
+    if model.unread_comments_count_by_admin > 0
+      tags += unread_comments_icon
+    end
+
+    tags
   end
 
   def actions
@@ -59,6 +69,19 @@ module AdminPanel
     links
   end
 
+  private
+
+  def comments_icon
+    content_tag(
+      :span, model.comments_count, class: 'fa fa-comment pull-right', style: 'color:orange;'
+    )
+  end
+
+  def unread_comments_icon
+    content_tag(
+      :span, model.unread_comments_count_by_admin, class: 'fa fa-comment pull-right', style: 'color:green;'
+    )
+  end
 
 end
 end

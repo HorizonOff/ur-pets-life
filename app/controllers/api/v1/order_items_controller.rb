@@ -146,10 +146,13 @@ class OrderItemsController < Api::BaseController
           vatCharges = (subTotal/100).to_f * 5
           total = subTotal + deliveryCharges + vatCharges
           paymentStatus = existingorder.IsCash == true ? 0 : 1
+          #if existingorder.IsCash == false
+          #  ispaymentconfirm = Api::V1::OrderServices::OnlinePaymentService.send_payment_request('sale', 'cont', @user.last_transaction_ref, existingitem.item.description, existingorder.id, total)
+          #end
           # TransactionId and TransactionDate to be inserted while Telr integration
           neworder = Order.new(:user_id => @user.id, :RedeemPoints => 0, :Subtotal => subTotal, :Delivery_Charges => deliveryCharges, :shipmenttime => 'with in 7 days', :Vat_Charges => vatCharges, :Total => total, :Order_Status => 1, :Payment_Status => paymentStatus, :Order_Notes => existingorder.Order_Notes, :IsCash => existingorder.IsCash,  :location_id => existingorder.location_id, :is_viewed => false, :order_status_flag => 'pending')
           if neworder.save
-            newitem = OrderItem.new(:IsRecurring => false, :order_id => neworder.id, :item_id => item.id, :Quantity => permitted_quantity, :Unit_Price => item.price, :Total_Price => subTotal, :IsReviewed => false, :status => :pending, :isdiscounted => (item.discount > 0 ? true : false)).save
+            newitem = OrderItem.new(:IsRecurring => false, :order_id => neworder.id, :item_id => item.id, :Quantity => permitted_quantity, :Unit_Price => item.price, :Total_Price => subTotal, :IsReviewed => false, :status => :pending, :isdiscounted => (item.discount > 0 ? true : false), :next_recurring_due_date => DateTime.now).save
 
             user_redeem_point_record = RedeemPoint.where(:user_id => @user.id).first
             discount_per_transaction = 0
@@ -204,6 +207,15 @@ class OrderItemsController < Api::BaseController
           order = Order.where(:id => orderitem.order_id).first
           if !order.nil?
             orderitem.update_attributes(status: :cancelled)
+            order_amount_cancelled = orderitem.Total_Price
+            redeem_points_consumed = order.RedeemPoints
+
+            points_to_be_reverted = 0
+            if order_amount_cancelled > redeem_points_consumed
+              points_to_be_reverted = redeem_points_consumed
+            elsif order_amount_cancelled < redeem_points_consumed
+               points_to_be_reverted = order_amount_cancelled
+            end
 
             updateordertocancel = true
             allorderitems = OrderItem.where(:order_id => orderitem.order_id)
@@ -214,27 +226,30 @@ class OrderItemsController < Api::BaseController
             end
 
             if updateordertocancel == true
-              order.update(:Subtotal => 0, :Delivery_Charges => 0, :Vat_Charges => 0, :Total => 0, :order_status_flag => 'cancelled', :earned_points => 0)
+              order.update(:Subtotal => 0, :Delivery_Charges => 0, :Vat_Charges => 0, :Total => 0, :order_status_flag => 'cancelled', :earned_points => 0, :RedeemPoints => 0)
             else
               subTotal = order.Subtotal - orderitem.Total_Price
               deliveryCharges = subTotal > 100 ? 0 : 20
               vatCharges = (subTotal/100).to_f * 5
               total = subTotal + deliveryCharges + vatCharges
-              order.update(:Subtotal => subTotal, :Delivery_Charges => deliveryCharges, :Vat_Charges => vatCharges, :Total => total)
+              order.update(:Subtotal => subTotal, :Delivery_Charges => deliveryCharges, :Vat_Charges => vatCharges, :Total => total, :RedeemPoints => order.RedeemPoints - points_to_be_reverted)
             end
 
             user_redeem_point_record = RedeemPoint.where(:user_id => @user.id).first
             userpoints = user_redeem_point_record.net_worth
             discount_per_transaction = 0
-            target_revert_price = orderitem.Total_Price
-            if target_revert_price <= 500
-              discount_per_transaction =+ (3*target_revert_price)/100
-            elsif target_revert_price > 500 and target_revert_price <= 1000
-              discount_per_transaction =+ (5*target_revert_price)/100
-            elsif target_revert_price > 1000 and target_revert_price <= 2000
-              discount_per_transaction =+ (7.5*target_revert_price)/100
-            elsif target_revert_price > 2000
-              discount_per_transaction =+ (10*target_revert_price)/100
+
+            if orderitem.isdiscounted == false
+              target_revert_price = orderitem.Total_Price
+              if target_revert_price <= 500
+                discount_per_transaction =+ (3*target_revert_price)/100
+              elsif target_revert_price > 500 and target_revert_price <= 1000
+                discount_per_transaction =+ (5*target_revert_price)/100
+              elsif target_revert_price > 1000 and target_revert_price <= 2000
+                discount_per_transaction =+ (7.5*target_revert_price)/100
+              elsif target_revert_price > 2000
+                discount_per_transaction =+ (10*target_revert_price)/100
+              end
             end
 
             points_to_be_deducted_on_cancel = 0
@@ -243,8 +258,7 @@ class OrderItemsController < Api::BaseController
             elsif userpoints >= discount_per_transaction
               points_to_be_deducted_on_cancel = discount_per_transaction
             end
-
-	    deduct_from_earned_points_to = 0
+            deduct_from_earned_points_to = 0
             if user_redeem_point_record.totalearnedpoints > 0
                if user_redeem_point_record.totalearnedpoints >= points_to_be_deducted_on_cancel
                  deduct_from_earned_points_to = points_to_be_deducted_on_cancel
@@ -252,9 +266,7 @@ class OrderItemsController < Api::BaseController
                  deduct_from_earned_points_to = user_redeem_point_record.totalearnedpoints
                end
             end
-
-
-            user_redeem_point_record.update(:net_worth => (userpoints -  points_to_be_deducted_on_cancel), :last_net_worth => userpoints, :last_reward_type => "Discount Per Transaction (Order Cancel Roll Back)", :last_reward_worth => discount_per_transaction, :last_reward_update => Time.now, :totalearnedpoints => (user_redeem_point_record.totalearnedpoints - deduct_from_earned_points_to))
+            user_redeem_point_record.update(:net_worth => (userpoints -  points_to_be_deducted_on_cancel) + points_to_be_reverted, :last_net_worth => userpoints, :last_reward_type => "Discount Per Transaction (Order Cancel Roll Back)", :last_reward_worth => discount_per_transaction, :last_reward_update => Time.now, :totalearnedpoints => (user_redeem_point_record.totalearnedpoints - deduct_from_earned_points_to))
             item = Item.where(:id => orderitem.item_id).first
             if !item.nil?
               item.increment!(:quantity, orderitem.Quantity)
@@ -265,7 +277,7 @@ class OrderItemsController < Api::BaseController
               @user.notifications.create(order: order, message: 'Your Order for ' + item.name + ' has been cancelled')
               send_order_cancellation_email(orderitem.id)
             else
-              @user.notifications.create(order: order, message: 'Your Order # ' + order.id + ' has been cancelled')
+              @user.notifications.create(order: order, message: 'Your Order # ' + order.id.to_s + ' has been cancelled')
               OrderMailer.send_complete_cancel_order_email_to_customer(order.id, order.user.email).deliver
             end
 

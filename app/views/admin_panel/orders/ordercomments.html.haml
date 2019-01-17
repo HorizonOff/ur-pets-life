@@ -1,9 +1,12 @@
 %div
-  .row 
+  .row
     .col-md-12.col-sm-12.col-xs-12
       .x_panel
         .x_title
-          %h2 Post
+          %h2
+            Order #
+            = @parent_object.id
+            Comments
           .clearfix
         .x_content
           .col-md-3.col-sm-3.col-xs-12.profile_left
@@ -22,11 +25,13 @@
                 = @parent_object.created_at.strftime('%-d %b %Y %I:%M %p')
               %li
                 Comments:
-                %span.comment_count= @parent_object.comments.size
+                %span.comment_count= @parent_object.comments.count
 
           .col-md-9.col-sm-9.col-xs-12
-            %h1= @parent_object.title
-            %blockquote
-              %p= @parent_object.message
+            %ul.list-unstyled.user_data
+              %li
+                Order #:
+                = @parent_object.id
+
     = render 'admin_panel/comments/form'
     = render 'admin_panel/comments/list'

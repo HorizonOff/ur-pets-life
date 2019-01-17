@@ -7,7 +7,7 @@ module Api
         def initialize(access_token)
           @access_token = access_token
         end
-
+ 
         def facebook_auth
           begin
             fb_user = FbGraph2::User.me(access_token).fetch(fields: %i[name email])

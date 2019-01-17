@@ -6,3 +6,4 @@ class AppointmentPolicy < ApplicationPolicy
     super_admin? || owner?
   end
 end
+ 

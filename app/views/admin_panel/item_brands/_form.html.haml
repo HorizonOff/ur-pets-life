@@ -2,6 +2,7 @@
   = render partial: 'layouts/admin_panel/errors', locals: { object: @admin_panel_item_brand }
 - content_for :head do
   %meta{name: "turbolinks-cache-control", content:"no-cache"}
+
 .col-md-6.col-sm-6.col-xs-12
   .x_panel
     .x_title
@@ -25,7 +26,7 @@
       .form-group
         = f.label :item_category_ids, 'For Categories', class: 'control-label col-md-3 col-sm-3 col-xs-12'
         .col-md-9.col-sm-9.col-xs-12
-          = f.collection_select :item_category_ids, ItemCategory.where(:IsHaveBrand => true), :id, :name, {}, { multiple: true, class: 'select2' }
+          = f.collection_select :item_category_ids, @categories, :id, :name, {}, { multiple: true, class: 'select2' }
 
       .form-group
         = f.label :picture, class: 'control-label col-md-3 col-sm-3 col-xs-12' do

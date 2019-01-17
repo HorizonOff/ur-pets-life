@@ -9,5 +9,6 @@
   html: { multipart: true, method: :put, class: 'form-horizontal form-label-left with_location', autocomplete: 'off'} do |f|
 
     = render partial: 'form', locals: { f: f }
-
-    = f.submit 'Update Brand', class: 'btn btn-success pull-right'
+    .clearfix
+    .row
+      = f.submit 'Update Brand', class: 'btn btn-success col-md-offset-2'

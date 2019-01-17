@@ -168,6 +168,13 @@ end
           status: :unprocessable_entity
         }
       end
+    elsif (params[:IsCash] == "false" and (params[:TransactionId].blank? or params[:TransactionDate].blank?))
+      format.json do
+        render json: {
+          Message: 'Invalid or empty Transaction reference',
+          status: :unprocessable_entity
+        }
+      end
     else
       isoutofstock = false
       @itemsprice = 0
@@ -189,10 +196,10 @@ end
           }
         end
       else
-        subTotal = @itemsprice
+        subTotal = @itemsprice.to_f.round(2)
         deliveryCharges = (subTotal > 100 ? 0 : 20)
-        vatCharges = (@itemsprice/100).to_f * 5
-        total = @itemsprice + deliveryCharges + (@itemsprice/100).to_f * 5
+        vatCharges = ((@itemsprice/100).to_f * 5).round(2)
+        total = subTotal + deliveryCharges + vatCharges
         user_redeem_points = 0
         requested_redeem_points = params[:RedeemPoints].to_i
         permitted_redeem_points = 0
@@ -214,7 +221,12 @@ end
           end
         end
 
+        if permitted_redeem_points > subTotal
+          permitted_redeem_points = subTotal
+        end 
+
         if params[:IsCash] == "false"
+          @user.update_attributes(last_transaction_ref: params[:TransactionId], last_transaction_date: params[:TransactionDate])
           paymentStatus = 1
         end
 
@@ -241,7 +253,7 @@ end
           @user_redeem_point_record.update(:net_worth => (user_redeem_points - permitted_redeem_points +  discount_per_transaction), :last_net_worth => (user_redeem_points - permitted_redeem_points), :last_reward_type => "Discount Per Transaction", :last_reward_worth => discount_per_transaction, :last_reward_update => Time.now, :totalearnedpoints => (@user_redeem_point_record.totalearnedpoints + discount_per_transaction))
           @order.update(:earned_points => discount_per_transaction)
           @usercartitems.each do |cartitem|
-          @neworderitemcreate = OrderItem.new(:IsRecurring => cartitem.IsRecurring, :order_id => @order.id, :item_id => cartitem.item_id, :Quantity => cartitem.quantity, :Unit_Price => cartitem.item.price, :Total_Price => (cartitem.item.price * cartitem.quantity), :IsReviewed => false, :status => :pending, :isdiscounted => (cartitem.item.discount > 0 ? true : false))
+          @neworderitemcreate = OrderItem.new(:IsRecurring => cartitem.IsRecurring, :order_id => @order.id, :item_id => cartitem.item_id, :Quantity => cartitem.quantity, :Unit_Price => cartitem.item.price, :Total_Price => (cartitem.item.price * cartitem.quantity), :IsReviewed => false, :status => :pending, :isdiscounted => (cartitem.item.discount > 0 ? true : false), :next_recurring_due_date => DateTime.now)
           @neworderitemcreate.save
           item = Item.where(:id => cartitem.item_id).first
           item.decrement!(:quantity, cartitem.quantity)
@@ -249,7 +261,10 @@ end
             send_inventory_alerts(item.id)
           end
           if !cartitem.recurssion_interval_id.nil?
-            @neworderitemcreate.update(:recurssion_interval_id => cartitem.recurssion_interval_id)
+            recurrion_interval = RecurssionInterval.where(:id => cartitem.recurssion_interval_id).first
+            next_due_date = DateTime.now.to_date
+            next_due_date = next_due_date.to_time + (recurrion_interval.days).days
+            @neworderitemcreate.update_attributes(:next_recurring_due_date => next_due_date.to_date, :recurssion_interval_id => cartitem.recurssion_interval_id)
           end
           end
           @user.shopping_cart_items.destroy_all

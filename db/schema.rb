@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181222141637) do
+ActiveRecord::Schema.define(version: 20181227134303) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -60,6 +60,7 @@ ActiveRecord::Schema.define(version: 20181222141637) do
     t.datetime "deleted_at"
     t.integer "unread_commented_appointments_count", default: 0, null: false
     t.boolean "is_employee", default: false
+    t.integer "unread_commented_orders_count", default: 0, null: false
     t.index ["deleted_at"], name: "index_admins_on_deleted_at"
     t.index ["email"], name: "index_admins_on_email", unique: true
     t.index ["invitation_token"], name: "index_admins_on_invitation_token", unique: true
@@ -741,6 +742,10 @@ ActiveRecord::Schema.define(version: 20181222141637) do
     t.integer "notifications_count", default: 0
     t.integer "commented_appointments_count", default: 0, null: false
     t.integer "unread_commented_appointments_count", default: 0, null: false
+    t.string "last_transaction_ref"
+    t.datetime "last_transaction_date"
+    t.integer "commented_orders_count", default: 0, null: false
+    t.integer "unread_commented_orders_count", default: 0, null: false
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["deleted_at"], name: "index_users_on_deleted_at"
     t.index ["email"], name: "index_users_on_email", unique: true

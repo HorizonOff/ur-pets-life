@@ -29,7 +29,7 @@ module AdminPanel
     def set_post
       @post = Post.find_by(id: params[:id])
     end
-
+ 
     def filter_posts
       filtered_posts = filter_and_pagination_query.filter
       posts = ::AdminPanel::PostDecorator.decorate_collection(filtered_posts)

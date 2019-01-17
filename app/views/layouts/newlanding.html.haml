@@ -23,7 +23,7 @@
     %link{:rel => :stylesheet, :type => :"text/css", :href => "https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,600,700,900"}
     %link{:rel => :stylesheet, :type => :"text/css", :href => "https://fonts.googleapis.com/css?family=Poppins:300,400,500,700"}
 
-    = javascript_include_tag 'landing', 'data-turbolinks-track': 'reload'
+    / = javascript_include_tag 'landing', 'data-turbolinks-track': 'reload'
     = javascript_include_tag 'newscript', 'data-turbolinks-track': 'reload'
     = javascript_include_tag 'xlib', 'data-turbolinks-track': 'reload'
 
@@ -33,13 +33,13 @@
 
     %body{ class: [ ("home-page" if controller.action_name == 'newlanding'), ("inner-pages" if controller.action_name != 'newlanding') ] }
     = render 'layouts/analytick_body' if ENV['SERVER'] == 'production'
+    = render 'layouts/appheader' if controller.action_name.include? "app_"
+    = render 'layouts/header' if !controller.action_name.include? "app_"
     - unless flash.empty?
       %script{ type: "text/javascript" }
         - flash.each do |f|
           - type = f[0].to_s.gsub('alert', 'error').gsub('notice', 'info')
           toastr["#{ type }"]("#{ f[1] }")
-    = render 'layouts/appheader' if controller.action_name.include? "app_"
-    = render 'layouts/header' if !controller.action_name.include? "app_"
     = yield
 
     = render 'layouts/footer'

@@ -21,8 +21,8 @@
  *= require dataTables.bootstrap.min
  *= require buttons.bootstrap.min
  *= require_self
- */
 
+ */
 
 input[type="checkbox"].check_box_picture{
   display: none;
