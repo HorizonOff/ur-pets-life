@@ -41,6 +41,10 @@
                             <td><strong>Due Date</strong></td>
                             <td><%= DateTime.now.to_date %></td>
                         </tr>
+                        <tr>
+                            <td><strong>Payment Mode</strong></td>
+                            <td><%= @order.IsCash == true ? 'Cash' : 'Card' %></td>
+                        </tr>
                     </table>
                 </div>
             </div>
