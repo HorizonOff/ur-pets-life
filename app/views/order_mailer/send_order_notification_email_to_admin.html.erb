@@ -119,7 +119,7 @@
                               <td><%= @order.Total - (@order.RedeemPoints? ? @order.RedeemPoints : 0) %></td>
                             <% end %>
                             <% if @order.IsCash == true %>
-                              <td><%= @order.Total - (@order.RedeemPoints? ? @order.RedeemPoints : 0) %></td>
+                              <td>0.0</td>
                             <% end %>
 
                         </tr>
@@ -128,7 +128,13 @@
                                 <p class="balance-lbl">Balance Due</p>
                             </td>
                             <td>
-                                <p class="balance-amt">AED <%= @order.Total %></p>
+                              <% if @order.IsCash == false %>
+                                <p class="balance-amt">AED 0.0</p>
+                              <% end %>
+                              <% if @order.IsCash == true %>
+                                <p class="balance-amt">AED <%= @order.Total - (@order.RedeemPoints? ? @order.RedeemPoints : 0) %></p>
+                              <% end %>
+
                             </td>
                         </tr>
                     </tbody>

@@ -49,6 +49,10 @@ module AdminPanel
     model.Order_Notes.truncate(50)
   end
 
+  def Total
+    model.Total - (model.RedeemPoints? ? model.RedeemPoints : 0)
+  end 
+
   def is_viewed
     text = model.is_viewed? ? 'viewed' : 'new'
     span_class = model.is_viewed? ? 'label-primary' : 'label-danger'
