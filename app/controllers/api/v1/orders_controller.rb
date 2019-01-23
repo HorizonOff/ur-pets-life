@@ -223,13 +223,17 @@ end
 
         if permitted_redeem_points > subTotal
           permitted_redeem_points = subTotal
-        end 
+        end
 
         if params[:IsCash] == "false"
           @user.update_attributes(last_transaction_ref: params[:TransactionId], last_transaction_date: params[:TransactionDate])
           paymentStatus = 1
         end
 
+        if permitted_redeem_points > 0
+          deliveryCharges = (subTotal - permitted_redeem_points) > 100 ? 0 : 20
+          total = subTotal + deliveryCharges + vatCharges
+        end 
         @order = Order.new(:user_id => @user.id, :RedeemPoints => permitted_redeem_points, :TransactionId => params[:TransactionId], :TransactionDate => params[:TransactionDate], :Subtotal => subTotal, :Delivery_Charges => deliveryCharges, :shipmenttime => 'with in 7 days', :Vat_Charges => vatCharges, :Total => total, :Order_Status => 1, :Payment_Status => paymentStatus, :Delivery_Date => params[:Delivery_Date], :Order_Notes => params[:Order_Notes], :IsCash => params[:IsCash],  :location_id => params[:location_id], :is_viewed => false, :order_status_flag => 'pending')
         if @order.save
 
@@ -249,8 +253,9 @@ end
             elsif amount_to_be_awarded > 2000
               discount_per_transaction =+ (10*amount_to_be_awarded)/100
             end
+            discount_per_transaction.to_f.ceil
           end
-          @user_redeem_point_record.update(:net_worth => (user_redeem_points - permitted_redeem_points +  discount_per_transaction), :last_net_worth => (user_redeem_points - permitted_redeem_points), :last_reward_type => "Discount Per Transaction", :last_reward_worth => discount_per_transaction, :last_reward_update => Time.now, :totalearnedpoints => (@user_redeem_point_record.totalearnedpoints + discount_per_transaction))
+          #@user_redeem_point_record.update(:net_worth => (user_redeem_points - permitted_redeem_points +  discount_per_transaction), :last_net_worth => (user_redeem_points - permitted_redeem_points), :last_reward_type => "Discount Per Transaction", :last_reward_worth => discount_per_transaction, :last_reward_update => Time.now, :totalearnedpoints => (@user_redeem_point_record.totalearnedpoints + discount_per_transaction))
           @order.update(:earned_points => discount_per_transaction)
           @usercartitems.each do |cartitem|
           @neworderitemcreate = OrderItem.new(:IsRecurring => cartitem.IsRecurring, :order_id => @order.id, :item_id => cartitem.item_id, :Quantity => cartitem.quantity, :Unit_Price => cartitem.item.price, :Total_Price => (cartitem.item.price * cartitem.quantity), :IsReviewed => false, :status => :pending, :isdiscounted => (cartitem.item.discount > 0 ? true : false), :next_recurring_due_date => DateTime.now)

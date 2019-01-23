@@ -31,28 +31,23 @@ module AdminPanel
   def create
     @admin_panel_item_category = ItemCategory.new(admin_panel_item_category_params)
 
-    respond_to do |format|
-      if @admin_panel_item_category.save
-        format.html { redirect_to @admin_panel_item_category, notice: 'Item category was successfully created.' }
-        format.json { render :show, status: :created, location: @admin_panel_item_category }
-      else
-        format.html { render :new }
-        format.json { render json: @admin_panel_item_category.errors, status: :unprocessable_entity }
-      end
+    if @admin_panel_item_category.save
+      flash[:success] = 'Item Category was successfully created'
+      redirect_to admin_panel_item_categories_path
+    else
+      render :new
     end
+
   end
 
   # PATCH/PUT /admin_panel/item_categories/1
   # PATCH/PUT /admin_panel/item_categories/1.json
   def update
-    respond_to do |format|
-      if @admin_panel_item_category.update(admin_panel_item_category_params)
-        format.html { redirect_to @admin_panel_item_category, notice: 'Item category was successfully updated.' }
-        format.json { render :show, status: :ok, location: @admin_panel_item_category }
-      else
-        format.html { render :edit }
-        format.json { render json: @admin_panel_item_category.errors, status: :unprocessable_entity }
-      end
+    if @admin_panel_item_category.update(admin_panel_item_category_params)
+      flash[:success] = 'Item Category was successfully updated'
+      redirect_to admin_panel_item_categories_path
+    else
+      render :edit
     end
   end
 
@@ -74,7 +69,7 @@ module AdminPanel
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def admin_panel_item_category_params
-      params.fetch(:admin_panel_item_category, {})
+      params.require(:item_category).permit(:name, :IsHaveBrand, :picture, :avatar_cache, pet_type_ids: [])
     end
 
     def filter_categories

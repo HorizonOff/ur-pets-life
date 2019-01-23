@@ -36,9 +36,9 @@ module AdminPanel
       @admin_panel_item.price = @admin_panel_item.unit_price.to_f - (@admin_panel_item.unit_price.to_f / 100 * @admin_panel_item.discount.to_f).to_f
     else
       item_brand = ItemBrand.where(:id => @admin_panel_item.item_brand_id).first
-      if item_brand.brand_discount > 0
-        @admin_panel_item.price = @admin_panel_item.unit_price.to_f - (@admin_panel_item.unit_price.to_f / 100 * item_brand.brand_discount? ? item_brand.brand_discount.to_f : 0).to_f
-        @admin_panel_item.discount = item_brand.brand_discount? ? item_brand.brand_discount.to_f : 0
+      if (!item_brand.brand_discount.nil? and item_brand.brand_discount > 0)
+        @admin_panel_item.price = @admin_panel_item.unit_price.to_f - ((@admin_panel_item.unit_price.to_f / 100) * item_brand.brand_discount).to_f
+        @admin_panel_item.discount = item_brand.brand_discount
       else
         @admin_panel_item.price = @admin_panel_item.unit_price
         @admin_panel_item.discount = 0

@@ -1,7 +1,14 @@
-%h1 Editing admin_panel_item_category
+%div
+  .page-title
+    .title_left
+      %h3 Edit Category
 
-= render 'form'
+  .clearfix
 
-= link_to 'Show', @admin_panel_item_category
-\|
-= link_to 'Back', admin_panel_item_categories_path
+  = form_for @admin_panel_item_category, url: admin_panel_item_category_path(@admin_panel_item_category),
+  html: { multipart: true, method: :put, class: 'form-horizontal form-label-left with_location', autocomplete: 'off'} do |f|
+
+    = render partial: 'form', locals: { f: f }
+    .clearfix
+    .row
+      = f.submit 'Update Category', class: 'btn btn-success col-md-offset-2'

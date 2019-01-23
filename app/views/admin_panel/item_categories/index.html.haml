@@ -4,6 +4,9 @@
   .page-title
     .title_left
       %h3 Item Categories
+    .title_right
+      = link_to 'Add New', new_admin_panel_item_category_path, class: 'btn btn-info btn-round pull-right'
+
 
   .clearfix
 
@@ -18,11 +21,13 @@
                 %th Name
                 %th Picture
                 %th Have Brands
+                %th Actions
               %tr
                 %th{style: 'width:30px'}
                   = text_field_tag :id, '', class: 'form-control', style: 'width:100%'
                 %th
                   = text_field_tag :name, '', class: 'form-control', style: 'width:100%'
+                %th
                 %th
                 %th
             %tbody

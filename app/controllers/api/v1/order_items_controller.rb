@@ -207,20 +207,24 @@ class OrderItemsController < Api::BaseController
           order = Order.where(:id => orderitem.order_id).first
           if !order.nil?
             orderitem.update_attributes(status: :cancelled)
-            order_amount_cancelled = orderitem.Total_Price
+            order_amount_remaining = order.Subtotal - orderitem.Total_Price
             redeem_points_consumed = order.RedeemPoints
 
             points_to_be_reverted = 0
-            if order_amount_cancelled > redeem_points_consumed
-              points_to_be_reverted = redeem_points_consumed
-            elsif order_amount_cancelled < redeem_points_consumed
-               points_to_be_reverted = order_amount_cancelled
+            if order_amount_remaining >= redeem_points_consumed
+              points_to_be_reverted = 0
+            elsif order_amount_remaining < redeem_points_consumed
+               points_to_be_reverted = redeem_points_consumed - order_amount_remaining
             end
 
             updateordertocancel = true
+            discountedproductsprice = 0
             allorderitems = OrderItem.where(:order_id => orderitem.order_id)
             allorderitems.each do |items|
               if items.status != 'cancelled'
+                if items.isdiscounted == true
+                  discountedproductsprice += items.Total_Price
+                end
                 updateordertocancel = false
               end
             end
@@ -228,52 +232,46 @@ class OrderItemsController < Api::BaseController
             if updateordertocancel == true
               order.update(:Subtotal => 0, :Delivery_Charges => 0, :Vat_Charges => 0, :Total => 0, :order_status_flag => 'cancelled', :earned_points => 0, :RedeemPoints => 0)
             else
-              subTotal = order.Subtotal - orderitem.Total_Price
+              subTotal = (order.Subtotal - orderitem.Total_Price).to_f.round(2)
               deliveryCharges = subTotal > 100 ? 0 : 20
-              vatCharges = (subTotal/100).to_f * 5
+              vatCharges = ((subTotal/100).to_f * 5).round(2)
               total = subTotal + deliveryCharges + vatCharges
-              order.update(:Subtotal => subTotal, :Delivery_Charges => deliveryCharges, :Vat_Charges => vatCharges, :Total => total, :RedeemPoints => order.RedeemPoints - points_to_be_reverted)
+
+              discount_per_transaction = 0
+              if orderitem.isdiscounted == false
+                order_price_for_award = subTotal - (order.RedeemPoints - points_to_be_reverted) - discountedproductsprice
+                if order_price_for_award <= 500
+                  discount_per_transaction =+ (3*order_price_for_award)/100
+                elsif order_price_for_award > 500 and order_price_for_award <= 1000
+                  discount_per_transaction =+ (5*order_price_for_award)/100
+                elsif order_price_for_award > 1000 and order_price_for_award <= 2000
+                  discount_per_transaction =+ (7.5*order_price_for_award)/100
+                elsif order_price_for_award > 2000
+                  discount_per_transaction =+ (10*order_price_for_award)/100
+                end
+                discount_per_transaction.to_f.ceil
+              end
+
+              if orderitem.isdiscounted == true
+                discount_per_transaction = order.earned_points
+              end
+              if points_to_be_reverted > 0
+                deliveryCharges = (subTotal - (redeem_points_consumed - points_to_be_reverted)) > 100 ? 0 : 20
+                total = subTotal + deliveryCharges + vatCharges
+              end
+              order.update(:Subtotal => subTotal, :Delivery_Charges => deliveryCharges, :Vat_Charges => vatCharges, :Total => total, :RedeemPoints => order.RedeemPoints - points_to_be_reverted, :earned_points => discount_per_transaction)
             end
 
             user_redeem_point_record = RedeemPoint.where(:user_id => @user.id).first
             userpoints = user_redeem_point_record.net_worth
-            discount_per_transaction = 0
 
-            if orderitem.isdiscounted == false
-              target_revert_price = orderitem.Total_Price
-              if target_revert_price <= 500
-                discount_per_transaction =+ (3*target_revert_price)/100
-              elsif target_revert_price > 500 and target_revert_price <= 1000
-                discount_per_transaction =+ (5*target_revert_price)/100
-              elsif target_revert_price > 1000 and target_revert_price <= 2000
-                discount_per_transaction =+ (7.5*target_revert_price)/100
-              elsif target_revert_price > 2000
-                discount_per_transaction =+ (10*target_revert_price)/100
-              end
-            end
-
-            points_to_be_deducted_on_cancel = 0
-            if (userpoints > 0 and userpoints < discount_per_transaction)
-              points_to_be_deducted_on_cancel = userpoints
-            elsif userpoints >= discount_per_transaction
-              points_to_be_deducted_on_cancel = discount_per_transaction
-            end
-            deduct_from_earned_points_to = 0
-            if user_redeem_point_record.totalearnedpoints > 0
-               if user_redeem_point_record.totalearnedpoints >= points_to_be_deducted_on_cancel
-                 deduct_from_earned_points_to = points_to_be_deducted_on_cancel
-               else
-                 deduct_from_earned_points_to = user_redeem_point_record.totalearnedpoints
-               end
-            end
-            user_redeem_point_record.update(:net_worth => (userpoints -  points_to_be_deducted_on_cancel) + points_to_be_reverted, :last_net_worth => userpoints, :last_reward_type => "Discount Per Transaction (Order Cancel Roll Back)", :last_reward_worth => discount_per_transaction, :last_reward_update => Time.now, :totalearnedpoints => (user_redeem_point_record.totalearnedpoints - deduct_from_earned_points_to))
+            user_redeem_point_record.update(:net_worth => userpoints + points_to_be_reverted, :last_net_worth => userpoints, :last_reward_type => "Discount Per Transaction (Order Cancel Roll Back)", :last_reward_worth => points_to_be_reverted, :last_reward_update => Time.now, :totalavailedpoints => user_redeem_point_record.totalavailedpoints - points_to_be_reverted)
             item = Item.where(:id => orderitem.item_id).first
             if !item.nil?
               item.increment!(:quantity, orderitem.Quantity)
             end
 
             if updateordertocancel != true
-              order.update(:earned_points => (order.earned_points - points_to_be_deducted_on_cancel))
               @user.notifications.create(order: order, message: 'Your Order for ' + item.name + ' has been cancelled')
               send_order_cancellation_email(orderitem.id)
             else
@@ -281,9 +279,7 @@ class OrderItemsController < Api::BaseController
               OrderMailer.send_complete_cancel_order_email_to_customer(order.id, order.user.email).deliver
             end
 
-            #if !OrderItem.where(:order_id => order.id).exists?
-            #  order.destroy
-            #end
+
             render json: {
               Message: "Order/Item Cancelled successfully",
               status: :deleted

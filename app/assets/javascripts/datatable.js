@@ -129,7 +129,8 @@ function init_datatables(){
                 'columns': [ { 'searchable': true, 'orderable': true, 'data': 'id', 'targets': 0 },
                              { 'searchable': true, 'orderable': false, 'data': 'name', 'targets': 1 },
                              { 'searchable': false, 'orderable': false, 'data': 'picture', 'targets': 2 },
-                             { 'searchable': false, 'orderable': false, 'data': 'IsHaveBrand', 'targets': 3 } ] },
+                             { 'searchable': false, 'orderable': false, 'data': 'IsHaveBrand', 'targets': 3 },
+                             { 'searchable': false, 'orderable': false, 'data': 'actions', 'targets': 4 } ] },
 
       'itembrands': { 'url': '/admin_panel/item_brands',
                 'columns': [ { 'searchable': true, 'orderable': true, 'data': 'id', 'targets': 0 },
