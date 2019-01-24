@@ -50,8 +50,8 @@ module AdminPanel
   end
 
   def Total
-    model.Total - (model.RedeemPoints? ? model.RedeemPoints : 0)
-  end 
+    (model.Total - (model.RedeemPoints? ? model.RedeemPoints : 0)).round(2)
+  end
 
   def is_viewed
     text = model.is_viewed? ? 'viewed' : 'new'

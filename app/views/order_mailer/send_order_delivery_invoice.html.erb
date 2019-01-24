@@ -115,11 +115,11 @@
                         </tr>
                         <tr style="border-bottom: 2px solid #d8d8d7;">
                             <td><strong>Net Payable Amount</strong></td>
-                            <td><strong>AED <%= @order.Total - (@order.RedeemPoints? ? @order.RedeemPoints : 0) %></strong></td>
+                            <td><strong>AED <%= (@order.Total - (@order.RedeemPoints? ? @order.RedeemPoints : 0)).round(2) %></strong></td>
                         </tr>
                         <tr style="border-bottom: 2px solid #d8d8d7;">
                             <td>Payment Made</td>
-                            <td><%= @order.Total - (@order.RedeemPoints? ? @order.RedeemPoints : 0) %></td>
+                            <td><%= (@order.Total - (@order.RedeemPoints? ? @order.RedeemPoints : 0)).round(2) %></td>
                         </tr>
                         <tr>
                             <td>

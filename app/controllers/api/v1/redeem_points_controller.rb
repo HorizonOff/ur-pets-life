@@ -13,10 +13,10 @@ class RedeemPointsController < Api::BaseController
         Availed: @user_redeem_points.totalavailedpoints,
         Earned: @user_redeem_points.totalearnedpoints,
         Orders: @user.orders.count,
-        NoramlSpendings: OrderItem.includes(:order).where(order_items: {isdiscounted: false}, orders: {user_id: @user.id}).sum(:Total_Price),
-        DiscountedSpendings: OrderItem.includes(:order).where(order_items: {isdiscounted: true}, orders: {user_id: @user.id}).sum(:Total_Price)
+        NoramlSpendings: OrderItem.includes(:order).where("orders.user_id = (?) AND order_items.status != (?) AND order_items.isdiscounted = false", @user.id, 'cancelled').references(:orders).sum("Total_Price"),
+        DiscountedSpendings: OrderItem.includes(:order).where("orders.user_id = (?) AND order_items.status != (?) AND order_items.isdiscounted = true", @user.id, 'cancelled').references(:orders).sum("Total_Price")
       }
-    else
+    else   
       render json: {
         Available: 0,
         Availed: 0,
