@@ -1,9 +1,13 @@
 FactoryBot.define do
   factory :appointment do
-    bookable nil
-    pet nil
-    vet nil
-    comment ""
-    booked_at "2017-12-15 11:05:31"
+    association :bookable, factory: :clinic
+    association :vet, factory: :vet_with_shedule
+    user
+    comment 'MyString'
+    start_at { Time.now + 1.day }
+    # end_at { Time.now + 1.hour }
+    number_of_days 2
+    status 1
+    total_price 100
   end
 end

@@ -1,6 +1,6 @@
 FactoryBot.define do
-  factory :breed do
+  factory :pet_type do
     name 'MyString'
-    pet_type
+    is_additional_type true
   end
 end

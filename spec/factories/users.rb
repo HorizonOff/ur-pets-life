@@ -3,7 +3,7 @@ FactoryBot.define do
     first_name            { Faker::Name.first_name }
     last_name             { Faker::Name.last_name }
     email                 { Faker::Internet.email }
-    mobile_number         '+442211542214'
+    mobile_number         { '+442' + Faker::Number.number(9).to_s }
     confirmed_at           { Time.now.getlocal }
     password              'foxtrapp'
     password_confirmation 'foxtrapp'
