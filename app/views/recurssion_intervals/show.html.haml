@@ -1,0 +1,12 @@
+%p#notice= notice
+
+%p
+  %b Weeks:
+  = @recurssion_interval.weeks
+%p
+  %b Days:
+  = @recurssion_interval.days
+
+= link_to 'Edit', edit_recurssion_interval_path(@recurssion_interval)
+\|
+= link_to 'Back', recurssion_intervals_path

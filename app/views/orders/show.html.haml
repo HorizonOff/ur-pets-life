@@ -1,0 +1,36 @@
+%p#notice= notice
+
+%p
+  %b References:
+  = @order.references
+%p
+  %b References:
+  = @order.references
+%p
+  %b Delivery date:
+  = @order.Delivery_Date
+%p
+  %b Order notes:
+  = @order.Order_Notes
+%p
+  %b Delivery charges:
+  = @order.Delivery_Charges
+%p
+  %b Vat charges:
+  = @order.Vat_Charges
+%p
+  %b Total:
+  = @order.Total
+%p
+  %b Iscash:
+  = @order.IsCash
+%p
+  %b Order status:
+  = @order.Order_Status
+%p
+  %b Payment status:
+  = @order.Payment_Status
+
+= link_to 'Edit', edit_order_path(@order)
+\|
+= link_to 'Back', orders_path

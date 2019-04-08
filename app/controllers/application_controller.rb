@@ -11,6 +11,6 @@ class ApplicationController < ActionController::Base
 
   def configure_permitted_parameters
     devise_parameter_sanitizer.permit(:accept_invitation, keys: %i[name avatar])
-    devise_parameter_sanitizer.permit(:invite, keys: %i[is_super_admin])
+    devise_parameter_sanitizer.permit(:invite, keys: %i[is_super_admin is_employee])
   end
 end

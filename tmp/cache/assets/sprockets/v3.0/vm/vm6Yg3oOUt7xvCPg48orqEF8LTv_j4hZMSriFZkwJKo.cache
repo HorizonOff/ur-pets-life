@@ -1,0 +1,29 @@
+I"…(function() {
+  var allowAction, fire, stopEverything;
+
+  fire = Rails.fire, stopEverything = Rails.stopEverything;
+
+  Rails.handleConfirm = function(e) {
+    if (!allowAction(this)) {
+      return stopEverything(e);
+    }
+  };
+
+  allowAction = function(element) {
+    var answer, callback, message;
+    message = element.getAttribute('data-confirm');
+    if (!message) {
+      return true;
+    }
+    answer = false;
+    if (fire(element, 'confirm')) {
+      try {
+        answer = confirm(message);
+      } catch (error) {}
+      callback = fire(element, 'confirm:complete', [answer]);
+    }
+    return answer && callback;
+  };
+
+}).call(this);
+:ET

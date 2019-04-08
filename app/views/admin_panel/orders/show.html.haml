@@ -1,0 +1,122 @@
+%div
+  .row
+    .col-md-12.col-sm-12.col-xs-12
+      .x_panel
+        .x_title
+          %h2
+            Order #
+            = @admin_panel_order.id
+            Details
+          .clearfix
+        .x_content
+
+          .col-md-3.col-sm-3.col-xs-12.profile_left
+            %ul.list-unstyled.user_data
+              %li
+                Shipping Address:
+                = @shippingaddress
+              %li
+                Order Notes:
+                = @admin_panel_order.Order_Notes
+              %li
+                Customer Name:
+                = @admin_panel_order.user.first_name + ' ' + @admin_panel_order.user.last_name
+              %li
+                Email:
+                = @admin_panel_order.user.email
+              %li
+                Mobile:
+                = @admin_panel_order.user.mobile_number
+              %li
+                Cash On Delivery:
+                = @admin_panel_order.IsCash? ? 'Yes': 'No'
+              %li
+                Order Date:
+                = @admin_panel_order.created_at.strftime('%d/%m/%Y')
+              %li
+                Subtotal:
+                = @admin_panel_order.Subtotal
+              %li
+                Delivery Charges:
+                = @admin_panel_order.Delivery_Charges
+              %li
+                VAT Charges:
+                = @admin_panel_order.Vat_Charges
+              %li
+                Total:
+                = @admin_panel_order.Total
+              %li
+                Earned Points:
+                = @admin_panel_order.earned_points
+              %li
+                Availed Points:
+                = @admin_panel_order.RedeemPoints? ? @admin_panel_order.RedeemPoints : 0
+              %li
+                Net Payable Amount:
+                = @admin_panel_order.order_status_flag == 'cancelled' ? 0 : @admin_panel_order.Total - (@admin_panel_order.RedeemPoints? ? @admin_panel_order.RedeemPoints : 0)
+              %li
+                Order Status:
+                = @admin_panel_order.order_status_flag == 'on_the_way' ? 'on the way' : @admin_panel_order.order_status_flag
+
+              %p.title
+                %b Comments:
+                = @admin_panel_order.comments_count
+              %p= @admin_panel_order.last_comment.nil? ? '' : @admin_panel_order.last_comment.message
+              = link_to ordercomments_admin_panel_order_path(@admin_panel_order), class: 'btn btn-info btn-xs' do
+                View history
+                - if @admin_panel_order.unread_comments_count_by_admin.present? && !@admin_panel_order.unread_comments_count_by_admin.zero?
+                  %span.badge= @admin_panel_order.unread_comments_count_by_admin
+
+          .col-md-9.col-sm-9.col-xs-12
+            .profile_title
+              .col-md-6.col-sm-6.col-xs-6
+                %h2 Total count of Items #{@admin_panel_order.order_items.size}
+            %table.table
+              %thead
+                %tr
+                  %th #
+                  %th Picture
+                  %th Name
+                  %th Price
+                  %th Quantity
+                  %th Total
+                  %th Recurring
+                  %th Recurring Interval
+                  %th Status
+                  %th Actions
+              %tbody
+                - @orderitems.each do |q|
+                  %tr
+                    %td{ scope: 'row' } #{q.id}
+                    %td
+                      = image_tag(q.item.picture.url, class: 'avatar', title: q.item.name) if q.item.picture.present?
+                    %td #{q.item.name}
+                    %td #{q.Unit_Price}
+                    %td #{q.Quantity}
+                    %td #{q.Total_Price}
+                    %td #{q.IsRecurring? ? 'Yes' : 'No'}
+                    %td #{q.recurssion_interval_id? ? q.recurssion_interval.label : 'N/A'}
+                    %td #{q.status == "on_the_way" ? 'on the way' : q.status}
+                    %td
+                      = link_to 'Cancel', cancel_admin_panel_order_path(q), data: { confirm: 'Are you sure?' }, method: :delete, remote: true, class: 'btn btn-danger btn-xs check_response' if q.status == 'pending'
+
+- if (@admin_panel_order.order_status_flag != 'delivered' and @admin_panel_order.order_status_flag != 'cancelled')
+  %div
+    .row
+      = render partial: 'layouts/admin_panel/errors', locals: { object: @admin_panel_order }
+      .col-md-12.col-sm-12.col-xs-12
+        .x_panel
+          .x_title
+            %h2 Update Order Status
+            .clearfix
+          .x_content
+            .col-md-6.col-sm-6.col-xs-12.col-md-offset-3.col-sm-offset-3
+              = form_for @admin_panel_order, url: admin_panel_order_path(@admin_panel_order), html: { multipart: true, method: :put, class: 'form-horizontal form-label-left with_location', autocomplete: 'off'} do |f|
+
+                .form-group
+                  = f.label :order_status_flag, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
+                    Select Status
+                    %span.required *
+                  .col-md-9.col-sm-9.col-xs-12
+                    = f.select :order_status_flag, options_for_select(@statusoption), {}, { class: 'select2', required: true }
+                = f.submit 'Update Status', class: 'btn btn-success col-md-offset-5'

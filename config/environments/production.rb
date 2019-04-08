@@ -90,7 +90,7 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
   config.host_name = ENV['HOST_NAME']
   config.action_mailer.default_url_options = { host: ENV['HOST_NAME'], protocol: 'https://' }
-
+  config.action_mailer.asset_host = ENV['MAILER_ASSETS_HOST']
   config.action_mailer.delivery_method = :smtp
 
   config.action_mailer.smtp_settings = {
@@ -101,4 +101,7 @@ Rails.application.configure do
     authentication: :plain,
     enable_starttls_auto: true
   }
+
+  config.aws_access_key_id = ENV['AKIAJHFXEDXOUI5IDPEA']
+  config.aws_secret_access_key = ENV['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']
 end

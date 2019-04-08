@@ -1,0 +1,28 @@
+%div
+  .row
+    .col-md-12.col-sm-12.col-xs-12
+      .x_panel
+        .x_title
+          %h2= @admin_panel_item_brand.name
+          .clearfix
+        .x_content
+          .col-md-6.col-sm-6.col-xs-12.col-md-offset-3.col-sm-offset-3
+            .profile_img
+              #crop-avatar
+                = image_tag(@admin_panel_item_brand.picture.url, class: 'img-responsive avatar-view', title: @admin_panel_item_brand.name) if @admin_panel_item_brand.picture.present?
+
+            %ul.list-unstyled.user_data
+              %br
+              %li
+                %label
+                  Name:
+                = @admin_panel_item_brand.name
+              %li
+                %label
+                  Discount On Brand Items (%):
+                = @admin_panel_item_brand.brand_discount
+
+            =link_to edit_admin_panel_item_brand_path(@admin_panel_item_brand), class: 'btn btn-warning' do
+              %i.fa.fa-edit.m-right-xs
+              Edit Brand
+            %br

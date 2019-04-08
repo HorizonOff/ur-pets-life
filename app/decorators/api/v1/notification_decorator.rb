@@ -17,17 +17,25 @@ module Api
       end
 
       def source_type
-        if model.appointment_id
-          'appointment'
-        elsif model.pet_id && model.is_for_vaccine?
-          'pet'
-        elsif model.pet_id
-          'lost'
+        if model.order_id
+          'order'
+        else
+          if model.appointment_id
+            'appointment'
+          elsif model.pet_id && model.is_for_vaccine?
+            'pet'
+          elsif model.pet_id
+            'lost'
+          end
         end
       end
 
       def source_id
-        model.appointment_id || model.pet_id
+        if model.order_id
+          model.order_id
+        else
+          model.appointment_id || model.pet_id
+        end
       end
 
       def avatar_url

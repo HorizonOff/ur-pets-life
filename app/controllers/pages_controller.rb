@@ -1,7 +1,11 @@
 class PagesController < ApplicationController
-  layout 'landing'
+  layout 'newlanding'
 
   def landing
+    @contact_request = ContactRequest.new
+  end
+
+  def newlanding
     @contact_request = ContactRequest.new
   end
 
@@ -11,7 +15,16 @@ class PagesController < ApplicationController
     @contact_request.save
   end
 
+  def loyalty_program; end
   def privacy_policy; end
+  def term_conditions; end
+  def new_privacy_policy; end
+  def cancelation_policy; end
+
+  def app_loyalty_program; end
+  def app_new_privacy_policy; end
+  def app_cancelation_policy; end
+  def app_term_conditions; end
 
   private
 

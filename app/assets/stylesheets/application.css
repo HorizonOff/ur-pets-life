@@ -23,7 +23,6 @@
  *= require_self
  */
 
-
 input[type="checkbox"].check_box_picture{
   display: none;
 }

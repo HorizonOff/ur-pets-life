@@ -3,6 +3,8 @@ module AdminPanel
     def pagination_comments_link
       commentable_param = if @parent_object.is_a?(Post)
                             { post_id: @parent_object.id }
+                          elsif @parent_object.is_a?(Order)
+                              { order_id: @parent_object.id }
                           else
                             { appointment_id: @parent_object.id }
                           end
@@ -13,6 +15,8 @@ module AdminPanel
     def path_for_comment_creating
       if @parent_object.is_a?(Post)
         admin_panel_post_comments_path(@parent_object.id)
+      elsif @parent_object.is_a?(Order)
+        admin_panel_order_comments_path(@parent_object.id)
       else
         admin_panel_appointment_comments_path(@parent_object.id)
       end

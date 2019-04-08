@@ -1,0 +1,33 @@
+I"(function() {
+  var stopEverything;
+
+  stopEverything = Rails.stopEverything;
+
+  Rails.handleMethod = function(e) {
+    var csrfParam, csrfToken, form, formContent, href, link, method;
+    link = this;
+    method = link.getAttribute('data-method');
+    if (!method) {
+      return;
+    }
+    href = Rails.href(link);
+    csrfToken = Rails.csrfToken();
+    csrfParam = Rails.csrfParam();
+    form = document.createElement('form');
+    formContent = "<input name='_method' value='" + method + "' type='hidden' />";
+    if ((csrfParam != null) && (csrfToken != null) && !Rails.isCrossDomain(href)) {
+      formContent += "<input name='" + csrfParam + "' value='" + csrfToken + "' type='hidden' />";
+    }
+    formContent += '<input type="submit" />';
+    form.method = 'post';
+    form.action = href;
+    form.target = link.target;
+    form.innerHTML = formContent;
+    form.style.display = 'none';
+    document.body.appendChild(form);
+    form.querySelector('[type="submit"]').click();
+    return stopEverything(e);
+  };
+
+}).call(this);
+:ET

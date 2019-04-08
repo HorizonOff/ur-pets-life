@@ -1,0 +1,100 @@
+I"N(function() {
+  var disableFormElement, disableFormElements, disableLinkElement, enableFormElement, enableFormElements, enableLinkElement, formElements, getData, matches, setData, stopEverything;
+
+  matches = Rails.matches, getData = Rails.getData, setData = Rails.setData, stopEverything = Rails.stopEverything, formElements = Rails.formElements;
+
+  Rails.handleDisabledElement = function(e) {
+    var element;
+    element = this;
+    if (element.disabled) {
+      return stopEverything(e);
+    }
+  };
+
+  Rails.enableElement = function(e) {
+    var element;
+    element = e instanceof Event ? e.target : e;
+    if (matches(element, Rails.linkDisableSelector)) {
+      return enableLinkElement(element);
+    } else if (matches(element, Rails.buttonDisableSelector) || matches(element, Rails.formEnableSelector)) {
+      return enableFormElement(element);
+    } else if (matches(element, Rails.formSubmitSelector)) {
+      return enableFormElements(element);
+    }
+  };
+
+  Rails.disableElement = function(e) {
+    var element;
+    element = e instanceof Event ? e.target : e;
+    if (matches(element, Rails.linkDisableSelector)) {
+      return disableLinkElement(element);
+    } else if (matches(element, Rails.buttonDisableSelector) || matches(element, Rails.formDisableSelector)) {
+      return disableFormElement(element);
+    } else if (matches(element, Rails.formSubmitSelector)) {
+      return disableFormElements(element);
+    }
+  };
+
+  disableLinkElement = function(element) {
+    var replacement;
+    replacement = element.getAttribute('data-disable-with');
+    if (replacement != null) {
+      setData(element, 'ujs:enable-with', element.innerHTML);
+      element.innerHTML = replacement;
+    }
+    element.addEventListener('click', stopEverything);
+    return setData(element, 'ujs:disabled', true);
+  };
+
+  enableLinkElement = function(element) {
+    var originalText;
+    originalText = getData(element, 'ujs:enable-with');
+    if (originalText != null) {
+      element.innerHTML = originalText;
+      setData(element, 'ujs:enable-with', null);
+    }
+    element.removeEventListener('click', stopEverything);
+    return setData(element, 'ujs:disabled', null);
+  };
+
+  disableFormElements = function(form) {
+    return formElements(form, Rails.formDisableSelector).forEach(disableFormElement);
+  };
+
+  disableFormElement = function(element) {
+    var replacement;
+    replacement = element.getAttribute('data-disable-with');
+    if (replacement != null) {
+      if (matches(element, 'button')) {
+        setData(element, 'ujs:enable-with', element.innerHTML);
+        element.innerHTML = replacement;
+      } else {
+        setData(element, 'ujs:enable-with', element.value);
+        element.value = replacement;
+      }
+    }
+    element.disabled = true;
+    return setData(element, 'ujs:disabled', true);
+  };
+
+  enableFormElements = function(form) {
+    return formElements(form, Rails.formEnableSelector).forEach(enableFormElement);
+  };
+
+  enableFormElement = function(element) {
+    var originalText;
+    originalText = getData(element, 'ujs:enable-with');
+    if (originalText != null) {
+      if (matches(element, 'button')) {
+        element.innerHTML = originalText;
+      } else {
+        element.value = originalText;
+      }
+      setData(element, 'ujs:enable-with', null);
+    }
+    element.disabled = false;
+    return setData(element, 'ujs:disabled', null);
+  };
+
+}).call(this);
+:ET

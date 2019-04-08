@@ -1,0 +1,14 @@
+%div
+  .page-title
+    .title_left
+      %h3 Edit Category
+
+  .clearfix
+
+  = form_for @admin_panel_item_category, url: admin_panel_item_category_path(@admin_panel_item_category),
+  html: { multipart: true, method: :put, class: 'form-horizontal form-label-left with_location', autocomplete: 'off'} do |f|
+
+    = render partial: 'form', locals: { f: f }
+    .clearfix
+    .row
+      = f.submit 'Update Category', class: 'btn btn-success col-md-offset-2'

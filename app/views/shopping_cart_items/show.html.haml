@@ -1,0 +1,21 @@
+%p#notice= notice
+
+%p
+  %b Isrecurring:
+  = @shopping_cart_item.IsRecurring
+%p
+  %b Interval:
+  = @shopping_cart_item.Interval
+%p
+  %b Quantity:
+  = @shopping_cart_item.quantity
+%p
+  %b Item:
+  = @shopping_cart_item.item
+%p
+  %b User:
+  = @shopping_cart_item.user
+
+= link_to 'Edit', edit_shopping_cart_item_path(@shopping_cart_item)
+\|
+= link_to 'Back', shopping_cart_items_path

@@ -1,0 +1,29 @@
+%h1 Listing shopping_cart_items
+
+%table
+  %thead
+    %tr
+      %th Isrecurring
+      %th Interval
+      %th Quantity
+      %th Item
+      %th User
+      %th
+      %th
+      %th
+
+  %tbody
+    - @shopping_cart_items.each do |shopping_cart_item|
+      %tr
+        %td= shopping_cart_item.IsRecurring
+        %td= shopping_cart_item.Interval
+        %td= shopping_cart_item.quantity
+        %td= shopping_cart_item.item
+        %td= shopping_cart_item.user
+        %td= link_to 'Show', shopping_cart_item
+        %td= link_to 'Edit', edit_shopping_cart_item_path(shopping_cart_item)
+        %td= link_to 'Destroy', shopping_cart_item, method: :delete, data: { confirm: 'Are you sure?' }
+
+%br
+
+= link_to 'New Shopping cart item', new_shopping_cart_item_path

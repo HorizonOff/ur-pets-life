@@ -45,4 +45,9 @@ class Admin < ApplicationRecord
     self.unread_commented_appointments_count = appointments.where('unread_comments_count_by_admin > 0').count
     save
   end
+
+  def update_counters_for_order
+    self.unread_commented_appointments_count = orders.where('unread_comments_count_by_admin > 0').count
+    save
+  end
 end

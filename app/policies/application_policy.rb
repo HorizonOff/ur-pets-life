@@ -10,6 +10,16 @@ class ApplicationPolicy
     user.is_super_admin?
   end
 
+  def employee_or_super_admin?
+    if user.is_super_admin?
+      true
+    elsif user.is_employee?
+      true
+    else
+      false
+    end
+  end
+
   class Scope
     attr_reader :user, :scope
 

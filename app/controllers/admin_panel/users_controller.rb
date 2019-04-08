@@ -1,9 +1,10 @@
 module AdminPanel
   class UsersController < AdminPanelController
-    before_action :authorize_super_admin
+    before_action :authorize_super_admin_employee
     before_action :set_user, except: %i[index new create]
     before_action :set_location, only: %i[edit]
 
+    @@redeem_points_net_worth = 0
     def index
       respond_to do |format|
         format.html {}
@@ -12,15 +13,31 @@ module AdminPanel
       end
     end
 
-    def edit; end
+    def edit
+      @@redeem_points_net_worth = 0
+      if !RedeemPoint.where(:user_id => @user.id).exists?
+        @redeempoint = RedeemPoint.create(:user_id => @user.id, :net_worth => 0, :last_net_worth => 0, :totalearnedpoints => 0, :totalavailedpoints => 0)
+        @user.redeem_point = @redeempoint
+        @@redeem_points_net_worth = @redeempoint.net_worth
+      else
+        @@redeem_points_net_worth = @user.redeem_point.net_worth
+      end
+    end
 
     def show
+      if !RedeemPoint.where(:user_id => @user.id).exists?
+        @redeempoint = RedeemPoint.create(:user_id => @user.id, :net_worth => 0, :last_net_worth => 0, :totalearnedpoints => 0, :totalavailedpoints => 0)
+        @user.redeem_point = @redeempoint
+      end
       @pets = ::AdminPanel::PetDecorator.decorate_collection(@user.pets)
     end
 
     def update
       @user.assign_attributes(user_params)
       if @user.save
+        if @user.redeem_point.net_worth > @@redeem_points_net_worth
+          @user.redeem_point.update(:totalearnedpoints => (@user.redeem_point.totalearnedpoints + (@user.redeem_point.net_worth - @@redeem_points_net_worth)))
+        end
         flash[:success] = 'User was successfully updated'
         redirect_to admin_panel_users_path
       else
@@ -61,7 +78,8 @@ module AdminPanel
 
     def user_params
       params.require(:user).permit(:first_name, :last_name, :mobile_number, :gender, :birthday, :email,
-                                   location_attributes: location_params)
+                                   location_attributes: location_params,
+                                   redeem_point_attributes: redeem_point_params)
     end
 
     def filter_users

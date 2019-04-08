@@ -1,0 +1,14 @@
+%div
+  .page-title
+    .title_left
+      %h3 Edit Brand
+
+  .clearfix
+
+  = form_for @admin_panel_item_brand, url: admin_panel_item_brand_path(@admin_panel_item_brand),
+  html: { multipart: true, method: :put, class: 'form-horizontal form-label-left with_location', autocomplete: 'off'} do |f|
+
+    = render partial: 'form', locals: { f: f }
+    .clearfix
+    .row
+      = f.submit 'Update Brand', class: 'btn btn-success col-md-offset-2'

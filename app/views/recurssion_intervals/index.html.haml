@@ -1,0 +1,23 @@
+%h1 Listing recurssion_intervals
+
+%table
+  %thead
+    %tr
+      %th Weeks
+      %th Days
+      %th
+      %th
+      %th
+
+  %tbody
+    - @recurssion_intervals.each do |recurssion_interval|
+      %tr
+        %td= recurssion_interval.weeks
+        %td= recurssion_interval.days
+        %td= link_to 'Show', recurssion_interval
+        %td= link_to 'Edit', edit_recurssion_interval_path(recurssion_interval)
+        %td= link_to 'Destroy', recurssion_interval, method: :delete, data: { confirm: 'Are you sure?' }
+
+%br
+
+= link_to 'New Recurssion interval', new_recurssion_interval_path

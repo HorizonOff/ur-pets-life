@@ -6,17 +6,26 @@ module Api
       before_action :parse_date, only: :index
 
       def index
-        authenticate_user if @parent_object.is_a?(Appointment)
-        comments = @parent_object.comments.where('created_at < ?', @created_at).order(created_at: :desc)
+        is_authorized = true
+        if (@parent_object.is_a?(Order) or @parent_object.is_a?(Appointment))
+          is_authorized = authenticate_user_for_chat
+        end
+        if is_authorized
+          # authenticate_user if @parent_object.is_a?(Appointment)
+          comments = @parent_object.comments.where('created_at < ?', @created_at).order(created_at: :desc)
                                  .includes(:writable, :commentable).limit(20)
 
-        decorated_comments = ::Api::V1::CommentDecorator.decorate_collection(comments)
-        serialized_comments = ActiveModel::Serializer::CollectionSerializer.new(decorated_comments,
-                                                                                serializer: CommentSerializer)
+          decorated_comments = ::Api::V1::CommentDecorator.decorate_collection(comments)
+          serialized_comments = ActiveModel::Serializer::CollectionSerializer.new(decorated_comments,
+                                                                              serializer: CommentSerializer)
 
-        read_comments(comments) if @parent_object.is_a? Appointment
+          read_comments(comments) if @parent_object.is_a? Appointment
+          read_comments(comments) if @parent_object.is_a? Order
 
-        render json: { comments: serialized_comments, total_count: @parent_object.comments_count }.merge(default_fields)
+          render json: { comments: serialized_comments, total_count: @parent_object.comments_count }.merge(default_fields)
+        else
+          render_401
+        end
       end
 
       def create
@@ -43,12 +52,22 @@ module Api
       end
 
       def set_parent_object
-        @parent_object = params[:post_id].present? ? set_post : set_appointment
+        if  params[:post_id].present?
+          @parent_object = set_post
+        elsif params[:order_id].present?
+          @parent_object = set_order
+        else
+          @parent_object = set_appointment
+        end
         return render_404 unless @parent_object
       end
 
       def set_post
         Post.find_by_id(params[:post_id])
+      end
+
+      def set_order
+        Order.find_by_id(params[:order_id])
       end
 
       def set_appointment
@@ -63,17 +82,29 @@ module Api
         @default_fields ||= { title: title, message: message, created_at: created_at }
         unless a_post?
           @default_fields[:unread_comments_count_by_user] = @parent_object.unread_comments_count_by_user
-          @default_fields[:unread_commented_appointments_count] = @user.unread_commented_appointments_count
+          @default_fields[:unread_commented_appointments_count] = (@user.unread_commented_appointments_count + @user.unread_commented_orders_count)
         end
         @default_fields
       end
 
       def title
-        a_post? ? @parent_object.title : @parent_object.bookable.name
+        if a_post?
+          @parent_object.title
+        elsif @parent_object.is_a?(Appointment)
+          @parent_object.bookable.name
+        elsif @parent_object.is_a?(Order)
+          'Order # ' + @parent_object.id.to_s
+        end
       end
 
       def message
-        a_post? ? @parent_object.message : @parent_object.comment
+        if a_post?
+          @parent_object.message
+        elsif @parent_object.is_a?(Appointment)
+          @parent_object.comment
+        elsif @parent_object.is_a?(Order)
+          ''
+        end
       end
 
       def created_at

@@ -1,0 +1,45 @@
+!!!
+%html
+  %head
+    = render 'layouts/analytick' if ENV['SERVER'] == 'production'
+    %title Ur Pets Life
+    = favicon_link_tag asset_path('Favicon.ico'), rel: 'icon', type: 'image/x-icon'
+    %meta{ name: 'title', content: 'Ur Pets Life' }
+
+    %meta{ name: 'description', content: 'Ur Pets Life is an awesome new app for managing your pets life in real-time, anytime anywhere, at no cost.' }
+    %meta{ name: 'viewport', content: 'width=device-width, initial-scale=1.0' }
+    %meta{ property: 'og:title', content: 'Ur Pets Life' }
+    %meta{ property: 'og:url', content: 'http://www.urpetslife.com' }
+    %meta{ property: 'og:image', content: asset_path('IMG.png') }
+    %link{ href: 'http://www.urpetslife.com', rel: 'canonical' }
+    %meta{ content: 'text/html; charset=UTF-8', 'http-equiv' => 'Content-Type' }
+
+    - if content_for?(:head)
+      = yield(:head)
+    = csrf_meta_tags
+
+    = stylesheet_link_tag    'bootstrap.min', media: 'all', 'data-turbolinks-track': 'reload'
+    = stylesheet_link_tag    'newstyle', media: 'all', 'data-turbolinks-track': 'reload'
+    %link{:rel => :stylesheet, :type => :"text/css", :href => "https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,600,700,900"}
+    %link{:rel => :stylesheet, :type => :"text/css", :href => "https://fonts.googleapis.com/css?family=Poppins:300,400,500,700"}
+
+    / = javascript_include_tag 'landing', 'data-turbolinks-track': 'reload'
+    = javascript_include_tag 'newscript', 'data-turbolinks-track': 'reload'
+    = javascript_include_tag 'xlib', 'data-turbolinks-track': 'reload'
+
+    %script( src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.2/TweenMax.min.js")
+
+    = render 'layouts/facebook_pixel' if ENV['SERVER'] == 'production'
+
+    %body{ class: [ ("home-page" if controller.action_name == 'newlanding'), ("inner-pages" if controller.action_name != 'newlanding') ] }
+    = render 'layouts/analytick_body' if ENV['SERVER'] == 'production'
+    = render 'layouts/appheader' if controller.action_name.include? "app_"
+    = render 'layouts/header' if !controller.action_name.include? "app_"
+    - unless flash.empty?
+      %script{ type: "text/javascript" }
+        - flash.each do |f|
+          - type = f[0].to_s.gsub('alert', 'error').gsub('notice', 'info')
+          toastr["#{ type }"]("#{ f[1] }")
+    = yield
+
+    = render 'layouts/footer'

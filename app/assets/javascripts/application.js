@@ -24,7 +24,6 @@
 //= require cocoon
 //= require fullcalendar
 //= require daterangepicker
-//= require ckeditor/init
 //= require datatables
 //= require dataTables.bootstrap.min
 //= require dataTables.buttons.min
@@ -33,6 +32,7 @@
 //= require datatable.js
 
 //= require_self
+
 $(document).on('turbolinks:load', function() {
   init_all_functions()
 });

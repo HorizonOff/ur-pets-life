@@ -1,0 +1,28 @@
+- content_for :head do
+  %meta{name: "turbolinks-cache-control", content:"no-cache"}
+%div
+  .page-title
+    .title_left
+      %h3 Pet Types
+
+  .clearfix
+
+  .row
+    .col-md-12.col-sm-12.col-xs-12
+      .x_panel
+        .x_content
+          %table.table.datatable.pettypes
+            %thead
+              %tr
+                %th{style: 'width:30px'}  #
+                %th Name
+                %th Picture
+                %th Have Categories
+              %tr
+                %th{style: 'width:30px'}
+                  = text_field_tag :id, '', class: 'form-control', style: 'width:100%'
+                %th
+                  = text_field_tag :name, '', class: 'form-control', style: 'width:100%'
+                %th
+                %th
+            %tbody

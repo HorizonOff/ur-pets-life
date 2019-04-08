@@ -1,0 +1,85 @@
+.row
+  = render partial: 'layouts/admin_panel/errors', locals: { object: @admin_panel_item }
+- content_for :head do
+  %meta{name: "turbolinks-cache-control", content:"no-cache"}
+.col-md-6.col-sm-6.col-xs-12
+  .x_panel
+    .x_title
+      %h2 Main Info
+      .clearfix
+    .x_content
+      %br
+      .form-group
+        = f.label :name, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
+          Product Name
+          %span.required *
+        .col-md-9.col-sm-9.col-xs-12
+          = f.text_field :name, class: 'form-control', required: true
+      .form-group
+        = f.label :unit_price, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
+          Selling Price (per Item)
+          %span.required *
+        .col-md-9.col-sm-9.col-xs-12
+          = f.number_field :unit_price, class: 'form-control', required: true, step: ".01", min: 1
+      .form-group
+        = f.label :buying_price, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
+          Buying Price (per Item)
+          %span.required *
+        .col-md-9.col-sm-9.col-xs-12
+          = f.number_field :buying_price, class: 'form-control', required: true, step: ".01", min: 1
+      .form-group
+        = f.label :discount, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
+          Discount (%)
+
+        .col-md-9.col-sm-9.col-xs-12
+          = f.number_field :discount, class: 'form-control', min: 0, max: 100, step: ".01"
+      .form-group
+        = f.label :unit, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
+          Weight / Size
+          %span.required *
+        .col-md-9.col-sm-9.col-xs-12
+          = f.text_field :unit, class: 'form-control', required: true
+      .form-group
+        = f.label :quantity, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
+          In Stock Quantity
+          %span.required *
+        .col-md-9.col-sm-9.col-xs-12
+          = f.number_field :quantity, class: 'form-control', min: 0, required: true
+      .form-group
+        = f.label :pet_type_id, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
+          Pet Type
+          %span.required *
+        .col-md-9.col-sm-9.col-xs-12
+          = f.collection_select :pet_type_id, PetType.all, :id, :name, {}, { class: 'select2 clinics_select', required: true, id: 'pet_type_id'}
+      .form-group
+        = f.label :item_categories_id, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
+          Item Category
+          %span.required *
+        .col-md-9.col-sm-9.col-xs-12
+          = f.collection_select :item_categories_id, ItemCategory.all, :id, :name, {}, { class: 'select2 clinics_select', required: true, id: 'item_category_id'}
+      .form-group
+        = f.label :item_brand_id, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
+          Item Brand
+          %span.required *
+        .col-md-9.col-sm-9.col-xs-12
+          = f.collection_select :item_brand_id, ItemBrand.all, :id, :name, {}, { class: 'select2 clinics_select', required: true, id: 'item_brand_id'}
+      .form-group
+        = f.label :short_description, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
+          Short Description
+          %span.required *
+        .col-md-9.col-sm-9.col-xs-12
+          = f.text_area :short_description, rows: 2, class: 'form-control', required: true
+      .form-group
+        = f.label :description, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
+          Description
+          %span.required *
+        .col-md-9.col-sm-9.col-xs-12
+          = f.text_area :description, rows: 5, class: 'form-control no-resize', required: true
+      .form-group
+        = f.label :picture, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
+          Picture
+          %span.required *
+        .col-md-9.col-sm-9.col-xs-12
+          - if @admin_panel_item.picture?
+            = image_tag @admin_panel_item.picture.url, class: 'avatar-show', style: 'display:block;margin:8px 0px;width:inherit;height:inherit;'
+          = f.file_field :picture, accept: '.jpg,.jpeg,.bmp,.png', required:  @admin_panel_item.picture? ? false : true

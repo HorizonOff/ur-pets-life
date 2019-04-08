@@ -1,0 +1,21 @@
+%h1 Listing item_brands
+
+%table
+  %thead
+    %tr
+      %th Name
+      %th
+      %th
+      %th
+
+  %tbody
+    - @item_brands.each do |item_brand|
+      %tr
+        %td= item_brand.name
+        %td= link_to 'Show', item_brand
+        %td= link_to 'Edit', edit_item_brand_path(item_brand)
+        %td= link_to 'Destroy', item_brand, method: :delete, data: { confirm: 'Are you sure?' }
+
+%br
+
+= link_to 'New Item brand', new_item_brand_path

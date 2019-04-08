@@ -1,10 +1,11 @@
 module AdminPanel
   class FilterAndPaginationQuery
-    INT_COLUMNS = %w[id vets_count status specialization_id pet_type_id experience sex].freeze
-    BOOLEAN_COLUMNS = %w[is_active is_answered is_super_admin skip_push_sending is_for_trainer].freeze
+    INT_COLUMNS = %w[user_id id Total_Price Quantity order_id item_id unit_price discount price quantity avg_rating weight vets_count status specialization_id pet_type_id experience sex].freeze
+    BOOLEAN_COLUMNS = %w[is_viewed IsRecurring IsHaveCategories is_active is_answered is_super_admin skip_push_sending is_for_trainer].freeze
     ADDITIONAL_PARAMS = { 'city' => { join_model: :location, field: 'locations.city' },
                           'specialization_id' => { join_model: :specializations, field: 'specializations.id' },
-                          'pet_type_id' => { join_model: :pet_types, field: 'pet_types.id' } }.freeze
+                          'pet_type_id' => { join_model: :pet_types, field: 'pet_types.id' },
+                          'user_id' => { join_model: :user, field: 'users.id' } }.freeze
     SQL_RULES = { 'name' => [{ models: %w[User Appointment Post Notification],
                                sql: "(users.first_name || ' ' || users.last_name) ILIKE :value" },
                              { models: %w[Pet],
@@ -13,6 +14,7 @@ module AdminPanel
                                    sql: '(vets.name ILIKE :value)' }] }.freeze
 
     PET_SCOPES = %w[for_adoption lost found].freeze
+    ORDER_STATUS = %w[pending confirmed on_the_way delivered cancelled].freeze
 
     def initialize(model, params, admin = nil)
       @model = model
@@ -29,7 +31,7 @@ module AdminPanel
     def filter
       select_additional_fields
       if draw_first?
-        if model.in? %w[Appointment ContactRequest]
+        if model.in? %w[Appointment ContactRequest OrderItem Order]
           scope.order(created_at: :desc).page(params[:page]).per(10)
         else
           scope.order(id: :asc).page(params[:page]).per(10)
@@ -80,7 +82,9 @@ module AdminPanel
     end
 
     def check_field_type(name)
-      if name.in?(INT_COLUMNS)
+      if (model == 'OrderItem' and name == 'status')
+        :order_item_status
+      elsif name.in?(INT_COLUMNS)
         :integer
       elsif name.in?(BOOLEAN_COLUMNS)
         :boolean
@@ -135,6 +139,8 @@ module AdminPanel
         use_sql_rule(column)
       elsif model == 'Pet' && column[:name] == 'status'
         pet_status_rule(column[:value])
+      elsif model == 'Order' && column[:name] == 'order_status_flag'
+        order_status_rule(column[:value], field)
       elsif column_type == :integer
         @scope.where("#{field} = :value", value: column_value.to_i)
       elsif column_type == :boolean
@@ -146,6 +152,10 @@ module AdminPanel
 
     def pet_status_rule(value)
       @scope.send(value) if value.in?(PET_SCOPES)
+    end
+
+    def order_status_rule(value, field)
+      @scope.where("#{field} = :value", value: value.to_s) if value.in?(ORDER_STATUS)
     end
 
     def specific_sql_rule_for?(column_name)

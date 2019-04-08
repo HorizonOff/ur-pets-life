@@ -1,0 +1,19 @@
+%h1 Listing shipping_addresses
+
+%table
+  %thead
+    %tr
+      %th
+      %th
+      %th
+
+  %tbody
+    - @shipping_addresses.each do |shipping_address|
+      %tr
+        %td= link_to 'Show', shipping_address
+        %td= link_to 'Edit', edit_shipping_address_path(shipping_address)
+        %td= link_to 'Destroy', shipping_address, method: :delete, data: { confirm: 'Are you sure?' }
+
+%br
+
+= link_to 'New Shipping address', new_shipping_address_path

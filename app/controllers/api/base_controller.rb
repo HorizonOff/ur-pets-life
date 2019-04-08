@@ -19,6 +19,14 @@ module Api
       render_401 unless @user
     end
 
+    def authenticate_user_for_chat
+      if !@user
+        false
+      else
+        true
+      end
+    end
+
     def authenticate_token
       @current_session = Session.find_by_token(request.headers['Authorization'])
       @user = @current_session.user if @current_session
