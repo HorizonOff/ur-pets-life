@@ -53,7 +53,7 @@ Rails.application.configure do
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
   config.action_mailer.delivery_method = :letter_opener
   config.action_mailer.default_url_options = { host: ENV['HOST_NAME'], port: 3000 }
-
+  config.reload_classes_only_on_change = false
   config.action_mailer.smtp_settings = {
     address: 'smtp.gmail.com',
     port: 587,
@@ -62,4 +62,7 @@ Rails.application.configure do
     authentication: :plain,
     enable_starttls_auto: true
   }
+
+  config.aws_access_key_id = ENV['AKIAJHFXEDXOUI5IDPEA']
+  config.aws_secret_access_key = ENV['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']
 end

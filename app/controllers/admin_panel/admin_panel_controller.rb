@@ -12,8 +12,22 @@ module AdminPanel
       current_admin.is_super_admin?
     end
 
+    def employee_or_super_admin?
+      if current_admin.is_super_admin?
+        true
+      elsif current_admin.is_employee?
+        true
+      else
+        false
+      end
+    end
+
     def authorize_super_admin
       authorize :application, :super_admin?
+    end
+
+    def authorize_super_admin_employee
+      authorize :application, :employee_or_super_admin?
     end
 
     def pundit_user
@@ -33,6 +47,10 @@ module AdminPanel
 
     def location_params
       %i[latitude longitude city area street building_type building_name unit_number villa_number comment _destroy]
+    end
+
+    def redeem_point_params
+      %i[net_worth]
     end
 
     def schedule_params
@@ -56,6 +74,7 @@ module AdminPanel
     def count_budges
       if current_admin.is_super_admin?
         @new_contact_requests_count = ContactRequest.where(is_viewed: false).count
+        @new_orders_count = Order.where(is_viewed: false).count
       else
         @new_appointments_count = current_admin.appointments.where(is_viewed: false).count
       end

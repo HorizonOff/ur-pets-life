@@ -5,8 +5,14 @@ class Comment < ApplicationRecord
   counter_culture :commentable, column_name: proc { |model| model.commentable_type == 'Appointment' && model.writable_type == 'User' && model.read_at.blank? ? 'unread_comments_count_by_admin' : nil },
                                 column_names: { ["comments.commentable_type = 'Appointment' AND comments.writable_type = 'User' AND comments.read_at IS NULL"] => 'unread_comments_count_by_admin' }
 
+  counter_culture :commentable, column_name: proc { |model| model.commentable_type == 'Order' && model.writable_type == 'User' && model.read_at.blank? ? 'unread_comments_count_by_admin' : nil },
+                                column_names: { ["comments.commentable_type = 'Order' AND comments.writable_type = 'User' AND comments.read_at IS NULL"] => 'unread_comments_count_by_admin' }
+
   counter_culture :commentable, column_name: proc { |model| model.commentable_type == 'Appointment' && model.writable_type == 'Admin' && model.read_at.blank? ? 'unread_comments_count_by_user' : nil },
                                 column_names: { ["comments.commentable_type = 'Appointment' AND comments.writable_type = 'Admin' AND comments.read_at IS NULL"] => 'unread_comments_count_by_user' }
+
+  counter_culture :commentable, column_name: proc { |model| model.commentable_type == 'Order' && model.writable_type == 'Admin' && model.read_at.blank? ? 'unread_comments_count_by_user' : nil },
+                                column_names: { ["comments.commentable_type = 'Order' AND comments.writable_type = 'Admin' AND comments.read_at IS NULL"] => 'unread_comments_count_by_user' }
 
   validates :message, presence: { message: 'Message is required' }
 
@@ -17,14 +23,22 @@ class Comment < ApplicationRecord
 
   def send_notification
     return if Rails.env.test?
-    PushSendingCommentJob.perform_async(id, commentable_id) if should_send_push?
-    EmailCommentJob.perform_async(commentable_id) if should_send_email?
+    if (commentable_type == 'Order' and writable_type == 'Admin')
+      PushSendingOrderCommentJob.perform_async(id, commentable_id)
+    else
+      PushSendingCommentJob.perform_async(id, commentable_id) if should_send_push?
+      EmailCommentJob.perform_async(commentable_id) if should_send_email?
+    end
   end
 
   def update_counters
-    return if commentable_type != 'Appointment'
-    commentable.admin&.update_counters if writable_type == 'User'
-    commentable.user.update_counters
+    return if (commentable_type != 'Appointment' and commentable_type != 'Order')
+    if commentable_type == 'Order'
+      commentable.user.update_counters_for_order
+    else
+      commentable.admin&.update_counters if writable_type == 'User'
+      commentable.user.update_counters
+    end
   end
 
   def self.read_by_user

@@ -3,6 +3,7 @@ class Notification < ApplicationRecord
   belongs_to :user, counter_cache: true
   belongs_to :appointment, optional: true
   belongs_to :pet, optional: true
+  belongs_to :order, optional: true
 
   before_validation :set_user
 

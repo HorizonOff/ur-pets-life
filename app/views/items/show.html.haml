@@ -1,0 +1,21 @@
+%p#notice= notice
+
+%p
+  %b Name:
+  = @item.name
+%p
+  %b Price:
+  = @item.price
+%p
+  %b Discount:
+  = @item.discount
+%p
+  %b Weight:
+  = @item.weight
+%p
+  %b Unit:
+  = @item.unit
+
+= link_to 'Edit', edit_item_path(@item)
+\|
+= link_to 'Back', items_path

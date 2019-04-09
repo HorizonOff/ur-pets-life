@@ -46,7 +46,7 @@ module PushSending
     end
 
     def unread_commented_appointments_count
-      @unread_commented_appointments_count ||= user.unread_commented_appointments_count
+      @unread_commented_appointments_count ||= (user.unread_commented_appointments_count + user.unread_commented_orders_count)
     end
 
     def certificate_path

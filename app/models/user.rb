@@ -45,12 +45,18 @@ class User < ApplicationRecord
 
   acts_as_paranoid
 
+  has_many :item_reviews
   has_one :location, as: :place, inverse_of: :place
 
+  has_many :orders
+  has_many :commented_orders, -> { where('comments_count > 0') }, class_name: 'Order'
+  has_many :orders_with_new_comments, -> { where('unread_comments_count_by_user > 0') }, class_name: 'Order'
+  has_one :redeem_point
   has_many :favorites, -> { order(created_at: :asc) }, dependent: :destroy
   has_many :sessions, dependent: :destroy
   has_many :pets, dependent: :destroy
-
+  has_many :wishlists
+  has_many :shopping_cart_items, -> { order('created_at DESC') }
   has_one :pet_avatar, -> { order(id: :asc) }, class_name: 'Pet'
 
   has_many :appointments
@@ -62,11 +68,11 @@ class User < ApplicationRecord
   has_many :unread_notifications, -> { where(viewed_at: nil) }, class_name: 'Notification'
 
   accepts_nested_attributes_for :location, update_only: true, reject_if: :all_blank
-
+  accepts_nested_attributes_for :redeem_point, update_only: true, reject_if: :all_blank
   delegate :address, to: :location, allow_nil: true
   delegate :avatar, to: :pet_avatar, allow_nil: true
 
-  before_validation :check_location
+  # before_validation :check_location
 
   delegate :address, to: :location, allow_nil: true
   reverse_geocoded_by 'locations.latitude', 'locations.longitude'
@@ -94,6 +100,14 @@ class User < ApplicationRecord
   def update_counters
     self.commented_appointments_count = commented_appointments.count
     self.unread_commented_appointments_count = appointments_with_new_comments.count
+    self.commented_orders_count = commented_orders.count
+    self.unread_commented_orders_count = orders_with_new_comments.count
+    save
+  end
+
+  def update_counters_for_order
+    self.commented_orders_count = commented_orders.count
+    self.unread_commented_orders_count = orders_with_new_comments.count
     save
   end
 

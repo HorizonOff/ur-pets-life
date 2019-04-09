@@ -1,4 +1,5 @@
-ruby "2.4.2"
+ruby "2.5.1"
+
 source 'https://rubygems.org'
 
 git_source(:github) do |repo_name|
@@ -10,6 +11,10 @@ gem 'omniauth'
 gem 'omniauth-facebook'
 gem 'omniauth-google-oauth2'
 gem 'google-api-client', '~> 0.11'
+
+#PDF gem
+gem 'wicked_pdf'
+gem 'wkhtmltopdf-binary'
 
 gem 'fb_graph2'
 gem 'rest-client'
@@ -104,3 +109,4 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem 'gmaps4rails'
 gem "cocoon"
 gem 'counter_culture', '~> 1.8'
+gem 'rails_12factor', group: :production

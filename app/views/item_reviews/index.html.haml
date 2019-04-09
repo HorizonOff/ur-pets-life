@@ -1,0 +1,27 @@
+%h1 Listing item_reviews
+
+%table
+  %thead
+    %tr
+      %th User
+      %th Item
+      %th Rating
+      %th Comment
+      %th
+      %th
+      %th
+
+  %tbody
+    - @item_reviews.each do |item_review|
+      %tr
+        %td= item_review.user
+        %td= item_review.item
+        %td= item_review.rating
+        %td= item_review.comment
+        %td= link_to 'Show', item_review
+        %td= link_to 'Edit', edit_item_review_path(item_review)
+        %td= link_to 'Destroy', item_review, method: :delete, data: { confirm: 'Are you sure?' }
+
+%br
+
+= link_to 'New Item review', new_item_review_path

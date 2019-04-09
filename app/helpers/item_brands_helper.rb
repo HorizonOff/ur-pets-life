@@ -1,0 +1,2 @@
+module ItemBrandsHelper
+end

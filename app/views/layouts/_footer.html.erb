@@ -1,0 +1,39 @@
+<footer style="background-image:url(<%= asset_path 'newlanding/footer.png' %>)">
+	<div class="container">
+		<div class="row">
+			<img src="<%= asset_path 'newlanding/logo.png' %>" alt="" class="logo">
+		</div>
+		<div class="row">
+		<div class="col-md-4 col-sm-4">
+			<p>Ur Pets Life is the first fully dedicated mobile application in the UAE targeting pet owners and pet businesses.
+			<br><br>
+			We give pet owners the chance to shop or book services for their pets in a click of a button while also accumulating loyalty points along the way.
+			<br><br>
+			We also give the opportunity for pet business owners to showcase and advertise their business to reach a wider network of audience
+			</p>
+		</div>
+		<div class="col-md-3 col-sm-3">
+			<p><strong>Address :</strong> Iridium building, al barsha first, dubai, UAE,<br> P.O.Box 454742</p>
+			<p><strong>Contact :</strong> 04 8849449</p>
+			<p><strong>Email :</strong> shopping@urpetslife.com<br> info@urpetslife.com</p>
+		</div>
+		<div class="col-md-5 col-sm-5">
+		<ul>
+			<li><a href="https://www.facebook.com/urpetslife" target="_blank"><img src="<%= asset_path 'newlanding/fb.png' %>" alt=""></a></li>
+			<li><a href="https://www.instagram.com/urpetslife/" target="_blank"><img src="<%= asset_path 'newlanding/ins.png' %>" alt=""></a></li>
+		</ul>
+
+		<ul class="links">
+			<li><%= link_to 'Terms & Condition', { controller: "pages", action: "term_conditions" }%> | </li>
+			<li><%= link_to 'Privacy Policy', { controller: "pages", action: "new_privacy_policy" }%> | </li>
+			<li><%= link_to 'Cancellation Policy', { controller: "pages", action: "cancelation_policy" }%> | </li>
+			<li><%= link_to 'Loyalty Program', { controller: "pages", action: "loyalty_program" }%> </li>
+		</ul>
+		<p>© Ur Pets Life 2018</p>
+		</div>
+		</div>
+		<div class="row" style="text-align: center;margin-top: 30px;">
+			<img src="<%= asset_path 'newlanding/btm.jpg' %>" alt=""> <img src="<%= asset_path 'newlanding/visa.jpg' %>" alt="" class="card">
+		</div>
+	</div>
+</footer>

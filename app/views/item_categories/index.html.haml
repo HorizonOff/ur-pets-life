@@ -1,0 +1,23 @@
+%h1 Listing item_categories
+
+%table
+  %thead
+    %tr
+      %th Name
+      %th Picture
+      %th
+      %th
+      %th
+
+  %tbody
+    - @item_categories.each do |item_category|
+      %tr
+        %td= item_category.name
+        %td= item_category.picture
+        %td= link_to 'Show', item_category
+        %td= link_to 'Edit', edit_item_category_path(item_category)
+        %td= link_to 'Destroy', item_category, method: :delete, data: { confirm: 'Are you sure?' }
+
+%br
+
+= link_to 'New Item category', new_item_category_path

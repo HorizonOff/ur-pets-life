@@ -1,0 +1,18 @@
+%p#notice= notice
+
+%p
+  %b User:
+  = @item_review.user
+%p
+  %b Item:
+  = @item_review.item
+%p
+  %b Rating:
+  = @item_review.rating
+%p
+  %b Comment:
+  = @item_review.comment
+
+= link_to 'Edit', edit_item_review_path(@item_review)
+\|
+= link_to 'Back', item_reviews_path

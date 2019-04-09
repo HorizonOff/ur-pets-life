@@ -1,0 +1,51 @@
+- content_for :head do
+  %meta{name: "turbolinks-cache-control", content:"no-cache"}
+%div
+  .page-title
+    .title_left
+      %h3 Orders
+    .title_right
+      = link_to 'Export in xlsx', admin_panel_orders_path(format: :xlsx, request_type: :excel), class: 'btn btn-primary btn-round pull-right'
+  .clearfix
+
+  .row
+    .col-md-12.col-sm-12.col-xs-12
+      .x_panel
+        .x_content
+          .form-horizontal.additional_parameters
+            .form-group
+              = label_tag :user_id, 'User Name', class: 'control-label col-md-2 col-sm-2 col-xs-6'
+              .col-md-3.col-sm-3.col-xs-6
+                = select_tag :user_id, options_from_collection_for_select(User.includes(:orders).where("orders.user_id = users.id").references(:orders).all, :id, :name),
+                  class: 'form-control select2 additional_parameter', include_blank: true
+
+          %table.table.datatable.orders
+            %thead
+              %tr
+                %th{style: 'width:30px'}  #
+                %th User Name
+                %th Location
+                %th Notes
+                %th SubTotal
+                %th Net Payable
+                %th IsCash
+                %th Payment Status
+                %th Status
+                %th Order Status
+                %th Actions
+              %tr
+                %th{style: 'width:30px'}
+                  = text_field_tag :id, '', class: 'form-control', style: 'width:100%'
+                %th
+                %th
+                %th
+                %th
+                %th
+                %th
+                %th
+                %th
+                  = select_tag :is_viewed, options_for_select([[], ['New', 'false'], ['Older', 'true']]), class: 'form-control select2'
+                %th
+                  = select_tag :order_status_flag, options_for_select([[], ['Pending', 'pending'], ['Confirmed', 'confirmed'], ['On The Way', 'on_the_way'], ['Delivered', 'delivered'], ['Cancelled', 'cancelled']]), class: 'form-control select2'
+                %th
+            %tbody

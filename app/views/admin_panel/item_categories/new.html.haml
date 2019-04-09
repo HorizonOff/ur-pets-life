@@ -1,0 +1,14 @@
+%div
+  .page-title
+    .title_left
+      %h3 Add New Category
+
+  .clearfix
+
+  = form_for @admin_panel_item_category, url: admin_panel_item_categories_path,
+  html: { multipart: true, method: :post, class: 'form-horizontal form-label-left with_location', autocomplete: 'off'} do |f|
+
+    = render partial: 'form', locals: { f: f }
+    .clearfix
+    .row
+      = f.submit 'Create Category', class: 'btn btn-success col-md-offset-2'

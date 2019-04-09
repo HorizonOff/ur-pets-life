@@ -1,13 +1,269 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <style>
-      /* Email styles need to be inline */
-    </style>
-  </head>
+<html lang="en">
 
-  <body>
-    <%= yield %>
-  </body>
+<head>
+    <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet">
+    <title>UR Pets Life</title>
+    <style>
+    * {
+        box-sizing: border-box;
+        padding: 0px;
+        margin: 0px;
+    }
+
+    html,
+    body {
+        font-family: 'Open Sans', sans-serif;
+        font-size: 13px;
+        font-weight: 400;
+        color: #333333;
+
+
+    }
+
+    p {
+        margin: 0px;
+        padding: 0px;
+    }
+
+    .boxcontainer {
+            width: 825px;
+
+        overflow: hidden;
+        margin: 15px auto 15px auto;
+        padding: 0 15px;
+        position: relative;
+        page-break-after: always;
+    }
+
+    /*.invoice-head{}*/
+    .companinfo {
+        font-size: 0;
+    }
+
+    .companinfo>div {
+        display: inline-block;
+        width: 49%;
+        vertical-align: middle;
+    }
+
+    .companinfo>div p,
+    .companinfo>div strong {
+        font-size: 13px;
+        color: #333333;
+    }
+
+    .text-right {
+        text-align: right;
+    }
+
+    .hdbox {
+        text-align: right;
+        position: relative;
+        padding-right: 0px;
+   width: 825px;
+        margin-top: 10px;
+  border-bottom: solid 2px #ebebeb;
+    }
+  .hdbox h3 {     position: relative; text-align: center;
+top: 10px;}
+    .hdbox:before {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        margin: auto;
+        width: 100%;
+        height: 2px;
+        background-color: #ebebeb;
+        content: "";
+        right: 0px;
+        z-index: -1;
+  display: none;
+    }
+
+    .hdbox span {
+        display: inline-block;
+        padding: 0px 15px;
+        background: #fff;
+    }
+
+    .invoice-info-bottom {
+        font-size: 0;
+        min-height: 210px;
+        padding-top: 5px;
+    }
+
+    .invoice-info-bottom>div {
+        display: inline-block;
+        vertical-align: top;
+    }
+
+    .invoice-info-bottom>div:first-child {
+        width: 62%;
+        padding-right: 20px;
+    }
+
+    .invoice-info-bottom>div:last-child {
+        width: 38%;
+    }
+
+    .invoice-info-bottom>div p {
+        font-size: 13px;
+    }
+
+    .invoice-info-bottom>div h4 {
+        font-size: 18px;
+        margin: 0px 0 5px 0;
+    }
+
+    .invoice-info-bottom>div table tr td {
+        font-size: 13px;
+        padding: 1px 0px;
+    }
+
+    .info-detail {
+        padding-top: 20px;
+    }
+
+    .info-detail table {
+        width: 100%;
+    }
+
+    .invoice-data {}
+
+    .invoice-data table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .invoice-data table thead tr {
+        border-top: 1px solid #d8d8d7;
+    }
+
+    .invoice-data table thead tr th {
+        font-size: 13px;
+        font-weight: 700;
+        color: #333333;
+        background: #f5f6f7;
+        text-align: left;
+        padding: 7px 10px;
+        border-right: 1px solid #d8d8d7;
+    }
+
+    .invoice-data table thead tr th:first-child {
+        border-left: 1px solid #d8d8d7;
+    }
+
+    .invoice-datatble tbody tr {
+        border-top: 1px solid #d8d8d7;
+    }
+
+    .invoice-datatble tbody tr td {
+        height: auto;
+        vertical-align: top;
+        padding-top: 15px;
+        text-align: left;
+        border-right: 1px solid #d8d8d7;
+        padding: 15px 10px;
+        border-bottom: 1px solid #d8d8d7;
+    }
+
+    .invoice-datatble tbody tr td:first-child {
+        border-left: 1px solid #d8d8d7;
+        width: 240px;
+    }
+
+    .invoiceTotal {
+  box-sizing: border-box;
+padding: 0px 0px 0px 450px;
+margin: 10px 0px;
+text-align: right;
+float: left;
+width: 795px;
+    }
+
+    .invoiceTotal table {
+        width: 100%;
+    }
+
+    .invoiceTotal table tr td {
+        padding: 5px;
+        vertical-align: top;
+    }
+
+    .invoiceTotal table tr:nth-child(2),
+    .invoiceTotal table tr:nth-last-child(2),
+    .invoiceTotal table tr:nth-last-child(1) {
+        border-bottom: 2px solid #d8d8d7;
+    }
+
+    .invoiceTotal table tr td span {
+        color: #666666;
+        display: block;
+    }
+
+    .balance-lbl,
+    .balance-amt {
+        font-size: 15px;
+        font-weight: 700;
+    }
+
+    .notepoints {
+        color: #333333;
+        font-weight: 600;
+    }
+
+    /*.notepoints:first-child{margin-top: 10px;}*/
+    .clearfix {
+        clear: both
+    }
+
+    .invoice-footer {
+        margin-top: 20px;
+        font-size: 0;
+    }
+
+    .invoice-footer>div {
+        width: 32%;
+        text-align: center;
+        display: inline-block;
+        vertical-align: top;
+    }
+
+    .invoice-footer>div p {
+        font-size: 13px;
+        color: #190202;
+        font-weight: 600;
+    }
+
+    .invoice-footer>div p:first-child {
+        margin-bottom: 7px;
+    }
+
+    .invoice-footer a {
+        color: #333;
+    }
+
+    .invoice-footer a:hover {
+        text-decoration: none;
+    }
+
+    .paid {
+        padding: 4px;
+        border: 2px solid #059600;
+        width: 80px;
+        color: #059600;
+        font-size: 22px;
+        font-weight: 600;
+        text-align: center;
+        margin-top: 12px;
+    }
+</style>
+</head>
+
+<body>
+  <%= yield %>
+</body>
+
 </html>

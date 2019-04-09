@@ -90,7 +90,7 @@ module Api
                                     :comment, :found_at, :additional_comment, :mobile_number, :description, :microchip,
                                     :municipality_tag, pictures_attributes: %i[id attachment _destroy],
                                                        vaccinations_attributes: vaccinations_params,
-                                                       location_attributes: location_params)
+                                                        location_attributes: location_params)
       end
 
       def lost_params

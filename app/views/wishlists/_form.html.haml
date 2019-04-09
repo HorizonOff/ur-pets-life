@@ -1,0 +1,16 @@
+= form_for @wishlist do |f|
+  - if @wishlist.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@wishlist.errors.count, "error")} prohibited this wishlist from being saved:"
+      %ul
+        - @wishlist.errors.full_messages.each do |message|
+          %li= message
+
+  .field
+    = f.label :user
+    = f.text_field :user
+  .field
+    = f.label :item
+    = f.text_field :item
+  .actions
+    = f.submit 'Save'

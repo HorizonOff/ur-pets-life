@@ -9,6 +9,7 @@
 
 # Ignore all logfiles and tempfiles.
 /log/*
+/log/development.log
 /tmp/*
 !/log/.keep
 !/tmp/.keep
@@ -19,6 +20,7 @@
 .byebug_history
 
 db/schema.rb
+db/structure.sql
 config/database.yml
 .idea/
 .DS_Store

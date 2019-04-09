@@ -3,6 +3,8 @@ class Location < ApplicationRecord
   enum building_type: BUILDING_OPTIONS
   belongs_to :place, polymorphic: true
 
+  has_many :orders
+
   validate :building_type_should_be_valid, :attributes_should_be_valid
 
   after_initialize :set_defaults

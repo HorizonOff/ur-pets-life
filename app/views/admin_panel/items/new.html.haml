@@ -1,0 +1,13 @@
+%div
+  .page-title
+    .title_left
+      %h3 Add New Item
+
+  .clearfix
+
+  = form_for @admin_panel_item, url: admin_panel_items_path,
+  html: { multipart: true, method: :post, class: 'form-horizontal form-label-left with_location', autocomplete: 'off'} do |f|
+
+    = render partial: 'admin_panel/items/form', locals: { f: f }
+
+    = f.submit 'Create Item', class: 'btn btn-success pull-right'
