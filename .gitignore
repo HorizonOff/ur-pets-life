@@ -20,6 +20,7 @@
 .byebug_history
 
 db/schema.rb
+db/structure.sql
 config/database.yml
 .idea/
 .DS_Store
