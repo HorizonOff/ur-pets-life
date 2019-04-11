@@ -19,14 +19,15 @@ module Api
             schema do
               property :email do
                 key :type, :string
-                key :example, 'user1@mail.com'
+                key :example, 'omerbinjamal@gmail.com'
               end
               property :password do
                 key :type, :string
-                key :example, '111111'
+                key :example, '11111111'
               end
               property :device_type do
                 key :type, :string
+                key :example, 'ios'
               end
               property :device_id do
                 key :type, :string

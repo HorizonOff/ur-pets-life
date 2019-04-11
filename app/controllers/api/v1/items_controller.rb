@@ -15,6 +15,14 @@ class ItemsController < Api::BaseController
     render json: @items
   end
 
+  def quick_search_items
+    @items = Item.where('items.name ILIKE :value', value: "%#{params[:keyword]}%").limit(40)
+    @brands = ItemBrand.where('item_brands.name ILIKE :value', value: "%#{params[:keyword]}%").limit(5)
+    render json: { items: ActiveModel::Serializer::CollectionSerializer.new(@items, serializer: ItemSearchSerializer),
+                   brands: ActiveModel::Serializer::CollectionSerializer.new(@brands,
+                                                                             serializer: ItemBrandSerializer) }
+  end
+
   def search_items_by_keywords
     if (params[:lowerprice].nil? or params[:upperprice].nil? or params[:minrating].nil? or params[:maxrating].nil? or params[:sortby].nil?)
       render json: {
