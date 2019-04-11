@@ -20,6 +20,22 @@ module Api
             end
           end
         end
+        property :brands do
+          items do
+            property :id do
+              key :type, :number
+              key :example, 1
+            end
+            property :name do
+              key :type, :string
+              key :example, 'BirdFood'
+            end
+            property :picture do
+              key :type, :string
+              key :example, 'www.amazon.link'
+            end
+          end
+        end
       end
 
       swagger_path '/quick_search_items' do
