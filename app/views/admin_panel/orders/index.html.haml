@@ -6,18 +6,18 @@
       %h3 Orders
     .title_right
       = form_tag admin_panel_orders_path, method: :get do
-        = hidden_field_tag 'format', 'xlsx'
+        = hidden_field_tag :format, :xlsx
         = hidden_field_tag 'request_type', 'excel'
         .form-group.col-md-3.pull-right
-          = submit_tag 'Export in xlsx', class: 'btn btn-primary btn-round'
+          = button_tag 'Export in xlsx', class: 'btn btn-primary btn-round form-btn'
         .form-group.col-md-3.pull-right
           = label_tag :to_date, class: 'control-label' do
             To Date
-          = text_field_tag :to_date, '', class: 'form-control single_cal2'
+          = text_field_tag :to_date, '', autocomplete: :off, class: 'form-control single_cal2'
         .form-group.col-md-3.pull-right
           = label_tag :from_date, class: 'control-label' do
             From Date
-          = text_field_tag :from_date, '', class: 'form-control single_cal2'
+          = text_field_tag :from_date, '', autocomplete: :off, class: 'form-control single_cal2'
   .clearfix
 
   .row
