@@ -281,11 +281,13 @@ module AdminPanel
 
       @orders = Order.order(:id).includes({user: [:location]}, {order_items: [item: :item_brand]})
                                       .where("(users.id = (?) OR #{is_user_present}) AND order_status_flag = (?)", @@filtered_user_id, 'delivered').references(:user)
+      if params[:from_date].present? && params[:to_date].present?
+        @orders = @orders.created_in_range(params[:from_date], params[:to_date].to_date.end_of_day)
+      end
 
       user_name = @@filtered_user_id > 0 ? User.where(:id => @@filtered_user_id).first.first_name + '_' : 'all_'
       name = "Orders_for_#{user_name} #{Time.now.utc.strftime('%d-%M-%Y')}.xlsx"
       response.headers['Content-Disposition'] = "attachment; filename*=UTF-8''#{name}"
     end
-
-end
+  end
 end
