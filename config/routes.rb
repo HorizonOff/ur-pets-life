@@ -48,6 +48,7 @@ Rails.application.routes.draw do
       get 'get_orders_history', to:'order_items#get_completed_order_items'
       get 'get_recurring_orders', to:'order_items#get_recurring_order_items'
       post 'search_items_by_keywords', to:'items#search_items_by_keywords'
+      get 'quick_search_items', to:'items#quick_search_items'
       get 'get_shopping_cart_stats', to:'shopping_cart_items#get_cart_stats'
       get 'get_vat_percentage', to:'order_items#get_vat_percentage'
       get 'pets_life_documentations', to:'order_items#gen_api_end_points'
