@@ -65,6 +65,10 @@ module AdminPanel
     tags
   end
 
+  def created_at
+    model.created_at.strftime('%-d %b %Y %I:%M %p')
+  end
+
   def actions
     links = (link_to 'View Details', url_helpers.admin_panel_order_path(model), class: 'btn btn-primary btn-xs')
     if model.order_status_flag == 'delivered'

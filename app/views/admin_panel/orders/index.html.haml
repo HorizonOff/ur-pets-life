@@ -32,6 +32,7 @@
                 %th Payment Status
                 %th Status
                 %th Order Status
+                %th Created at
                 %th Actions
               %tr
                 %th{style: 'width:30px'}
@@ -47,5 +48,6 @@
                   = select_tag :is_viewed, options_for_select([[], ['New', 'false'], ['Older', 'true']]), class: 'form-control select2'
                 %th
                   = select_tag :order_status_flag, options_for_select([[], ['Pending', 'pending'], ['Confirmed', 'confirmed'], ['On The Way', 'on_the_way'], ['Delivered', 'delivered'], ['Cancelled', 'cancelled']]), class: 'form-control select2'
+                %th
                 %th
             %tbody
