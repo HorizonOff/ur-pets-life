@@ -140,6 +140,19 @@ function init_timepicker(){
     });
   };
 
+  if ($('.single_cal2')){
+    $('.single_cal2').daterangepicker({
+      singleDatePicker: true,
+      singleClasses: "picker_1",
+      autoUpdateInput: false,
+      locale: {
+        "format": "DD/MM/YYYY"
+      }
+    }, function(chosen_date) {
+        $(this.element[0]).val(chosen_date.format("DD/MM/YYYY"));
+    });
+  }
+
   if ($('.timepicker')[0]) {
     $('.timepicker.open').datetimepicker({
       format: 'hh:mm A'

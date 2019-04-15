@@ -1,11 +1,10 @@
 wb = xlsx_package.workbook
 
 wb.add_worksheet(name: "Users") do |sheet|
-  sheet.add_row %w(ID First\ Name Last\ Name Email\ Address Mobile\ Number Location Gender Day\ of\ Birth Number\ of\ pets)
+  sheet.add_row %w(ID First\ Name Last\ Name Email\ Address Mobile\ Number Location Gender Day\ of\ Birth Number\ of\ pets Available\ Redeem\ Points)
 
   @users.each do |user|
    sheet.add_row [user.id, user.first_name, user.last_name, user.email, user.mobile_number, user.address,
-                  user.gender, user.birthday&.strftime('%e %b %Y'), user.pets.size]
-
+                  user.gender, user.birthday&.strftime('%e %b %Y'), user.pets.size, user.redeem_point&.net_worth]
   end
 end
