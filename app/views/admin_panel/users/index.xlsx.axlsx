@@ -6,6 +6,5 @@ wb.add_worksheet(name: "Users") do |sheet|
   @users.each do |user|
    sheet.add_row [user.id, user.first_name, user.last_name, user.email, user.mobile_number, user.address,
                   user.gender, user.birthday&.strftime('%e %b %Y'), user.pets.size, user.redeem_point&.net_worth]
-
   end
 end
