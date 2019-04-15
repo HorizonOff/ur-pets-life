@@ -46,6 +46,11 @@
         .col-md-9.col-sm-9.col-xs-12
           = f.number_field :quantity, class: 'form-control', min: 0, required: true
       .form-group
+        = f.label :expiry_at, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
+          Expiry Date
+        .col-md-9.col-sm-9.col-xs-12
+          = f.text_field :expiry_at, class: 'form-control month_picker'
+      .form-group
         = f.label :pet_type_id, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
           Pet Type
           %span.required *

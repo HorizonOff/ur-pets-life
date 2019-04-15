@@ -18,7 +18,7 @@ CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 -- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: -
 --
 
--- COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 
 --
@@ -884,7 +884,8 @@ CREATE TABLE public.items (
     short_description character varying,
     unit_price double precision,
     buying_price double precision,
-    is_active boolean DEFAULT true
+    is_active boolean DEFAULT true,
+    expiry_at timestamp without time zone
 );
 
 
@@ -4482,6 +4483,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20181224104638'),
 ('20181225104517'),
 ('20181227093934'),
-('20181227134303');
+('20181227134303'),
+('20190412121525');
 
 

@@ -140,6 +140,13 @@ function init_timepicker(){
     });
   };
 
+  if ($('.month_picker')){
+    $('.month_picker').datetimepicker({
+      format: "MMMM YYYY",
+      viewMode: 'months'
+    });
+  };
+
   if ($('.timepicker')[0]) {
     $('.timepicker.open').datetimepicker({
       format: 'hh:mm A'
