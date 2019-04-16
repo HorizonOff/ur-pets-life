@@ -1,10 +1,20 @@
 wb = xlsx_package.workbook
 
 wb.add_worksheet(name: "Users") do |sheet|
-  sheet.add_row %w(ID First\ Name Last\ Name Email\ Address Mobile\ Number Location Gender Day\ of\ Birth Number\ of\ pets Available\ Redeem\ Points)
+  sheet.add_row %w(ID First\ Name Last\ Name Email\ Address Mobile\ Number Location Gender Day\ of\ Birth
+                   Number\ of\ pets Available\ Redeem\ Points Spends\ Not\ Eligble\ For\ Yearly\ Spends\ Program
+                   Spends\ Eligble\ For\ Yearly\ Spends\ Program)
 
   @users.each do |user|
-   sheet.add_row [user.id, user.first_name, user.last_name, user.email, user.mobile_number, user.address,
-                  user.gender, user.birthday&.strftime('%e %b %Y'), user.pets.size, user.redeem_point&.net_worth]
+    if user.redeem_point.present?
+      spends_not_eligble = OrderItem.includes(:order).where("orders.user_id = (?) AND order_items.status != (?) AND order_items.isdiscounted = false", user.id, 'cancelled').references(:orders).sum("Total_Price")
+      spends_eligble = OrderItem.includes(:order).where("orders.user_id = (?) AND order_items.status != (?) AND order_items.isdiscounted = true", user.id, 'cancelled').references(:orders).sum("Total_Price")
+    else
+      spends_not_eligble = OrderItem.includes(:order).where(order_items: {isdiscounted: false}, orders: {user_id: user.id}).sum(:Total_Price)
+      spends_eligble = OrderItem.includes(:order).where(order_items: {isdiscounted: true}, orders: {user_id: user.id}).sum(:Total_Price)
+    end
+    sheet.add_row [user.id, user.first_name, user.last_name, user.email, user.mobile_number, user.address,
+                   user.gender, user.birthday&.strftime('%e %b %Y'), user.pets.size, user.redeem_point&.net_worth,
+                   spends_not_eligble, spends_eligble]
   end
 end
