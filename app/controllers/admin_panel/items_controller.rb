@@ -113,7 +113,7 @@ module AdminPanel
     end
 
     def export_data
-      @items = Item.all.order(:id).includes(:item_category, :item_brand)
+      @items = Item.where(is_active: true).order(:id).includes(:item_brand)
       name = "Catalog #{Time.now.utc.strftime('%d-%M-%Y')}.xlsx"
       response.headers['Content-Disposition'] = "attachment; filename*=UTF-8''#{name}"
     end
