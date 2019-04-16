@@ -8,6 +8,7 @@ module AdminPanel
   def index
     respond_to do |format|
       format.html {}
+      format.xlsx { export_data }
       format.json { filter_items }
     end
   end
@@ -111,5 +112,10 @@ module AdminPanel
       @filter_and_pagination_query ||= ::AdminPanel::FilterAndPaginationQuery.new('Item', params)
     end
 
-end
+    def export_data
+      @items = Item.all.order(:id).includes(:item_category, :item_brand)
+      name = "Catalog #{Time.now.utc.strftime('%d-%M-%Y')}.xlsx"
+      response.headers['Content-Disposition'] = "attachment; filename*=UTF-8''#{name}"
+    end
+  end
 end

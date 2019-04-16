@@ -5,10 +5,11 @@
     .title_left
       %h3 Items Inventory
     .title_right
+      = link_to 'Export in xlsx', admin_panel_items_path(format: :xlsx), class: 'btn btn-primary btn-round pull-right'
       = link_to 'Add New', new_admin_panel_item_path, class: 'btn btn-info btn-round pull-right'
 
   .clearfix
- 
+
   .row
     .col-md-12.col-sm-12.col-xs-12
       .x_panel
