@@ -70,4 +70,8 @@ class OrderMailer < ApplicationMailer
     mail(to: @orderitem.order.user.email, subject: 'Recurring Order Alert')
   end
 
+  def inform_about_comment(order_id)
+    @order = Order.find_by_id(order_id)
+    mail(to: ENV['ADMIN'], subject: 'New reply')
+  end
 end
