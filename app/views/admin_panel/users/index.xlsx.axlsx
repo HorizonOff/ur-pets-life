@@ -16,6 +16,5 @@ wb.add_worksheet(name: "Users") do |sheet|
     sheet.add_row [user.id, user.first_name, user.last_name, user.email, user.mobile_number, user.address,
                    user.gender, user.birthday&.strftime('%e %b %Y'), user.pets.size, user.redeem_point&.net_worth,
                    spends_not_eligble, spends_eligble]
-
   end
 end

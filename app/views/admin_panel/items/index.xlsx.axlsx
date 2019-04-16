@@ -1,0 +1,11 @@
+wb = xlsx_package.workbook
+
+wb.add_worksheet(name: "Catalog") do |sheet|
+  sheet.add_row %w(Item# Product\ Name Item\ Category Item\ Brand Weight Buying\ Price Selling\ Price)
+
+  @items.each do |item|
+   sheet.add_row [item.id, item.name, item.item_category&.name, item.item_brand&.name, item.weight, item.buying_price,
+                  item.price]
+
+  end
+end
