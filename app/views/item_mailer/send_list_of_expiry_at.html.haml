@@ -1,0 +1,23 @@
+%p Dear Admin,
+%p This items expiry at next six month:
+%table.table-bordered
+  %thead
+    %tr
+      %th #
+      %th Name
+      %th Quantity
+      %th Expiry at
+  %tbody
+    - @items.each do |item|
+      %tr
+        %td
+          = item.id
+        %td
+          = item.name
+        %td
+          = item.quantity
+        %td
+          = item.expiry_at.strftime('%B %Y')
+%br
+%p Thanks You
+%p Ur Pets Life
