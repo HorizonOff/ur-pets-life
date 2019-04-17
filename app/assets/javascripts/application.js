@@ -160,7 +160,6 @@ function init_timepicker(){
     });
   };
 
-
   if ($('.timepicker')[0]) {
     $('.timepicker.open').datetimepicker({
       format: 'hh:mm A'

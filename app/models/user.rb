@@ -30,12 +30,12 @@ class User < ApplicationRecord
                                    too_long: 'First name should contain not more than 64 symbols' },
                          presence: { message: 'First name is required' }
 
-  validates :mobile_number, uniqueness: { case_sensitive: false, message: 'This Mobile Number is already registered' },
-                            format: { with: /\A\+\d+\z/, message: 'Mobile Number is invalid' },
-                            length: { within: 11..13,
-                                      too_short: 'Mobile number should contain at least 10 symbols',
-                                      too_long: 'Mobile number should contain not more than 12 symbols' },
-                            allow_blank: true
+  # validates :mobile_number, uniqueness: { case_sensitive: false, message: 'This Mobile Number is already registered' },
+  #                           format: { with: /\A\+\d+\z/, message: 'Mobile Number is invalid' },
+  #                           length: { within: 11..13,
+  #                                     too_short: 'Mobile number should contain at least 10 symbols',
+  #                                     too_long: 'Mobile number should contain not more than 12 symbols' },
+  #                           allow_blank: true
 
   validates :facebook_id, :google_id, uniqueness: true, allow_blank: true
 
