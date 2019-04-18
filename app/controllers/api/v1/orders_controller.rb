@@ -230,10 +230,11 @@ end
           paymentStatus = 1
         end
 
-        if permitted_redeem_points > 0
-          deliveryCharges = (subTotal - permitted_redeem_points) > 100 ? 0 : 20
-          total = subTotal + deliveryCharges + vatCharges
-        end 
+        # if permitted_redeem_points > 0
+        #   deliveryCharges = (subTotal - permitted_redeem_points) > 100 ? 0 : 20
+        #   total = subTotal + deliveryCharges + vatCharges
+        # end
+
         @order = Order.new(:user_id => @user.id, :RedeemPoints => permitted_redeem_points, :TransactionId => params[:TransactionId], :TransactionDate => params[:TransactionDate], :Subtotal => subTotal, :Delivery_Charges => deliveryCharges, :shipmenttime => 'with in 7 days', :Vat_Charges => vatCharges, :Total => total, :Order_Status => 1, :Payment_Status => paymentStatus, :Delivery_Date => params[:Delivery_Date], :Order_Notes => params[:Order_Notes], :IsCash => params[:IsCash],  :location_id => params[:location_id], :is_viewed => false, :order_status_flag => 'pending')
         if @order.save
 
