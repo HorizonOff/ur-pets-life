@@ -31,8 +31,7 @@ module AdminPanel
   # POST /admin_panel/items
   # POST /admin_panel/items.json
   def create
-
-    @admin_panel_item = Item.new(item_params)
+    @admin_panel_item = Item.new(item_params.merge({ expiry_at: params[:item][:expiry_at].to_date}))
     if (!@admin_panel_item.discount.nil? and @admin_panel_item.discount > 0)
       @admin_panel_item.price = @admin_panel_item.unit_price.to_f - (@admin_panel_item.unit_price.to_f / 100 * @admin_panel_item.discount.to_f).to_f
     else
@@ -59,14 +58,13 @@ module AdminPanel
   # PATCH/PUT /admin_panel/items/1
   # PATCH/PUT /admin_panel/items/1.json
   def update
-
     if (!params[:item][:discount].nil? and params[:item][:discount].to_i > 0)
       params[:item][:price] = params[:item][:unit_price].to_f - ((params[:item][:unit_price].to_f / 100) * params[:item][:discount].to_f)
     else
       params[:item][:discount] = 0
       params[:item][:price] = params[:item][:unit_price]
     end
-    if @admin_panel_item.update(item_params)
+    if @admin_panel_item.update(item_params.merge({ expiry_at: params[:item][:expiry_at].to_date}))
       flash[:success] = 'Item was successfully updated'
       redirect_to admin_panel_item_path(@admin_panel_item)
     else
