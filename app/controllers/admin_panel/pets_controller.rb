@@ -1,6 +1,6 @@
 module AdminPanel
   class PetsController < AdminPanelController
-    before_action :authorize_super_admin, only: :index
+    before_action :authorize_super_admin_employee, only: :index
     before_action :set_pet, except: :index
 
     def index
