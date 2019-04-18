@@ -60,6 +60,10 @@
                 %label
                   Discount (%):
                 = @admin_panel_item.discount
+              %li
+                %label
+                  Expiry date:
+                = @admin_panel_item.expiry_at&.strftime('%B %Y')
 
             =link_to edit_admin_panel_item_path(@admin_panel_item), class: 'btn btn-warning' do
               %i.fa.fa-edit.m-right-xs
