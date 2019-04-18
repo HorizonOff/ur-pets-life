@@ -2,7 +2,10 @@
   = link_to admin_panel_users_path do
     %i.fa.fa-users
     Users
-
+%li{ class: "#{'current-page' if current_page?(admin_panel_pets_path)}" }
+  = link_to admin_panel_pets_path do
+    %i.fa.fa-paw
+    Pets
 %li{ class: "#{'current-page' if current_page?(admin_panel_pettypes_path)}" }
   = link_to admin_panel_pettypes_path do
     %i.fa.fa-paw
@@ -30,3 +33,10 @@
   = link_to admin_panel_invoices_path do
     %i.fa.fa-table
     Invoices
+
+%li{ class: "#{'current-page' if current_page?(admin_panel_contact_requests_path)}" }
+  = link_to admin_panel_contact_requests_path do
+    %i.fa.fa-table
+    Contact requests
+    - if @new_contact_requests_count.present? && !@new_contact_requests_count.zero?
+      %span.badge.bg-green= @new_contact_requests_count

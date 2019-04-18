@@ -1,6 +1,6 @@
 module AdminPanel
   class ContactRequestsController < AdminPanelController
-    before_action :authorize_super_admin
+    before_action :authorize_super_admin_employee
     before_action :set_contact_request, except: :index
     before_action :view_contact_request, only: :show
 
