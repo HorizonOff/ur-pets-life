@@ -53,6 +53,7 @@ module Api
         Api::V1::ServiceOptionTimes,
         Api::V1::AppVersions,
         Api::V1::Items,
+        Api::V1::Orders,
         self
       ].freeze
 

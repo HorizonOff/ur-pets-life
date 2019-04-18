@@ -135,10 +135,10 @@ module AdminPanel
       if orderitem.isdiscounted == true
         discount_per_transaction = order.earned_points
       end
-      if points_to_be_reverted > 0
-        deliveryCharges = (subTotal - (redeem_points_consumed - points_to_be_reverted)) > 100 ? 0 : 20
-        total = subTotal + deliveryCharges + vatCharges
-      end
+      # if points_to_be_reverted > 0
+      #   deliveryCharges = (subTotal - (redeem_points_consumed - points_to_be_reverted)) > 100 ? 0 : 20
+      #   total = subTotal + deliveryCharges + vatCharges
+      # end
 
       order.update(:Subtotal => subTotal, :Delivery_Charges => deliveryCharges, :Vat_Charges => vatCharges, :Total => total, :RedeemPoints => order.RedeemPoints - points_to_be_reverted, :earned_points => discount_per_transaction)
     end

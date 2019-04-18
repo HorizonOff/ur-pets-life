@@ -8,7 +8,7 @@ module Api
           key :description, 'Create order'
           key :consumes, %w[application/json]
           key :produces, %w[application/json]
-          key :tags, %W[Posts]
+          key :tags, %W[Orders]
 
           security do
             key :api_key, []
