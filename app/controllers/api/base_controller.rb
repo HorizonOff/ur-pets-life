@@ -56,7 +56,8 @@ module Api
           render_422(parse_errors_messages(session))
         end
       else
-        render json: { error: 'Account not confirmed' }, status: 461
+        render_422(message: 'Please confirm your email.')
+        # render json: { error: 'Account not confirmed' }, status: 461
       end
     end
 
