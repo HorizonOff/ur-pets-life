@@ -9,6 +9,8 @@ module Api
         @user = User.find_by_email(params[:email])
         if @user&.valid_password?(params[:password])
           sign_in_user
+        elsif @user&.confirmed_at.blank?
+          render_422(message: 'Please confirm your email.')
         else
           render_422(message: 'Incorrect email or Password. Please try again.')
         end
