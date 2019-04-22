@@ -1,0 +1,13 @@
+%div
+  .page-title
+    .title_left
+      %h3 New discount domain
+
+  .clearfix
+
+  = form_for @discount_domain, url: admin_panel_discount_domains_path,
+  html: { method: :post, class: 'form-horizontal form-label-left with_location', autocomplete: 'off'} do |f|
+
+    = render partial: 'form', locals: { f: f }
+
+    = f.submit 'Create discount domain', class: 'btn btn-success pull-right'

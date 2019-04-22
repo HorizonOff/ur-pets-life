@@ -1,0 +1,2 @@
+class DiscountDomain < ApplicationRecord
+end

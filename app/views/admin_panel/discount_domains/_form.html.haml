@@ -1,0 +1,25 @@
+.row
+  = render partial: 'layouts/admin_panel/errors', locals: { object: @discount_domain }
+
+  .col-md-6.col-sm-6.col-xs-12
+  .x_panel
+    .x_title
+      %h2 Main Info
+      .clearfix
+    .x_content
+      %br
+      .form-group
+        = f.label :domain, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
+          Domain
+          %span.required *
+        .col-md-9.col-sm-9.col-xs-12
+          = f.text_field :domain, class: 'form-control', required: true
+
+      .form-group
+        = f.label :discount, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
+          Discount
+          %span.required *
+        .col-md-9.col-sm-9.col-xs-12
+          = f.text_field :discount, class: 'form-control', required: true
+
+
