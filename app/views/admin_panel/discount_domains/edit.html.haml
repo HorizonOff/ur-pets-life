@@ -1,0 +1,13 @@
+%div
+  .page-title
+    .title_left
+      %h3 Edit discount domain
+
+  .clearfix
+
+  = form_for @discount_domain, url: admin_panel_discount_domain_path(@discount_domain),
+  html: { method: :put, class: 'form-horizontal form-label-left', autocomplete: 'off'} do |f|
+
+    = render partial: 'form', locals: { f: f }
+
+    = f.submit 'Update discount domain', class: 'btn btn-success pull-right'

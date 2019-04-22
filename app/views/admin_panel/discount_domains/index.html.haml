@@ -1,0 +1,30 @@
+- content_for :head do
+  %meta{name: "turbolinks-cache-control", content:"no-cache"}
+%div
+  .page-title
+    .title_left
+      %h3 Discount domain
+    .title_right
+      = link_to 'Create discount domain', new_admin_panel_discount_domain_path, class: 'btn btn-info btn-round pull-right'
+
+  .clearfix
+
+  .row
+    .col-md-12.col-sm-12.col-xs-12
+      .x_panel
+        .x_content
+
+
+          %table.table.datatable.discount_domains
+            %thead
+              %tr
+                %th Domain
+                %th Discount
+                %th Created at
+                %th Actions
+              %tr
+                %th
+                %th
+                %th
+                %th
+            %tbody
