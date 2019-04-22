@@ -667,6 +667,38 @@ ALTER SEQUENCE public.diagnoses_id_seq OWNED BY public.diagnoses.id;
 
 
 --
+-- Name: discount_domains; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.discount_domains (
+    id bigint NOT NULL,
+    domain character varying,
+    discount integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: discount_domains_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.discount_domains_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: discount_domains_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.discount_domains_id_seq OWNED BY public.discount_domains.id;
+
+
+--
 -- Name: favorites; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -2162,6 +2194,13 @@ ALTER TABLE ONLY public.diagnoses ALTER COLUMN id SET DEFAULT nextval('public.di
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY public.discount_domains ALTER COLUMN id SET DEFAULT nextval('public.discount_domains_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY public.favorites ALTER COLUMN id SET DEFAULT nextval('public.favorites_id_seq'::regclass);
 
 
@@ -2529,6 +2568,14 @@ ALTER TABLE ONLY public.day_care_centres
 
 ALTER TABLE ONLY public.diagnoses
     ADD CONSTRAINT diagnoses_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: discount_domains_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.discount_domains
+    ADD CONSTRAINT discount_domains_pkey PRIMARY KEY (id);
 
 
 --
@@ -4484,6 +4531,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20181225104517'),
 ('20181227093934'),
 ('20181227134303'),
-('20190412121525');
+('20190412121525'),
+('20190419141622');
 
 

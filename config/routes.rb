@@ -223,6 +223,7 @@ Rails.application.routes.draw do
     end
     resources :comments, only: :destroy
     resources :notifications
+    resources :discount_domains
 
     resource :app_version, only: %i[edit update]
   end
