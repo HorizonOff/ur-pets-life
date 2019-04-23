@@ -5,9 +5,17 @@ module Api
 
       def index
         @itemsprice = 0
+        @total_price_without_discount = 0
+        discount = ::Api::V1::DiscountDomainService.new(@user.email.dup).dicount_on_email
         @user.shopping_cart_items.each do |cartitem|
-          @itemsprice += (cartitem.item.price * cartitem.quantity)
+          if discount.present? && cartitem.item.discount == 0
+            @itemsprice += cartitem.item.price * ((100 - discount).to_f / 100) * cartitem.quantity
+          else
+            @itemsprice += (cartitem.item.price * cartitem.quantity)
+          end
+          @total_price_without_discount += (cartitem.item.price * cartitem.quantity)
         end
+        # binding.pry
         serialized_items = ActiveModel::Serializer::CollectionSerializer.new(
           @user.shopping_cart_items, serializer: UserShoppingCartSerializer
         )
@@ -31,10 +39,11 @@ module Api
           # ),
           VatPercentage: 5,
           AvailableRedeemPoints: user_redeem_points,
-          SubTotal: @itemsprice,
+          SubTotal: @total_price_without_discount,
+          dicount_from_domain: (@itemsprice - @total_price_without_discount).round(2),
           DeliveryCharges: @itemsprice > 100 ? 0 : 20,
-          VatCharges: (@itemsprice / 100).to_f * 5,
-          Total: @itemsprice + (@itemsprice > 100 ? 0 : 20) + ((@itemsprice / 100).to_f * 5)
+          VatCharges: (@total_price_without_discount / 100).to_f * 5,
+          Total: @itemsprice + (@itemsprice > 100 ? 0 : 20) + ((@total_price_without_discount / 100).to_f * 5)
         }
       end
 
