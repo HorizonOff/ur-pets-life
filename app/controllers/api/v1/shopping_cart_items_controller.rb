@@ -15,7 +15,6 @@ module Api
           end
           @total_price_without_discount += (cartitem.item.price * cartitem.quantity)
         end
-        # binding.pry
         serialized_items = ActiveModel::Serializer::CollectionSerializer.new(
           @user.shopping_cart_items, serializer: UserShoppingCartSerializer
         )
@@ -40,7 +39,7 @@ module Api
           VatPercentage: 5,
           AvailableRedeemPoints: user_redeem_points,
           SubTotal: @total_price_without_discount,
-          dicount_from_domain: (@itemsprice - @total_price_without_discount).round(2),
+          discount_from_domain: (@itemsprice - @total_price_without_discount).round(2),
           DeliveryCharges: @itemsprice > 100 ? 0 : 20,
           VatCharges: (@total_price_without_discount / 100).to_f * 5,
           Total: @itemsprice + (@itemsprice > 100 ? 0 : 20) + ((@total_price_without_discount / 100).to_f * 5)
