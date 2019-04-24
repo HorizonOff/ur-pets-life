@@ -172,7 +172,7 @@ module Api
         subTotal = @itemsprice.to_f.round(2)
         deliveryCharges = (subTotal > 100 ? 0 : 20)
         company_discount = (@itemsprice - @total_price_without_discount).round(2)
-        vatCharges = ((@itemsprice/100).to_f * 5).round(2)
+        vatCharges = ((@discounted_items_amount/100).to_f * 5).round(2)
         total = subTotal + deliveryCharges + vatCharges
         user_redeem_points = 0
         requested_redeem_points = params[:RedeemPoints].to_i
