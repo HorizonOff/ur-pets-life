@@ -212,7 +212,7 @@ module Api
 
         @order = Order.new(user_id: @user.id, RedeemPoints: permitted_redeem_points,
                            TransactionId: params[:TransactionId],
-                           TransactionDate: params[:TransactionDate], Subtotal: subTotal,
+                           TransactionDate: params[:TransactionDate], Subtotal: @total_price_without_discount,
                            Delivery_Charges: deliveryCharges, shipmenttime: 'with in 7 days', Vat_Charges: vatCharges,
                            Total: total, Order_Status: 1, Payment_Status: paymentStatus,
                            Delivery_Date: params[:Delivery_Date], Order_Notes: params[:Order_Notes],
