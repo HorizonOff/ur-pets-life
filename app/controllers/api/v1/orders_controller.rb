@@ -152,9 +152,16 @@ module Api
       def create
         isoutofstock = false
         @itemsprice = 0
+        @total_price_without_discount = 0
         @discounted_items_amount = 0
+        discount = ::Api::V1::DiscountDomainService.new(@user.email.dup).dicount_on_email
         @usercartitems.each do |cartitem|
-          @itemsprice += (cartitem.item.price * cartitem.quantity)
+          if discount.present? && cartitem.item.discount.zero?
+            @itemsprice += cartitem.item.price * ((100 - discount).to_f / 100) * cartitem.quantity
+          else
+            @itemsprice += (cartitem.item.price * cartitem.quantity)
+          end
+          @total_price_without_discount += (cartitem.item.price * cartitem.quantity)
           if cartitem.item.discount > 0
             @discounted_items_amount += (cartitem.item.price * cartitem.quantity)
           end
@@ -164,6 +171,7 @@ module Api
 
         subTotal = @itemsprice.to_f.round(2)
         deliveryCharges = (subTotal > 100 ? 0 : 20)
+        company_discount = (@itemsprice - @total_price_without_discount).round(2)
         vatCharges = ((@itemsprice/100).to_f * 5).round(2)
         total = subTotal + deliveryCharges + vatCharges
         user_redeem_points = 0
@@ -202,13 +210,14 @@ module Api
         #   total = subTotal + deliveryCharges + vatCharges
         # end
 
-        @order = Order.new(user_id: @user.id, RedeemPoints: permitted_redeem_points, TransactionId: params[:TransactionId],
+        @order = Order.new(user_id: @user.id, RedeemPoints: permitted_redeem_points,
+                           TransactionId: params[:TransactionId],
                            TransactionDate: params[:TransactionDate], Subtotal: subTotal,
                            Delivery_Charges: deliveryCharges, shipmenttime: 'with in 7 days', Vat_Charges: vatCharges,
                            Total: total, Order_Status: 1, Payment_Status: paymentStatus,
                            Delivery_Date: params[:Delivery_Date], Order_Notes: params[:Order_Notes],
                            IsCash: params[:IsCash], location_id: params[:location_id], is_viewed: false,
-                           order_status_flag: 'pending')
+                           order_status_flag: 'pending', company_discount: company_discount)
         if @order.save
           if permitted_redeem_points > 0
             @user_redeem_point_record.update(net_worth: (user_redeem_points - permitted_redeem_points),
@@ -264,7 +273,7 @@ module Api
             VatPercentage: "5",
             #EarnedPoints: discount_per_transaction,
             OrderDetails: @order.as_json(
-              :only => [:id, :Subtotal, :Delivery_Charges, :Vat_Charges, :Total, :Delivery_Date, :Order_Notes, :IsCash, :shipmenttime, :RedeemPoints, :earned_points],
+              :only => [:id, :Subtotal, :Delivery_Charges, :Vat_Charges, :Total, :Delivery_Date, :Order_Notes, :IsCash, :shipmenttime, :RedeemPoints, :earned_points, :company_discount],
               :include => {
                 :location => {
                   :only => [:id, :latitude, :longitude, :city, :area, :street, :building_name, :unit_number, :villa_number]
