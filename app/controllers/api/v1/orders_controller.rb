@@ -301,6 +301,7 @@ module Api
             Message: 'Order update not allowed',
             status: :unprocessable_entity
           }
+
           end
         end
       end
@@ -345,6 +346,7 @@ module Api
         return render json: { Message: 'Cart Empty', status: :unprocessable_entity } if @usercartitems.blank?
       end
 
+
       def check_empty_transactions
         if (params[:IsCash] == "false" and (params[:TransactionId].blank? or params[:TransactionDate].blank?))
           return render json: { Message: 'Invalid or empty Transaction reference', status: :unprocessable_entity }
@@ -355,17 +357,22 @@ module Api
         OrderMailer.send_low_inventory_alert(itemid).deliver
       end
 
-    def set_order_notifcation_email(order, is_any_recurring_item)
-      OrderMailer.send_order_notification_email_to_admin(order.id).deliver
-      OrderMailer.send_order_placement_notification_to_customer(@user.email).deliver
-      return unless is_any_recurring_item
+      def send_inventory_alerts(itemid)
+        OrderMailer.send_low_inventory_alert(itemid).deliver
+      end
 
-      OrderMailer.send_recurring_order_notification_email_to_admin(order.id).deliver
-      OrderMailer.send_recurring_order_placement_notification_to_customer(@user.email, order.id).deliver
-    end
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def order_params
-      params.require(:order).permit(:Delivery_Date, :Order_Notes, :IsCash,  :location_id, :RedeemPoints)
+      def set_order_notifcation_email(order, is_any_recurring_item)
+        OrderMailer.send_order_notification_email_to_admin(order.id).deliver
+        OrderMailer.send_order_placement_notification_to_customer(@user.email).deliver
+        return unless is_any_recurring_item
+
+        OrderMailer.send_recurring_order_notification_email_to_admin(order.id).deliver
+        OrderMailer.send_recurring_order_placement_notification_to_customer(@user.email, order.id).deliver
+      end
+      # Never trust parameters from the scary internet, only allow the white list through.
+      def order_params
+        params.require(:order).permit(:Delivery_Date, :Order_Notes, :IsCash,  :location_id, :RedeemPoints)
+      end
     end
   end
 end
