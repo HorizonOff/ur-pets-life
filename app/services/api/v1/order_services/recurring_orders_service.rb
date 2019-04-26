@@ -28,6 +28,7 @@ module API
           puts "processing " + orderitem.id.to_s + " ..."
           trans_id = ""
           paymentStatus = 0
+          discounted_items_amount = 0
           trans_date = DateTime.now
           if discount.present? && orderitem.item.discount.zero?
             subTotal += orderitem.item.price * ((100 - discount).to_f / 100) * orderitem.Quantity
