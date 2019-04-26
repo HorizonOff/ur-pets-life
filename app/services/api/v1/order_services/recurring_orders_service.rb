@@ -7,7 +7,8 @@ module API
       end
 
       def perform
-        @recrringDate = (DateTime.now.to_time + 1.days).to_date
+        # @recrringDate = (DateTime.now.to_time + 1.days).to_date
+        @recrringDate = (DateTime.now.to_time).to_date
         puts "Fetching Recurring Items for " + @recrringDate.beginning_of_day.to_s + " to " + @recrringDate.end_of_day.to_s
         @orderitems = get_recurring_orders
         puts "found(s) " + @orderitems.count.to_s + " item(s)"
