@@ -269,7 +269,8 @@ end
           if !cartitem.recurssion_interval_id.nil?
             recurrion_interval = RecurssionInterval.where(:id => cartitem.recurssion_interval_id).first
             next_due_date = DateTime.now.to_date
-            next_due_date = next_due_date.to_time + (recurrion_interval.days).days
+            # next_due_date = next_due_date.to_time + (recurrion_interval.days).days
+            next_due_date = next_due_date.to_time + (recurrion_interval.days).minutes
             @neworderitemcreate.update_attributes(:next_recurring_due_date => next_due_date.to_date, :recurssion_interval_id => cartitem.recurssion_interval_id)
           end
           end

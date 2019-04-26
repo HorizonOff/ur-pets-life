@@ -70,7 +70,8 @@ module API
 
             recurrion_interval = RecurssionInterval.where(:id => orderitem.recurssion_interval_id).first
             next_due_date = orderitem.next_recurring_due_date.to_date
-            next_due_date = next_due_date.to_time + (recurrion_interval.days).days
+            # next_due_date = next_due_date.to_time + (recurrion_interval.days).days
+            next_due_date = next_due_date.to_time + (recurrion_interval.days).minutes
             orderitem.update(:next_recurring_due_date => next_due_date.to_date)
             puts "sending success alert for " + orderitem.id.to_s
             send_order_sucess_alerts(orderitem, @recurringorder)
