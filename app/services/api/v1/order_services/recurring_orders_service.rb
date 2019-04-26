@@ -7,8 +7,7 @@ module API
       end
 
       def perform
-        # @recrringDate = (DateTime.now.to_time + 1.days).to_date
-        @recrringDate = (DateTime.now.to_time).to_date
+        @recrringDate = (DateTime.now.to_time + 1.days).to_date
         puts "Fetching Recurring Items for " + @recrringDate.beginning_of_day.to_s + " to " + @recrringDate.end_of_day.to_s
         @orderitems = get_recurring_orders
         puts "found(s) " + @orderitems.count.to_s + " item(s)"
@@ -91,8 +90,7 @@ module API
 
             recurrion_interval = RecurssionInterval.where(:id => orderitem.recurssion_interval_id).first
             next_due_date = orderitem.next_recurring_due_date.to_date
-            # next_due_date = next_due_date.to_time + (recurrion_interval.days).days
-            next_due_date = next_due_date.to_time + (recurrion_interval.days).minutes
+            next_due_date = next_due_date.to_time + (recurrion_interval.days).days
             orderitem.update(:next_recurring_due_date => next_due_date.to_date)
             puts "sending success alert for " + orderitem.id.to_s
             send_order_sucess_alerts(orderitem, @recurringorder)
