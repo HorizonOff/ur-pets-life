@@ -1093,7 +1093,8 @@ CREATE TABLE public.orders (
     unread_comments_count_by_user integer DEFAULT 0 NOT NULL,
     unread_comments_count_by_admin integer DEFAULT 0 NOT NULL,
     comments_count integer DEFAULT 0 NOT NULL,
-    company_discount double precision
+    company_discount double precision,
+    is_user_from_company boolean DEFAULT false
 );
 
 
@@ -4534,6 +4535,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20181227134303'),
 ('20190412121525'),
 ('20190419141622'),
-('20190424073441');
+('20190424073441'),
+('20190426081550');
 
 

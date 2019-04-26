@@ -155,6 +155,7 @@ module Api
         @total_price_without_discount = 0
         @discounted_items_amount = 0
         discount = ::Api::V1::DiscountDomainService.new(@user.email.dup).dicount_on_email
+        @is_user_from_company = discount.present?
         @usercartitems.each do |cartitem|
           if discount.present? && cartitem.item.discount.zero?
             @itemsprice += cartitem.item.price * ((100 - discount).to_f / 100) * cartitem.quantity
@@ -172,7 +173,7 @@ module Api
         subTotal = @itemsprice.to_f.round(2)
         deliveryCharges = (subTotal > 100 ? 0 : 20)
         company_discount = (@itemsprice - @total_price_without_discount).round(2)
-        vatCharges = ((@discounted_items_amount/100).to_f * 5).round(2)
+        vatCharges = ((@total_price_without_discount/100).to_f * 5).round(2)
         total = subTotal + deliveryCharges + vatCharges
         user_redeem_points = 0
         requested_redeem_points = params[:RedeemPoints].to_i
@@ -205,11 +206,12 @@ module Api
                            Total: total, Order_Status: 1, Payment_Status: paymentStatus,
                            Delivery_Date: params[:Delivery_Date], Order_Notes: params[:Order_Notes],
                            IsCash: params[:IsCash], location_id: params[:location_id], is_viewed: false,
-                           order_status_flag: 'pending', company_discount: company_discount)
+                           order_status_flag: 'pending', company_discount: company_discount,
+                           is_user_from_company: @is_user_from_company)
         if @order.save
           if permitted_redeem_points > 0
             @user_redeem_point_record.update(net_worth: (user_redeem_points - permitted_redeem_points),
-                                             last_net_worth: user_redeem_points, last_reward_type: "Order Deduction",
+                                             last_net_worth: user_redeem_points, last_reward_type: 'Order Deduction',
                                              last_reward_worth: permitted_redeem_points, last_reward_update: Time.now,
                                              totalavailedpoints: (@user_redeem_point_record.totalavailedpoints
                                                                   + permitted_redeem_points))
@@ -262,7 +264,7 @@ module Api
             VatPercentage: "5",
             #EarnedPoints: discount_per_transaction,
             OrderDetails: @order.as_json(
-              :only => [:id, :Subtotal, :Delivery_Charges, :Vat_Charges, :Total, :Delivery_Date, :Order_Notes, :IsCash, :shipmenttime, :RedeemPoints, :earned_points, :company_discount],
+              :only => [:id, :Subtotal, :Delivery_Charges, :Vat_Charges, :Total, :Delivery_Date, :Order_Notes, :IsCash, :shipmenttime, :RedeemPoints, :earned_points, :company_discount, :is_user_from_company],
               :include => {
                 :location => {
                   :only => [:id, :latitude, :longitude, :city, :area, :street, :building_name, :unit_number, :villa_number]

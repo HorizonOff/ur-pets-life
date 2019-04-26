@@ -39,7 +39,8 @@ module Api
           VatPercentage: 5,
           AvailableRedeemPoints: user_redeem_points,
           SubTotal: @total_price_without_discount,
-          discount_from_domain: (@itemsprice - @total_price_without_discount).round(2),
+          company_discount: (@itemsprice - @total_price_without_discount).round(2),
+          is_user_from_company: discount.present?,
           DeliveryCharges: @itemsprice > 100 ? 0 : 20,
           VatCharges: (@total_price_without_discount / 100).to_f * 5,
           Total: @itemsprice + (@itemsprice > 100 ? 0 : 20) + ((@total_price_without_discount / 100).to_f * 5)
