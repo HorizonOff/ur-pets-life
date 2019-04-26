@@ -21,11 +21,10 @@ module API
       end
 
       def place_recurring_orders
-        user = @orderitems.order.user
-        discount = ::Api::V1::DiscountDomainService.new(user.email.dup).dicount_on_email
-        is_user_from_company = discount.present?
-
         @orderitems.each do |orderitem|
+          user = orderitem.order.user
+          discount = ::Api::V1::DiscountDomainService.new(user.email.dup).dicount_on_email
+          is_user_from_company = discount.present?
           puts "processing " + orderitem.id.to_s + " ..."
           trans_id = ""
           paymentStatus = 0
