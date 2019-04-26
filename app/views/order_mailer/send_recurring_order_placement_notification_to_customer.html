@@ -1,0 +1,6 @@
+%p Dear Customer,
+%p Your recurring order has been placed with following details:
+- @order.order_items.each do |order_item|
+  %p #{order_item.item.name} in quantity #{order_item.Quantity} will sent you #{order_item.recurssion_interval.label}
+%p Thank you
+%p Ur Pets Life

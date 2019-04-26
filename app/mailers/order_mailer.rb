@@ -7,6 +7,11 @@ class OrderMailer < ApplicationMailer
     mail(to: ENV['ADMIN'], subject: 'New Order Received')
   end
 
+  def send_recurring_order_notification_email_to_admin(order_id)
+    @order = Order.find_by_id(order_id)
+    mail(to: ENV['ADMIN'], subject: 'New Recurring Order Received')
+  end
+
   def send_order_delivery_invoice(orderid, to_address)
     @order = Order.includes({user: [:location]}, {order_items: [:item]}).where(:id => orderid).first
     @shippinglocation = Location.where(:id => @order.location_id).first
@@ -16,6 +21,11 @@ class OrderMailer < ApplicationMailer
 
   def send_order_placement_notification_to_customer(toAddress)
     mail(to: toAddress, subject: 'Order Placed')
+  end
+
+  def send_recurring_order_placement_notification_to_customer(toAddress, order_id)
+    @order = Order.find_by_id(order_id)
+    mail(to: toAddress, subject: 'Recurring Order Placed')
   end
 
   def send_order_confimation_notification_to_customer(orderid)
