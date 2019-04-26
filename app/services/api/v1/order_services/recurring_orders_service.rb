@@ -31,12 +31,12 @@ module API
           paymentStatus = 0
           trans_date = DateTime.now
           if discount.present? && orderitem.item.discount.zero?
-            subTotal += orderitem.item.price * ((100 - discount).to_f / 100) * orderitem.quantity
+            subTotal += orderitem.item.price * ((100 - discount).to_f / 100) * orderitem.Quantity
           else
             subTotal = orderitem.item.price * orderitem.Quantity
           end
           if orderitem.item.discount > 0
-            @discounted_items_amount += (orderitem.item.price * orderitem.quantity)
+            @discounted_items_amount += (orderitem.item.price * orderitem.Quantity)
           end
           total_price_without_discount = orderitem.item.price * orderitem.Quantity
           company_discount = (subTotal - total_price_without_discount).round(2)
