@@ -188,6 +188,18 @@ module Api
         end
         user_redeem_points = @user_redeem_point_record.net_worth
 
+        if requested_redeem_points > 0
+          if requested_redeem_points <= user_redeem_points
+            permitted_redeem_points = requested_redeem_points
+          else
+            permitted_redeem_points = user_redeem_points
+          end
+        end
+
+        if permitted_redeem_points > subTotal
+          permitted_redeem_points = subTotal
+        end
+
         if params[:IsCash] == 'false'
           @user.update_attributes(last_transaction_ref: params[:TransactionId],
                                   last_transaction_date: params[:TransactionDate])

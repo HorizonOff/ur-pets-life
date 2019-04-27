@@ -7,6 +7,7 @@ module Api
 
       def create
         @user = User.find_by_email(params[:email])
+
         if @user&.valid_password?(params[:password])
           sign_in_user
         else

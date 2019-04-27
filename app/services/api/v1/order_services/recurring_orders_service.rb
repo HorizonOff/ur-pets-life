@@ -21,15 +21,27 @@ module API
       end
 
       def place_recurring_orders
-
         @orderitems.each do |orderitem|
+          user = orderitem.order.user
+          discount = ::Api::V1::DiscountDomainService.new(user.email.dup).dicount_on_email
+          is_user_from_company = discount.present?
           puts "processing " + orderitem.id.to_s + " ..."
           trans_id = ""
           paymentStatus = 0
+          @discounted_items_amount = 0
           trans_date = DateTime.now
-          subTotal = orderitem.item.price * orderitem.Quantity
+          if discount.present? && orderitem.item.discount.zero?
+            subTotal = orderitem.item.price * ((100 - discount).to_f / 100) * orderitem.Quantity
+          else
+            subTotal = orderitem.item.price * orderitem.Quantity
+          end
+          if orderitem.item.discount > 0
+            @discounted_items_amount = (orderitem.item.price * orderitem.Quantity)
+          end
+          total_price_without_discount = orderitem.item.price * orderitem.Quantity
+          company_discount = (subTotal - total_price_without_discount).round(2)
           deliveryCharges = subTotal > 100 ? 0 : 20
-          vatCharges = (subTotal/100).to_f * 5
+          vatCharges = (total_price_without_discount/100).to_f * 5
           total = subTotal + deliveryCharges + vatCharges
 
           if orderitem.order.IsCash == false
@@ -39,14 +51,22 @@ module API
             #trans_date = gateway_response[1]
           end
 
-          @recurringorder = Order.new(:user_id => orderitem.order.user_id, :RedeemPoints => 0, :TransactionId => trans_id, :TransactionDate => trans_date, :Subtotal => subTotal, :Delivery_Charges => deliveryCharges, :shipmenttime => 'with in 7 days', :Vat_Charges => vatCharges, :Total => total, :Order_Status => 1, :Payment_Status => paymentStatus, :Order_Notes => orderitem.order.Order_Notes, :IsCash => true,  :location_id => orderitem.order.location_id, :is_viewed => false, :order_status_flag => 'pending')
+          @recurringorder = Order.new(user_id: orderitem.order.user_id, RedeemPoints: 0, TransactionId: trans_id,
+                                      TransactionDate: trans_date, Subtotal: total_price_without_discount,
+                                      Delivery_Charges: deliveryCharges,
+                                      shipmenttime: 'with in 7 days', Vat_Charges: vatCharges, Total: total,
+                                      Order_Status: 1, Payment_Status: paymentStatus,
+                                      Order_Notes: orderitem.order.Order_Notes, IsCash: true,
+                                      location_id: orderitem.order.location_id, is_viewed: false,
+                                      order_status_flag: 'pending', company_discount: company_discount,
+                                      is_user_from_company: is_user_from_company)
           if @recurringorder.save
             puts "Order placed for " + orderitem.id.to_s
             @neworderitemcreate = OrderItem.new(:IsRecurring => false, :order_id => @recurringorder.id, :item_id => orderitem.item.id, :Quantity => orderitem.Quantity, :Unit_Price => orderitem.item.price, :Total_Price => subTotal, :IsReviewed => false, :status => :pending, :isdiscounted => (orderitem.item.discount > 0 ? true : false))
             @neworderitemcreate.save
 
             discount_per_transaction = 0
-            amount_to_be_awarded = subTotal
+            amount_to_be_awarded = subTotal - @discounted_items_amount
             if amount_to_be_awarded > 0
               if amount_to_be_awarded <= 500
                 discount_per_transaction =+ (3*amount_to_be_awarded)/100
