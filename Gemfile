@@ -104,6 +104,7 @@ end
 
 group :production do
   gem 'scout_apm'
+  gem 'newrelic_rpm'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
