@@ -244,6 +244,7 @@ module Api
           end
           #@user_redeem_point_record.update(:net_worth => (user_redeem_points - permitted_redeem_points +  discount_per_transaction), :last_net_worth => (user_redeem_points - permitted_redeem_points), :last_reward_type => "Discount Per Transaction", :last_reward_worth => discount_per_transaction, :last_reward_update => Time.now, :totalearnedpoints => (@user_redeem_point_record.totalearnedpoints + discount_per_transaction))
           @order.update(earned_points: discount_per_transaction)
+          is_any_recurring_item = false
           @usercartitems.each do |cartitem|
             @neworderitemcreate = OrderItem.new(IsRecurring: cartitem.IsRecurring, order_id: @order.id,
                                                 item_id: cartitem.item_id, Quantity: cartitem.quantity,
@@ -265,9 +266,10 @@ module Api
               @neworderitemcreate.update_attributes(next_recurring_due_date: next_due_date.to_date,
                                                     recurssion_interval_id: cartitem.recurssion_interval_id)
             end
+            is_any_recurring_item = true if cartitem.IsRecurring
           end
           @user.shopping_cart_items.destroy_all
-          set_order_notifcation_email(@order.id)
+          set_order_notifcation_email(@order, is_any_recurring_item)
           @user.notifications.create(order: @order, message: 'Your Order has been placed successfully')
           return render json: {
             Message: 'Order was successfully created.',
@@ -365,9 +367,13 @@ module Api
         OrderMailer.send_low_inventory_alert(itemid).deliver
       end
 
-      def set_order_notifcation_email(orderid)
-        OrderMailer.send_order_notification_email_to_admin(orderid).deliver
+      def set_order_notifcation_email(order, is_any_recurring_item)
+        OrderMailer.send_order_notification_email_to_admin(order.id).deliver
         OrderMailer.send_order_placement_notification_to_customer(@user.email).deliver
+        return unless is_any_recurring_item
+
+        OrderMailer.send_recurring_order_notification_email_to_admin(order.id).deliver
+        OrderMailer.send_recurring_order_placement_notification_to_customer(@user.email, order.id).deliver
       end
       # Never trust parameters from the scary internet, only allow the white list through.
       def order_params
