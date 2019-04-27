@@ -11,7 +11,7 @@ module Api
 
       def create
         @user = User.new(user_params)
-        @user.confirmed_at = Time.now
+        @user.confirmed_at = Time.now if ::Api::V1::DiscountDomainService.new(@user.email.dup).is_domain_popular
         if @user.save
           sign_in_user
         else
