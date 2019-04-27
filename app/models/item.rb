@@ -11,4 +11,6 @@ class Item < ApplicationRecord
   scope :six_month_before_expiry_date, (lambda do
     where(expiry_at: Time.current..(Time.current + 6.month))
   end)
+
+  scope :active, -> { where(is_active: true) }
 end
