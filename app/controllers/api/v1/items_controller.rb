@@ -18,7 +18,7 @@ class ItemsController < Api::BaseController
   def quick_search_items
     return render_422('At least 3 characters in keyword') if params[:keyword].blank? || params[:keyword].length < 3
 
-    @items = Item.where('items.name ILIKE :value', value: "%#{params[:keyword]}%").limit(40)
+    @items = Item.active.where('items.name ILIKE :value', value: "%#{params[:keyword]}%").limit(40)
     @brands = ItemBrand.where('item_brands.name ILIKE :value', value: "%#{params[:keyword]}%").limit(5)
     render json: { items: ActiveModel::Serializer::CollectionSerializer.new(@items, serializer: ItemSearchSerializer),
                    brands: ActiveModel::Serializer::CollectionSerializer.new(@brands,
