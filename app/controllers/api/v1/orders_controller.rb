@@ -171,7 +171,7 @@ module Api
         return render json: { Message: 'Out of Stock', status: :out_of_stock } if isoutofstock == true
 
         subTotal = @itemsprice.to_f.round(2)
-        deliveryCharges = (subTotal > 100 ? 0 : 20)
+        deliveryCharges = (subTotal < 100 ? 20 : 0)
         company_discount = (@itemsprice - @total_price_without_discount).round(2)
         vatCharges = ((@total_price_without_discount/100).to_f * 5).round(2)
         total = subTotal + deliveryCharges + vatCharges
