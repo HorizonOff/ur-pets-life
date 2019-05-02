@@ -41,9 +41,9 @@ module Api
           SubTotal: @total_price_without_discount,
           company_discount: (@itemsprice - @total_price_without_discount).round(2),
           is_user_from_company: discount.present?,
-          DeliveryCharges: @itemsprice > 100 ? 0 : 20,
+          DeliveryCharges: @itemsprice < 100 ? 20 : 0,
           VatCharges: (@total_price_without_discount / 100).to_f * 5,
-          Total: @itemsprice + (@itemsprice > 100 ? 0 : 20) + ((@total_price_without_discount / 100).to_f * 5)
+          Total: @itemsprice + (@itemsprice < 100 ? 20 : 0) + ((@total_price_without_discount / 100).to_f * 5)
         }
       end
 
