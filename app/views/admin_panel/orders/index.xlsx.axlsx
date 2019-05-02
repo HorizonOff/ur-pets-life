@@ -18,11 +18,11 @@ wb.add_worksheet(name: "Orders") do |sheet|
         amount_selling = orderitem.Total_Price
         total_buying = amount_buying + vat_buying
         if redeem_points > amount_selling
-          redeem_points = redeem_points - amount_selling
           total_selling = 0 + vat_selling
+          redeem_points = redeem_points - amount_selling
         else
-          redeem_points = 0
           total_selling = amount_selling - redeem_points + vat_selling
+          redeem_points = 0
         end
         customer_name = orderinfo.user.first_name + ' ' + orderinfo.user.last_name
         sheet.add_row [order_date, invoice_no, customer_name, orderinfo.location.city, orderitem.item.name, orderitem.item.item_brand.name, orderitem.Quantity, orderitem.item.buying_price, '5%', vat_buying, orderitem.Unit_Price, '5%', vat_selling, amount_buying, amount_selling, total_buying, total_selling]
