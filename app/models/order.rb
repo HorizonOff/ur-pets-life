@@ -12,6 +12,8 @@ class Order < ApplicationRecord
   has_many :admin_comments, -> { where(writable_type: 'Admin') }, as: :commentable, class_name: 'Comment'
   has_one :last_comment, -> { order(id: :desc) }, as: :commentable, class_name: 'Comment'
 
+  after_commit :set_delivery_at, on: :update
+
   def update_counters
     unread_comments_count_by_user = admin_comments.where(read_at: nil).count
     unread_comments_count_by_admin = user_comments.where(read_at: nil).count
@@ -22,4 +24,12 @@ class Order < ApplicationRecord
   scope :created_in_range, (lambda do |from_date, to_date|
     where('orders.created_at > ? AND orders.created_at < ?', from_date, to_date)
   end)
+
+  private
+
+  def set_delivery_at
+    return unless saved_change_to_attribute?(:order_status_flag, to: 'delivered')
+
+    update_column(:delivery_at, Time.current)
+  end
 end
