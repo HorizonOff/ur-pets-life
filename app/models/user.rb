@@ -111,6 +111,34 @@ class User < ApplicationRecord
     save
   end
 
+  def update_spends
+    spends_eligble = 0
+    spends_not_eligble = 0
+    orders.each do |user_order|
+      next if user_order.order_status_flag == 'cancelled'
+
+      redeem_points = user_order.RedeemPoints? ? user_order.RedeemPoints : 0
+      user_order.order_items.each do |item|
+        next if item.status == 'cancelled'
+
+        if item.isdiscounted?
+          spends_not_eligble += item.Total_Price
+        elsif redeem_points > item.Total_Price
+          spends_eligble += 0
+          spends_not_eligble += item.Total_Price
+          redeem_points -= item.Total_Price
+        else
+          spends_eligble += item.Total_Price - redeem_points
+          spends_not_eligble += redeem_points
+          redeem_points = 0
+        end
+      end
+    end
+    self.spends_eligble = spends_eligble.round(2)
+    self.spends_not_eligble = spends_not_eligble.round(2)
+    save
+  end
+
   private
 
   def check_location
