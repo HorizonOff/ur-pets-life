@@ -1890,7 +1890,9 @@ CREATE TABLE public.users (
     last_transaction_ref character varying,
     last_transaction_date timestamp without time zone,
     commented_orders_count integer DEFAULT 0 NOT NULL,
-    unread_commented_orders_count integer DEFAULT 0 NOT NULL
+    unread_commented_orders_count integer DEFAULT 0 NOT NULL,
+    spends_eligble double precision DEFAULT 0.0 NOT NULL,
+    spends_not_eligble double precision DEFAULT 0.0 NOT NULL
 );
 
 
@@ -4536,6 +4538,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190412121525'),
 ('20190419141622'),
 ('20190424073441'),
-('20190426081550');
+('20190426081550'),
+('20190503070829');
 
 
