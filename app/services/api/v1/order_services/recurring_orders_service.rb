@@ -40,7 +40,7 @@ module API
           end
           total_price_without_discount = orderitem.item.price * orderitem.Quantity
           company_discount = (subTotal - total_price_without_discount).round(2)
-          deliveryCharges = subTotal > 100 ? 0 : 20
+          deliveryCharges = subTotal < 100 ? 20 : 0
           vatCharges = (total_price_without_discount/100).to_f * 5
           total = subTotal + deliveryCharges + vatCharges
 
