@@ -12,8 +12,8 @@ class Order < ApplicationRecord
   has_many :admin_comments, -> { where(writable_type: 'Admin') }, as: :commentable, class_name: 'Comment'
   has_one :last_comment, -> { order(id: :desc) }, as: :commentable, class_name: 'Comment'
 
-  after_commit :update_user_spends
   after_commit :set_delivery_at, on: :update
+  after_commit :update_user_spends
 
   def update_counters
     unread_comments_count_by_user = admin_comments.where(read_at: nil).count
@@ -28,13 +28,13 @@ class Order < ApplicationRecord
 
   private
 
-  def update_user_spends
-    user.update_spends
-  end
-
   def set_delivery_at
     return unless saved_change_to_attribute?(:order_status_flag, to: 'delivered')
 
     update_column(:delivery_at, Time.current)
+  end
+
+  def update_user_spends
+    user.update_spends
   end
 end
