@@ -31,7 +31,7 @@
                         </tr>
                         <tr>
                             <td><strong>Invoice Date</strong></td>
-                            <td><%= @order.delivery_at.present? ?  @order.delivery_at : DateTime.now.to_date %></td>
+                            <td><%= @order.delivery_at.present? ?  @order.delivery_at.strftime('%d/%m/%Y') : DateTime.now.to_date %></td>
                         </tr>
                         <tr>
                             <td><strong>Terms</strong></td>
@@ -39,7 +39,7 @@
                         </tr>
                         <tr>
                             <td><strong>Due Date</strong></td>
-                            <td><%= @order.delivery_at.present? ?  @order.delivery_at : DateTime.now.to_date %></td>
+                            <td><%= @order.delivery_at.present? ?  @order.delivery_at.strftime('%d/%m/%Y') : DateTime.now.to_date %></td>
                         </tr>
                         <tr>
                             <td><strong>Payment Mode</strong></td>
