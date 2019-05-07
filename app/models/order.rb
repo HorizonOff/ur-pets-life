@@ -12,6 +12,7 @@ class Order < ApplicationRecord
   has_many :admin_comments, -> { where(writable_type: 'Admin') }, as: :commentable, class_name: 'Comment'
   has_one :last_comment, -> { order(id: :desc) }, as: :commentable, class_name: 'Comment'
 
+  after_commit :set_delivery_at, on: :update
   after_commit :update_user_spends
 
   def update_counters
@@ -26,6 +27,12 @@ class Order < ApplicationRecord
   end)
 
   private
+
+  def set_delivery_at
+    return unless saved_change_to_attribute?(:order_status_flag, to: 'delivered')
+
+    update_column(:delivery_at, Time.current)
+  end
 
   def update_user_spends
     user.update_spends

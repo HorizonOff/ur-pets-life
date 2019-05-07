@@ -4545,4 +4545,3 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190503134211'),
 ('20190506145806');
 
-

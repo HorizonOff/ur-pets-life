@@ -57,6 +57,9 @@
               %li
                 Order Status:
                 = @admin_panel_order.order_status_flag == 'on_the_way' ? 'on the way' : @admin_panel_order.order_status_flag
+              %li
+                Delivery At:
+                = @admin_panel_order.delivery_at&.strftime('%d/%m/%Y')
 
               %p.title
                 %b Comments:
