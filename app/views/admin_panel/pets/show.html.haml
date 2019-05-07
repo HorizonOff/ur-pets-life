@@ -12,7 +12,7 @@
                 %i.fa.fa-birthday-cake.user-profile-icon
                 = @pet.birthday
               %li
-                Gender: 
+                Gender:
                 = @pet.gender
 
             = link_to edit_admin_panel_pet_path(@pet), class: 'btn btn-warning' do
@@ -39,3 +39,16 @@
                   %th Actions
               %tbody
                 = render @appointments
+  - if @pet.pictures.present?
+    .row
+      .col-md-12.col-sm-12.col-xs-12
+        .x_panel
+          .x_title
+            %h2 Pet pictures
+            .clearfix
+          .x_content
+            - @pet.pictures.each do |picture|
+              =image_tag(picture.attachment, class: 'big-avatar photo_preview', data: { url: picture.attachment } )
+              / #photo_preview.modal.fade{ tabindex: "-1", role: "dialog", aria: { labelledby: "myModalLabel", hidden:"true" } }
+              /   .modal-dialog
+              /     .modal-body{ style: 'text-align:center' }
