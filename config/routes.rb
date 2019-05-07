@@ -161,7 +161,9 @@ Rails.application.routes.draw do
     resources :invoices do
       member { post :download_invoices}
     end
-    resources :items
+    resources :items do
+      member { put :hide }
+    end
     resources :item_brands
     resources :item_categories
     resources :pettypes
