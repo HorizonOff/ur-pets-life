@@ -96,7 +96,7 @@ module AdminPanel
 
     def filter_items
       filtered_items = filter_and_pagination_query.filter
-      filtered_items = filtered_items.where(:is_active => true)
+      # filtered_items = filtered_items.where(:is_active => true)
       decorated_data = ::AdminPanel::ItemDecorator.decorate_collection(filtered_items)
       serialized_data = ActiveModel::Serializer::CollectionSerializer.new(
         decorated_data, serializer: ::AdminPanel::ItemSerializer, adapter: :attributes

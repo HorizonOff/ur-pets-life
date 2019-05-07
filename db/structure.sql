@@ -917,7 +917,8 @@ CREATE TABLE public.items (
     unit_price double precision,
     buying_price double precision,
     is_active boolean DEFAULT true,
-    expiry_at timestamp without time zone
+    expiry_at timestamp without time zone,
+    deleted_at timestamp without time zone
 );
 
 
@@ -1094,7 +1095,8 @@ CREATE TABLE public.orders (
     unread_comments_count_by_admin integer DEFAULT 0 NOT NULL,
     comments_count integer DEFAULT 0 NOT NULL,
     company_discount double precision,
-    is_user_from_company boolean DEFAULT false
+    is_user_from_company boolean DEFAULT false,
+    delivery_at timestamp without time zone
 );
 
 
@@ -4539,6 +4541,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190419141622'),
 ('20190424073441'),
 ('20190426081550'),
-('20190503070829');
+('20190503070829'),
+('20190503134211'),
+('20190506145806');
 
 
