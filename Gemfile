@@ -113,3 +113,6 @@ gem 'gmaps4rails'
 gem "cocoon"
 gem 'counter_culture', '~> 1.8'
 gem 'rails_12factor', group: :production
+
+#flesh messages for cms
+gem 'toastr-rails'

@@ -64,6 +64,10 @@
                 %label
                   Expiry date:
                 = @admin_panel_item.expiry_at&.strftime('%B %Y')
+              %li
+                %label
+                  Is item show in app:
+                = @admin_panel_item.is_active
 
             =link_to edit_admin_panel_item_path(@admin_panel_item), class: 'btn btn-warning' do
               %i.fa.fa-edit.m-right-xs

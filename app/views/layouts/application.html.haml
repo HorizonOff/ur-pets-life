@@ -19,6 +19,11 @@
           = render partial: 'layouts/admin_panel/sidebar'
           = render partial: 'layouts/admin_panel/header'
           .right_col{role: 'main'}
+            - unless flash.empty?
+              %script{ type: "text/javascript" }
+                - flash.each do |f|
+                  - type = f[0].to_s.gsub('alert', 'error').gsub('notice', 'info')
+                  toastr["#{ type }"]("#{ f[1] }")
             = yield
           %footer
             .pull-right UrPetsLife 2017

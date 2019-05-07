@@ -61,3 +61,14 @@
                   %th Actions
               %tbody
                 = render @pets
+  - if @user.pets.present?
+    .row
+      .col-md-12.col-sm-12.col-xs-12
+        .x_panel
+          .x_title
+            %h2 Pet pictures
+            .clearfix
+          .x_content
+            - @user.pets.each do |pet|
+              - pet.pictures.each do |picture|
+                =image_tag(picture.attachment, class: 'big-avatar')
