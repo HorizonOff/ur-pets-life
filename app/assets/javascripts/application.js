@@ -30,13 +30,13 @@
 //= require buttons.bootstrap.min
 //= require location.js
 //= require datatable.js
+//= require toastr
 
 //= require_self
 
 $(document).on('turbolinks:load', function() {
   init_all_functions()
 });
-
 $(document).on('turbolinks:load', function() {
   init_datatables();
   init_icheck();
