@@ -71,4 +71,4 @@
           .x_content
             - @user.pets.each do |pet|
               - pet.pictures.each do |picture|
-                =image_tag(picture.attachment, class: 'big-avatar photo_preview', data: { url: picture.attachment } )
+                =image_tag(picture.attachment, class: 'big-avatar')
