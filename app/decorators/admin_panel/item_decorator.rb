@@ -1,18 +1,26 @@
 module AdminPanel
   class ItemDecorator < ApplicationDecorator
-  delegate_all
+    delegate_all
 
-  def picture
-    content_tag(:image, '', src: model.picture.url, class: 'avatar') if model.picture?
+    def picture
+      content_tag(:image, '', src: model.picture.url, class: 'avatar') if model.picture?
+    end
+
+    def actions
+      (link_to 'Show', url_helpers.admin_panel_item_path(model), class: 'btn btn-primary btn-xs') +
+        (link_to 'Edit', url_helpers.edit_admin_panel_item_path(model), class: 'btn btn-warning btn-xs') +
+        hide_button +
+        (link_to 'Delete', url_helpers.admin_panel_item_path(model),
+                 data: { confirm: 'Are you sure?' }, method: :delete, remote: true,
+                 class: 'btn btn-danger btn-xs check_response')
+    end
+
+    private
+
+    def hide_button
+      button_name = model.is_active? ? 'Hide' : 'Unhide'
+      (link_to button_name, url_helpers.hide_admin_panel_item_path(model), method: :put, remote: true,
+                                                                           class: 'btn btn-warning btn-xs')
+    end
   end
-
-  def actions
-    (link_to 'Show', url_helpers.admin_panel_item_path(model), class: 'btn btn-primary btn-xs') +
-      (link_to 'Edit', url_helpers.edit_admin_panel_item_path(model), class: 'btn btn-warning btn-xs') +
-      (link_to 'Delete', url_helpers.admin_panel_item_path(model),
-               data: { confirm: 'Are you sure?' }, method: :delete, remote: true,
-               class: 'btn btn-danger btn-xs check_response')
-  end
-
-end
 end
