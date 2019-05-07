@@ -48,7 +48,5 @@
             .clearfix
           .x_content
             - @pet.pictures.each do |picture|
-              =image_tag(picture.attachment, class: 'big-avatar photo_preview', data: { url: picture.attachment } )
-              / #photo_preview.modal.fade{ tabindex: "-1", role: "dialog", aria: { labelledby: "myModalLabel", hidden:"true" } }
-              /   .modal-dialog
-              /     .modal-body{ style: 'text-align:center' }
+              =image_tag(picture.attachment, class: 'big-avatar')
+
