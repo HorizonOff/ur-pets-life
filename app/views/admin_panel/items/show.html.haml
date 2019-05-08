@@ -3,73 +3,73 @@
     .col-md-12.col-sm-12.col-xs-12
       .x_panel
         .x_title
-          %h2= @admin_panel_item.name
+          %h2= @item.name
           .clearfix
         .x_content
           .col-md-6.col-sm-6.col-xs-12.col-md-offset-3.col-sm-offset-3
             .profile_img
               #crop-avatar
-                = image_tag(@admin_panel_item.picture.url, class: 'img-responsive avatar-view', title: @admin_panel_item.name) if @admin_panel_item.picture.present?
+                = image_tag(@item.picture.url, class: 'img-responsive avatar-view', title: @item.name) if @item.picture.present?
 
             %ul.list-unstyled.user_data
               %li
                 %label
                   Name:
-                = @admin_panel_item.name
+                = @item.name
               %li
                 %label
                   Short Description:
-                = @admin_panel_item.short_description
+                = @item.short_description
               %li
                 %label
                   Description:
-                = @admin_panel_item.description
+                = @item.description
               %li
                 %label
                   Weight / Size:
-                = @admin_panel_item.unit
+                = @item.unit
               %li
                 %label
                   Available Stock:
-                = @admin_panel_item.quantity
+                = @item.quantity
               %li
                 %label
                   Pet Type:
-                = @admin_panel_item.pet_type.name if @admin_panel_item.pet_type.present?
+                = @item.pet_type.name if @item.pet_type.present?
               %li
                 %label
                   Category:
-                = ItemCategory.where(:id => @admin_panel_item.item_categories_id).first.name if @admin_panel_item.item_categories_id.present?
+                = ItemCategory.where(:id => @item.item_categories_id).first.name if @item.item_categories_id.present?
               %li
                 %label
                   Brand:
-                = @admin_panel_item.item_brand.name if @admin_panel_item.item_brand.present?
+                = @item.item_brand.name if @item.item_brand.present?
               %li
                 %label
                   Buying Price:
-                = @admin_panel_item.buying_price
+                = @item.buying_price
               %li
                 %label
                   Selling Price:
-                = @admin_panel_item.unit_price
+                = @item.unit_price
               %li
                 %label
                   Discount Price:
-                = @admin_panel_item.price
+                = @item.price
               %li
                 %label
                   Discount (%):
-                = @admin_panel_item.discount
+                = @item.discount
               %li
                 %label
                   Expiry date:
-                = @admin_panel_item.expiry_at&.strftime('%B %Y')
+                = @item.expiry_at&.strftime('%B %Y')
               %li
                 %label
                   Is item show in app:
-                = @admin_panel_item.is_active
+                = @item.is_active
 
-            =link_to edit_admin_panel_item_path(@admin_panel_item), class: 'btn btn-warning' do
+            =link_to edit_admin_panel_item_path(@item), class: 'btn btn-warning' do
               %i.fa.fa-edit.m-right-xs
               Edit Item
             %br
