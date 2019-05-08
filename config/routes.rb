@@ -228,5 +228,6 @@ Rails.application.routes.draw do
     resources :discount_domains
 
     resource :app_version, only: %i[edit update]
+    resources :tax_reports, only: %i[index]
   end
 end
