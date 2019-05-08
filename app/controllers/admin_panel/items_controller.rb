@@ -1,7 +1,7 @@
 module AdminPanel
   class ItemsController < AdminPanelController
     before_action :authorize_super_admin_employee, only: :index
-    before_action :set_admin_panel_item, only: [:show, :edit, :update, :hide, :destroy]
+    before_action :set_item, only: [:show, :edit, :update, :hide, :destroy]
 
     def index
       respond_to do |format|
@@ -14,29 +14,29 @@ module AdminPanel
     def show; end
 
     def new
-      @admin_panel_item = Item.new
+      @item = Item.new
     end
 
     def edit; end
 
     def create
-      @admin_panel_item = Item.new(item_params.merge({ expiry_at: params[:item][:expiry_at].to_date}))
-      if (!@admin_panel_item.discount.nil? and @admin_panel_item.discount > 0)
-        @admin_panel_item.price = @admin_panel_item.unit_price.to_f - (@admin_panel_item.unit_price.to_f / 100 * @admin_panel_item.discount.to_f).to_f
+      @item = Item.new(item_params.merge({ expiry_at: params[:item][:expiry_at].to_date}))
+      if (!@item.discount.nil? and @item.discount > 0)
+        @item.price = @item.unit_price.to_f - (@item.unit_price.to_f / 100 * @item.discount.to_f).to_f
       else
-        item_brand = ItemBrand.where(:id => @admin_panel_item.item_brand_id).first
+        item_brand = ItemBrand.where(:id => @item.item_brand_id).first
         if (!item_brand.brand_discount.nil? and item_brand.brand_discount > 0)
-          @admin_panel_item.price = @admin_panel_item.unit_price.to_f - ((@admin_panel_item.unit_price.to_f / 100) * item_brand.brand_discount).to_f
-          @admin_panel_item.discount = item_brand.brand_discount
+          @item.price = @item.unit_price.to_f - ((@item.unit_price.to_f / 100) * item_brand.brand_discount).to_f
+          @item.discount = item_brand.brand_discount
         else
-          @admin_panel_item.price = @admin_panel_item.unit_price
-          @admin_panel_item.discount = 0
+          @item.price = @item.unit_price
+          @item.discount = 0
         end
       end
-      @admin_panel_item.avg_rating = 0
-      @admin_panel_item.rating = 0
-      @admin_panel_item.review_count = 0
-      if @admin_panel_item.save
+      @item.avg_rating = 0
+      @item.rating = 0
+      @item.review_count = 0
+      if @item.save
         flash[:success] = 'Product was successfully created'
         redirect_to admin_panel_items_path
       else
@@ -51,27 +51,27 @@ module AdminPanel
         params[:item][:discount] = 0
         params[:item][:price] = params[:item][:unit_price]
       end
-      if @admin_panel_item.update(item_params.merge({ expiry_at: params[:item][:expiry_at].to_date}))
+      if @item.update(item_params.merge({ expiry_at: params[:item][:expiry_at].to_date}))
         flash[:success] = 'Item was successfully updated'
-        redirect_to admin_panel_item_path(@admin_panel_item)
+        redirect_to admin_panel_item_path(@item)
       else
         render :edit
       end
     end
 
     def hide
-      if @admin_panel_item.is_active?
-        @admin_panel_item.update_attribute(:is_active, false)
+      if @item.is_active?
+        @item.update_attribute(:is_active, false)
         flash[:success] = 'Item was hid'
       else
-        @admin_panel_item.update_attribute(:is_active, true)
+        @item.update_attribute(:is_active, true)
         flash[:success] = 'Item was unhid'
       end
       redirect_back(fallback_location: root_path)
     end
 
     def destroy
-      any_item_relitions? ? @admin_panel_item.really_destroy! : @admin_panel_item.destroy
+      @item.smart_destroy
       respond_to do |format|
         format.html { redirect_to admin_panel_items_url, notice: 'Item was successfully destroyed.' }
         format.json { head :no_content }
@@ -79,14 +79,9 @@ module AdminPanel
     end
 
     private
-
-    def any_item_relitions?
-      @admin_panel_item.wishlists.blank? && @admin_panel_item.order_items.blank? &&
-        @admin_panel_item.item_reviews.blank?
-    end
     # Use callbacks to share common setup or constraints between actions.
-    def set_admin_panel_item
-      @admin_panel_item = Item.find(params[:id])
+    def set_item
+      @item = Item.find(params[:id])
     end
     # Never trust parameters from the scary internet, only allow the white list through.
     def item_params

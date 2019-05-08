@@ -1,5 +1,5 @@
 .row
-  = render partial: 'layouts/admin_panel/errors', locals: { object: @admin_panel_item }
+  = render partial: 'layouts/admin_panel/errors', locals: { object: @item }
 - content_for :head do
   %meta{name: "turbolinks-cache-control", content:"no-cache"}
 .col-md-6.col-sm-6.col-xs-12
@@ -49,7 +49,7 @@
         = f.label :expiry_at, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
           Expiry Date
         .col-md-9.col-sm-9.col-xs-12
-          = f.text_field :expiry_at, value: @admin_panel_item.expiry_at&.strftime('%B %Y'), class: 'form-control month_picker'
+          = f.text_field :expiry_at, value: @item.expiry_at&.strftime('%B %Y'), class: 'form-control month_picker'
       .form-group
         = f.label :pet_type_id, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
           Pet Type
@@ -85,6 +85,6 @@
           Picture
           %span.required *
         .col-md-9.col-sm-9.col-xs-12
-          - if @admin_panel_item.picture?
-            = image_tag @admin_panel_item.picture.url, class: 'avatar-show', style: 'display:block;margin:8px 0px;width:inherit;height:inherit;'
-          = f.file_field :picture, accept: '.jpg,.jpeg,.bmp,.png', required:  @admin_panel_item.picture? ? false : true
+          - if @item.picture?
+            = image_tag @item.picture.url, class: 'avatar-show', style: 'display:block;margin:8px 0px;width:inherit;height:inherit;'
+          = f.file_field :picture, accept: '.jpg,.jpeg,.bmp,.png', required:  @item.picture? ? false : true
