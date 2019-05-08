@@ -71,19 +71,14 @@ module AdminPanel
     end
 
     def destroy
-      any_item_relitions? ? @item.really_destroy! : @item.destroy
+      @item.smart_destroy
       respond_to do |format|
-        format.html { redirect_to admin_panel_items_url,, notice: 'Item was successfully destroyed.' }
+        format.html { redirect_to admin_panel_items_url, notice: 'Item was successfully destroyed.' }
         format.json { head :no_content }
       end
     end
 
     private
-
-    def any_item_relitions?
-      @item.wishlists.blank? && @item.order_items.blank? &&
-        @item.item_reviews.blank?
-    end
     # Use callbacks to share common setup or constraints between actions.
     def set_item
       @item = Item.find(params[:id])

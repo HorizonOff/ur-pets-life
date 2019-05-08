@@ -15,4 +15,14 @@ class Item < ApplicationRecord
   end)
 
   scope :active, -> { where(is_active: true) }
+
+  def smart_destroy
+    any_item_relitions? ? really_destroy! : destroy
+  end
+
+  private
+
+  def any_item_relitions?
+    wishlists.blank? && order_items.blank? && item_reviews.blank?
+  end
 end
