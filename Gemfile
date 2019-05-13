@@ -77,7 +77,8 @@ gem 'ruby-push-notifications'
 gem 'fcm'
 gem 'axlsx'
 gem 'axlsx_rails'
-gem 'sucker_punch', '~> 2.0'
+# worker
+gem 'sidekiq'
 # For read xlsx
 gem "roo", "~> 2.8.0"
 

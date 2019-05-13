@@ -71,6 +71,6 @@ class Vet < ApplicationRecord
   end
 
   def generate_default_calendars
-    VetTimingJob.perform_async(id)
+    VetTimingWorker.perform_async(id)
   end
 end
