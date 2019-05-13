@@ -26,6 +26,12 @@ class Order < ApplicationRecord
     where('orders.created_at > ? AND orders.created_at < ?', from_date, to_date)
   end)
 
+  scope :deliver_or_created_in_range, (lambda do |from_date, to_date|
+    where('(delivery_at IS NOT NULL AND orders.delivery_at > :from_date AND orders.delivery_at < :to_date) OR
+          (delivery_at IS NULL AND orders.created_at > :from_date AND orders.created_at < :to_date)',
+          from_date: from_date, to_date: to_date)
+  end)
+
   private
 
   def set_delivery_at
