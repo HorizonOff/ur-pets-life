@@ -4,6 +4,10 @@ module Api
       decorates :comment
       delegate_all
 
+      def image
+        model.image.blank? ? model.mobile_image_url : model.image
+      end
+
       def created_at
         model.created_at.to_i
       end
