@@ -18,7 +18,9 @@ class Comment < ApplicationRecord
 
   acts_as_paranoid
 
-  after_commit :send_notification, on: :create
+  mount_uploader :image, PhotoUploader
+
+  after_commit :send_notification, :create_image_from_url, on: :create
   after_commit :update_counters
 
   def send_notification
@@ -31,6 +33,10 @@ class Comment < ApplicationRecord
       PushSendingCommentWorker.perform_async(id, commentable_id) if should_send_push?
       EmailCommentWorker.perform_async(commentable_id) if should_send_email?
     end
+  end
+
+  def create_image_from_url
+    CreateImageWorker.perform_async(id, 'Comment') if mobile_image_url.present?
   end
 
   def update_counters

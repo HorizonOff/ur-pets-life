@@ -534,7 +534,9 @@ CREATE TABLE public.comments (
     commentable_id bigint,
     writable_type character varying,
     writable_id bigint,
-    read_at timestamp without time zone
+    read_at timestamp without time zone,
+    mobile_image_url character varying,
+    image character varying
 );
 
 
@@ -4547,4 +4549,6 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190503070829'),
 ('20190503134211'),
 ('20190506145806'),
-('20190514074821');
+('20190514074821'),
+('20190514114144');
+
