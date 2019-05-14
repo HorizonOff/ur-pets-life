@@ -68,6 +68,14 @@
                 %label
                   Is item show in app:
                 = @item.is_active
+              %li
+                %label
+                  Supplier:
+                = @item.supplier
+              %li
+                %label
+                  Supplie Code:
+                = @item.supplier_code
 
             =link_to edit_admin_panel_item_path(@item), class: 'btn btn-warning' do
               %i.fa.fa-edit.m-right-xs

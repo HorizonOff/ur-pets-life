@@ -4,6 +4,7 @@ SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
 SET check_function_bodies = false;
+SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
@@ -918,7 +919,9 @@ CREATE TABLE public.items (
     buying_price double precision,
     is_active boolean DEFAULT true,
     expiry_at timestamp without time zone,
-    deleted_at timestamp without time zone
+    deleted_at timestamp without time zone,
+    supplier character varying,
+    supplier_code character varying
 );
 
 
@@ -4543,4 +4546,5 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190426081550'),
 ('20190503070829'),
 ('20190503134211'),
-('20190506145806');
+('20190506145806'),
+('20190514074821');
