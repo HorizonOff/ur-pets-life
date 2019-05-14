@@ -40,6 +40,16 @@
         .col-md-9.col-sm-9.col-xs-12
           = f.text_field :unit, class: 'form-control', required: true
       .form-group
+        = f.label :supplier, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
+          Supplier
+        .col-md-9.col-sm-9.col-xs-12
+          = f.text_field :supplier, class: 'form-control'
+      .form-group
+        = f.label :supplier_code, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
+          Supplier Code
+        .col-md-9.col-sm-9.col-xs-12
+          = f.text_field :supplier_code, class: 'form-control'
+      .form-group
         = f.label :quantity, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
           In Stock Quantity
           %span.required *
