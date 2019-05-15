@@ -20,7 +20,7 @@ module AdminPanel
     end
 
     def reject
-      @appointment.update(status: :rejected) if appointment.can_be_rejected?
+      @appointment.update(status: :rejected) if @appointment.can_be_rejected?
       render :show
     end
 
