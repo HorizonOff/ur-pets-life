@@ -28,6 +28,6 @@ class Notification < ApplicationRecord
 
   def send_push
     return if Rails.env.test?
-    PushSendingNotificationJob.perform_async(id)
+    PushSendingNotificationWorker.perform_async(id)
   end
 end

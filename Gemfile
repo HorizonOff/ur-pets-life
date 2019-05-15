@@ -54,6 +54,9 @@ gem 'carrierwave', '~> 1.0'
 gem "mini_magick"
 gem "fog-aws"
 gem 'geocoder'
+#for delete files from aws by link
+gem 'aws-sdk-rails'
+gem 'aws-sdk-s3'
 
 gem 'paper_trail', '~> 7.1'
 
@@ -74,7 +77,8 @@ gem 'ruby-push-notifications'
 gem 'fcm'
 gem 'axlsx'
 gem 'axlsx_rails'
-gem 'sucker_punch', '~> 2.0'
+# worker
+gem 'sidekiq'
 # For read xlsx
 gem "roo", "~> 2.8.0"
 
