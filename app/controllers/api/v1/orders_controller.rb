@@ -364,16 +364,16 @@ module Api
       end
 
       def send_inventory_alerts(itemid)
-        OrderMailer.send_low_inventory_alert(itemid).deliver
+        OrderMailer.send_low_inventory_alert(itemid).deliver_later
       end
 
       def set_order_notifcation_email(order, is_any_recurring_item)
-        OrderMailer.send_order_notification_email_to_admin(order.id).deliver
-        OrderMailer.send_order_placement_notification_to_customer(@user.email).deliver
+        OrderMailer.send_order_notification_email_to_admin(order.id).deliver_later
+        OrderMailer.send_order_placement_notification_to_customer(@user.email, order.id).deliver_later
         return unless is_any_recurring_item
 
-        OrderMailer.send_recurring_order_notification_email_to_admin(order.id).deliver
-        OrderMailer.send_recurring_order_placement_notification_to_customer(@user.email, order.id).deliver
+        OrderMailer.send_recurring_order_notification_email_to_admin(order.id).deliver_later
+        OrderMailer.send_recurring_order_placement_notification_to_customer(@user.email, order.id).deliver_later
       end
       # Never trust parameters from the scary internet, only allow the white list through.
       def order_params

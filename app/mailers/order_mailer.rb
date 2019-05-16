@@ -19,7 +19,10 @@ class OrderMailer < ApplicationMailer
     mail(to: to_address, subject: 'Order Delivered')
   end
 
-  def send_order_placement_notification_to_customer(toAddress)
+  def send_order_placement_notification_to_customer(toAddress, orderid)
+    @order = Order.includes(user: [:location], order_items: [:item]).find_by(id: orderid)
+    @shippinglocation = Location.find_by(id: @order.location_id)
+    @userAddress = (@shippinglocation.villa_number.blank? ? '' : (@shippinglocation.villa_number + ' '))  + (@shippinglocation.unit_number.blank? ? '' : (@shippinglocation.unit_number + ' ')) + (@shippinglocation.building_name.blank? ? '' : (@shippinglocation.building_name + ' ')) + (@shippinglocation.street.blank? ? '' : (@shippinglocation.street + ' ')) + (@shippinglocation.area.blank? ? '' : (@shippinglocation.area + ' ')) + (@shippinglocation.city.blank? ? '' : @shippinglocation.city)
     mail(to: toAddress, subject: 'Order Placed')
   end
 
