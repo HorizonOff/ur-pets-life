@@ -18,6 +18,7 @@
             %thead
               %tr
                 %th{style: 'width:30px'}  #
+                %th Supplier code
                 %th Name
                 %th Picture
                 %th Description
@@ -31,6 +32,8 @@
               %tr
                 %th{style: 'width:30px'}
                   = text_field_tag :id, '', class: 'form-control', style: 'width:100%'
+                %th
+                  = text_field_tag :supplier_code, '', class: 'form-control', style: 'width:100%'
                 %th
                   = text_field_tag :name, '', class: 'form-control', style: 'width:100%'
                 %th
