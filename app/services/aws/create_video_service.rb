@@ -1,5 +1,5 @@
 module Aws
-  class CreateImageService
+  class CreateVideoService
     def initialize(id, type)
       @object = Object.const_get(type).find_by(id: id)
     end
