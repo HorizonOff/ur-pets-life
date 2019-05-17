@@ -14,7 +14,8 @@ class Comment < ApplicationRecord
   counter_culture :commentable, column_name: proc { |model| model.commentable_type == 'Order' && model.writable_type == 'Admin' && model.read_at.blank? ? 'unread_comments_count_by_user' : nil },
                                 column_names: { ["comments.commentable_type = 'Order' AND comments.writable_type = 'Admin' AND comments.read_at IS NULL"] => 'unread_comments_count_by_user' }
 
-  validates :message, presence: { message: 'Message is required' }
+  # validates :message, presence: { message: 'Message is required' }
+  validate :content_should_be_valid, :ome_type_of_media
 
   acts_as_paranoid
 
@@ -34,11 +35,6 @@ class Comment < ApplicationRecord
       PushSendingCommentWorker.perform_async(id, commentable_id) if should_send_push?
       EmailCommentWorker.perform_async(commentable_id) if should_send_email?
     end
-  end
-
-  def create_media_from_url
-    CreateImageWorker.perform_async(id, 'Comment') if mobile_image_url.present?
-    CreateVideoWorker.perform_async(id, 'Comment') if mobile_video_url.present?
   end
 
   def update_counters
@@ -66,6 +62,19 @@ class Comment < ApplicationRecord
   end
 
   private
+
+  def content_should_be_valid
+    errors.add(:base, 'Should be message or video or image') if image.blank? && video.blank? && message.blank?
+  end
+
+  def ome_type_of_media
+    errors.add(:base, 'Only image or video in one comment') if image.present? && video.present?
+  end
+
+  def create_media_from_url
+    CreateImageWorker.perform_async(id, 'Comment') if mobile_image_url.present?
+    CreateVideoWorker.perform_async(id, 'Comment') if mobile_video_url.present?
+  end
 
   def should_send_push?
     for_appointment? && from_admin?
