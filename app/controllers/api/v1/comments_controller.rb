@@ -75,7 +75,7 @@ module Api
       end
 
       def comment_params
-        params.require(:comment).permit(:message, :mobile_image_url)
+        params.require(:comment).permit(:message, :mobile_image_url, :mobile_video_url)
       end
 
       def default_fields

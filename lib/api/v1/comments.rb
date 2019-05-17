@@ -13,6 +13,10 @@ module Api
             key :type, :string
             key :example, 'https://s3.eu-central-1.amazonaws.com/urpets-dev/urpets/uploads/item/picture/15/Big___Small_Pumkins.JPG'
           end
+          property :mobile_video_url do
+            key :type, :string
+            key :example, 'https://s3.eu-central-1.amazonaws.com/urpets-dev/SampleVideo_1280x720_1mb.mp4'
+          end
         end
       end
 

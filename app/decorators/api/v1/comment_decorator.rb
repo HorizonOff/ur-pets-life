@@ -5,7 +5,7 @@ module Api
       delegate_all
 
       def image
-        model.image.blank? ? model.mobile_image_url : model.image
+        model.image.blank? ? image_hash : model.image
       end
 
       def created_at
@@ -21,6 +21,18 @@ module Api
       end
 
       private
+
+      def image_hash
+        {
+          url: model.mobile_image_url,
+          medium: {
+            url: model.mobile_image_url
+          },
+          thumb: {
+            url: model.mobile_image_url
+          }
+        }
+      end
 
       def user_name_for_admin
         if model.commentable_type == 'Order'
@@ -40,3 +52,4 @@ module Api
     end
   end
 end
+
