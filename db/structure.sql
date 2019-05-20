@@ -110,7 +110,8 @@ CREATE TABLE public.admins (
     deleted_at timestamp without time zone,
     unread_commented_appointments_count integer DEFAULT 0 NOT NULL,
     is_employee boolean DEFAULT false,
-    unread_commented_orders_count integer DEFAULT 0 NOT NULL
+    unread_commented_orders_count integer DEFAULT 0 NOT NULL,
+    is_cataloger boolean DEFAULT false
 );
 
 
@@ -4554,5 +4555,6 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190506145806'),
 ('20190514074821'),
 ('20190514114144'),
-('20190516142135');
+('20190516142135'),
+('20190520082024');
 
