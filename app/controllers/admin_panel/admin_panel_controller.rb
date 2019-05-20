@@ -22,12 +22,28 @@ module AdminPanel
       end
     end
 
+    def cataloger_or_employee_or_super_admin?
+      if current_admin.is_super_admin?
+        true
+      elsif current_admin.is_employee?
+        true
+      elsif current_admin.is_cataloger?
+        true
+      else
+        false
+      end
+    end
+
     def authorize_super_admin
       authorize :application, :super_admin?
     end
 
     def authorize_super_admin_employee
       authorize :application, :employee_or_super_admin?
+    end
+
+    def authorize_super_admin_employee_cataloger
+      authorize :application, :cataloger_or_employee_or_super_admin?
     end
 
     def pundit_user

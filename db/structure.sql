@@ -110,7 +110,8 @@ CREATE TABLE public.admins (
     deleted_at timestamp without time zone,
     unread_commented_appointments_count integer DEFAULT 0 NOT NULL,
     is_employee boolean DEFAULT false,
-    unread_commented_orders_count integer DEFAULT 0 NOT NULL
+    unread_commented_orders_count integer DEFAULT 0 NOT NULL,
+    is_cataloger boolean DEFAULT false
 );
 
 
@@ -536,7 +537,10 @@ CREATE TABLE public.comments (
     writable_id bigint,
     read_at timestamp without time zone,
     mobile_image_url character varying,
-    image character varying
+    image character varying,
+    video character varying,
+    video_duration integer,
+    mobile_video_url character varying
 );
 
 
@@ -4550,6 +4554,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190503134211'),
 ('20190506145806'),
 ('20190514074821'),
-('20190514114144');
+('20190514114144'),
+('20190516142135'),
+('20190520082024');
 
 
