@@ -1,7 +1,7 @@
 module Api
   module V1
-    class CommentDecorator < ApplicationDecorator
-      decorates :comment
+    class PostDecorator < ApplicationDecorator
+      decorates :post
       delegate_all
 
       def image
@@ -10,6 +10,10 @@ module Api
 
       def video
         model.video.file.blank? ? video_hash : model.video
+      end
+
+      def created_at
+        model.created_at.to_i
       end
 
       private
