@@ -1288,7 +1288,12 @@ CREATE TABLE public.posts (
     pet_type_id bigint,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    deleted_at timestamp without time zone
+    deleted_at timestamp without time zone,
+    mobile_image_url character varying,
+    image character varying,
+    video character varying,
+    video_duration integer,
+    mobile_video_url character varying
 );
 
 
@@ -4556,5 +4561,6 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190514074821'),
 ('20190514114144'),
 ('20190516142135'),
-('20190520082024');
+('20190520082024'),
+('20190521112407');
 
