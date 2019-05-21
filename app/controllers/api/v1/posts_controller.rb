@@ -25,7 +25,7 @@ module Api
       private
 
       def post_params
-        params.require(:post).permit(:title, :message, :pet_type_id)
+        params.require(:post).permit(:title, :message, :pet_type_id, :mobile_image_url, :mobile_video_url)
       end
     end
   end
