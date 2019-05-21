@@ -6,7 +6,7 @@ module Aws
 
     def create_video
       @object.remote_video_url = @object.mobile_video_url
-      ::Aws::DeleteService.new(@object.mobile_video_url.dup, @object, 'video').delete if @object.save
+      DeleteWorker.perform_in(10.minutes, @object.mobile_video_url.dup, @object, 'video').delete if @object.save
     end
 
     private

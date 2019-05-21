@@ -6,9 +6,7 @@ module Aws
 
     def create_image
       @object.remote_image_url = @object.mobile_image_url
-      if @object.save && @object.image.present? && ::Aws::DeleteService.new(@object.mobile_image_url.dup).delete
-        @object.update_column(:mobile_image_url, nil)
-      end
+      DeleteWorker.perform_in(10.minutes, @object.mobile_image_url.dup, @object, 'image').delete if @object.save
     end
 
     private
