@@ -6,7 +6,9 @@ module Aws
 
     def create_video
       @object.remote_video_url = @object.mobile_video_url
-      DeleteWorker.perform_in(10.minutes, @object.mobile_video_url.dup, @object, 'video') if @object.save
+      if @object.save
+        DeleteWorker.perform_in(10.minutes, @object.mobile_video_url.dup, @object.id, @@object.class.to_s, 'video')
+      end
     end
 
     private

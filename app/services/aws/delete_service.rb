@@ -1,7 +1,7 @@
 module Aws
   class DeleteService
-    def initialize(link, object, media_type)
-      @object = object
+    def initialize(link, object_id, object_type, media_type)
+      @object = Object.const_get(object_type).find_by(id: object_id)
       @media_type = media_type
       @region = ENV["AWS_REGION"]
       @bucket = ENV["AWS_BUCKET_NAME"]
