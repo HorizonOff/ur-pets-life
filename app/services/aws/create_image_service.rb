@@ -6,7 +6,9 @@ module Aws
 
     def create_image
       @object.remote_image_url = @object.mobile_image_url
-      DeleteWorker.perform_in(10.minutes, @object.mobile_image_url.dup, @object, 'image') if @object.save
+      if @object.save
+        DeleteWorker.perform_in(10.minutes, @object.mobile_image_url.dup, @object.id, @@object.class.to_s, 'image')
+      end
     end
 
     private
