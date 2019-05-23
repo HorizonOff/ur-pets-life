@@ -23,10 +23,22 @@ class Comment < ApplicationRecord
 
   def send_notification
     return if Rails.env.test?
+
     if (commentable_type == 'Order' and writable_type == 'Admin')
       PushSendingOrderCommentWorker.perform_async(id, commentable_id)
     elsif (commentable_type == 'Order' and writable_type == 'User')
       EmailOrderCommentWorker.perform_async(commentable_id)
+    elsif commentable_type == 'Post'
+      if commentable.user_id != writable.id
+        EmailPostCommentWorker.perform_async(id, commentable_id, commentable.user_id)
+      end
+      array = []
+      commentable.comments.each do |comment|
+        next if comment.user_id == writable.id || comment.user_id == commentable.user_id || comment.user_id.in?(array)
+
+        EmailPostCommentWorker.perform_async(id, commentable_id, comment.user_id)
+        array << comment.user_id
+      end
     else
       PushSendingCommentWorker.perform_async(id, commentable_id) if should_send_push?
       EmailCommentWorker.perform_async(commentable_id) if should_send_email?
