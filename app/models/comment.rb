@@ -30,14 +30,15 @@ class Comment < ApplicationRecord
       EmailOrderCommentWorker.perform_async(commentable_id)
     elsif commentable_type == 'Post'
       if commentable.user_id != writable.id
-        EmailPostCommentWorker.perform_async(id, commentable_id, commentable.user_id)
+        PushSendingPostCommentWorker.perform_async(id, commentable_id, commentable.user_id)
       end
       array = []
       commentable.comments.each do |comment|
-        next if comment.user_id == writable.id || comment.user_id == commentable.user_id || comment.user_id.in?(array)
+        next if comment.writable_id == writable.id || comment.writable_id == commentable.user_id ||
+                comment.writable_id.in?(array)
 
-        EmailPostCommentWorker.perform_async(id, commentable_id, comment.user_id)
-        array << comment.user_id
+        PushSendingPostCommentWorker.perform_async(id, commentable_id, comment.writable_id)
+        array << comment.writable_id
       end
     else
       PushSendingCommentWorker.perform_async(id, commentable_id) if should_send_push?
