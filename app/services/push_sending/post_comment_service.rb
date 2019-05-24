@@ -11,8 +11,7 @@ module PushSending
     attr_reader :comment, :post, :user
 
     def ios_options
-      { alert: comment.message,
-        title: post.title,
+      { alert: { body: comment.message, title: post.title },
         sound: 'default',
         source_id: post.id,
         source_type: 'PostComment',
