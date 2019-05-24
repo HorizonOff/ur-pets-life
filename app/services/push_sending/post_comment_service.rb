@@ -12,6 +12,7 @@ module PushSending
 
     def ios_options
       { alert: comment.message,
+        title: post.title,
         sound: 'default',
         source_id: post.id,
         source_type: 'PostComment',
@@ -24,7 +25,7 @@ module PushSending
       {
         collapse_key: 'type_a',
         data: { body: comment.message,
-                title: 'UrPetsLife',
+                title: post.title,
                 source_id: post.id,
                 source_type: 'PostComment',
                 badge: android_badge,
