@@ -133,6 +133,10 @@ module Api
           key :produces, %w[application/json]
           key :tags, %W[Comments]
 
+          security do
+            key :api_key, []
+          end
+
           parameter do
             key :name, :id
             key :in, :path
