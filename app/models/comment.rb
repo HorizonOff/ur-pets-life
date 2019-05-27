@@ -75,7 +75,6 @@ class Comment < ApplicationRecord
 
   private
 
-<<<<<<< HEAD
   def content_should_be_valid
     errors.add(:base, 'Should be message or video or image') if image.blank? && video.blank? && message.blank?
   end
@@ -87,7 +86,8 @@ class Comment < ApplicationRecord
   def create_media_from_url
     CreateImageWorker.perform_async(id, 'Comment') if mobile_image_url.present?
     CreateVideoWorker.perform_async(id, 'Comment') if mobile_video_url.present?
-=======
+  end
+
   def create_user_post
     return if commentable_type != 'Post' || writable.user_posts.where(post_id: commentable_id).any?
 
@@ -103,7 +103,6 @@ class Comment < ApplicationRecord
       user_post.update_column(:unread_post_comments_count, user_post.unread_post_comments_count + 1)
       user_post.user.update_column(:unread_post_comments_count, user_post.user.unread_post_comments_count + 1)
     end
->>>>>>> push_on_comment_posted
   end
 
   def should_send_push?
