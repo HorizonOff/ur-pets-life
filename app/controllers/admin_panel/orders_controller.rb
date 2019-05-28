@@ -16,10 +16,7 @@ module AdminPanel
     end
   end
 
-  # GET /admin_panel/orders/1
-  # GET /admin_panel/orders/1.json
   def show
-
     @shippinglocation = Location.where(:id => @admin_panel_order.location_id).first
     @shippingaddress = (@shippinglocation.villa_number.blank? ? '' : (@shippinglocation.villa_number + ' '))  + (@shippinglocation.unit_number.blank? ? '' : (@shippinglocation.unit_number + ' ')) + (@shippinglocation.building_name.blank? ? '' : (@shippinglocation.building_name + ' ')) + (@shippinglocation.street.blank? ? '' : (@shippinglocation.street + ' ')) + (@shippinglocation.area.blank? ? '' : (@shippinglocation.area + ' ')) + (@shippinglocation.city.blank? ? '' : @shippinglocation.city)
     @orderitems = OrderItem.includes(:item).where(:order_id => @admin_panel_order.id)
@@ -27,11 +24,10 @@ module AdminPanel
     if @admin_panel_order.order_status_flag == 'pending'
       @statusoption = [['Confirm', 'confirmed'], ['Cancel', 'cancelled']]
     elsif @admin_panel_order.order_status_flag == 'confirmed'
-      @statusoption = [['On The Way', 'on_the_way']]
+      @statusoption = [['On The Way', 'on_the_way'], ['Cancel', 'cancelled']]
     elsif @admin_panel_order.order_status_flag == 'on_the_way'
-      @statusoption = [['Delievered', 'delivered']]
+      @statusoption = [['Delievered', 'delivered'], ['Cancel', 'cancelled']]
     end
-
   end
 
   # GET /admin_panel/orders/new
