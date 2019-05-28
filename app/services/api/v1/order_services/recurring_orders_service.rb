@@ -51,6 +51,11 @@ module API
             #trans_date = gateway_response[1]
           end
 
+          if user.orders.where(TransactionDate: (DateTime.now.beginning_of_day..DateTime.now.end_of_day)).any?
+            order = user.orders.where(TransactionDate: (DateTime.now.beginning_of_day..DateTime.now.end_of_day)).first
+            @recurringorder = order.assign_attributes(Subtotal: )
+          else
+
           @recurringorder = Order.new(user_id: orderitem.order.user_id, RedeemPoints: 0, TransactionId: trans_id,
                                       TransactionDate: trans_date, Subtotal: total_price_without_discount,
                                       Delivery_Charges: deliveryCharges,
