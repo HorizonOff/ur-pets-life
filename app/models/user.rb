@@ -108,6 +108,7 @@ class User < ApplicationRecord
 
   def update_post_comment_counters
     self.unread_post_comments_count = user_posts.sum(:unread_post_comments_count)
+    save
   end
 
   def update_counters_for_order
