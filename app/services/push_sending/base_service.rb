@@ -35,9 +35,9 @@ module PushSending
 
     def ios_badge
       puts user.inspect
-      puts 'unread_notifications_count= ' + unread_notifications_count
-      puts 'unread_commented_appointments_count= ' + unread_commented_appointments_count
-      puts 'unread_post_comments_count= ' + unread_post_comments_count
+      puts 'unread_notifications_count= ' + unread_notifications_count.to_s
+      puts 'unread_commented_appointments_count= ' + unread_commented_appointments_count.to_s
+      puts 'unread_post_comments_count= ' + unread_post_comments_count.to_s
       @ios_badge ||= unread_notifications_count + unread_commented_appointments_count + unread_post_comments_count
     end
 
@@ -46,15 +46,18 @@ module PushSending
     end
 
     def unread_notifications_count
+      puts 'def unread_notifications_count= ' + unread_notifications_count.to_s
       @unread_notifications_count ||= user.unread_notifications.count
     end
 
     def unread_commented_appointments_count
+      puts 'deef unread_commented_appointments_count= ' + unread_commented_appointments_count.to_s
       @unread_commented_appointments_count ||= (user.unread_commented_appointments_count +
                                                 user.unread_commented_orders_count)
     end
 
     def unread_post_comments_count
+      puts 'def unread_post_comments_count= ' + unread_post_comments_count.to_s
       @unread_commented_appointments_count ||= user.unread_post_comments_count
     end
 
