@@ -14,7 +14,8 @@ module PushSending
         sound: 'default',
         badge: ios_badge,
         unread_commented_appointments_count: unread_commented_appointments_count,
-        unread_notifications_count: unread_notifications_count }
+        unread_notifications_count: unread_notifications_count,
+        unread_post_comments_count: unread_post_comments_count }
     end
 
     def android_options
@@ -23,7 +24,9 @@ module PushSending
         data: { body: notification.message,
                 title: 'UrPetsLife',
                 badge: android_badge,
-                unread_commented_appointments_count: unread_commented_appointments_count }
+                unread_commented_appointments_count: unread_commented_appointments_count,
+                unread_notifications_count: unread_notifications_count,
+                unread_post_comments_count: unread_post_comments_count }
       }
     end
   end
