@@ -17,11 +17,11 @@ module API
       # end
 
       def place_recurring_orders
-        User.joins(:orders).includes(:orderitems).find_each do |user|
-          orderitems = user.orderitems.where('"IsRecurring" = true AND status = "delivered" AND
+        User.joins(:orders).includes(orders: :order_items).find_each do |user|
+          order_items = user.order_items.where('"IsRecurring" = true AND status = "delivered" AND
                                 next_recurring_due_date BETWEEN (?) AND (?)',
                                 @recrringDate.beginning_of_day, @recrringDate.end_of_day)
-          next if orderitems.blank?
+          next if order_items.blank?
 
           isoutofstock = false
           @itemsprice = 0
@@ -29,7 +29,7 @@ module API
           @discounted_items_amount = 0
           discount = ::Api::V1::DiscountDomainService.new(user.email.dup).dicount_on_email
           is_user_from_company = discount.present?
-          orderitems.each do |cartitem|
+          order_items.each do |cartitem|
             if discount.present? && cartitem.item.discount.zero?
               @itemsprice += cartitem.item.price * ((100 - discount).to_f / 100) * cartitem.quantity
             else
@@ -59,7 +59,7 @@ module API
                             Delivery_Charges: deliveryCharges, shipmenttime: 'with in 7 days', Vat_Charges: vatCharges,
                             Total: total, Order_Status: 1, Payment_Status: paymentStatus,
                             Order_Notes: '',
-                            IsCash: true, location_id: orderitems.last.order.location_id, is_viewed: false,
+                            IsCash: true, location_id: order_items.last.order.location_id, is_viewed: false,
                             order_status_flag: 'pending', company_discount: company_discount,
                             is_user_from_company: is_user_from_company)
         end
