@@ -8,19 +8,63 @@ module API
 
       def perform
         @recrringDate = (DateTime.now.to_time + 1.days).to_date
-        puts "Fetching Recurring Items for " + @recrringDate.beginning_of_day.to_s + " to " + @recrringDate.end_of_day.to_s
-        @orderitems = get_recurring_orders
-        puts "found(s) " + @orderitems.count.to_s + " item(s)"
-        puts "Placing Recurring Orders"
+        # @orderitems = get_recurring_orders
         place_recurring_orders
-        puts "Job terminating . .  . . "
       end
 
-      def get_recurring_orders
-        OrderItem.includes(:item, {order: [:user]}).where('"IsRecurring" = true AND status = \'delivered\' AND next_recurring_due_date BETWEEN (?) AND (?)', @recrringDate.beginning_of_day, @recrringDate.end_of_day )
-      end
+      # def get_recurring_orders
+      #   OrderItem.includes(:item, {order: [:user]}).where('"IsRecurring" = true AND status = \'delivered\' AND next_recurring_due_date BETWEEN (?) AND (?)', @recrringDate.beginning_of_day, @recrringDate.end_of_day )
+      # end
 
       def place_recurring_orders
+        User.joins(:orders).includes(:orderitems).find_each do |user|
+          orderitems = user.orderitems.where('"IsRecurring" = true AND status = "delivered" AND
+                                next_recurring_due_date BETWEEN (?) AND (?)',
+                                @recrringDate.beginning_of_day, @recrringDate.end_of_day)
+          next if orderitems.blank?
+
+          isoutofstock = false
+          @itemsprice = 0
+          @total_price_without_discount = 0
+          @discounted_items_amount = 0
+          discount = ::Api::V1::DiscountDomainService.new(user.email.dup).dicount_on_email
+          is_user_from_company = discount.present?
+          orderitems.each do |cartitem|
+            if discount.present? && cartitem.item.discount.zero?
+              @itemsprice += cartitem.item.price * ((100 - discount).to_f / 100) * cartitem.quantity
+            else
+              @itemsprice += (cartitem.item.price * cartitem.quantity)
+            end
+            @total_price_without_discount += (cartitem.item.price * cartitem.quantity)
+            if cartitem.item.discount > 0
+              @discounted_items_amount += (cartitem.item.price * cartitem.quantity)
+            end
+            isoutofstock = true if cartitem.item.quantity < cartitem.quantity
+          end
+          # return render json: { Message: 'Out of Stock', status: :out_of_stock } if isoutofstock == true
+
+          subTotal = @itemsprice.to_f.round(2)
+          deliveryCharges = (subTotal < 100 ? 20 : 0)
+          company_discount = (@itemsprice - @total_price_without_discount).round(2)
+          vatCharges = ((@total_price_without_discount/100).to_f * 5).round(2)
+          total = subTotal + deliveryCharges + vatCharges
+          user_redeem_points = 0
+          permitted_redeem_points = 0
+          paymentStatus = 0
+          trans_date = DateTime.now
+
+          order = Order.new(user_id: user.id, RedeemPoints: permitted_redeem_points,
+                            TransactionId: '',
+                            TransactionDate: trans_date, Subtotal: @total_price_without_discount,
+                            Delivery_Charges: deliveryCharges, shipmenttime: 'with in 7 days', Vat_Charges: vatCharges,
+                            Total: total, Order_Status: 1, Payment_Status: paymentStatus,
+                            Order_Notes: '',
+                            IsCash: true, location_id: orderitems.last.order.location_id, is_viewed: false,
+                            order_status_flag: 'pending', company_discount: company_discount,
+                            is_user_from_company: is_user_from_company)
+        end
+
+
         @orderitems.each do |orderitem|
           user = orderitem.order.user
           discount = ::Api::V1::DiscountDomainService.new(user.email.dup).dicount_on_email
