@@ -20,6 +20,18 @@ class ApplicationPolicy
     end
   end
 
+  def cataloger_or_employee_or_super_admin?
+    if user.is_super_admin?
+      true
+    elsif user.is_employee?
+      true
+    elsif user.is_cataloger?
+      true
+    else
+      false
+    end
+  end
+
   class Scope
     attr_reader :user, :scope
 

@@ -32,6 +32,10 @@
     Orders
     - if @new_orders_count.present? && !@new_orders_count.zero?
       %span.badge.bg-green= @new_orders_count
+%li{ class: "#{'current-page' if current_page?(admin_panel_tax_reports_path)}" }
+  = link_to admin_panel_tax_reports_path do
+    %i.fa.fa-table
+    Tax reports
 
 %li{ class: "#{'current-page' if current_page?(admin_panel_invoices_path)}" }
   = link_to admin_panel_invoices_path do
