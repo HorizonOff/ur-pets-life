@@ -34,11 +34,11 @@ module PushSending
     end
 
     def ios_badge
-      @ios_badge ||= unread_notifications_count + unread_commented_appointments_count
+      @ios_badge ||= unread_notifications_count + unread_commented_appointments_count + unread_post_comments_count
     end
 
     def android_badge
-      @android_badge ||= unread_notifications_count
+      @android_badge ||= unread_notifications_count + unread_commented_appointments_count + unread_post_comments_count
     end
 
     def unread_notifications_count
@@ -46,7 +46,12 @@ module PushSending
     end
 
     def unread_commented_appointments_count
-      @unread_commented_appointments_count ||= (user.unread_commented_appointments_count + user.unread_commented_orders_count)
+      @unread_commented_appointments_count ||= (user.unread_commented_appointments_count +
+                                                user.unread_commented_orders_count)
+    end
+
+    def unread_post_comments_count
+      @unread_post_comments_count ||= user.unread_post_comments_count
     end
 
     def certificate_path

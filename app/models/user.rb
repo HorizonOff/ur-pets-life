@@ -49,6 +49,7 @@ class User < ApplicationRecord
   has_one :location, as: :place, inverse_of: :place
 
   has_many :orders
+  has_many :user_posts, dependent: :destroy
   has_many :commented_orders, -> { where('comments_count > 0') }, class_name: 'Order'
   has_many :orders_with_new_comments, -> { where('unread_comments_count_by_user > 0') }, class_name: 'Order'
   has_one :redeem_point
@@ -102,6 +103,11 @@ class User < ApplicationRecord
     self.unread_commented_appointments_count = appointments_with_new_comments.count
     self.commented_orders_count = commented_orders.count
     self.unread_commented_orders_count = orders_with_new_comments.count
+    save
+  end
+
+  def update_post_comment_counters
+    self.unread_post_comments_count = user_posts.sum(:unread_post_comments_count)
     save
   end
 

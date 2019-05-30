@@ -5,15 +5,19 @@ module Api
       delegate_all
 
       def image
-        model.image.file.blank? ? image_hash : model.image
+        model.image.blank? ? image_hash : model.image
       end
 
       def video
-        model.video.file.blank? ? video_hash : model.video
+        model.video.blank? ? video_hash : model.video
       end
 
       def created_at
         model.created_at.to_i
+      end
+
+      def unread_post_comments_count
+        model.user_posts.find_by(user_id: h.current_user&.id)&.unread_post_comments_count
       end
 
       private

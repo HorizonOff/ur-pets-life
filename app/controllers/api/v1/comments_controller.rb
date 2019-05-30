@@ -21,6 +21,7 @@ module Api
 
           read_comments(comments) if @parent_object.is_a? Appointment
           read_comments(comments) if @parent_object.is_a? Order
+          read_post_comments if @parent_object.is_a? Post
 
           render json: { comments: serialized_comments, total_count: @parent_object.comments_count }.merge(default_fields)
         else
@@ -45,6 +46,11 @@ module Api
         comments.read_by_user
         @parent_object.update_counters
         current_user.update_counters
+      end
+
+      def read_post_comments
+        @parent_object.update_counters(current_user.id)
+        current_user.update_post_comment_counters
       end
 
       def parse_date

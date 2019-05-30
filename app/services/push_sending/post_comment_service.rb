@@ -1,20 +1,20 @@
 module PushSending
-  class CommentService < PushSending::BaseService
-    def initialize(comment, appointment)
+  class PostCommentService < PushSending::BaseService
+    def initialize(comment, post, user)
       @comment = comment
-      @appointment = appointment
-      @user = appointment.user
+      @post = post
+      @user = user
     end
 
     private
 
-    attr_reader :comment, :appointment, :user
+    attr_reader :comment, :post, :user
 
     def ios_options
-      { alert: comment.message,
+      { alert: { body: comment.message, title: post.title },
         sound: 'default',
-        source_id: appointment.id,
-        source_type: 'AppointmentComment',
+        source_id: post.id,
+        source_type: 'PostComment',
         badge: ios_badge,
         unread_commented_appointments_count: unread_commented_appointments_count,
         unread_notifications_count: unread_notifications_count,
@@ -25,9 +25,9 @@ module PushSending
       {
         collapse_key: 'type_a',
         data: { body: comment.message,
-                title: 'UrPetsLife',
-                source_id: appointment.id,
-                source_type: 'AppointmentComment',
+                title: post.title,
+                source_id: post.id,
+                source_type: 'PostComment',
                 badge: android_badge,
                 unread_commented_appointments_count: unread_commented_appointments_count,
                 unread_notifications_count: unread_notifications_count,

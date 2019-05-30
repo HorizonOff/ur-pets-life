@@ -98,6 +98,10 @@ module Api
           key :produces, %w[application/json]
           key :tags, %W[Posts]
 
+          security do
+            key :api_key, []
+          end
+
           parameter do
             key :name, :created_at
             key :in, :query
