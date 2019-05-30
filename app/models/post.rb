@@ -7,8 +7,12 @@ class Post < ApplicationRecord
 
   acts_as_paranoid
 
+  mount_uploader :image, PhotoUploader
+  mount_uploader :video, VideoUploader
+
   validates :title, presence: { message: 'Title is required' }
-  validates :message, presence: { message: 'Message is required' }
+  # validates :message, presence: { message: 'Message is required' }
+  validate :content_should_be_valid, :ome_type_of_media
 
   delegate :name, to: :user, prefix: true
   delegate :avatar, to: :user, allow_nil: true

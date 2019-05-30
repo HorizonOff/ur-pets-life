@@ -1,23 +1,27 @@
 module Aws
   class DeleteService
-    def initialize(link)
+    def initialize(link, object_id, object_type, media_type)
+      @object = Object.const_get(object_type).find_by(id: object_id)
+      @media_type = media_type
       @region = ENV["AWS_REGION"]
       @bucket = ENV["AWS_BUCKET_NAME"]
       @link = link.split(@bucket + '/')[1]
     end
 
     def delete
-      response = { deleted: false }
       s3 = Aws::S3::Resource.new(region: @region)
-      if s3.bucket(@bucket).object(@link).exists?
-        s3.bucket(@bucket).object(@link).delete
-        response[:deleted] = true
+      return unless s3.bucket(@bucket).object(@link).exists?
+
+      s3.bucket(@bucket).object(@link).delete
+      if media_type == 'video'
+        @object.update_column(:mobile_video_url, nil)
+      else
+        @object.update_column(:mobile_image_url, nil)
       end
-      response
     end
 
     private
 
-    attr_accessor :link, :bucket, :region
+    attr_accessor :link, :bucket, :region, :object, :media_type
   end
 end

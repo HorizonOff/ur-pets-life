@@ -81,16 +81,49 @@ module Api
       end
 
       def comment_params
-        params.require(:comment).permit(:message)
+        params.require(:comment).permit(:message, :mobile_image_url, :mobile_video_url)
       end
 
       def default_fields
         @default_fields ||= { title: title, message: message, created_at: created_at }
-        unless a_post?
+        if a_post?
+          @default_fields[:image] = image
+          @default_fields[:video] = video
+          @default_fields[:video_duration] = @parent_object.video_duration
+        else
           @default_fields[:unread_comments_count_by_user] = @parent_object.unread_comments_count_by_user
           @default_fields[:unread_commented_appointments_count] = (@user.unread_commented_appointments_count + @user.unread_commented_orders_count)
         end
         @default_fields
+      end
+
+      def image
+        @parent_object.image.file.blank? ? image_hash : @parent_object.image
+      end
+
+      def video
+        @parent_object.video.file.blank? ? video_hash : @parent_object.video
+      end
+
+      def image_hash
+        {
+          url: @parent_object.mobile_image_url,
+          medium: {
+            url: @parent_object.mobile_image_url
+          },
+          thumb: {
+            url: @parent_object.mobile_image_url
+          }
+        }
+      end
+
+      def video_hash
+        {
+          url: @parent_object.mobile_video_url,
+          thumb: {
+            url: nil
+          }
+        }
       end
 
       def title
