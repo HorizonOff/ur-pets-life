@@ -8,7 +8,7 @@ module Api
         posts = Post.where('created_at < ?', @created_at).order(created_at: :desc)
                     .includes(:user).limit(20)
 
-        posts = PostDecorator.decorate_collection(posts)
+        posts = ::Api::V1::PostDecorator.decorate_collection(posts)
         serialized_posts = ActiveModel::Serializer::CollectionSerializer.new(posts, serializer: PostSerializer)
         render json: { posts: serialized_posts, total_count: Post.count }
       end
@@ -25,7 +25,7 @@ module Api
       private
 
       def post_params
-        params.require(:post).permit(:title, :message, :pet_type_id)
+        params.require(:post).permit(:title, :message, :pet_type_id, :mobile_image_url, :mobile_video_url)
       end
     end
   end

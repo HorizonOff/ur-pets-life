@@ -120,3 +120,10 @@ gem 'rails_12factor', group: :production
 
 #flesh messages for cms
 gem 'toastr-rails'
+
+# fix dependency with roo
+gem 'zip-zip', '~> 0.3'
+
+#for video
+gem 'carrierwave-video'
+gem 'video_thumbnailer'
