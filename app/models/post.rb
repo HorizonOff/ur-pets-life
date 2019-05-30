@@ -19,6 +19,10 @@ class Post < ApplicationRecord
 
   after_commit :create_media_from_url, :create_user_post, on: :create
 
+  def update_counters(user_id)
+    user_posts.find_by(user_id: user_id)&.update_column(:unread_post_comments_count, 0)
+  end
+
   private
 
   def create_media_from_url
@@ -32,10 +36,6 @@ class Post < ApplicationRecord
 
   def ome_type_of_media
     errors.add(:base, 'Only image or video in one post') if image.present? && video.present?
-  end
-
-  def update_counters(user_id)
-    user_posts.find_by(user_id: user_id)&.update_column(:unread_post_comments_count, 0)
   end
 
   def create_user_post
