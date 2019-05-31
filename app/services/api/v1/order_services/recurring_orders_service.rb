@@ -16,9 +16,9 @@ module API
 
         def place_recurring_orders
           User.joins(:orders).includes(orders: :order_items).find_each do |user|
-            order_items = user.order_items.where('"IsRecurring" = true AND status = "delivered" AND
-                                                 next_recurring_due_date BETWEEN (?) AND (?)',
-                                                 @recrringDate.beginning_of_day, @recrringDate.end_of_day)
+            order_items = user.order_items.where(IsRecurring: true)
+                                          .where(status: 'delivered')
+                                          .where(next_recurring_due_date: @recrringDate.beginning_of_day..@recrringDate.end_of_day)
             next if order_items.blank?
 
             isoutofstock = false
@@ -29,15 +29,15 @@ module API
             is_user_from_company = discount.present?
             order_items.each do |cartitem|
               if discount.present? && cartitem.item.discount.zero?
-                @itemsprice += cartitem.item.price * ((100 - discount).to_f / 100) * cartitem.quantity
+                @itemsprice += cartitem.item.price * ((100 - discount).to_f / 100) * cartitem.Quantity
               else
-                @itemsprice += (cartitem.item.price * cartitem.quantity)
+                @itemsprice += (cartitem.item.price * cartitem.Quantity)
               end
-              @total_price_without_discount += (cartitem.item.price * cartitem.quantity)
+              @total_price_without_discount += (cartitem.item.price * cartitem.Quantity)
               if cartitem.item.discount > 0
-                @discounted_items_amount += (cartitem.item.price * cartitem.quantity)
+                @discounted_items_amount += (cartitem.item.price * cartitem.Quantity)
               end
-              isoutofstock = true if cartitem.item.quantity < cartitem.quantity
+              isoutofstock = true if cartitem.item.quantity < cartitem.Quantity
             end
             # return render json: { Message: 'Out of Stock', status: :out_of_stock } if isoutofstock == true
 
@@ -104,7 +104,7 @@ module API
                                                                   discount_per_transaction))
               @recurringorder.update(earned_points: discount_per_transaction)
 
-              send_order_sucess_alerts(orderitem, @recurringorder)
+              send_order_sucess_alerts(@recurringorder)
             else
               send_failure_alert_to_admin(orderitem.id)
             end
@@ -115,15 +115,12 @@ module API
           OrderMailer.send_recurring_failure_alert_to_admin(orderitemid).deliver
         end
 
-        def send_order_sucess_alerts(orderitem, recurringorder)
-          OrderMailer.send_recurring_success_alert_to_admin(orderitem.id).deliver
-          OrderMailer.send_recurring_success_alert_to_customer(orderitem.id).deliver
+        def send_order_sucess_alerts(recurringorder)
+          OrderMailer.send_recurring_success_alert_to_admin(recurringorder.id).deliver
+          OrderMailer.send_recurring_success_alert_to_customer(recurringorder.id).deliver
           @user = User.where(:id => recurringorder.user_id).first
-          @user.notifications.create(order: recurringorder, message: 'Your Order for Recurring Item ' + orderitem.item.name + ' has been placed.')
-        end
-
-        def perform_order_transaction(amount, desc, orderid, trans_ref)
-          API::V1::OrderServices::OnlinePaymentService.send_payment_request('sale', 'cont', trans_ref, desc, orderid, amount)
+          @user.notifications.create(order: recurringorder, message: 'Your recurring order is scheduled to be automatically placed and
+delivered tomorrow. If you wish to cancel please go to My Account/My Order History/Recurring')
         end
 
         def send_inventory_alerts(itemid)

@@ -252,7 +252,7 @@ module AdminPanel
 
     def filter_orders
       filtered_orders = filter_and_pagination_query.filter
-      filtered_orders = filtered_orders
+      filtered_orders = filtered_orders.visible
       decorated_data = ::AdminPanel::OrderDecorator.decorate_collection(filtered_orders)
       serialized_data = ActiveModel::Serializer::CollectionSerializer.new(
         decorated_data, serializer: ::AdminPanel::OrderSerializer, adapter: :attributes
@@ -279,7 +279,7 @@ module AdminPanel
     def export_data
       is_user_present = @@filtered_user_id > 0 ? false : true
 
-      @orders = Order.order(:id).includes({user: [:location]}, {order_items: [item: :item_brand]})
+      @orders = Order.visible.order(:id).includes({user: [:location]}, {order_items: [item: :item_brand]})
                                       .where("(users.id = (?) OR #{is_user_present}) AND order_status_flag = (?)", @@filtered_user_id, 'delivered').references(:user)
       if params[:from_date].present? && params[:to_date].present?
         @orders = @orders.created_in_range(params[:from_date].to_date.beginning_of_day, params[:to_date].to_date.end_of_day)

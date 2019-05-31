@@ -8,7 +8,7 @@ module Api
       # GET /orders
       # GET /orders.json
       def index
-        @orders = @user.orders
+        @orders = @user.orders.visible
         if @orders.nil? or @orders.empty?
           render :json => {
             Message: 'No Orders found'
