@@ -1105,7 +1105,8 @@ CREATE TABLE public.orders (
     comments_count integer DEFAULT 0 NOT NULL,
     company_discount double precision,
     is_user_from_company boolean DEFAULT false,
-    delivery_at timestamp without time zone
+    delivery_at timestamp without time zone,
+    is_pre_recurring boolean DEFAULT false
 );
 
 
@@ -1288,7 +1289,12 @@ CREATE TABLE public.posts (
     pet_type_id bigint,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    deleted_at timestamp without time zone
+    deleted_at timestamp without time zone,
+    mobile_image_url character varying,
+    image character varying,
+    video character varying,
+    video_duration integer,
+    mobile_video_url character varying
 );
 
 
@@ -1871,6 +1877,39 @@ ALTER SEQUENCE public.trainers_id_seq OWNED BY public.trainers.id;
 
 
 --
+-- Name: user_posts; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.user_posts (
+    id bigint NOT NULL,
+    user_id bigint,
+    post_id bigint,
+    unread_post_comments_count integer DEFAULT 0,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: user_posts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.user_posts_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: user_posts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.user_posts_id_seq OWNED BY public.user_posts.id;
+
+
+--
 -- Name: users; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1903,7 +1942,8 @@ CREATE TABLE public.users (
     commented_orders_count integer DEFAULT 0 NOT NULL,
     unread_commented_orders_count integer DEFAULT 0 NOT NULL,
     spends_eligble double precision DEFAULT 0.0 NOT NULL,
-    spends_not_eligble double precision DEFAULT 0.0 NOT NULL
+    spends_not_eligble double precision DEFAULT 0.0 NOT NULL,
+    unread_post_comments_count integer DEFAULT 0
 );
 
 
@@ -2419,6 +2459,13 @@ ALTER TABLE ONLY public.trainers ALTER COLUMN id SET DEFAULT nextval('public.tra
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY public.user_posts ALTER COLUMN id SET DEFAULT nextval('public.user_posts_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_id_seq'::regclass);
 
 
@@ -2831,6 +2878,14 @@ ALTER TABLE ONLY public.terms_and_conditions
 
 ALTER TABLE ONLY public.trainers
     ADD CONSTRAINT trainers_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: user_posts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.user_posts
+    ADD CONSTRAINT user_posts_pkey PRIMARY KEY (id);
 
 
 --
@@ -3841,6 +3896,20 @@ CREATE INDEX index_trainers_on_name ON public.trainers USING btree (name);
 
 
 --
+-- Name: index_user_posts_on_post_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_user_posts_on_post_id ON public.user_posts USING btree (post_id);
+
+
+--
+-- Name: index_user_posts_on_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_user_posts_on_user_id ON public.user_posts USING btree (user_id);
+
+
+--
 -- Name: index_users_on_confirmation_token; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -4082,6 +4151,14 @@ ALTER TABLE ONLY public.shopping_cart_items
 
 
 --
+-- Name: fk_rails_38a7c4b06f; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.user_posts
+    ADD CONSTRAINT fk_rails_38a7c4b06f FOREIGN KEY (post_id) REFERENCES public.posts(id);
+
+
+--
 -- Name: fk_rails_3e402078fd; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -4159,6 +4236,14 @@ ALTER TABLE ONLY public.cart_items
 
 ALTER TABLE ONLY public.notifications
     ADD CONSTRAINT fk_rails_636732d23d FOREIGN KEY (pet_id) REFERENCES public.pets(id);
+
+
+--
+-- Name: fk_rails_6c6a346128; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.user_posts
+    ADD CONSTRAINT fk_rails_6c6a346128 FOREIGN KEY (user_id) REFERENCES public.users(id);
 
 
 --
@@ -4556,6 +4641,10 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190514074821'),
 ('20190514114144'),
 ('20190516142135'),
-('20190520082024');
+('20190520082024'),
+('20190521112407'),
+('20190527071941'),
+('20190527113051'),
+('20190530123640');
 
 
