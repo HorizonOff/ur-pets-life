@@ -21,7 +21,7 @@ class Comment < ApplicationRecord
   mount_uploader :image, PhotoUploader
   mount_uploader :video, VideoUploader
 
-  after_commit :send_notification, :create_user_post, :update_unread_comments_count, on: :create
+  after_commit :send_notification, :create_media_from_url, :create_user_post, :update_unread_comments_count, on: :create
   after_commit :update_counters
 
   def send_notification

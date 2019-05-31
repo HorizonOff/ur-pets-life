@@ -7,6 +7,7 @@ module Api
         @created_at = Time.zone.at(params[:created_at].to_i)
         posts = Post.where('created_at < ?', @created_at).order(created_at: :desc)
                     .includes(:user).limit(20)
+
         posts = ::Api::V1::PostDecorator.decorate_collection(posts)
         serialized_posts = ActiveModel::Serializer::CollectionSerializer.new(posts, serializer: PostSerializer)
         render json: { posts: serialized_posts, total_count: Post.count }
