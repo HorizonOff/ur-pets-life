@@ -27,6 +27,8 @@ module AdminPanel
       @statusoption = [['On The Way', 'on_the_way'], ['Cancel', 'cancelled']]
     elsif @admin_panel_order.order_status_flag == 'on_the_way'
       @statusoption = [['Delievered', 'delivered'], ['Cancel', 'cancelled']]
+    elsif @admin_panel_order.order_status_flag == 'delivered'
+      @statusoption = [['Cancel', 'cancelled']]
     end
   end
 
