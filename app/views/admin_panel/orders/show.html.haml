@@ -60,6 +60,9 @@
               %li
                 Delivery At:
                 = @admin_panel_order.delivery_at&.strftime('%d/%m/%Y')
+              %li
+                Pre order:
+                = @admin_panel_order.is_pre_recurring?
 
               %p.title
                 %b Comments:

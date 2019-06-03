@@ -19,7 +19,6 @@ module AdminPanel
   # GET /admin_panel/orders/1
   # GET /admin_panel/orders/1.json
   def show
-
     @shippinglocation = Location.where(:id => @admin_panel_order.location_id).first
     @shippingaddress = (@shippinglocation.villa_number.blank? ? '' : (@shippinglocation.villa_number + ' '))  + (@shippinglocation.unit_number.blank? ? '' : (@shippinglocation.unit_number + ' ')) + (@shippinglocation.building_name.blank? ? '' : (@shippinglocation.building_name + ' ')) + (@shippinglocation.street.blank? ? '' : (@shippinglocation.street + ' ')) + (@shippinglocation.area.blank? ? '' : (@shippinglocation.area + ' ')) + (@shippinglocation.city.blank? ? '' : @shippinglocation.city)
     @orderitems = OrderItem.includes(:item).where(:order_id => @admin_panel_order.id)
@@ -31,7 +30,6 @@ module AdminPanel
     elsif @admin_panel_order.order_status_flag == 'on_the_way'
       @statusoption = [['Delievered', 'delivered']]
     end
-
   end
 
   # GET /admin_panel/orders/new
@@ -49,7 +47,6 @@ module AdminPanel
     @parent_object.update_attributes(:unread_comments_count_by_admin => 0)
     @comments = @parent_object.comments.includes(:writable).order(id: :desc).page(params[:page])
     @comment = @parent_object.comments.new
-
   end
   # POST /admin_panel/orders
   # POST /admin_panel/orders.json
@@ -252,7 +249,7 @@ module AdminPanel
 
     def filter_orders
       filtered_orders = filter_and_pagination_query.filter
-      filtered_orders = filtered_orders.visible
+      filtered_orders = filtered_orders
       decorated_data = ::AdminPanel::OrderDecorator.decorate_collection(filtered_orders)
       serialized_data = ActiveModel::Serializer::CollectionSerializer.new(
         decorated_data, serializer: ::AdminPanel::OrderSerializer, adapter: :attributes

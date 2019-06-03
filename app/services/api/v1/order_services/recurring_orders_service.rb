@@ -63,6 +63,8 @@ module API
                                         order_status_flag: 'pending', company_discount: company_discount,
                                         is_user_from_company: is_user_from_company)
             if @recurringorder.save
+              send_inventory_alerts(@recurringorder.id) if isoutofstock
+
               order_items.each do |cartitem|
                 neworderitemcreate = OrderItem.new(IsRecurring: false, order_id: @recurringorder.id,
                                                    item_id: cartitem.item.id, Quantity: cartitem.Quantity,
@@ -70,9 +72,12 @@ module API
                                                    IsReviewed: false, status: :pending,
                                                    isdiscounted: cartitem.item.discount.positive?)
                 neworderitemcreate.save
-                item = Item.where(id: cartitem.item.id).first
-                item.decrement!(:quantity, cartitem.Quantity)
-                send_inventory_alerts(item.id) if item.quantity < 3
+
+                unless isoutofstock
+                  item = Item.where(id: cartitem.item.id).first
+                  item.decrement!(:quantity, cartitem.Quantity)
+                  send_inventory_alerts(item.id) if item.quantity < 3
+                end
 
                 recurrion_interval = RecurssionInterval.where(id: cartitem.recurssion_interval_id).first
                 next_due_date = cartitem.next_recurring_due_date.to_date
@@ -125,6 +130,10 @@ delivered tomorrow. If you wish to cancel please go to My Account/My Order Histo
 
         def send_inventory_alerts(itemid)
           OrderMailer.send_low_inventory_alert(itemid).deliver
+        end
+
+        def send_empty_inventory_alerts(order_id)
+          OrderMailer.send_empty_inventory_alert(order_id).deliver
         end
       end
     end
