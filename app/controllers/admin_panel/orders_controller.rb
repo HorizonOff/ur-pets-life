@@ -275,7 +275,7 @@ module AdminPanel
     def export_data
       is_user_present = @@filtered_user_id > 0 ? false : true
 
-      @orders = Order.order(:id).includes({user: [:location]}, {order_items: [item: :item_brand]})
+      @orders = Order.order(:id).includes(:location, {user: [:location]}, {order_items: [item: :item_brand]})
                                       .where("(users.id = (?) OR #{is_user_present}) AND order_status_flag = (?)", @@filtered_user_id, 'delivered').references(:user)
       if params[:from_date].present? && params[:to_date].present?
         @orders = @orders.created_in_range(params[:from_date].to_date.beginning_of_day, params[:to_date].to_date.end_of_day)
