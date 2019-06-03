@@ -56,6 +56,8 @@ module AdminPanel
         @scope = scope.includes(:user).joins(:user)
       elsif model == 'Admin'
         @scope = scope.with_deleted
+      elsif model == 'Order'
+        @scope = scope.includes(:user, :location)
       end
     end
 
