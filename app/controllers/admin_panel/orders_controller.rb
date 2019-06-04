@@ -47,7 +47,6 @@ module AdminPanel
     @parent_object.update_attributes(:unread_comments_count_by_admin => 0)
     @comments = @parent_object.comments.includes(:writable).order(id: :desc).page(params[:page])
     @comment = @parent_object.comments.new
-
   end
   # POST /admin_panel/orders
   # POST /admin_panel/orders.json
@@ -278,7 +277,8 @@ module AdminPanel
       is_user_present = @@filtered_user_id > 0 ? false : true
 
       @orders = Order.order(:id).includes(:location, {user: [:location]}, {order_items: [item: :item_brand]})
-                                      .where("(users.id = (?) OR #{is_user_present}) AND order_status_flag = (?)", @@filtered_user_id, 'delivered').references(:user)
+                                .where("(users.id = (?) OR #{is_user_present}) AND order_status_flag = (?)",
+                                       @@filtered_user_id, 'delivered').references(:user)
       if params[:from_date].present? && params[:to_date].present?
         @orders = @orders.created_in_range(params[:from_date].to_date.beginning_of_day, params[:to_date].to_date.end_of_day)
       end

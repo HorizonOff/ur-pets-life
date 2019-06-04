@@ -1105,7 +1105,8 @@ CREATE TABLE public.orders (
     comments_count integer DEFAULT 0 NOT NULL,
     company_discount double precision,
     is_user_from_company boolean DEFAULT false,
-    delivery_at timestamp without time zone
+    delivery_at timestamp without time zone,
+    is_pre_recurring boolean DEFAULT false
 );
 
 
@@ -4643,5 +4644,6 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190520082024'),
 ('20190521112407'),
 ('20190527071941'),
-('20190527113051');
+('20190527113051'),
+('20190530123640');
 

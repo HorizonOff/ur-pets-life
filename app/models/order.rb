@@ -27,10 +27,17 @@ class Order < ApplicationRecord
   end)
 
   scope :deliver_or_created_in_range, (lambda do |from_date, to_date|
-    where('(delivery_at IS NOT NULL AND orders.delivery_at > :from_date AND orders.delivery_at < :to_date) OR
-          (delivery_at IS NULL AND orders.created_at > :from_date AND orders.created_at < :to_date)',
+    where('(orders.delivery_at IS NOT NULL AND orders.delivery_at > :from_date AND orders.delivery_at < :to_date) OR
+          (orders.delivery_at IS NULL AND orders.created_at > :from_date AND orders.created_at < :to_date)',
           from_date: from_date, to_date: to_date)
   end)
+
+  scope :yesterday, (lambda do
+    where('orders.created_at > ? AND orders.created_at < ?',
+          DateTime.yesterday.beginning_of_day, DateTime.yesterday.end_of_day)
+  end)
+
+  scope :visible, -> { where(is_pre_recurring: false) }
 
   private
 

@@ -43,11 +43,15 @@ module Api
               end
                property :item_id do
                 key :type, :integer
-                key :example, 1
+                key :example, 10
               end
               property :IsRecurring do
                 key :type, :boolean
                 key :example, false
+              end
+              property :IntervalId do
+                key :type, :integer
+                key :example, 1
               end
             end
           end

@@ -50,6 +50,7 @@ class User < ApplicationRecord
 
   has_many :orders
   has_many :user_posts, dependent: :destroy
+  has_many :order_items, through: :orders
   has_many :commented_orders, -> { where('comments_count > 0') }, class_name: 'Order'
   has_many :orders_with_new_comments, -> { where('unread_comments_count_by_user > 0') }, class_name: 'Order'
   has_one :redeem_point

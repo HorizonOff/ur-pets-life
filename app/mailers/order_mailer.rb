@@ -50,6 +50,11 @@ class OrderMailer < ApplicationMailer
     mail(to: ENV['ADMIN'], subject: 'Inventory Alert')
   end
 
+  def send_empty_inventory_alerts(order_id)
+    @order_ = Order.find_by(id: order_id)
+    mail(to: ENV['ADMIN'], subject: 'Inventory Alert')
+  end
+
   def send_order_cancellation_notification_to_admin(orderitemid)
     @orderitem = OrderItem.where(:id => orderitemid).first
     @itemName = Item.where(:id => @orderitem.item_id).first.name
@@ -69,16 +74,16 @@ class OrderMailer < ApplicationMailer
     mail(to: ENV['ADMIN'], subject: 'Recurring Order Failure Alert')
   end
 
-  def send_recurring_success_alert_to_admin(orderitemid)
-    @orderitem = OrderItem.includes(:item, order: :user).where(:id => orderitemid).first
-    @shippinglocation = Location.where(:id => @orderitem.order.location_id).first
+  def send_recurring_success_alert_to_admin(order_id)
+    @order = Order.find_by(id: order_id)
+    @shippinglocation = Location.find_by(id:  @order.location_id)
     @userAddress = (@shippinglocation.villa_number.blank? ? '' : (@shippinglocation.villa_number + ' '))  + (@shippinglocation.unit_number.blank? ? '' : (@shippinglocation.unit_number + ' ')) + (@shippinglocation.building_name.blank? ? '' : (@shippinglocation.building_name + ' ')) + (@shippinglocation.street.blank? ? '' : (@shippinglocation.street + ' ')) + (@shippinglocation.area.blank? ? '' : (@shippinglocation.area + ' ')) + (@shippinglocation.city.blank? ? '' : @shippinglocation.city)
     mail(to: ENV['ADMIN'], subject: 'System Placed Recurring Order Alert')
   end
 
-  def send_recurring_success_alert_to_customer(orderitemid)
-    @orderitem = OrderItem.includes(:item, order: :user).where(:id => orderitemid).first
-    @shippinglocation = Location.where(:id => @orderitem.order.location_id).first
+  def send_recurring_success_alert_to_customer(order_id)
+    @order = Order.find_by(id: order_id)
+    @shippinglocation = Location.find_by(id:  @order.location_id)
     @userAddress = (@shippinglocation.villa_number.blank? ? '' : (@shippinglocation.villa_number + ' '))  + (@shippinglocation.unit_number.blank? ? '' : (@shippinglocation.unit_number + ' ')) + (@shippinglocation.building_name.blank? ? '' : (@shippinglocation.building_name + ' ')) + (@shippinglocation.street.blank? ? '' : (@shippinglocation.street + ' ')) + (@shippinglocation.area.blank? ? '' : (@shippinglocation.area + ' ')) + (@shippinglocation.city.blank? ? '' : @shippinglocation.city)
     mail(to: @orderitem.order.user.email, subject: 'Recurring Order Alert')
   end
