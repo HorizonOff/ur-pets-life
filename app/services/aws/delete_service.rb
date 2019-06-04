@@ -13,7 +13,7 @@ module Aws
       return unless s3.bucket(@bucket).object(@link).exists?
 
       s3.bucket(@bucket).object(@link).delete
-      if media_type == 'video'
+      if media_type == 'video' && @object.present?
         @object.update_column(:mobile_video_url, nil)
       else
         @object.update_column(:mobile_image_url, nil)

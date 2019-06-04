@@ -145,6 +145,11 @@ Rails.application.routes.draw do
   devise_for :admins, path: 'admin_panel/admins', except: :registrations,
                       controllers: { invitations: 'admin_panel/admins/invitations' }
 
+  authenticate :admin do
+    require 'sidekiq/web'
+    mount Sidekiq::Web => '/sidekiq'
+  end
+
   namespace :admin_panel do
     root 'dashboard#index'
 
