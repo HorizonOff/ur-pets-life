@@ -85,7 +85,7 @@ class OrderMailer < ApplicationMailer
     @order = Order.find_by(id: order_id)
     @shippinglocation = Location.find_by(id:  @order.location_id)
     @userAddress = (@shippinglocation.villa_number.blank? ? '' : (@shippinglocation.villa_number + ' '))  + (@shippinglocation.unit_number.blank? ? '' : (@shippinglocation.unit_number + ' ')) + (@shippinglocation.building_name.blank? ? '' : (@shippinglocation.building_name + ' ')) + (@shippinglocation.street.blank? ? '' : (@shippinglocation.street + ' ')) + (@shippinglocation.area.blank? ? '' : (@shippinglocation.area + ' ')) + (@shippinglocation.city.blank? ? '' : @shippinglocation.city)
-    mail(to: @orderitem.order.user.email, subject: 'Recurring Order Alert')
+    mail(to: @order.user.email, subject: 'Recurring Order Alert')
   end
 
   def inform_about_comment(order_id)
