@@ -155,9 +155,6 @@ module Api
 
           response 200 do
             key :description, 'Success response'
-            schema do
-              key :'$ref', :ItemsResponse
-            end
           end
         end
       end
@@ -186,9 +183,6 @@ module Api
 
           response 200 do
             key :description, 'Success response'
-            schema do
-              key :'$ref', :ItemSearchResponse
-            end
           end
         end
       end
