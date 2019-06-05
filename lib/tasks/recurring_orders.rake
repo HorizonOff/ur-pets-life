@@ -6,7 +6,7 @@ namespace :recurring_orders do
 
   task make_recurring_orders_visible: :environment do
     Order.yesterday.where(is_pre_recurring: true).find_each do |order|
-      order.update_column(is_pre_recurring: false)
+      order.update_column(:is_pre_recurring, false)
     end
   end
 end
