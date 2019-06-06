@@ -166,8 +166,9 @@ function init_datatables(){
                              { 'searchable': false, 'orderable': false, 'data': 'Payment_Status', 'targets': 7},
                              { 'searchable': true, 'orderable': false, 'data': 'is_viewed', 'targets': 8 },
                              { 'searchable': true, 'orderable': false, 'data': 'order_status_flag', 'targets': 9 },
-                             { 'searchable': false, 'orderable': true, 'data': 'created_at', 'targets': 10 },
-                             { 'searchable': false, 'orderable': false, 'data': 'actions', 'targets': 11 } ] },
+                             { 'searchable': true, 'orderable': false, 'data': 'is_pre_recurring', 'targets': 10 },
+                             { 'searchable': false, 'orderable': true, 'data': 'created_at', 'targets': 11 },
+                             { 'searchable': false, 'orderable': false, 'data': 'actions', 'targets': 12 } ] },
 
       'specializations': { 'url': '/admin_panel/specializations',
                            'columns': [ { 'searchable': true, 'orderable': true, 'data': 'id', 'targets': 0 },
