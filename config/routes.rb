@@ -225,7 +225,7 @@ Rails.application.routes.draw do
       member { get :new_reply }
       member { post :send_reply }
     end
-    resources :posts, only: %i[index show destroy], shallow: true do
+    resources :posts, only: %i[index new create show destroy], shallow: true do
       resources :comments, only: %i[index create]
     end
     resources :comments, only: :destroy

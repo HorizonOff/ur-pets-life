@@ -88,7 +88,7 @@ function init_datatables(){
                                      { 'searchable': false, 'orderable': false, 'data': 'actions', 'targets': 7 } ] },
       'posts': { 'url': '/admin_panel/posts',
                  'columns': [ { 'searchable': true, 'orderable': true, 'data': 'id', 'targets': 0 },
-                              { 'searchable': true, 'orderable': false, 'data': 'name', 'targets': 1 },
+                              { 'searchable': true, 'orderable': false, 'data': 'user_name', 'targets': 1 },
                               { 'searchable': true, 'orderable': false, 'data': 'title', 'targets': 2 },
                                { 'searchable': true, 'orderable': true, 'data': 'pet_type_id', 'targets': 3 },
                               { 'searchable': false, 'orderable': true, 'data': 'created_at', 'targets': 4 },

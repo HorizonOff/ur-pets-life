@@ -16,6 +16,7 @@ class Admin < ApplicationRecord
   has_many :notifications
 
   has_many :comments, as: :writable, dependent: :destroy
+  has_many :posts, as: :author, class_name: 'Post', dependent: :destroy
 
   has_many :vets, through: :clinic
 

@@ -64,7 +64,7 @@ class User < ApplicationRecord
   has_many :appointments
   has_many :commented_appointments, -> { where('comments_count > 0') }, class_name: 'Appointment'
   has_many :appointments_with_new_comments, -> { where('unread_comments_count_by_user > 0') }, class_name: 'Appointment'
-  has_many :posts
+  has_many :posts, as: :author, class_name: 'Post', dependent: :destroy
   has_many :comments, as: :writable, dependent: :destroy
   has_many :notifications
   has_many :unread_notifications, -> { where(viewed_at: nil) }, class_name: 'Notification'

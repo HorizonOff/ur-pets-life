@@ -32,12 +32,12 @@ class Comment < ApplicationRecord
     elsif (commentable_type == 'Order' and writable_type == 'User')
       EmailOrderCommentWorker.perform_async(commentable_id)
     elsif commentable_type == 'Post'
-      if commentable.user_id != writable.id
-        PushSendingPostCommentWorker.perform_async(id, commentable_id, commentable.user_id)
+      if commentable.author != writable && commentable.author_type != 'Admin'
+        PushSendingPostCommentWorker.perform_async(id, commentable_id, commentable.author_id)
       end
       array = []
       commentable.comments.each do |comment|
-        next if comment.writable_id == writable.id || comment.writable_id == commentable.user_id ||
+        next if comment.writable == writable || comment.writable == commentable.author ||
                 comment.writable_id.in?(array)
 
         PushSendingPostCommentWorker.perform_async(id, commentable_id, comment.writable_id)

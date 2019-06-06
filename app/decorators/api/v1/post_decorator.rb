@@ -16,6 +16,10 @@ module Api
         model.created_at.to_i
       end
 
+      def user_name
+        model.author_type == 'User' ? model.author.first_name + ' ' + model.author.last_name : model.author.name
+      end
+
       def unread_post_comments_count
         model.user_posts.find_by(user_id: h.current_user&.id)&.unread_post_comments_count
       end

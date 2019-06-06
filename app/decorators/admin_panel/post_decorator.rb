@@ -3,6 +3,10 @@ module AdminPanel
     decorates :post
     delegate_all
 
+    def user_name
+      model.author_type == 'User' ? model.author.first_name + ' ' + model.author.last_name : model.author.name
+    end
+
     def created_at
       model.created_at.strftime('%-d %b %Y %I:%M %p')
     end
