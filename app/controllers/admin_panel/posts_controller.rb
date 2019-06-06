@@ -1,12 +1,27 @@
 module AdminPanel
   class PostsController < AdminPanelController
     before_action :authorize_super_admin
-    before_action :set_post, only: :destroy
+    before_action :set_post, only: %i[destroy create]
 
     def index
       respond_to do |format|
         format.html {}
         format.json { filter_posts }
+      end
+    end
+
+    def new
+      @post = Post.new
+    end
+
+    def create
+      @post = current_admin.posts.new(post_params)
+      if @post.save
+        flash[:success] = 'Post was successfully created'
+        redirect_to admin_panel_posts_path
+      else
+        flash[:error] = "Post wasn't created"
+        render :new
       end
     end
 
@@ -28,6 +43,10 @@ module AdminPanel
 
     def set_post
       @post = Post.find_by(id: params[:id])
+    end
+
+    def post_params
+      params.require(:post).permit(:image, :video, :pet_type_id, :title, :message)
     end
 
     def filter_posts

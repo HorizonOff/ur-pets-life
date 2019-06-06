@@ -1,5 +1,5 @@
 class Post < ApplicationRecord
-  belongs_to :user, -> { with_deleted }
+  belongs_to :author, -> { with_deleted }, polymorphic: true
   belongs_to :pet_type
 
   has_many :comments, as: :commentable, dependent: :destroy
@@ -14,8 +14,8 @@ class Post < ApplicationRecord
   # validates :message, presence: { message: 'Message is required' }
   validate :content_should_be_valid, :ome_type_of_media
 
-  delegate :name, to: :user, prefix: true
-  delegate :avatar, to: :user, allow_nil: true
+  delegate :name, to: :author, prefix: true
+  delegate :avatar, to: :author, allow_nil: true
 
   after_commit :create_media_from_url, :create_user_post, on: :create
 
@@ -39,8 +39,8 @@ class Post < ApplicationRecord
   end
 
   def create_user_post
-    return if user.user_posts.where(post_id: id).any?
+    return if author_type == 'Admin' || author.user_posts.where(post_id: id).any?
 
-    user.user_posts.create(post_id: id)
+    author.user_posts.create(post_id: id)
   end
 end
