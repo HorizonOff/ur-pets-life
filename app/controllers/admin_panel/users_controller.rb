@@ -77,7 +77,8 @@ module AdminPanel
     end
 
     def user_params
-      params.require(:user).permit(:first_name, :last_name, :mobile_number, :gender, :birthday, :email,
+      params.require(:user).permit(:first_name, :last_name, :mobile_number, :gender, :birthday, :email, :spends_eligble,
+                                   :spends_not_eligble,
                                    location_attributes: location_params,
                                    redeem_point_attributes: redeem_point_params)
     end
