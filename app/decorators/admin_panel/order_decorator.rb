@@ -23,6 +23,12 @@ module AdminPanel
     elsif model.order_status_flag == "delivered"
       span_class = 'label-success'
       text = "Delivered"
+    elsif model.order_status_flag == "delivered_by_card"
+      span_class = 'label-success'
+      text = "Delivered by card"
+    elsif model.order_status_flag == "delivered_by_cash"
+      span_class = 'label-success'
+      text = "Delivered by cash"
     elsif model.order_status_flag == "cancelled"
       span_class = 'label-danger'
       text = "Cancelled"
@@ -34,7 +40,7 @@ module AdminPanel
   end
 
   def IsCash
-    text = model.IsCash? ? 'Yes' : 'No'
+    text = model.IsCash? ? 'Telr' : 'COD'
     span_class = model.IsCash? ? 'label-default' : 'label-info'
     content_tag(:span, text, class: "label #{span_class}")
   end

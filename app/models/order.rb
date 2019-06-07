@@ -3,7 +3,10 @@ class Order < ApplicationRecord
   belongs_to :location
   has_many :order_items
   has_many :notifications
-  enum order_status_flag: { pending: "pending", confirmed: "confirmed", on_the_way: "on_the_way", delivered: "delivered", cancelled: "cancelled" }, _prefix: :order_status_flag
+  enum order_status_flag: { pending: "pending", confirmed: "confirmed", on_the_way: "on_the_way",
+                            delivered: "delivered", delivered_by_card: "delivered_by_card",
+                            delivered_by_cash: "delivered_by_cash",
+                            cancelled: "cancelled" }, _prefix: :order_status_flag
 
   acts_as_paranoid without_default_scope: true
 
