@@ -31,6 +31,8 @@ CREATE TYPE public.order_item_status AS ENUM (
     'confirmed',
     'on_the_way',
     'delivered',
+    'delivered_by_cash',
+    'delivered_by_card',
     'cancelled'
 );
 
@@ -1105,7 +1107,8 @@ CREATE TABLE public.orders (
     comments_count integer DEFAULT 0 NOT NULL,
     company_discount double precision,
     is_user_from_company boolean DEFAULT false,
-    delivery_at timestamp without time zone
+    delivery_at timestamp without time zone,
+    is_pre_recurring boolean DEFAULT false
 );
 
 
@@ -1281,7 +1284,6 @@ ALTER SEQUENCE public.pictures_id_seq OWNED BY public.pictures.id;
 
 CREATE TABLE public.posts (
     id bigint NOT NULL,
-    user_id bigint,
     title character varying,
     message text,
     comments_count integer DEFAULT 0,
@@ -1293,7 +1295,9 @@ CREATE TABLE public.posts (
     image character varying,
     video character varying,
     video_duration integer,
-    mobile_video_url character varying
+    mobile_video_url character varying,
+    author_type character varying,
+    author_id bigint
 );
 
 
@@ -3685,6 +3689,13 @@ CREATE INDEX index_pictures_on_picturable_type_and_picturable_id ON public.pictu
 
 
 --
+-- Name: index_posts_on_author_type_and_author_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_posts_on_author_type_and_author_id ON public.posts USING btree (author_type, author_id);
+
+
+--
 -- Name: index_posts_on_deleted_at; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3696,13 +3707,6 @@ CREATE INDEX index_posts_on_deleted_at ON public.posts USING btree (deleted_at);
 --
 
 CREATE INDEX index_posts_on_pet_type_id ON public.posts USING btree (pet_type_id);
-
-
---
--- Name: index_posts_on_user_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_posts_on_user_id ON public.posts USING btree (user_id);
 
 
 --
@@ -4206,14 +4210,6 @@ ALTER TABLE ONLY public.pets
 
 
 --
--- Name: fk_rails_5b5ddfd518; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.posts
-    ADD CONSTRAINT fk_rails_5b5ddfd518 FOREIGN KEY (user_id) REFERENCES public.users(id);
-
-
---
 -- Name: fk_rails_5b9551c291; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -4643,5 +4639,10 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190520082024'),
 ('20190521112407'),
 ('20190527071941'),
-('20190527113051');
+('20190527113051'),
+('20190530123640'),
+('20190606115107'),
+('20190607124136'),
+('20190607125447');
+
 
