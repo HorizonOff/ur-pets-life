@@ -25,6 +25,8 @@ module AdminPanel
       @statusoption = [['Confirm', 'confirmed'], ['Cancel', 'cancelled']]
     elsif @admin_panel_order.order_status_flag == 'confirmed'
       @statusoption = [['On The Way', 'on_the_way'], ['Cancel', 'cancelled']]
+    elsif @admin_panel_order.order_status_flag == 'on_the_way' && !@admin_panel_order.IsCash?
+      @statusoption = [['Delivered', 'delivered'], ['Cancel', 'cancelled']]
     elsif @admin_panel_order.order_status_flag == 'on_the_way'
       @statusoption = [['Delivered by card', 'delivered_by_card'], ['Delivered by cash', 'delivered_by_cash'], ['Cancel', 'cancelled']]
     elsif @admin_panel_order.order_status_flag.in?(['delivered', 'delivered_by_card', 'delivered_by_cash'])

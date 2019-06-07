@@ -40,7 +40,7 @@ module AdminPanel
   end
 
   def IsCash
-    text = model.IsCash? ? 'Telr' : 'COD'
+    text = model.IsCash? ? 'COD' : 'Telr'
     span_class = model.IsCash? ? 'label-default' : 'label-info'
     content_tag(:span, text, class: "label #{span_class}")
   end
