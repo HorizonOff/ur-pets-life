@@ -31,6 +31,8 @@ CREATE TYPE public.order_item_status AS ENUM (
     'confirmed',
     'on_the_way',
     'delivered',
+    'delivered_by_cash',
+    'delivered_by_card',
     'cancelled'
 );
 
@@ -4639,6 +4641,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190527071941'),
 ('20190527113051'),
 ('20190530123640'),
-('20190606115107');
-
+('20190606115107'),
+('20190607124136'),
+('20190607125447');
 

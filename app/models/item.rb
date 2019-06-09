@@ -15,6 +15,7 @@ class Item < ApplicationRecord
   end)
 
   scope :active, -> { where(is_active: true) }
+  scope :sale, -> { where('items.discount > 0') }
 
   def smart_destroy
     any_item_relitions? ? really_destroy! : destroy
