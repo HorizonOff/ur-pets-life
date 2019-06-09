@@ -40,7 +40,7 @@
                 %th Notes
                 %th SubTotal
                 %th Net Payable
-                %th IsCash
+                %th Mode of Payment
                 %th Payment Status
                 %th Status
                 %th Order Status
@@ -59,7 +59,7 @@
                 %th
                   = select_tag :is_viewed, options_for_select([[], ['New', 'false'], ['Older', 'true']]), class: 'form-control select2'
                 %th
-                  = select_tag :order_status_flag, options_for_select([[], ['Pending', 'pending'], ['Confirmed', 'confirmed'], ['On The Way', 'on_the_way'], ['Delivered', 'delivered'], ['Cancelled', 'cancelled']]), class: 'form-control select2'
+                  = select_tag :order_status_flag, options_for_select([[], ['Pending', 'pending'], ['Confirmed', 'confirmed'], ['On The Way', 'on_the_way'], ['Delivered', 'delivered'], ['Delivered by card', 'delivered_by_card'], ['Delivered by cash', 'delivered_by_cash'], ['Cancelled', 'cancelled']]), class: 'form-control select2'
                 %th
                 %th
             %tbody
