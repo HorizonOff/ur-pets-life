@@ -5,7 +5,7 @@
       .clearfix
     .x_content
       %br
-      
+
       .form-group
         = f.label :first_name, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
           First Name
@@ -36,3 +36,11 @@
         = f.label :gender, class: 'control-label col-md-3 col-sm-3 col-xs-12'
         .col-md-9.col-sm-9.col-xs-12
           = f.select :gender, options_for_select([['male', 0], ['female', 1]], User.genders[@user.gender]), { include_blank: true }, { class: 'form-control select2' }
+      .form-group
+        = f.label :spends_eligble, class: 'control-label col-md-3 col-sm-3 col-xs-12'
+        .col-md-9.col-sm-9.col-xs-12
+          = f.number_field :spends_eligble, class: 'form-control', step: ".01"
+      .form-group
+        = f.label :spends_not_eligble, class: 'control-label col-md-3 col-sm-3 col-xs-12'
+        .col-md-9.col-sm-9.col-xs-12
+          = f.number_field :spends_not_eligble, class: 'form-control', step: ".01"
