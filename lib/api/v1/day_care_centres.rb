@@ -167,6 +167,10 @@ module Api
           key :produces, %w[application/json]
           key :tags, %W[Day\ Care\ Centres]
 
+          security do
+            key :api_key, []
+          end
+
           parameter do
             key :name, :longitude
             key :in, :query

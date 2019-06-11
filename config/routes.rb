@@ -234,5 +234,6 @@ Rails.application.routes.draw do
 
     resource :app_version, only: %i[edit update]
     resources :tax_reports, only: %i[index]
+    resources :my_second_house_member_invitations, only: %i[index new create]
   end
 end

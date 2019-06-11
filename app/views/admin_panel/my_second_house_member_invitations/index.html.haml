@@ -1,0 +1,28 @@
+- content_for :head do
+  %meta{name: "turbolinks-cache-control", content:"no-cache"}
+%div
+  .page-title
+    .title_left
+      %h3 My Second House member invitation
+    .title_right
+      = link_to 'Add New', new_admin_panel_my_second_house_member_invitation_path, class: 'btn btn-info btn-round pull-right'
+
+  .clearfix
+
+  .row
+    .col-md-12.col-sm-12.col-xs-12
+      .x_panel
+        .x_content
+          %table.table.datatable.my_second_house_member_invitations
+            %thead
+              %tr
+                %th{style: 'width:30px'}  #
+                %th Email
+                %th Create at
+              %tr
+                %th{style: 'width:30px'}
+                  = text_field_tag :id, '', class: 'form-control', style: 'width:100%'
+                %th
+                  = text_field_tag :email, '', class: 'form-control', style: 'width:100%'
+                %th
+            %tbody
