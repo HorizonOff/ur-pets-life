@@ -45,7 +45,9 @@ class Order < ApplicationRecord
   private
 
   def set_delivery_at
-    return unless saved_change_to_attribute?(:order_status_flag, to: 'delivered')
+    return unless saved_change_to_attribute?(:order_status_flag, to: 'delivered') ||
+                  saved_change_to_attribute?(:order_status_flag, to: 'delivered_by_card') ||
+                  saved_change_to_attribute?(:order_status_flag, to: 'delivered_by_cash')
 
     update_column(:delivery_at, Time.current)
   end
