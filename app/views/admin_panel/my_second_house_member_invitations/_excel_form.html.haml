@@ -1,0 +1,13 @@
+.row
+  .col-md-6.col-sm-6.col-xs-12
+    .x_panel
+      .x_title
+        %h2 Create invitation by execel
+        .clearfix
+      .x_content
+        %br
+
+
+        - form_tag import_products_path, multipart: true do
+          = file_field_tag :file
+          = submit_tag "Import"
