@@ -10,7 +10,7 @@ module AdminPanel
     end
 
     def new
-      @post = Post.new
+      @invitation = MySecondHouseMemberInvitation.new
     end
 
     def create

@@ -1,0 +1,18 @@
+.row
+  = render partial: 'layouts/admin_panel/errors', locals: { object: @invitation }
+
+  .col-md-6.col-sm-6.col-xs-12
+    .x_panel
+      .x_title
+        %h2 New invitation
+        .clearfix
+      .x_content
+        %br
+
+
+        .form-group
+          = f.label :email, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
+            Title
+          .col-md-9.col-sm-9.col-xs-12
+            = f.text_field :email, class: 'form-control'
+
