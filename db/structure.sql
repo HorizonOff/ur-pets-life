@@ -996,6 +996,37 @@ ALTER SEQUENCE public.locations_id_seq OWNED BY public.locations.id;
 
 
 --
+-- Name: my_second_house_member_invitations; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.my_second_house_member_invitations (
+    id bigint NOT NULL,
+    email character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: my_second_house_member_invitations_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.my_second_house_member_invitations_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: my_second_house_member_invitations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.my_second_house_member_invitations_id_seq OWNED BY public.my_second_house_member_invitations.id;
+
+
+--
 -- Name: notifications; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -2308,6 +2339,13 @@ ALTER TABLE ONLY public.locations ALTER COLUMN id SET DEFAULT nextval('public.lo
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY public.my_second_house_member_invitations ALTER COLUMN id SET DEFAULT nextval('public.my_second_house_member_invitations_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY public.notifications ALTER COLUMN id SET DEFAULT nextval('public.notifications_id_seq'::regclass);
 
 
@@ -2697,6 +2735,14 @@ ALTER TABLE ONLY public.items
 
 ALTER TABLE ONLY public.locations
     ADD CONSTRAINT locations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: my_second_house_member_invitations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.my_second_house_member_invitations
+    ADD CONSTRAINT my_second_house_member_invitations_pkey PRIMARY KEY (id);
 
 
 --
@@ -4643,5 +4689,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190530123640'),
 ('20190606115107'),
 ('20190607124136'),
-('20190607125447');
+('20190607125447'),
+('20190610125009');
+
 

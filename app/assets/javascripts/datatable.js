@@ -175,6 +175,11 @@ function init_datatables(){
                                         { 'searchable': true, 'orderable': true, 'data': 'is_for_trainer', 'targets': 2 },
                                         { 'searchable': false, 'orderable': false, 'data': 'actions', 'targets': 3 } ] },
 
+      'my_second_house_member_invitations': { 'url': '/admin_panel/my_second_house_member_invitations',
+                           'columns': [ { 'searchable': true, 'orderable': true, 'data': 'id', 'targets': 0 },
+                                        { 'searchable': true, 'orderable': true, 'data': 'email', 'targets': 1 },
+                                        { 'searchable': false, 'orderable': false, 'data': 'created_at', 'targets': 2 } ] },
+
       'discount_domains': { 'url': '/admin_panel/discount_domains', 'order_col': 2, 'order_dir': 'desc',
                            'columns': [ { 'searchable': true, 'orderable': true, 'data': 'domain', 'targets': 0 },
                                         { 'searchable': true, 'orderable': true, 'data': 'discount', 'targets': 1 },
@@ -222,6 +227,8 @@ function init_datatables(){
       init_datatable(table_rules['orders']['url'], table_rules['orders']['columns'], 0, 'desc')
     } else if (datatable.hasClass('discount_domains')){
       init_datatable(table_rules['discount_domains']['url'], table_rules['discount_domains']['columns'], table_rules['discount_domains']['order_col'], table_rules['discount_domains']['order_dir'])
+    } else if (datatable.hasClass('my_second_house_member_invitations')){
+      init_datatable(table_rules['my_second_house_member_invitations']['url'], table_rules['my_second_house_member_invitations']['columns'], 0, 'desc')
     } else {
       init_datatable(table_rules['specializations']['url'], table_rules['specializations']['columns'])
     }
