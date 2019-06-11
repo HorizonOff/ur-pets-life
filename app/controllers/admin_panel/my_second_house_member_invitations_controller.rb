@@ -1,6 +1,7 @@
 module AdminPanel
   class MySecondHouseMemberInvitationsController < AdminPanelController
     before_action :authorize_super_admin
+    before_action :set_invitation, only: :destroy
 
     def index
       respond_to do |format|
@@ -14,38 +15,28 @@ module AdminPanel
     end
 
     def create
-      @post = current_admin.posts.new(post_params)
-      if @post.save
-        flash[:success] = 'Post was successfully created'
-        redirect_to admin_panel_posts_path
+      @invitation = MySecondHouseMemberInvitation.new(email: params[:my_second_house_member_invitation][:email])
+      if @invitation.save
+        flash[:success] = 'Invitation was successfully created'
+        redirect_to admin_panel_my_second_house_member_invitations_path
       else
-        flash[:error] = "Post wasn't created"
+        flash[:error] = "Invitation wasn't created"
         render :new
       end
     end
 
-    def show
-      @parent_object = Post.find_by(id: params[:id])
-      @comments = @parent_object.comments.includes(:writable).order(id: :desc).page(params[:page])
-      @comment = @parent_object.comments.new
-    end
-
     def destroy
-      if @post.destroy
-        render json: { message: 'Post was deleted' }
+      if @invitation.destroy
+        render json: { message: 'Invitation was deleted' }
       else
-        render json: { errors: @post.errors.full_messages }, status: 422
+        render json: { errors: @invitation.errors.full_messages }, status: 422
       end
     end
 
     private
 
-    def set_post
-      @post = Post.find_by(id: params[:id])
-    end
-
-    def post_params
-      params.require(:post).permit(:image, :video, :pet_type_id, :title, :message)
+    def set_invitation
+      @invitation = MySecondHouseMemberInvitation.find_by(id: params[:id])
     end
 
     def filter_invitations

@@ -4,6 +4,7 @@ class MySecondHouseMemberInvitation < ApplicationRecord
   private
 
   def send_invitation
-    InvitationWorker.perform_async(id)
+    # InvitationWorker.perform_async(id)
+    InvitationMailer.invite_my_second_house_member(id).deliver
   end
 end

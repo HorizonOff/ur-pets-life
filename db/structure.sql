@@ -1977,7 +1977,8 @@ CREATE TABLE public.users (
     unread_commented_orders_count integer DEFAULT 0 NOT NULL,
     spends_eligble double precision DEFAULT 0.0 NOT NULL,
     spends_not_eligble double precision DEFAULT 0.0 NOT NULL,
-    unread_post_comments_count integer DEFAULT 0
+    unread_post_comments_count integer DEFAULT 0,
+    is_msh_member boolean DEFAULT false
 );
 
 
@@ -4690,6 +4691,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190606115107'),
 ('20190607124136'),
 ('20190607125447'),
-('20190610125009');
+('20190610125009'),
+('20190611081442');
 
 
