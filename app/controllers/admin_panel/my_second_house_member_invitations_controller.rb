@@ -33,6 +33,12 @@ module AdminPanel
       end
     end
 
+    def import
+      MySecondHouseMemberInvitation.import(params[:file])
+
+      redirect_to admin_panel_my_second_house_member_invitations_path, notice: 'Invitations imported.'
+    end
+
     private
 
     def set_invitation
