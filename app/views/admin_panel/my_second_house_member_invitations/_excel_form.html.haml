@@ -2,12 +2,13 @@
   .col-md-6.col-sm-6.col-xs-12
     .x_panel
       .x_title
-        %h2 Create invitation by execel
+        %h2 Import invitations from execel
         .clearfix
       .x_content
         %br
 
 
-        - form_tag import_products_path, multipart: true do
-          = file_field_tag :file
-          = submit_tag "Import"
+        = form_tag import_admin_panel_my_second_house_member_invitations_path, multipart: true do
+          = file_field_tag :file, class: 'form-control'
+          %br
+          = submit_tag "Import", class: 'btn btn-success pull-right'
