@@ -40,8 +40,6 @@ class ItemsController < Api::BaseController
       if (!params[:pageno].nil? and !params[:size].nil?)
         size = params[:size].to_i
         page = params[:pageno].to_i
-        # Fast fix after deploy mobile remove
-        size = 1000 if params[:sale_only].in?([true, 'true'])
 
         @items = Item.where("price BETWEEN (?) AND  (?) AND avg_rating BETWEEN (?) AND (?) AND (#{brand_filter} OR item_brand_id = (?)) AND (#{cat_filter} OR item_categories_id = (?)) AND (#{pet_filter} OR pet_type_id = (?))", params[:lowerprice], params[:upperprice], params[:minrating], params[:maxrating], params[:brand_id], params[:category_id], params[:pet_type_id]).limit(size).offset(page * size)
       else
@@ -55,8 +53,6 @@ class ItemsController < Api::BaseController
       if (!params[:pageno].nil? and !params[:size].nil?)
         size = params[:size].to_i
         page = params[:pageno].to_i
-        # Fast fix after deploy mobile remove
-        size = 1000 if params[:sale_only].in?([true, 'true'])
 
         @items = Item.includes(:item_brand).where("(lower(item_brands.name) LIKE (?) OR lower(items.name) LIKE (?)) AND price BETWEEN (?) AND  (?) AND avg_rating BETWEEN (?) AND (?) AND (#{brand_filter} OR item_brand_id = (?)) AND (#{cat_filter} OR item_categories_id = (?)) AND (#{pet_filter} OR pet_type_id = (?))", key.downcase, key.downcase, params[:lowerprice], params[:upperprice], params[:minrating], params[:maxrating], params[:brand_id], params[:category_id], params[:pet_type_id]).references(:item_brand).limit(size).offset(page * size)
       else
