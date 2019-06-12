@@ -54,12 +54,22 @@ Rails.application.configure do
   config.action_mailer.delivery_method = :letter_opener
   config.action_mailer.default_url_options = { host: ENV['HOST_NAME'], port: 3000 }
   config.reload_classes_only_on_change = false
+  # config.action_mailer.smtp_settings = {
+  #   address: 'smtp.gmail.com',
+  #   port: 587,
+  #   user_name: ENV['GMAIL_USERNAME'],
+  #   password: ENV['GMAIL_PASSWORD'],
+  #   authentication: :plain,
+  #   enable_starttls_auto: true
+  # }
+
   config.action_mailer.smtp_settings = {
-    address: 'smtp.gmail.com',
-    port: 587,
-    user_name: ENV['GMAIL_USERNAME'],
-    password: ENV['GMAIL_PASSWORD'],
-    authentication: :plain,
+    address:              'smtp.sendgrid.net',
+    port:                 587,
+    domain:               'urpetslife.com',
+    user_name:            ENV['SENDGRID_USERNAME'],
+    password:             ENV['SENDGRID_PASSWORD'],
+    authentication:       :plain,
     enable_starttls_auto: true
   }
 
