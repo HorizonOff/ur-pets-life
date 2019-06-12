@@ -70,13 +70,13 @@ class ItemsController < Api::BaseController
       @items = @items.order(created_at: :asc)
     end
     json_to_render = []
+    @items = @items.active.includes(:wishlists)
+    @items = @items.sale if params[:sale_only].in?([true, 'true'])
     if @items.nil? or @items.empty?
       render json: {
         Message: 'No Items found'
       }
     else
-      @items = @items.active.includes(:wishlists)
-      @items = @items.sale if params[:sale_only].in?([true, 'true'])
       @items.each do |myitem|
         json_to_render << ({
           :item => myitem.as_json(:only => [:id, :picture, :name, :price, :unit_price, :discount, :description, :weight, :unit, :rating, :review_count, :avg_rating, :quantity, :short_description]),
