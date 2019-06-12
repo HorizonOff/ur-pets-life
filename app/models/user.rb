@@ -127,7 +127,7 @@ class User < ApplicationRecord
       user_order.order_items.each do |item|
         next if item.status == 'cancelled'
 
-        if item.isdiscounted?
+        if item.isdiscounted? || user_order.is_user_from_company?
           spends_not_eligble += item.Total_Price
         elsif redeem_points > item.Total_Price
           spends_eligble += 0
