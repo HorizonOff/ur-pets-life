@@ -15,7 +15,7 @@ module AdminPanel
     end
 
     def create
-      @invitation = MySecondHouseMemberInvitation.new(email: params[:my_second_house_member_invitation][:email])
+      @invitation = MySecondHouseMemberInvitation.new(invitation_params)
       if @invitation.save
         flash[:success] = 'Invitation was successfully created'
         redirect_to admin_panel_my_second_house_member_invitations_path
@@ -40,6 +40,10 @@ module AdminPanel
     end
 
     private
+
+    def invitation_params
+      params.require(:my_second_house_member_invitation).permit(:name, :email)
+    end
 
     def set_invitation
       @invitation = MySecondHouseMemberInvitation.find_by(id: params[:id])

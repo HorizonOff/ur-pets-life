@@ -5,8 +5,9 @@ class MySecondHouseMemberInvitation < ApplicationRecord
     spreadsheet = Roo::Spreadsheet.open(file.path)
     header = spreadsheet.row(1)
     (2..spreadsheet.last_row).each do |i|
+      # binding.pry
       row = Hash[[header, spreadsheet.row(i)].transpose]
-      create(name: row["Name"], email: row["Email Address"])
+      create(name: row.first[1], email: row["Email Address"])
     end
   end
 
