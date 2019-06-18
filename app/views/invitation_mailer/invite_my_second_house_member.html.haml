@@ -1,1 +1,15 @@
+Hi #{@invitation.name.present? ? @invitation.name : @invitation.email },
+%br
 %p In an effort of automating our booking & invoicing system, My Second Home would like to invite you to start doing all your bookings on Ur Pets Life mobile application where My Second Home now has exclusivity over the Boarding / Day Care & Grooming Section
+
+%p Download links:
+= link_to 'https://apps.apple.com/ua/app/ur-pets-life/id1356559735' do
+  = image_tag('landing/app-store-badge.png')
+= link_to 'https://play.google.com/store/apps/details?id=com.foxtrapp.pets' do
+  = image_tag('landing/google-play-badge.png', class: 'store-button')
+%br
+%br
+If you are not My Second House member
+= link_to 'unsubscribe', @unsubscribe
+%br
+For any questions related to the mobile app, please contact us info@urpetslife.com
