@@ -8,11 +8,15 @@ module Api
 
       def index
         grooming_centres = grooming_centres_query.find_objects
+        if @user&.is_msh_member?
+          grooming_centres = grooming_centres.select { |center| center[:name].match(/My Second Home/).present? }
+        end
         serialized_centres = ActiveModel::Serializer::CollectionSerializer.new(
           grooming_centres, serializer: GroomingCentreIndexSerializer, scope: serializable_params
         )
 
-        render json: { grooming_centres: serialized_centres, total_count: grooming_centres.total_count }
+        render json: { grooming_centres: serialized_centres,
+                       total_count: @user&.is_msh_member? ? grooming_centres.count : grooming_centres.total_count }
       end
 
       def show

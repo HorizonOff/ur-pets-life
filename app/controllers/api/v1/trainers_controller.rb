@@ -6,11 +6,15 @@ module Api
 
       def index
         trainers = trainers_query.find_objects
+        if @user&.is_msh_member?
+          trainers = trainers.select { |center| center[:email].match(/info@mysecondhomedubai.com/).present? }
+        end
         serialized_trainers = ActiveModel::Serializer::CollectionSerializer.new(
           trainers, serializer: TrainerIndexSerializer, scope: serializable_params
         )
 
-        render json: { trainers: serialized_trainers, total_count: trainers.total_count }
+        render json: { trainers: serialized_trainers,
+                       total_count: @user&.is_msh_member? ? trainers.count : trainers.total_count }
       end
 
       def show
