@@ -17,12 +17,16 @@
             %thead
               %tr
                 %th{style: 'width:30px'}  #
+                %th Name
                 %th Email
+                %th Unsubscribe
                 %th Create at
               %tr
                 %th{style: 'width:30px'}
                   = text_field_tag :id, '', class: 'form-control', style: 'width:100%'
                 %th
+                %th
                   = text_field_tag :email, '', class: 'form-control', style: 'width:100%'
+                %th
                 %th
             %tbody

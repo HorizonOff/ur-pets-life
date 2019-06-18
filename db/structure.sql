@@ -1003,7 +1003,10 @@ CREATE TABLE public.my_second_house_member_invitations (
     id bigint NOT NULL,
     email character varying,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    unsubscribe boolean DEFAULT false,
+    name character varying,
+    token character varying
 );
 
 
@@ -3596,6 +3599,13 @@ CREATE INDEX index_locations_on_place_type_and_place_id ON public.locations USIN
 
 
 --
+-- Name: index_my_second_house_member_invitations_on_token; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_my_second_house_member_invitations_on_token ON public.my_second_house_member_invitations USING btree (token);
+
+
+--
 -- Name: index_notifications_on_admin_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -4692,6 +4702,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190607124136'),
 ('20190607125447'),
 ('20190610125009'),
-('20190611081442');
+('20190611081442'),
+('20190614103926');
 
 

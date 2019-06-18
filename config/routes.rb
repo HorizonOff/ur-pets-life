@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   get '/login', to: 'application#login'
   get '/privacy_policy_new', to:'pages#send_message', as:'view_pp'
   post 'send_message', to: 'pages#send_message', as: 'send_message_post'
+  get 'invitations/:token/unsubscribe', to:'invitations#unsubscribe'
   devise_for :users, only: %i[confirmations passwords omniauth_callbacks],
                      controllers: { confirmations: 'confirmations',
                                     passwords: 'passwords',

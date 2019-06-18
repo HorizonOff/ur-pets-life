@@ -177,8 +177,10 @@ function init_datatables(){
 
       'my_second_house_member_invitations': { 'url': '/admin_panel/my_second_house_member_invitations',
                            'columns': [ { 'searchable': true, 'orderable': true, 'data': 'id', 'targets': 0 },
-                                        { 'searchable': true, 'orderable': true, 'data': 'email', 'targets': 1 },
-                                        { 'searchable': false, 'orderable': false, 'data': 'created_at', 'targets': 2 } ] },
+                                        { 'searchable': true, 'orderable': true, 'data': 'name', 'targets': 1 },
+                                        { 'searchable': true, 'orderable': true, 'data': 'email', 'targets': 2 },
+                                        { 'searchable': true, 'orderable': true, 'data': 'unsubscribe', 'targets': 3 },
+                                        { 'searchable': false, 'orderable': false, 'data': 'created_at', 'targets': 4 } ] },
 
       'discount_domains': { 'url': '/admin_panel/discount_domains', 'order_col': 2, 'order_dir': 'desc',
                            'columns': [ { 'searchable': true, 'orderable': true, 'data': 'domain', 'targets': 0 },
