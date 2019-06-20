@@ -1006,7 +1006,8 @@ CREATE TABLE public.my_second_house_member_invitations (
     updated_at timestamp without time zone NOT NULL,
     unsubscribe boolean DEFAULT false,
     name character varying,
-    token character varying
+    token character varying,
+    member_type integer DEFAULT 1
 );
 
 
@@ -1981,7 +1982,7 @@ CREATE TABLE public.users (
     spends_eligble double precision DEFAULT 0.0 NOT NULL,
     spends_not_eligble double precision DEFAULT 0.0 NOT NULL,
     unread_post_comments_count integer DEFAULT 0,
-    is_msh_member boolean DEFAULT false
+    member_type integer DEFAULT 0
 );
 
 
@@ -4703,6 +4704,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190607125447'),
 ('20190610125009'),
 ('20190611081442'),
-('20190614103926');
+('20190614103926'),
+('20190620083531'),
+('20190620123632');
 
 

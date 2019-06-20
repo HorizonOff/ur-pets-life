@@ -2,6 +2,7 @@ class User < ApplicationRecord
   include EmailCheckable
   GENDER_OPTIONS = %i[male female].freeze
   enum gender: GENDER_OPTIONS
+  enum member_type: { not_member: 0, simple: 1, silver: 2, gold: 3 }
 
   # Include default devise modules. Others available are:
   # :rememberable, :lockable, :timeoutable and :omniauthable

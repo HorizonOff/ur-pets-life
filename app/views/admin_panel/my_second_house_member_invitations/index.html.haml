@@ -19,6 +19,7 @@
                 %th{style: 'width:30px'}  #
                 %th Name
                 %th Email
+                %th Member Type
                 %th Unsubscribe
                 %th Create at
               %tr
@@ -27,6 +28,8 @@
                 %th
                 %th
                   = text_field_tag :email, '', class: 'form-control', style: 'width:100%'
+                %th
+                  = select_tag :member_type, options_for_select(MySecondHouseMemberInvitation.member_types), include_blank: true, class: 'form-control select2'
                 %th
                 %th
             %tbody
