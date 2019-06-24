@@ -55,6 +55,7 @@ module Api
         Api::V1::Items,
         Api::V1::Orders,
         Api::V1::ShoppingCartItems,
+        Api::V1::OrderItems,
         self
       ].freeze
 
