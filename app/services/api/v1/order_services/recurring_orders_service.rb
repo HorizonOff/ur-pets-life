@@ -24,13 +24,13 @@ module API
         @orderitems.each do |orderitem|
           user = orderitem.order.user
           discount = ::Api::V1::DiscountDomainService.new(user.email.dup).dicount_on_email
-          is_user_from_company = discount.present?
+          is_user_from_company = discount.positive?
           puts "processing " + orderitem.id.to_s + " ..."
           trans_id = ""
           paymentStatus = 0
           @discounted_items_amount = 0
           trans_date = DateTime.now
-          if discount.present? && orderitem.item.discount.zero?
+          if discount.positive? && orderitem.item.discount.zero? && !(user.member_type.in?(['silver', 'gold']) && orderitem.item.supplier.in?(["MARS", "NESTLE"]))
             subTotal = orderitem.item.price * ((100 - discount).to_f / 100) * orderitem.Quantity
           else
             subTotal = orderitem.item.price * orderitem.Quantity

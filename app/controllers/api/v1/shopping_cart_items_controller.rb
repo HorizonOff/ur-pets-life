@@ -8,7 +8,7 @@ module Api
         @total_price_without_discount = 0
         discount = ::Api::V1::DiscountDomainService.new(@user.email.dup).dicount_on_email
         @user.shopping_cart_items.each do |cartitem|
-          if discount.present? && cartitem.item.discount.zero?
+          if discount.positive? && cartitem.item.discount.zero?
             @itemsprice += cartitem.item.price * ((100 - discount).to_f / 100) * cartitem.quantity
           else
             @itemsprice += (cartitem.item.price * cartitem.quantity)
@@ -40,7 +40,7 @@ module Api
           AvailableRedeemPoints: user_redeem_points,
           SubTotal: @total_price_without_discount,
           company_discount: (@itemsprice - @total_price_without_discount).round(2),
-          is_user_from_company: discount.present?,
+          is_user_from_company: discount.positive?,
           DeliveryCharges: @itemsprice < 100 ? 20 : 0,
           VatCharges: (@total_price_without_discount / 100).to_f * 5,
           Total: @itemsprice + (@itemsprice < 100 ? 20 : 0) + ((@total_price_without_discount / 100).to_f * 5)

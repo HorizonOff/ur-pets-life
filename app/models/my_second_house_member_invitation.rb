@@ -8,7 +8,7 @@ class MySecondHouseMemberInvitation < ApplicationRecord
     header = spreadsheet.row(1)
     (2..spreadsheet.last_row).each do |i|
       row = Hash[[header, spreadsheet.row(i)].transpose]
-      create(name: row.first[1], email: row["Email Address"])
+      create(name: row.first[1], email: row["Email Address"], member_type: row["Type"])
     end
   end
 
