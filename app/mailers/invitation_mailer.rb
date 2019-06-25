@@ -6,7 +6,7 @@ class InvitationMailer < ApplicationMailer
     @unsubscribe = ENV['HOST_NAME'] + "/invitations/#{@invitation.token}/unsubscribe"
     delivery_options = { user_name: ENV['AWS_SMTP_USERNAME'],
                          password: ENV['AWS_SMTP_PASSWORD'],
-                         address: 'email-smtp.us-west-2.amazonaws.com' }
+                         address: 'email-smtp.eu-west-1.amazonaws.com' }
     mail(to: @invitation.email, subject: 'Welcome to app', delivery_method_options: delivery_options)
   end
 end
