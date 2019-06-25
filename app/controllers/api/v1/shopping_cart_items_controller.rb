@@ -8,7 +8,7 @@ module Api
         @total_price_without_discount = 0
         discount = ::Api::V1::DiscountDomainService.new(@user.email.dup).dicount_on_email
         @user.shopping_cart_items.each do |cartitem|
-          if discount.positive? && cartitem.item.discount.zero?
+          if discount.positive? && cartitem.item.discount.zero? && !(@user.member_type.in?(['silver', 'gold']) && cartitem.item.supplier.in?(["MARS", "NESTLE"]))
             @itemsprice += cartitem.item.price * ((100 - discount).to_f / 100) * cartitem.quantity
           else
             @itemsprice += (cartitem.item.price * cartitem.quantity)
