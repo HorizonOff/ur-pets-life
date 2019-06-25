@@ -174,7 +174,7 @@ module AdminPanel
       orderuser = User.where(:id => @admin_panel_order.user_id).first
       orderuser.notifications.create(order: @admin_panel_order, message: 'Your Order status for Order # ' + @admin_panel_order.id.to_s + ' has been ' + (statustoupdate == 'cancelled' ? 'Cancelled' : 'updated to ' + (statustoupdate == 'on_the_way' ? 'on the way' : statustoupdate)))
 
-      if statustoupdate == 'delivered'
+      if statustoupdate.in?(['delivered', 'delivered_by_card', 'delivered_by_cash'])
         set_order_delivery_invoice(@admin_panel_order.id, orderuser.email)
         @admin_panel_order.update_attributes(Payment_Status: 1)
       end
@@ -280,7 +280,7 @@ module AdminPanel
       is_user_present = @@filtered_user_id > 0 ? false : true
 
       @orders = Order.order(:id).includes(:location, {user: [:location]}, {order_items: [item: :item_brand]})
-                                      .where("(users.id = (?) OR #{is_user_present}) AND order_status_flag = (?)", @@filtered_user_id, 'delivered').references(:user)
+                                      .where("(users.id = (?) OR #{is_user_present}) AND order_status_flag IN (?)", @@filtered_user_id, ['delivered', 'delivered_by_card', 'delivered_by_cash']).references(:user)
       if params[:from_date].present? && params[:to_date].present?
         @orders = @orders.created_in_range(params[:from_date].to_date.beginning_of_day, params[:to_date].to_date.end_of_day)
       end
