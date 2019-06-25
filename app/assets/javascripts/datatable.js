@@ -180,8 +180,9 @@ function init_datatables(){
                            'columns': [ { 'searchable': true, 'orderable': true, 'data': 'id', 'targets': 0 },
                                         { 'searchable': true, 'orderable': true, 'data': 'name', 'targets': 1 },
                                         { 'searchable': true, 'orderable': true, 'data': 'email', 'targets': 2 },
-                                        { 'searchable': true, 'orderable': true, 'data': 'unsubscribe', 'targets': 3 },
-                                        { 'searchable': false, 'orderable': true, 'data': 'created_at', 'targets': 4 } ] },
+                                        { 'searchable': true, 'orderable': true, 'data': 'member_type', 'targets': 3 },
+                                        { 'searchable': true, 'orderable': true, 'data': 'unsubscribe', 'targets': 4 },
+                                        { 'searchable': false, 'orderable': true, 'data': 'created_at', 'targets': 5 } ] },
 
       'discount_domains': { 'url': '/admin_panel/discount_domains', 'order_col': 2, 'order_dir': 'desc',
                            'columns': [ { 'searchable': true, 'orderable': true, 'data': 'domain', 'targets': 0 },

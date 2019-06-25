@@ -49,6 +49,7 @@ module API
 
             user_redeem_points = 0
             permitted_redeem_points = 0
+
             paymentStatus = 0
             trans_date = DateTime.now
 

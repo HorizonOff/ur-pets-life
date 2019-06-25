@@ -1,13 +1,14 @@
 class MySecondHouseMemberInvitation < ApplicationRecord
+  enum member_type: { simple: 1, silver: 2, gold: 3 }
+
   after_commit :send_invitation, :set_token, on: :create
 
   def self.import(file)
     spreadsheet = Roo::Spreadsheet.open(file.path)
     header = spreadsheet.row(1)
     (2..spreadsheet.last_row).each do |i|
-      # binding.pry
       row = Hash[[header, spreadsheet.row(i)].transpose]
-      create(name: row.first[1], email: row["Email Address"])
+      create(name: row.first[1], email: row["Email Address"], member_type: row["Type"])
     end
   end
 

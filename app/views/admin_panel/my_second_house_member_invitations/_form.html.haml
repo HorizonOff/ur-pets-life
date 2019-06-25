@@ -20,4 +20,9 @@
             Email
           .col-md-9.col-sm-9.col-xs-12
             = f.text_field :email, class: 'form-control'
+        .form-group
+          = f.label :member_type, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
+            Member type
+          .col-md-9.col-sm-9.col-xs-12
+            = f.select :member_type, options_for_select(MySecondHouseMemberInvitation.member_types.keys.map { |w| [w.humanize, w] }), { include_blank: true }, class: 'form-control select2'
         = f.submit 'Send invitation', class: 'btn btn-success pull-right'

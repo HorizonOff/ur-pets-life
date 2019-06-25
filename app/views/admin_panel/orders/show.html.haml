@@ -22,6 +22,9 @@
                 Customer Name:
                 = @admin_panel_order.user.first_name + ' ' + @admin_panel_order.user.last_name
               %li
+                Member type:
+                = @admin_panel_order.user.member_type
+              %li
                 Email:
                 = @admin_panel_order.user.email
               %li

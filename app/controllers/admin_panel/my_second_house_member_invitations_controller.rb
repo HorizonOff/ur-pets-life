@@ -42,7 +42,7 @@ module AdminPanel
     private
 
     def invitation_params
-      params.require(:my_second_house_member_invitation).permit(:name, :email)
+      params.require(:my_second_house_member_invitation).permit(:name, :email, :member_type)
     end
 
     def set_invitation

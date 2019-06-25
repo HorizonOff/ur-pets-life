@@ -1,5 +1,5 @@
 module AdminPanel
   class InvitationFilterSerializer < ActiveModel::Serializer
-    attributes :id, :name, :email, :unsubscribe, :created_at
+    attributes :id, :name, :email, :member_type, :unsubscribe, :created_at
   end
 end
