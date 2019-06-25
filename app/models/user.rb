@@ -99,6 +99,10 @@ class User < ApplicationRecord
     self[:gender] = nil
   end
 
+  def is_msh_member?
+    member_type.in?(['simple', 'silver', 'gold'])
+  end
+
   def update_counters
     self.commented_appointments_count = commented_appointments.count
     self.unread_commented_appointments_count = appointments_with_new_comments.count
