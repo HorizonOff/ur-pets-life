@@ -19,5 +19,7 @@
             = render 'layouts/admin_panel/super_admin_sidebar'
           - elsif current_admin.is_cataloger?
             = render 'layouts/admin_panel/cataloger_sidebar'
+          - elsif current_admin.is_cataloger?
+            = render 'layouts/admin_panel/cataloger_sidebar'
           - else
             = render 'layouts/admin_panel/simple_admin_sidebar'
