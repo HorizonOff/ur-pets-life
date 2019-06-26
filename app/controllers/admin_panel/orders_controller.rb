@@ -168,6 +168,12 @@ module AdminPanel
     if @admin_panel_order.update(:order_status_flag => statustoupdate)
       @admin_panel_order.order_items.each do |orderitem|
         if orderitem.status != 'cancelled'
+          if statustoupdate == 'cancelled'
+            item = Item.where(:id => orderitem.item_id).first
+            if !item.nil?
+              item.increment!(:quantity, orderitem.Quantity)
+            end
+          end
           orderitem.update(:status => statustoupdate)
         end
       end
@@ -190,14 +196,14 @@ module AdminPanel
         user_redeem_point_reimburse.update(:net_worth => user_redeem_point_reimburse.net_worth + @admin_panel_order.RedeemPoints, :totalavailedpoints => user_redeem_point_reimburse.totalavailedpoints - @admin_panel_order.RedeemPoints)
         @admin_panel_order.update(:Subtotal => 0, :Delivery_Charges => 0, :Vat_Charges => 0, :Total => 0, :order_status_flag => 'cancelled', :earned_points => 0, :RedeemPoints => 0)
 
-        @admin_panel_order.order_items.each do |orderitem|
-          if orderitem.status != "cancelled"
-            item = Item.where(:id => orderitem.item_id).first
-            if !item.nil?
-              item.increment!(:quantity, orderitem.Quantity)
-            end
-          end
-        end
+        # @admin_panel_order.order_items.each do |orderitem|
+        #   if orderitem.status != "cancelled"
+        #     item = Item.where(:id => orderitem.item_id).first
+        #     if !item.nil?
+        #       item.increment!(:quantity, orderitem.Quantity)
+        #     end
+        #   end
+        # end
 
         OrderMailer.send_complete_cancel_order_email_to_customer(@admin_panel_order.id, @admin_panel_order.user.email).deliver
       end
