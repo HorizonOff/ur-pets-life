@@ -113,7 +113,8 @@ CREATE TABLE public.admins (
     unread_commented_appointments_count integer DEFAULT 0 NOT NULL,
     is_employee boolean DEFAULT false,
     unread_commented_orders_count integer DEFAULT 0 NOT NULL,
-    is_cataloger boolean DEFAULT false
+    is_cataloger boolean DEFAULT false,
+    is_msh_admin boolean DEFAULT false
 );
 
 
@@ -4706,6 +4707,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190611081442'),
 ('20190614103926'),
 ('20190620083531'),
-('20190620123632');
+('20190620123632'),
+('20190626112218');
 
 
