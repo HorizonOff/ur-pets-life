@@ -15,6 +15,8 @@ class GroomingCentre < ApplicationRecord
   accepts_nested_attributes_for :schedule, update_only: true
   accepts_nested_attributes_for :service_option_details, allow_destroy: true
 
+  scope :msh_members, -> { where('name ILIKE ?', '%My Second Home%') }
+
   def admins_for_select
     if admin_id?
       Admin.for_grooming_centre.pluck(:email, :id) << [admin.email, admin_id]

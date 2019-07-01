@@ -13,7 +13,7 @@ class DayCareCentre < ApplicationRecord
   accepts_nested_attributes_for :schedule, update_only: true
   accepts_nested_attributes_for :service_option_details, allow_destroy: true
 
-  scope :msh, -> { where('name ILIKE ?', '%My Second Home%') }
+  scope :msh_members, -> { where('name ILIKE ?', '%My Second Home%') }
 
   def admins_for_select
     if admin_id?

@@ -7,7 +7,7 @@ module AdminPanel
     before_action :parse_params, only: %i[create update]
 
     def index
-      authorize_super_admin
+      authorize_super_admin_employee_msh_admin
       respond_to do |format|
         format.html {}
         format.json { filter_day_care_centres }
@@ -115,7 +115,7 @@ module AdminPanel
     end
 
     def filter_and_pagination_query
-      @filter_and_pagination_query ||= ::AdminPanel::FilterAndPaginationQuery.new('DayCareCentre', params)
+      @filter_and_pagination_query ||= ::AdminPanel::FilterAndPaginationQuery.new('DayCareCentre', params, current_admin)
     end
   end
 end
