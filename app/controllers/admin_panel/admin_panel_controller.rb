@@ -22,6 +22,18 @@ module AdminPanel
       end
     end
 
+    def employee_or_super_admin_or_msh_admin?
+      if current_admin.is_super_admin?
+        true
+      elsif current_admin.is_employee?
+        true
+      elsif current_admin.is_msh_admin?
+        true
+      else
+        false
+      end
+    end
+
     def cataloger_or_employee_or_super_admin?
       if current_admin.is_super_admin?
         true
@@ -40,6 +52,10 @@ module AdminPanel
 
     def authorize_super_admin_employee
       authorize :application, :employee_or_super_admin?
+    end
+
+    def authorize_super_admin_employee_msh_admin
+      authorize :application, :employee_or_super_admin_or_msh_admin?
     end
 
     def authorize_super_admin_employee_cataloger

@@ -20,6 +20,26 @@ class ApplicationPolicy
     end
   end
 
+  def msh_admin?
+    if user.is_msh_admin?
+      true
+    else
+      false
+    end
+  end
+
+  def employee_or_super_admin_or_msh_admin?
+    if user.is_super_admin?
+      true
+    elsif user.is_employee?
+      true
+    elsif user.is_msh_admin?
+      true
+    else
+      false
+    end
+  end
+
   def cataloger_or_employee_or_super_admin?
     if user.is_super_admin?
       true
@@ -41,8 +61,10 @@ class ApplicationPolicy
     end
 
     def resolve
-      if user.is_super_admin?
+      if user.is_super_admin? || user.is_employee?
         scope.all
+      elsif user.is_msh_admin?
+        scope.msh_members
       else
         scope.joins(:admin).where(admins: { id: user.id })
       end

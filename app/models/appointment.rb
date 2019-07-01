@@ -54,6 +54,16 @@ class Appointment < ApplicationRecord
                                               (start_at <= :start AND end_at > :start) OR
                                               (start_at >= :start AND end_at <= :end)', start: start_at, end: end_at)
   end)
+  scope :msh_members, (lambda do
+    joins("LEFT OUTER JOIN day_care_centres ON appointments.bookable_id = day_care_centres.id
+          AND appointments.bookable_type = 'DayCareCentre'")
+    .joins("LEFT OUTER JOIN boardings ON appointments.bookable_id = boardings.id
+           AND appointments.bookable_type = 'Boarding'")
+    .joins("LEFT OUTER JOIN grooming_centres ON appointments.bookable_id = grooming_centres.id
+           AND appointments.bookable_type = 'GroomingCentre'")
+    .where('day_care_centres.name ILIKE :msh OR boardings.name ILIKE :msh OR grooming_centres.name ILIKE :msh',
+           msh: '%My Second Home%')
+  end)
 
   def for_clinic?
     @for_clinic ||= bookable_type == 'Clinic'
