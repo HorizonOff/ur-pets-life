@@ -1,0 +1,29 @@
+.row
+  - content_for :head do
+    %meta{name: "turbolinks-cache-control", content:"no-cache"}
+  .col-md-6.col-sm-6.col-xs-12
+    .x_panel
+      .x_title
+        %h2 Main Info
+        .clearfix
+      .x_content
+        %br
+        .form-group
+          = f.label :name, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
+            Name
+          .col-md-9.col-sm-9.col-xs-12
+            = f.text_field :name, class: 'form-control'
+        .form-group
+          = f.label :image, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
+            Image
+            %span.required *
+          .col-md-9.col-sm-9.col-xs-12
+            -if @ad.image?
+              =image_tag @ad.image.medium.url, class: 'avatar-show', style: ' display:block;margin:auto'
+
+            = f.file_field :image, accept: '.jpg,.jpeg,.bmp,.png'
+        .form-group
+          = f.label :is_active, 'Make active', class: 'control-label col-md-3 col-sm-3 col-xs-12'
+          .col-md-9.col-sm-9.col-xs-12
+            = f.check_box :is_active, class: 'flat'
+
