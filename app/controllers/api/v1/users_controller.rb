@@ -22,7 +22,6 @@ module Api
       def update
         @user.assign_attributes(user_params.except(:password, :password_confirmation))
         @user.skip_password_validation = true
-        binding.pry
         if user_params[:email].present?
           is_domain_discount = ::Api::V1::DiscountDomainService.new(user_params[:email]).domain_with_discount?
           @user.confirm unless is_domain_discount
