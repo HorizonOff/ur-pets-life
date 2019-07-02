@@ -2017,7 +2017,12 @@ CREATE TABLE public.users (
     spends_eligble double precision DEFAULT 0.0 NOT NULL,
     spends_not_eligble double precision DEFAULT 0.0 NOT NULL,
     unread_post_comments_count integer DEFAULT 0,
+<<<<<<< HEAD
     member_type integer DEFAULT 0
+=======
+    member_type integer DEFAULT 0,
+    unconfirmed_email character varying
+>>>>>>> new_task_24_add_menu_to_app
 );
 
 
@@ -4758,4 +4763,5 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190620083531'),
 ('20190620123632'),
 ('20190626112218'),
-('20190701132734');
+('20190701132734'),
+('20190702125721');
