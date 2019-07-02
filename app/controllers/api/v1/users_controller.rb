@@ -24,7 +24,7 @@ module Api
         @user.skip_password_validation = true
         if user_params[:email].present?
           is_domain_discount = ::Api::V1::DiscountDomainService.new(user_params[:email]).domain_with_discount?
-          @user.confirm unless is_domain_discount
+          @user.skip_reconfirmation! unless is_domain_discount
         end
         if @user.save
           render json: { message: 'User updated successfully',
