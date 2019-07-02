@@ -65,6 +65,7 @@ Rails.application.routes.draw do
       get 'pets/:id/health_history', to: 'health_history#index'
       get 'pets/:id/weight_history', to: 'weight_history#index'
       get 'found_pets', to: 'pets#found_pets'
+      get 'get_current_ad', to: 'ads#current'
       resources :pets, except: %i[new edit] do
         collection { post :found }
         collection { get :can_be_lost }
@@ -234,5 +235,8 @@ Rails.application.routes.draw do
 
     resource :app_version, only: %i[edit update]
     resources :tax_reports, only: %i[index]
+    resources :ads, only: %i[index new create] do
+      member { put :change_status }
+    end
   end
 end
