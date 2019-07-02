@@ -5,8 +5,10 @@ module Api
 
       def index
         @created_at = Time.zone.at(params[:created_at].to_i)
-        posts = Post.where('created_at < ?', @created_at).order(created_at: :desc)
-                    .includes(:author, :user_posts).limit(20)
+        posts = Post.all
+        posts = posts.search(params[:search]) if params[:search].present?
+        posts = posts.where('posts.created_at < ?', @created_at).order(created_at: :desc)
+                     .includes(:author, :user_posts).limit(20)
 
         posts = ::Api::V1::PostDecorator.decorate_collection(posts)
         serialized_posts = ActiveModel::Serializer::CollectionSerializer.new(posts, serializer: PostSerializer)

@@ -103,6 +103,13 @@ module Api
           end
 
           parameter do
+            key :name, :search
+            key :in, :query
+            key :type, :string
+            key :example, 'good post'
+          end
+
+          parameter do
             key :name, :created_at
             key :in, :query
             key :type, :integer
