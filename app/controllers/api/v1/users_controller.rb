@@ -29,9 +29,10 @@ module Api
           is_domain_discount = ::Api::V1::DiscountDomainService.new(user_params[:email]).domain_with_discount?
           @user.skip_reconfirmation! unless is_domain_discount
         end
+        message = 'User updated successfully.'
+        message += ' E-mail will change after confirmation' if is_domain_discount == true
         if @user.save
-          render json: { message: 'User updated successfully',
-                         is_domain_discount: is_domain_discount }
+          render json: { message: message }
         else
           render_422(parse_errors_messages(@user))
         end
