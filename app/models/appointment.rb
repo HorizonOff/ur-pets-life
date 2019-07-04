@@ -12,11 +12,13 @@ class Appointment < ApplicationRecord
   belongs_to :main_appointment, class_name: 'Appointment', optional: true
 
   has_many :diagnoses, dependent: :destroy
+  has_many :medications, dependent: :destroy
   has_one :next_appointment, class_name: 'Appointment', foreign_key: :main_appointment_id
 
   has_many :cart_items, dependent: :destroy
 
   accepts_nested_attributes_for :cart_items
+  accepts_nested_attributes_for :medications
 
   has_many :service_option_details, -> { order(service_option_id: :asc) }, through: :cart_items,
                                                                            source: :serviceable,

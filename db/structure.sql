@@ -229,7 +229,9 @@ CREATE TABLE public.appointments (
     is_viewed boolean DEFAULT false,
     comments_count integer DEFAULT 0,
     unread_comments_count_by_user integer DEFAULT 0 NOT NULL,
-    unread_comments_count_by_admin integer DEFAULT 0 NOT NULL
+    unread_comments_count_by_admin integer DEFAULT 0 NOT NULL,
+    reason_of_visit character varying,
+    findings character varying
 );
 
 
@@ -1031,6 +1033,41 @@ ALTER SEQUENCE public.locations_id_seq OWNED BY public.locations.id;
 
 
 --
+<<<<<<< HEAD
+=======
+-- Name: medications; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.medications (
+    id bigint NOT NULL,
+    appointment_id bigint,
+    name character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: medications_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.medications_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: medications_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.medications_id_seq OWNED BY public.medications.id;
+
+
+--
+>>>>>>> new_task_18_edit_helth_history
 -- Name: my_second_house_member_invitations; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -2018,11 +2055,16 @@ CREATE TABLE public.users (
     spends_not_eligble double precision DEFAULT 0.0 NOT NULL,
     unread_post_comments_count integer DEFAULT 0,
 <<<<<<< HEAD
+<<<<<<< HEAD
     member_type integer DEFAULT 0
 =======
     member_type integer DEFAULT 0,
     unconfirmed_email character varying
 >>>>>>> new_task_24_add_menu_to_app
+=======
+    member_type integer DEFAULT 0,
+    unconfirmed_email character varying
+>>>>>>> new_task_18_edit_helth_history
 );
 
 
@@ -2391,6 +2433,16 @@ ALTER TABLE ONLY public.locations ALTER COLUMN id SET DEFAULT nextval('public.lo
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+<<<<<<< HEAD
+=======
+ALTER TABLE ONLY public.medications ALTER COLUMN id SET DEFAULT nextval('public.medications_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+>>>>>>> new_task_18_edit_helth_history
 ALTER TABLE ONLY public.my_second_house_member_invitations ALTER COLUMN id SET DEFAULT nextval('public.my_second_house_member_invitations_id_seq'::regclass);
 
 
@@ -2798,6 +2850,17 @@ ALTER TABLE ONLY public.locations
 
 
 --
+<<<<<<< HEAD
+=======
+-- Name: medications_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.medications
+    ADD CONSTRAINT medications_pkey PRIMARY KEY (id);
+
+
+--
+>>>>>>> new_task_18_edit_helth_history
 -- Name: my_second_house_member_invitations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3655,6 +3718,16 @@ CREATE INDEX index_locations_on_place_type_and_place_id ON public.locations USIN
 
 
 --
+<<<<<<< HEAD
+=======
+-- Name: index_medications_on_appointment_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_medications_on_appointment_id ON public.medications USING btree (appointment_id);
+
+
+--
+>>>>>>> new_task_18_edit_helth_history
 -- Name: index_my_second_house_member_invitations_on_token; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -4764,4 +4837,6 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190620123632'),
 ('20190626112218'),
 ('20190701132734'),
-('20190702125721');
+('20190702125721'),
+('20190704082744'),
+('20190704084608');

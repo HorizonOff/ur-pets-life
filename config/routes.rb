@@ -103,7 +103,7 @@ Rails.application.routes.draw do
       resources :vets, only: :show do
         member { get :schedule }
       end
-      resources :appointments, only: %i[index create show] do
+      resources :appointments, only: %i[index create update show] do
         member { put :cancel }
         resources :comments, only: %i[index create]
       end
