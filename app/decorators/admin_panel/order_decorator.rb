@@ -75,6 +75,10 @@ module AdminPanel
     model.created_at.strftime('%-d %b %Y %I:%M %p')
   end
 
+  def delivery_at
+    model.delivery_at&.strftime('%-d %b %Y %I:%M %p')
+  end
+
   def actions
     links = (link_to 'View Details', url_helpers.admin_panel_order_path(model), class: 'btn btn-primary btn-xs')
     if model.order_status_flag.in?(['delivered', 'delivered_by_card', 'delivered_by_cash'])
