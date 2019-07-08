@@ -18,7 +18,7 @@ module Api
                                                 pets_diagnoses: pets_diagnoses,
                                                 service_option_times: @appointment.service_option_times),
                include: 'vet,service_option_details,service_option_details.service_option_times,
-                         pets,pets.service_details,pets.diagnosis'
+                         pets,pets.service_details,pets.diagnosis,medications'
       end
 
       def create
