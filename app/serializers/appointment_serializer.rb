@@ -1,6 +1,8 @@
 class AppointmentSerializer < ActiveModel::Serializer
-  attributes :id, :bookable_type, :total_price, :comment
+  attributes :id, :bookable_type, :total_price, :comment, :reason_of_visit, :findings
   attribute :can_be_canceled?, key: :can_be_canceled
+
+  has_many :medications, serializer: MedicationAppointmentSerializer
 
   attribute :dates do
     int_dates = []
