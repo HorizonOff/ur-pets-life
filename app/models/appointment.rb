@@ -35,6 +35,8 @@ class Appointment < ApplicationRecord
   after_initialize :set_defaults
 
   before_validation :set_start_at, :set_end_at, :set_calendar, :set_admin, :set_number_of_days, on: :create
+  before_validation :delete_medications, on: :update
+
   validates :start_at, presence: { message: 'Date and time are required' }
   validate :vet_id_should_be_vaild, :pet_ids_should_be_valid, :service_ids_should_be_valid, :time_should_be_valid,
            :appointment_overlaps, :dates_should_be_valid
@@ -183,6 +185,10 @@ class Appointment < ApplicationRecord
     return if !for_clinic? || calendar_id.present? || vet_id.blank?
     current_vet_calendar = vet.calendars.where('start_at <= ? AND end_at >= ?', start_at, end_at).first
     self.calendar = current_vet_calendar if current_vet_calendar
+  end
+
+  def delete_medications
+    medications.where('id IS NOT NULL').delete_all
   end
 
   def set_start_at
