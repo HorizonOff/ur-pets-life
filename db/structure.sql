@@ -1033,8 +1033,6 @@ ALTER SEQUENCE public.locations_id_seq OWNED BY public.locations.id;
 
 
 --
-<<<<<<< HEAD
-=======
 -- Name: medications; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1067,7 +1065,6 @@ ALTER SEQUENCE public.medications_id_seq OWNED BY public.medications.id;
 
 
 --
->>>>>>> new_task_18_edit_helth_history
 -- Name: my_second_house_member_invitations; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -2054,17 +2051,8 @@ CREATE TABLE public.users (
     spends_eligble double precision DEFAULT 0.0 NOT NULL,
     spends_not_eligble double precision DEFAULT 0.0 NOT NULL,
     unread_post_comments_count integer DEFAULT 0,
-<<<<<<< HEAD
-<<<<<<< HEAD
-    member_type integer DEFAULT 0
-=======
     member_type integer DEFAULT 0,
     unconfirmed_email character varying
->>>>>>> new_task_24_add_menu_to_app
-=======
-    member_type integer DEFAULT 0,
-    unconfirmed_email character varying
->>>>>>> new_task_18_edit_helth_history
 );
 
 
@@ -2433,8 +2421,6 @@ ALTER TABLE ONLY public.locations ALTER COLUMN id SET DEFAULT nextval('public.lo
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-<<<<<<< HEAD
-=======
 ALTER TABLE ONLY public.medications ALTER COLUMN id SET DEFAULT nextval('public.medications_id_seq'::regclass);
 
 
@@ -2442,7 +2428,6 @@ ALTER TABLE ONLY public.medications ALTER COLUMN id SET DEFAULT nextval('public.
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
->>>>>>> new_task_18_edit_helth_history
 ALTER TABLE ONLY public.my_second_house_member_invitations ALTER COLUMN id SET DEFAULT nextval('public.my_second_house_member_invitations_id_seq'::regclass);
 
 
@@ -2850,8 +2835,6 @@ ALTER TABLE ONLY public.locations
 
 
 --
-<<<<<<< HEAD
-=======
 -- Name: medications_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2860,7 +2843,6 @@ ALTER TABLE ONLY public.medications
 
 
 --
->>>>>>> new_task_18_edit_helth_history
 -- Name: my_second_house_member_invitations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3718,8 +3700,6 @@ CREATE INDEX index_locations_on_place_type_and_place_id ON public.locations USIN
 
 
 --
-<<<<<<< HEAD
-=======
 -- Name: index_medications_on_appointment_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3727,7 +3707,6 @@ CREATE INDEX index_medications_on_appointment_id ON public.medications USING btr
 
 
 --
->>>>>>> new_task_18_edit_helth_history
 -- Name: index_my_second_house_member_invitations_on_token; Type: INDEX; Schema: public; Owner: -
 --
 
