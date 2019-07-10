@@ -5,8 +5,9 @@ module API
         def initialize(); end
 
         def perform
-          @recrringDate = (DateTime.now.to_time + 1.days).to_date
+          @recrringDate = DateTime.current + 1.days
           # @orderitems = get_recurring_orders
+
           place_recurring_orders
         end
 
