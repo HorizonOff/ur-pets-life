@@ -5,21 +5,14 @@ module API
         def initialize(); end
 
         def perform
-          @recrringDate = DateTime.current + 1.days
-          # @orderitems = get_recurring_orders
-
           place_recurring_orders
         end
-
-        # def get_recurring_orders
-        #   OrderItem.includes(:item, {order: [:user]}).where('"IsRecurring" = true AND status = \'delivered\' AND next_recurring_due_date BETWEEN (?) AND (?)', @recrringDate.beginning_of_day, @recrringDate.end_of_day )
-        # end
 
         def place_recurring_orders
           User.joins(:orders).includes(orders: :order_items).find_each do |user|
             order_items = user.order_items.where(IsRecurring: true)
-                                          .where("status IN ['delivered', 'delivered_by_cash', 'delivered_by_card']")
-                                          .where(next_recurring_due_date: @recrringDate.beginning_of_day..@recrringDate.end_of_day)
+              .where("status IN (?)", ['delivered', 'delivered_by_cash', 'delivered_by_card'])
+              .where(next_recurring_due_date: Date.tomorrow.beginning_of_day..Date.tomorrow.end_of_day)
             next if order_items.blank?
 
             isoutofstock = false
