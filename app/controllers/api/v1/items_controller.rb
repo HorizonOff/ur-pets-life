@@ -20,6 +20,7 @@ class ItemsController < Api::BaseController
 
     @items = Item.active.where('items.name ILIKE :value', value: "%#{params[:keyword]}%").limit(40)
     @items = @items.sale if params[:sale_only].in?([true, 'true'])
+    @items = @items.send(params[:category]) if params[:category].present?
     @brands = ItemBrand.where('item_brands.name ILIKE :value', value: "%#{params[:keyword]}%").limit(5)
     render json: { items: ActiveModel::Serializer::CollectionSerializer.new(@items, serializer: ItemSearchSerializer),
                    brands: ActiveModel::Serializer::CollectionSerializer.new(@brands,
@@ -72,6 +73,7 @@ class ItemsController < Api::BaseController
     json_to_render = []
     @items = @items.active.includes(:wishlists)
     @items = @items.sale if params[:sale_only].in?([true, 'true'])
+    @items = @items.send(params[:category]) if params[:category].present?
     if @items.nil? or @items.empty?
       render json: {
         Message: 'No Items found'
