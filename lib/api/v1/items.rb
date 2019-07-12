@@ -126,6 +126,10 @@ module Api
                 key :type, :boolean
                 key :example, false
               end
+              property :category do
+                key :type, :string
+                key :example, 'first_month'
+              end
               property :lowerprice do
                 key :type, :integer
                 key :example, 0

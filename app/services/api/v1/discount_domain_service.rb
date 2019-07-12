@@ -16,6 +16,10 @@ module Api
         @domain.in?(@popular_domains)
       end
 
+      def domain_with_discount?
+        DiscountDomain.find_by(domain: @domain).present?
+      end
+
       private
 
       attr_reader :email, :domain, :popular_domains

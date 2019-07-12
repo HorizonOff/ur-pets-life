@@ -66,6 +66,7 @@ Rails.application.routes.draw do
       get 'pets/:id/weight_history', to: 'weight_history#index'
       get 'found_pets', to: 'pets#found_pets'
       get 'get_current_ad', to: 'ads#current'
+      get 'sale_categories', to: 'sales#categories'
       resources :pets, except: %i[new edit] do
         collection { post :found }
         collection { get :can_be_lost }
