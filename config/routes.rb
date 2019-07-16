@@ -146,6 +146,8 @@ Rails.application.routes.draw do
   get 'pets_life_privacy_policy', to: 'pages#new_privacy_policy'
   get 'app_pets_life_privacy_policy', to: 'pages#app_new_privacy_policy'
   get 'about', to: 'pages#about'
+  get 'loyalty_programs', to: 'pages#loyalty_programs'
+  get 'stray_cat_community', to: 'pages#stray_cat_community'
   devise_for :admins, path: 'admin_panel/admins', except: :registrations,
                       controllers: { invitations: 'admin_panel/admins/invitations' }
 

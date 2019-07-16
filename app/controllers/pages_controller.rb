@@ -16,16 +16,28 @@ class PagesController < ApplicationController
   end
 
   def loyalty_program; end
+
   def privacy_policy; end
+
   def term_conditions; end
+
   def new_privacy_policy; end
+
   def cancelation_policy; end
-  def about; end
 
   def app_loyalty_program; end
+
   def app_new_privacy_policy; end
+
   def app_cancelation_policy; end
+
   def app_term_conditions; end
+
+  def about; end
+
+  def loyalty_programs; end
+
+  def stray_cat_community; end
 
   private
 
