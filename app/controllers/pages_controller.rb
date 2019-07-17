@@ -39,6 +39,10 @@ class PagesController < ApplicationController
 
   def stray_cat_community; end
 
+  def sale
+    @sale = Item.sale.page(params[:page]).per(15)
+  end
+
   private
 
   def contact_request_params
