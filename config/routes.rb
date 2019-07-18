@@ -149,6 +149,7 @@ Rails.application.routes.draw do
   get 'loyalty_programs', to: 'pages#loyalty_programs'
   get 'stray_cat_community', to: 'pages#stray_cat_community'
   get 'sale', to: 'pages#sale'
+  get 'contact_us', to: 'pages#contact_us'
   devise_for :admins, path: 'admin_panel/admins', except: :registrations,
                       controllers: { invitations: 'admin_panel/admins/invitations' }
 

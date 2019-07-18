@@ -26,21 +26,37 @@
  .navbar-logo{ filter: opacity(.5) drop-shadow(0 0 0 yellow); width: 110px; height: 30px; color-rendering: black;}
  .red-big{color: red;font-size: 1.2em; font-weight: bold;}
  .red-underline{color: red;text-decoration: underline;}
+ .underline{text-decoration: underline;}
  .img-full{width: 100%;height: auto;}
- .shop-card{height: 75vh;border: solid 1px #A6BECB; padding: 7px; margin-top: 10px; border-radius: 20px 20px 20px 20px;}
+ .sale{padding: 7px;}
+ .shop-card{height: 400px;border: solid 1px #A6BECB; padding: 10px; margin-top: 5px; border-radius: 10px 10px 10px 10px;}
+ .shop-card-img{max-width: 100%; max-height: 250px;}
  .text-line-through{text-decoration: line-through;}
  .card-notify-badge {
         position: absolute;
-        left: 20px;
+        left: 15px;
         top: 20px;
-        background: #7FFFD4;
+        background: #FFD700;
         text-align: center;
-        border-radius: 30px 30px 30px 30px;
+        border-radius: 10px 10px 10px 10px;
         color: #000;
         padding: 5px 10px;
         font-size: 14px;
-
     }
+  .card-bottom-badge{
+        position: relative;
+        right: -30px;
+        top: -20px;
+        background: #006400;
+        text-align: center;
+        color: #fff;
+        padding: 5px 10px;
+        font-size: 14px;
+    }
+  .download-links p {color: #000;font-size: 24px;line-height: 25px;margin: 10px 0 10px;}
+  .download-links a {float: left;margin: 0 10px 0 0;}
+  .download-links a img {width: 150px;float: left;border-radius: 10px; max-height: 42px;}
+  .download-links {margin-bottom: -40px; margin-top: 10px;}
 
  .whatsknow {text-align: center;padding: 40px 0;}
  .whatsknow h2 {font-size: 36px;color: #1C5879;}
