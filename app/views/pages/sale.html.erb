@@ -10,8 +10,10 @@
     <% @sale.each do |item| %>
       <div class="col-lg-2 col-md-2 col-2 sale">
         <div class="card shop-card" style="width: 100%;">
-          <span class="card-notify-badge"><%= item.discount&.to_i %>% OFF</span>
-          <img src="<%= item.picture_url %>" class="card-img-top shop-card-img" alt="...">
+          <div class='image-zone'>
+            <span class="card-notify-badge"><%= item.discount&.to_i %>% OFF</span>
+            <img src="<%= item.picture_url %>" class="card-img-top shop-card-img" alt="...">
+          </div>
           <div class="card-body">
             <span class="card-bottom-badge"><%= item.unit.truncate(15) %></span>
             <h5 class="card-title"><%= item.name.truncate(46) %></h5>
