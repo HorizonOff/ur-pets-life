@@ -230,7 +230,7 @@ module Api
           end
           discount_per_transaction = 0
           amount_to_be_awarded = subTotal - permitted_redeem_points - @discounted_items_amount
-          if amount_to_be_awarded > 0
+          if amount_to_be_awarded > 0 && discount.blank?
             if amount_to_be_awarded <= 500
               discount_per_transaction =+ (3*amount_to_be_awarded)/100
             elsif amount_to_be_awarded > 500 and amount_to_be_awarded <= 1000

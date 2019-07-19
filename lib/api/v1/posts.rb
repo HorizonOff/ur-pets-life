@@ -17,6 +17,14 @@ module Api
             key :type, :integer
             key :example, 1
           end
+          property :mobile_image_url do
+            key :type, :string
+            key :example, 'https://s3.eu-central-1.amazonaws.com/urpets-dev/urpets/uploads/item/picture/15/Big___Small_Pumkins.JPG'
+          end
+          property :mobile_video_url do
+            key :type, :string
+            key :example, 'https://s3.eu-central-1.amazonaws.com/urpets-dev/SampleVideo_1280x720_1mb.mp4'
+          end
         end
       end
 
@@ -89,6 +97,17 @@ module Api
           key :consumes, %w[application/json]
           key :produces, %w[application/json]
           key :tags, %W[Posts]
+
+          security do
+            key :api_key, []
+          end
+
+          parameter do
+            key :name, :search
+            key :in, :query
+            key :type, :string
+            key :example, 'good post'
+          end
 
           parameter do
             key :name, :created_at

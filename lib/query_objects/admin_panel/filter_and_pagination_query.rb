@@ -1,6 +1,6 @@
 module AdminPanel
   class FilterAndPaginationQuery
-    INT_COLUMNS = %w[user_id id Total_Price Quantity order_id item_id unit_price discount price quantity avg_rating weight vets_count status specialization_id pet_type_id experience sex].freeze
+    INT_COLUMNS = %w[user_id id Total_Price Quantity order_id item_id unit_price discount price quantity avg_rating weight vets_count status specialization_id pet_type_id experience sex view_count].freeze
     BOOLEAN_COLUMNS = %w[is_viewed IsRecurring IsHaveCategories is_active is_answered is_super_admin skip_push_sending is_for_trainer].freeze
     ADDITIONAL_PARAMS = { 'city' => { join_model: :location, field: 'locations.city' },
                           'specialization_id' => { join_model: :specializations, field: 'specializations.id' },
@@ -14,7 +14,7 @@ module AdminPanel
                                    sql: '(vets.name ILIKE :value)' }] }.freeze
 
     PET_SCOPES = %w[for_adoption lost found].freeze
-    ORDER_STATUS = %w[pending confirmed on_the_way delivered cancelled].freeze
+    ORDER_STATUS = %w[pending confirmed on_the_way delivered delivered_by_card delivered_by_cash cancelled].freeze
 
     def initialize(model, params, admin = nil)
       @model = model
@@ -53,9 +53,11 @@ module AdminPanel
       elsif model == 'Appointment'
         @scope = scope.includes(:vet, :user).joins(:user)
       elsif model == 'Post' || model == 'Notification'
-        @scope = scope.includes(:user).joins(:user)
+        @scope = scope.includes(:author)
       elsif model == 'Admin'
         @scope = scope.with_deleted
+      elsif model == 'Order'
+        @scope = scope.includes(:user, :location)
       end
     end
 

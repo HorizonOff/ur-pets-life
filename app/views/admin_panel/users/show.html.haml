@@ -32,6 +32,12 @@
               %li
                 Total Availed Points:
                 = @user.redeem_point.totalavailedpoints
+              %li
+                Spends Eligible:
+                = @user.spends_eligble
+              %li
+                Spends not eligible:
+                = @user.spends_not_eligble
 
             =link_to edit_admin_panel_user_path(@user), class: 'btn btn-warning' do
               %i.fa.fa-edit.m-right-xs

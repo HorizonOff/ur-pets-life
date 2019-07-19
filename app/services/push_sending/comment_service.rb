@@ -17,7 +17,8 @@ module PushSending
         source_type: 'AppointmentComment',
         badge: ios_badge,
         unread_commented_appointments_count: unread_commented_appointments_count,
-        unread_notifications_count: unread_notifications_count }
+        unread_notifications_count: unread_notifications_count,
+        unread_post_comments_count: unread_post_comments_count }
     end
 
     def android_options
@@ -28,7 +29,9 @@ module PushSending
                 source_id: appointment.id,
                 source_type: 'AppointmentComment',
                 badge: android_badge,
-                unread_commented_appointments_count: unread_commented_appointments_count }
+                unread_commented_appointments_count: unread_commented_appointments_count,
+                unread_notifications_count: unread_notifications_count,
+                unread_post_comments_count: unread_post_comments_count }
       }
     end
   end

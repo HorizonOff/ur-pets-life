@@ -9,6 +9,14 @@ module Api
             key :type, :string
             key :example, 'Message'
           end
+          property :mobile_image_url do
+            key :type, :string
+            key :example, 'https://s3.eu-central-1.amazonaws.com/urpets-dev/urpets/uploads/item/picture/15/Big___Small_Pumkins.JPG'
+          end
+          property :mobile_video_url do
+            key :type, :string
+            key :example, 'https://s3.eu-central-1.amazonaws.com/urpets-dev/SampleVideo_1280x720_1mb.mp4'
+          end
         end
       end
 
@@ -132,6 +140,10 @@ module Api
           key :consumes, %w[application/json]
           key :produces, %w[application/json]
           key :tags, %W[Comments]
+
+          security do
+            key :api_key, []
+          end
 
           parameter do
             key :name, :id

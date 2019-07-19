@@ -16,8 +16,6 @@ module AdminPanel
     end
   end
 
-  # GET /admin_panel/orders/1
-  # GET /admin_panel/orders/1.json
   def show
     @shippinglocation = Location.where(:id => @admin_panel_order.location_id).first
     @shippingaddress = (@shippinglocation.villa_number.blank? ? '' : (@shippinglocation.villa_number + ' '))  + (@shippinglocation.unit_number.blank? ? '' : (@shippinglocation.unit_number + ' ')) + (@shippinglocation.building_name.blank? ? '' : (@shippinglocation.building_name + ' ')) + (@shippinglocation.street.blank? ? '' : (@shippinglocation.street + ' ')) + (@shippinglocation.area.blank? ? '' : (@shippinglocation.area + ' ')) + (@shippinglocation.city.blank? ? '' : @shippinglocation.city)
@@ -26,9 +24,13 @@ module AdminPanel
     if @admin_panel_order.order_status_flag == 'pending'
       @statusoption = [['Confirm', 'confirmed'], ['Cancel', 'cancelled']]
     elsif @admin_panel_order.order_status_flag == 'confirmed'
-      @statusoption = [['On The Way', 'on_the_way']]
+      @statusoption = [['On The Way', 'on_the_way'], ['Cancel', 'cancelled']]
+    elsif @admin_panel_order.order_status_flag == 'on_the_way' && !@admin_panel_order.IsCash?
+      @statusoption = [['Delivered', 'delivered'], ['Cancel', 'cancelled']]
     elsif @admin_panel_order.order_status_flag == 'on_the_way'
-      @statusoption = [['Delievered', 'delivered']]
+      @statusoption = [['Delivered by card', 'delivered_by_card'], ['Delivered by cash', 'delivered_by_cash'], ['Cancel', 'cancelled']]
+    elsif @admin_panel_order.order_status_flag.in?(['delivered', 'delivered_by_card', 'delivered_by_cash'])
+      @statusoption = [['Cancel', 'cancelled']]
     end
   end
 
@@ -165,13 +167,19 @@ module AdminPanel
     if @admin_panel_order.update(:order_status_flag => statustoupdate)
       @admin_panel_order.order_items.each do |orderitem|
         if orderitem.status != 'cancelled'
+          if statustoupdate == 'cancelled'
+            item = Item.where(:id => orderitem.item_id).first
+            if !item.nil?
+              item.increment!(:quantity, orderitem.Quantity)
+            end
+          end
           orderitem.update(:status => statustoupdate)
         end
       end
       orderuser = User.where(:id => @admin_panel_order.user_id).first
       orderuser.notifications.create(order: @admin_panel_order, message: 'Your Order status for Order # ' + @admin_panel_order.id.to_s + ' has been ' + (statustoupdate == 'cancelled' ? 'Cancelled' : 'updated to ' + (statustoupdate == 'on_the_way' ? 'on the way' : statustoupdate)))
 
-      if statustoupdate == 'delivered'
+      if statustoupdate.in?(['delivered', 'delivered_by_card', 'delivered_by_cash'])
         set_order_delivery_invoice(@admin_panel_order.id, orderuser.email)
         @admin_panel_order.update_attributes(Payment_Status: 1)
       end
@@ -187,14 +195,14 @@ module AdminPanel
         user_redeem_point_reimburse.update(:net_worth => user_redeem_point_reimburse.net_worth + @admin_panel_order.RedeemPoints, :totalavailedpoints => user_redeem_point_reimburse.totalavailedpoints - @admin_panel_order.RedeemPoints)
         @admin_panel_order.update(:Subtotal => 0, :Delivery_Charges => 0, :Vat_Charges => 0, :Total => 0, :order_status_flag => 'cancelled', :earned_points => 0, :RedeemPoints => 0)
 
-        @admin_panel_order.order_items.each do |orderitem|
-          if orderitem.status != "cancelled"
-            item = Item.where(:id => orderitem.item_id).first
-            if !item.nil?
-              item.increment!(:quantity, orderitem.Quantity)
-            end
-          end
-        end
+        # @admin_panel_order.order_items.each do |orderitem|
+        #   if orderitem.status != "cancelled"
+        #     item = Item.where(:id => orderitem.item_id).first
+        #     if !item.nil?
+        #       item.increment!(:quantity, orderitem.Quantity)
+        #     end
+        #   end
+        # end
 
         OrderMailer.send_complete_cancel_order_email_to_customer(@admin_panel_order.id, @admin_panel_order.user.email).deliver
       end
@@ -275,9 +283,8 @@ module AdminPanel
 
     def export_data
       is_user_present = @@filtered_user_id > 0 ? false : true
-
       @orders = Order.visible.order(:id).includes({user: [:location]}, {order_items: [item: :item_brand]})
-                                      .where("(users.id = (?) OR #{is_user_present}) AND order_status_flag = (?)", @@filtered_user_id, 'delivered').references(:user)
+                                      .where("(users.id = (?) OR #{is_user_present}) AND order_status_flag IN (?)", @@filtered_user_id, ['delivered', 'delivered_by_card', 'delivered_by_cash']).references(:user)
       if params[:from_date].present? && params[:to_date].present?
         @orders = @orders.created_in_range(params[:from_date].to_date.beginning_of_day, params[:to_date].to_date.end_of_day)
       end

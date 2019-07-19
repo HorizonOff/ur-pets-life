@@ -15,6 +15,27 @@ class Item < ApplicationRecord
   end)
 
   scope :active, -> { where(is_active: true) }
+  scope :sale, -> { where('items.discount > 0') }
+  scope :first_month, (lambda do
+    where('items.expiry_at BETWEEN (?) AND (?)',
+          (Time.current + 1.month).beginning_of_month, (Time.current + 1.month).end_of_month)
+  end)
+  scope :second_month, (lambda do
+    where('items.expiry_at BETWEEN (?) AND (?)',
+          (Time.current + 2.month).beginning_of_month, (Time.current + 2.month).end_of_month)
+  end)
+  scope :third_month, (lambda do
+    where('items.expiry_at BETWEEN (?) AND (?)',
+          (Time.current + 3.month).beginning_of_month, (Time.current + 3.month).end_of_month)
+  end)
+  scope :fourth_month, (lambda do
+    where('items.expiry_at BETWEEN (?) AND (?)',
+          (Time.current + 4.month).beginning_of_month, (Time.current + 4.month).end_of_month)
+  end)
+  scope :discounted_items, (lambda do
+    sale.where('items.expiry_at > ? OR items.expiry_at < ?',
+               (Time.current + 4.month).end_of_month, Time.current.end_of_month)
+  end)
 
   def smart_destroy
     any_item_relitions? ? really_destroy! : destroy

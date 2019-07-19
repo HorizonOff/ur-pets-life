@@ -48,7 +48,7 @@ class OrderItemsController < Api::BaseController
   end
 
   def get_completed_order_items
-    completed_orders = OrderItem.includes(:order).where(order_items: {status: [:delivered, :cancelled]}, orders: {user_id: @user.id})
+    completed_orders = OrderItem.includes(:order).where(order_items: {status: [:delivered, :delivered_by_card, :delivered_by_cash, :cancelled]}, orders: {user_id: @user.id})
     if completed_orders.count > 0
     render json: completed_orders.order(created_at: :desc).as_json(
       :only => [:id, :status, :Quantity, :IsRecurring, :IsReviewed, :Unit_Price, :Total_Price],

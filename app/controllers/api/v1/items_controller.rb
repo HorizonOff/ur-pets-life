@@ -19,6 +19,8 @@ class ItemsController < Api::BaseController
     return render_422('At least 3 characters in keyword') if params[:keyword].blank? || params[:keyword].length < 3
 
     @items = Item.active.where('items.name ILIKE :value', value: "%#{params[:keyword]}%").limit(40)
+    @items = @items.sale if params[:sale_only].in?([true, 'true'])
+    @items = @items.send(params[:category]) if params[:category].present?
     @brands = ItemBrand.where('item_brands.name ILIKE :value', value: "%#{params[:keyword]}%").limit(5)
     render json: { items: ActiveModel::Serializer::CollectionSerializer.new(@items, serializer: ItemSearchSerializer),
                    brands: ActiveModel::Serializer::CollectionSerializer.new(@brands,
@@ -26,12 +28,12 @@ class ItemsController < Api::BaseController
   end
 
   def search_items_by_keywords
-    if (params[:lowerprice].nil? or params[:upperprice].nil? or params[:minrating].nil? or params[:maxrating].nil? or params[:sortby].nil?)
-      render json: {
+    if params[:lowerprice].nil? || params[:upperprice].nil? || params[:minrating].nil? || params[:maxrating].nil?
+      return render json: {
         Message: 'Parameters not found',
         status: :unprocessable_entity
       }
-    elsif  params[:keyword].nil?
+    elsif params[:keyword].nil?
       pet_filter = params[:pet_type_id].nil?
       cat_filter = params[:category_id].nil?
       brand_filter = params[:brand_id].nil?
@@ -39,6 +41,7 @@ class ItemsController < Api::BaseController
       if (!params[:pageno].nil? and !params[:size].nil?)
         size = params[:size].to_i
         page = params[:pageno].to_i
+
         @items = Item.where("price BETWEEN (?) AND  (?) AND avg_rating BETWEEN (?) AND (?) AND (#{brand_filter} OR item_brand_id = (?)) AND (#{cat_filter} OR item_categories_id = (?)) AND (#{pet_filter} OR pet_type_id = (?))", params[:lowerprice], params[:upperprice], params[:minrating], params[:maxrating], params[:brand_id], params[:category_id], params[:pet_type_id]).limit(size).offset(page * size)
       else
         @items = Item.where("price BETWEEN (?) AND  (?) AND avg_rating BETWEEN (?) AND (?) AND (#{brand_filter} OR item_brand_id = (?)) AND (#{cat_filter} OR item_categories_id = (?)) AND (#{pet_filter} OR pet_type_id = (?))", params[:lowerprice], params[:upperprice], params[:minrating], params[:maxrating], params[:brand_id], params[:category_id], params[:pet_type_id])
@@ -56,9 +59,8 @@ class ItemsController < Api::BaseController
       else
         @items = Item.includes(:item_brand).where("(lower(item_brands.name) LIKE (?) OR lower(items.name) LIKE (?)) AND price BETWEEN (?) AND  (?) AND avg_rating BETWEEN (?) AND (?) AND (#{brand_filter} OR item_brand_id = (?)) AND (#{cat_filter} OR item_categories_id = (?)) AND (#{pet_filter} OR pet_type_id = (?))", key.downcase, key.downcase, params[:lowerprice], params[:upperprice], params[:minrating], params[:maxrating], params[:brand_id], params[:category_id], params[:pet_type_id]).references(:item_brand)
       end
-
     end
-    sort_filter = params[:sortby].to_i
+    sort_filter = params[:sortby].blank? ? 1 : params[:sortby].to_i
     if sort_filter == 1
       @items = @items.order(name: :asc)
     elsif sort_filter == 2
@@ -68,26 +70,26 @@ class ItemsController < Api::BaseController
     elsif sort_filter == 4
       @items = @items.order(created_at: :asc)
     end
-    @items = @items.where(:is_active => true)
     json_to_render = []
+    @items = @items.active.includes(:wishlists)
+    @items = @items.sale if params[:sale_only].in?([true, 'true'])
+    @items = @items.send(params[:category]) if params[:category].present?
     if @items.nil? or @items.empty?
-        render json: {
-          Message: 'No Items found'
-        }
+      render json: {
+        Message: 'No Items found'
+      }
     else
-    @items.each do |myitem|
-      json_to_render << ({
-        :item => myitem.as_json(:only => [:id, :picture, :name, :price, :unit_price, :discount, :description, :weight, :unit, :rating, :review_count, :avg_rating, :quantity, :short_description]),
-        :IsFavorite => get_wish_list_flag(myitem),
-        :WishlistId => get_wish_list_id(myitem)
-        }
-      )
+      @items.each do |myitem|
+        json_to_render << ({
+          :item => myitem.as_json(:only => [:id, :picture, :name, :price, :unit_price, :discount, :description, :weight, :unit, :rating, :review_count, :avg_rating, :quantity, :short_description]),
+          :IsFavorite => get_wish_list_flag(myitem),
+          :WishlistId => get_wish_list_id(myitem)
+          }
+        )
       end
-    render :json => json_to_render
+      render :json => json_to_render
     end
   end
-
-
 
   def search_items_using_filters
     item_categories = []
@@ -99,7 +101,8 @@ class ItemsController < Api::BaseController
       item_brand_ids << brand.id
     end
     @items = Item.where("price >= (?) AND price <= (?) AND item_brand_id IN (?)", params[:lowerprice], params[:upperprice], item_brand_ids)
-    @items = @items.where(:is_active => true)
+    @items = @items.active
+    @items = @items.sale if params[:sale_only].in?([true, 'true'])
     if @items.nil? or @items.empty?
       format.json do
         render json: {
@@ -311,6 +314,7 @@ end
     def item_params
       params.require(:item).permit(:name, :price, :discount, :weight, :unit)
     end
+
     def get_wish_list_flag(item)
       if Wishlist.where(:user_id => @user.id, :item_id => item.id).exists?
         true

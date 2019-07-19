@@ -88,7 +88,7 @@ function init_datatables(){
                                      { 'searchable': false, 'orderable': false, 'data': 'actions', 'targets': 7 } ] },
       'posts': { 'url': '/admin_panel/posts',
                  'columns': [ { 'searchable': true, 'orderable': true, 'data': 'id', 'targets': 0 },
-                              { 'searchable': true, 'orderable': false, 'data': 'name', 'targets': 1 },
+                              { 'searchable': true, 'orderable': false, 'data': 'user_name', 'targets': 1 },
                               { 'searchable': true, 'orderable': false, 'data': 'title', 'targets': 2 },
                                { 'searchable': true, 'orderable': true, 'data': 'pet_type_id', 'targets': 3 },
                               { 'searchable': false, 'orderable': true, 'data': 'created_at', 'targets': 4 },
@@ -167,8 +167,9 @@ function init_datatables(){
                              { 'searchable': true, 'orderable': false, 'data': 'is_viewed', 'targets': 8 },
                              { 'searchable': true, 'orderable': false, 'data': 'order_status_flag', 'targets': 9 },
                              { 'searchable': true, 'orderable': false, 'data': 'is_pre_recurring', 'targets': 10 },
-                             { 'searchable': false, 'orderable': true, 'data': 'created_at', 'targets': 11 },
-                             { 'searchable': false, 'orderable': false, 'data': 'actions', 'targets': 12 } ] },
+                             { 'searchable': false, 'orderable': true, 'data': 'delivery_at', 'targets': 11 },
+                             { 'searchable': false, 'orderable': true, 'data': 'created_at', 'targets': 12 },
+                             { 'searchable': false, 'orderable': false, 'data': 'actions', 'targets': 13 } ] },
 
       'specializations': { 'url': '/admin_panel/specializations',
                            'columns': [ { 'searchable': true, 'orderable': true, 'data': 'id', 'targets': 0 },
@@ -180,7 +181,15 @@ function init_datatables(){
                            'columns': [ { 'searchable': true, 'orderable': true, 'data': 'domain', 'targets': 0 },
                                         { 'searchable': true, 'orderable': true, 'data': 'discount', 'targets': 1 },
                                         { 'searchable': false, 'orderable': true, 'data': 'created_at', 'targets': 2 },
-                                        { 'searchable': false, 'orderable': false, 'data': 'actions', 'targets': 3 } ] }
+                                        { 'searchable': false, 'orderable': false, 'data': 'actions', 'targets': 3 } ] },
+
+      'ads': { 'url': '/admin_panel/ads', 'order_col': 1, 'order_dir': 'desc',
+                           'columns': [ { 'searchable': true, 'orderable': true, 'data': 'id', 'targets': 0 },
+                                        { 'searchable': true, 'orderable': true, 'data': 'name', 'targets': 1 },
+                                        { 'searchable': false, 'orderable': false, 'data': 'image', 'targets': 2 },
+                                        { 'searchable': true, 'orderable': true, 'data': 'view_count', 'targets': 3 },
+                                        { 'searchable': true, 'orderable': true, 'data': 'is_active', 'targets': 4 },
+                                        { 'searchable': false, 'orderable': false, 'data': 'actions', 'targets': 5 } ] }
     }
     var datatable = $('.datatable').first()
     if (datatable.hasClass('clinics')){
@@ -223,6 +232,8 @@ function init_datatables(){
       init_datatable(table_rules['orders']['url'], table_rules['orders']['columns'], 0, 'desc')
     } else if (datatable.hasClass('discount_domains')){
       init_datatable(table_rules['discount_domains']['url'], table_rules['discount_domains']['columns'], table_rules['discount_domains']['order_col'], table_rules['discount_domains']['order_dir'])
+    } else if (datatable.hasClass('ads')){
+      init_datatable(table_rules['ads']['url'], table_rules['ads']['columns'], table_rules['ads']['order_col'], table_rules['ads']['order_dir'])
     } else {
       init_datatable(table_rules['specializations']['url'], table_rules['specializations']['columns'])
     }

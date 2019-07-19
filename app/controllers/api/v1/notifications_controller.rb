@@ -19,7 +19,8 @@ module Api
 
       def unread
         render json: { unread_notifications_count: unread_notifications_count,
-                       unread_commented_appointments_count: @user.unread_commented_appointments_count + @user.unread_commented_orders_count }
+                       unread_commented_appointments_count: @user.unread_commented_appointments_count + @user.unread_commented_orders_count,
+                       unread_post_comments_count: @user.unread_post_comments_count }
       end
 
       private

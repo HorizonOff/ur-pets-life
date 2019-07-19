@@ -65,6 +65,8 @@ Rails.application.routes.draw do
       get 'pets/:id/health_history', to: 'health_history#index'
       get 'pets/:id/weight_history', to: 'weight_history#index'
       get 'found_pets', to: 'pets#found_pets'
+      get 'get_current_ad', to: 'ads#current'
+      get 'sale_categories', to: 'sales#categories'
       resources :pets, except: %i[new edit] do
         collection { post :found }
         collection { get :can_be_lost }
@@ -145,6 +147,11 @@ Rails.application.routes.draw do
   devise_for :admins, path: 'admin_panel/admins', except: :registrations,
                       controllers: { invitations: 'admin_panel/admins/invitations' }
 
+  authenticate :admin do
+    require 'sidekiq/web'
+    mount Sidekiq::Web => '/sidekiq'
+  end
+
   namespace :admin_panel do
     root 'dashboard#index'
 
@@ -220,7 +227,7 @@ Rails.application.routes.draw do
       member { get :new_reply }
       member { post :send_reply }
     end
-    resources :posts, only: %i[index show destroy], shallow: true do
+    resources :posts, only: %i[index new create show destroy], shallow: true do
       resources :comments, only: %i[index create]
     end
     resources :comments, only: :destroy
@@ -229,5 +236,8 @@ Rails.application.routes.draw do
 
     resource :app_version, only: %i[edit update]
     resources :tax_reports, only: %i[index]
+    resources :ads, only: %i[index new create] do
+      member { put :change_status }
+    end
   end
 end

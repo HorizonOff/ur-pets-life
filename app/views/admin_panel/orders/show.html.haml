@@ -104,7 +104,8 @@
                     %td #{q.recurssion_interval_id? ? q.recurssion_interval.label : 'N/A'}
                     %td #{q.status == "on_the_way" ? 'on the way' : q.status}
                     %td
-                      = link_to 'Cancel', cancel_admin_panel_order_path(q), data: { confirm: 'Are you sure?' }, method: :delete, remote: true, class: 'btn btn-danger btn-xs check_response' if q.status == 'pending'
+                      = link_to 'Cancel', cancel_admin_panel_order_path(q), data: { confirm: 'Are you sure?' }, method: :delete, remote: true, class: 'btn btn-danger btn-xs check_response' if q.status != 'cancelled'
+
 
 - if (@admin_panel_order.order_status_flag != 'delivered' and @admin_panel_order.order_status_flag != 'cancelled' && !@admin_panel_order.is_pre_recurring?)
   %div

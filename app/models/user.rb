@@ -50,6 +50,7 @@ class User < ApplicationRecord
 
   has_many :orders
   has_many :order_items, through: :orders
+  has_many :user_posts, dependent: :destroy
   has_many :commented_orders, -> { where('comments_count > 0') }, class_name: 'Order'
   has_many :orders_with_new_comments, -> { where('unread_comments_count_by_user > 0') }, class_name: 'Order'
   has_one :redeem_point
@@ -63,7 +64,7 @@ class User < ApplicationRecord
   has_many :appointments
   has_many :commented_appointments, -> { where('comments_count > 0') }, class_name: 'Appointment'
   has_many :appointments_with_new_comments, -> { where('unread_comments_count_by_user > 0') }, class_name: 'Appointment'
-  has_many :posts
+  has_many :posts, as: :author, class_name: 'Post', dependent: :destroy
   has_many :comments, as: :writable, dependent: :destroy
   has_many :notifications
   has_many :unread_notifications, -> { where(viewed_at: nil) }, class_name: 'Notification'
@@ -106,6 +107,11 @@ class User < ApplicationRecord
     save
   end
 
+  def update_post_comment_counters
+    self.unread_post_comments_count = user_posts.sum(:unread_post_comments_count)
+    save
+  end
+
   def update_counters_for_order
     self.commented_orders_count = commented_orders.count
     self.unread_commented_orders_count = orders_with_new_comments.count
@@ -122,7 +128,7 @@ class User < ApplicationRecord
       user_order.order_items.each do |item|
         next if item.status == 'cancelled'
 
-        if item.isdiscounted?
+        if item.isdiscounted? || user_order.is_user_from_company?
           spends_not_eligble += item.Total_Price
         elsif redeem_points > item.Total_Price
           spends_eligble += 0

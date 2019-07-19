@@ -1,0 +1,37 @@
+.row
+  = render partial: 'layouts/admin_panel/errors', locals: { object: @post }
+
+  .col-md-6.col-sm-6.col-xs-12
+    .x_panel
+      .x_title
+        %h2 Post Info
+        .clearfix
+      .x_content
+        %br
+
+        .form-group
+          = f.label :video, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
+            Video
+          .col-md-9.col-sm-9.col-xs-12
+            = f.file_field :video, class: 'form-control'
+        .form-group
+          = f.label :image, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
+            Image
+          .col-md-9.col-sm-9.col-xs-12
+            = f.file_field :image, class: 'form-control'
+        .form-group
+          = f.label :pet_type_id, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
+            Pet type
+          .col-md-9.col-sm-9.col-xs-12
+            = f.select :pet_type_id, options_from_collection_for_select(PetType.all, :id, :name, params[:pet_type_id]), { include_blank: false }, { class: 'form-control select2' }
+        .form-group
+          = f.label :title, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
+            Title
+          .col-md-9.col-sm-9.col-xs-12
+            = f.text_field :title, class: 'form-control'
+        .form-group
+          = f.label :message, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
+            Description
+          .col-md-9.col-sm-9.col-xs-12
+            = f.text_area :message, class: 'form-control'
+

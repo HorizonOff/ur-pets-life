@@ -75,7 +75,9 @@ gem "paranoia", "~> 2.2"
 
 gem 'ruby-push-notifications'
 gem 'fcm'
-gem 'axlsx'
+# For write xlsx
+gem 'rubyzip', '>= 1.2.1'
+gem 'axlsx', git: 'https://github.com/randym/axlsx.git', ref: 'c8ac844'
 gem 'axlsx_rails'
 # worker
 gem 'sidekiq'
@@ -120,3 +122,10 @@ gem 'rails_12factor', group: :production
 
 #flesh messages for cms
 gem 'toastr-rails'
+
+# fix dependency with roo
+gem 'zip-zip', '~> 0.3'
+
+#for video
+gem 'carrierwave-video'
+gem 'video_thumbnailer'

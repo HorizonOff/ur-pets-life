@@ -31,6 +31,8 @@ CREATE TYPE public.order_item_status AS ENUM (
     'confirmed',
     'on_the_way',
     'delivered',
+    'delivered_by_cash',
+    'delivered_by_card',
     'cancelled'
 );
 
@@ -111,7 +113,8 @@ CREATE TABLE public.admins (
     unread_commented_appointments_count integer DEFAULT 0 NOT NULL,
     is_employee boolean DEFAULT false,
     unread_commented_orders_count integer DEFAULT 0 NOT NULL,
-    is_cataloger boolean DEFAULT false
+    is_cataloger boolean DEFAULT false,
+    is_msh_admin boolean DEFAULT false
 );
 
 
@@ -132,6 +135,40 @@ CREATE SEQUENCE public.admins_id_seq
 --
 
 ALTER SEQUENCE public.admins_id_seq OWNED BY public.admins.id;
+
+
+--
+-- Name: ads; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.ads (
+    id bigint NOT NULL,
+    name character varying,
+    image character varying,
+    is_active boolean DEFAULT false,
+    view_count integer DEFAULT 0,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: ads_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.ads_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: ads_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.ads_id_seq OWNED BY public.ads.id;
 
 
 --
@@ -994,6 +1031,41 @@ ALTER SEQUENCE public.locations_id_seq OWNED BY public.locations.id;
 
 
 --
+-- Name: my_second_house_member_invitations; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.my_second_house_member_invitations (
+    id bigint NOT NULL,
+    email character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    unsubscribe boolean DEFAULT false,
+    name character varying,
+    token character varying,
+    member_type integer DEFAULT 1
+);
+
+
+--
+-- Name: my_second_house_member_invitations_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.my_second_house_member_invitations_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: my_second_house_member_invitations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.my_second_house_member_invitations_id_seq OWNED BY public.my_second_house_member_invitations.id;
+
+
+--
 -- Name: notifications; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1282,7 +1354,6 @@ ALTER SEQUENCE public.pictures_id_seq OWNED BY public.pictures.id;
 
 CREATE TABLE public.posts (
     id bigint NOT NULL,
-    user_id bigint,
     title character varying,
     message text,
     comments_count integer DEFAULT 0,
@@ -1294,7 +1365,13 @@ CREATE TABLE public.posts (
     image character varying,
     video character varying,
     video_duration integer,
+<<<<<<< HEAD
     mobile_video_url character varying
+=======
+    mobile_video_url character varying,
+    author_type character varying,
+    author_id bigint
+>>>>>>> master
 );
 
 
@@ -1943,7 +2020,17 @@ CREATE TABLE public.users (
     unread_commented_orders_count integer DEFAULT 0 NOT NULL,
     spends_eligble double precision DEFAULT 0.0 NOT NULL,
     spends_not_eligble double precision DEFAULT 0.0 NOT NULL,
+<<<<<<< HEAD
     unread_post_comments_count integer DEFAULT 0
+=======
+    unread_post_comments_count integer DEFAULT 0,
+<<<<<<< HEAD
+    member_type integer DEFAULT 0
+=======
+    member_type integer DEFAULT 0,
+    unconfirmed_email character varying
+>>>>>>> master
+>>>>>>> master
 );
 
 
@@ -2158,6 +2245,13 @@ ALTER TABLE ONLY public.admins ALTER COLUMN id SET DEFAULT nextval('public.admin
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY public.ads ALTER COLUMN id SET DEFAULT nextval('public.ads_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY public.app_versions ALTER COLUMN id SET DEFAULT nextval('public.app_versions_id_seq'::regclass);
 
 
@@ -2299,6 +2393,13 @@ ALTER TABLE ONLY public.items ALTER COLUMN id SET DEFAULT nextval('public.items_
 --
 
 ALTER TABLE ONLY public.locations ALTER COLUMN id SET DEFAULT nextval('public.locations_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.my_second_house_member_invitations ALTER COLUMN id SET DEFAULT nextval('public.my_second_house_member_invitations_id_seq'::regclass);
 
 
 --
@@ -2521,6 +2622,14 @@ ALTER TABLE ONLY public.admins
 
 
 --
+-- Name: ads_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ads
+    ADD CONSTRAINT ads_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: app_versions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2694,6 +2803,14 @@ ALTER TABLE ONLY public.items
 
 ALTER TABLE ONLY public.locations
     ADD CONSTRAINT locations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: my_second_house_member_invitations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.my_second_house_member_invitations
+    ADD CONSTRAINT my_second_house_member_invitations_pkey PRIMARY KEY (id);
 
 
 --
@@ -3546,6 +3663,13 @@ CREATE INDEX index_locations_on_place_type_and_place_id ON public.locations USIN
 
 
 --
+-- Name: index_my_second_house_member_invitations_on_token; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_my_second_house_member_invitations_on_token ON public.my_second_house_member_invitations USING btree (token);
+
+
+--
 -- Name: index_notifications_on_admin_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3686,6 +3810,13 @@ CREATE INDEX index_pictures_on_picturable_type_and_picturable_id ON public.pictu
 
 
 --
+-- Name: index_posts_on_author_type_and_author_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_posts_on_author_type_and_author_id ON public.posts USING btree (author_type, author_id);
+
+
+--
 -- Name: index_posts_on_deleted_at; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3697,13 +3828,6 @@ CREATE INDEX index_posts_on_deleted_at ON public.posts USING btree (deleted_at);
 --
 
 CREATE INDEX index_posts_on_pet_type_id ON public.posts USING btree (pet_type_id);
-
-
---
--- Name: index_posts_on_user_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_posts_on_user_id ON public.posts USING btree (user_id);
 
 
 --
@@ -4207,14 +4331,6 @@ ALTER TABLE ONLY public.pets
 
 
 --
--- Name: fk_rails_5b5ddfd518; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.posts
-    ADD CONSTRAINT fk_rails_5b5ddfd518 FOREIGN KEY (user_id) REFERENCES public.users(id);
-
-
---
 -- Name: fk_rails_5b9551c291; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -4645,6 +4761,16 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190521112407'),
 ('20190527071941'),
 ('20190527113051'),
-('20190530123640');
-
+('20190530123640'),
+('20190606115107'),
+('20190607124136'),
+('20190607125447'),
+('20190610125009'),
+('20190611081442'),
+('20190614103926'),
+('20190620083531'),
+('20190620123632'),
+('20190626112218'),
+('20190701132734'),
+('20190702125721');
 
