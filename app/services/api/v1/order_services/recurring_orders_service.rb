@@ -64,7 +64,8 @@ module API
                                                    item_id: cartitem.item.id, Quantity: cartitem.Quantity,
                                                    Unit_Price: cartitem.Unit_Price, Total_Price: cartitem.Total_Price,
                                                    IsReviewed: false, status: :pending,
-                                                   isdiscounted: cartitem.isdiscounted)
+                                                   isdiscounted: cartitem.isdiscounted,
+                                                   recurssion_interval_id: cartitem.recurssion_interval_id)
 
                 unless isoutofstock
                   item = Item.where(id: cartitem.item.id).first
