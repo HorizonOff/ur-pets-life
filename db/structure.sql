@@ -1399,9 +1399,19 @@ CREATE TABLE public.posts (
     image character varying,
     video character varying,
     video_duration integer,
+<<<<<<< HEAD
     mobile_video_url character varying,
     author_type character varying,
     author_id bigint
+=======
+<<<<<<< HEAD
+    mobile_video_url character varying
+=======
+    mobile_video_url character varying,
+    author_type character varying,
+    author_id bigint
+>>>>>>> master
+>>>>>>> recurring_order
 );
 
 
@@ -2050,6 +2060,12 @@ CREATE TABLE public.users (
     unread_commented_orders_count integer DEFAULT 0 NOT NULL,
     spends_eligble double precision DEFAULT 0.0 NOT NULL,
     spends_not_eligble double precision DEFAULT 0.0 NOT NULL,
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+    unread_post_comments_count integer DEFAULT 0
+=======
+>>>>>>> recurring_order
     unread_post_comments_count integer DEFAULT 0,
 <<<<<<< HEAD
     member_type integer DEFAULT 0,
@@ -2061,7 +2077,11 @@ CREATE TABLE public.users (
     member_type integer DEFAULT 0,
     unconfirmed_email character varying
 >>>>>>> master
+<<<<<<< HEAD
 >>>>>>> new_task_22_ad
+=======
+>>>>>>> master
+>>>>>>> recurring_order
 );
 
 
