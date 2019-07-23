@@ -262,7 +262,7 @@ module Api
             if !cartitem.recurssion_interval_id.nil?
               recurrion_interval = cartitem.recurssion_interval
               next_due_date = Time.current + recurrion_interval.days.days
-              @neworderitemcreate.update_attributes(next_recurring_due_date: next_due_date.to_date,
+              @neworderitemcreate.update_attributes(next_recurring_due_date: next_due_date,
                                                     recurssion_interval_id: cartitem.recurssion_interval_id)
             end
             is_any_recurring_item = true if cartitem.IsRecurring
