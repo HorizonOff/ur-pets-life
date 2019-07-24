@@ -58,8 +58,6 @@ module API
                                         order_status_flag: 'pending', company_discount: company_discount,
                                         is_user_from_company: is_user_from_company)
             if @recurringorder.save
-              send_inventory_alerts(@recurringorder.id) if isoutofstock
-
               order_items.each do |cartitem|
                 @recurringorder.order_items.create(IsRecurring: true,
                                                    item_id: cartitem.item.id, Quantity: cartitem.Quantity,
@@ -103,7 +101,7 @@ module API
                                                totalearnedpoints: (@user_redeem_point_record.totalearnedpoints +
                                                                   discount_per_transaction))
               @recurringorder.update(earned_points: discount_per_transaction)
-
+              send_empty_inventory_alerts(@recurringorder.id) if isoutofstock
               send_order_sucess_alerts(@recurringorder)
             else
               send_failure_alert_to_admin(orderitem.id)
