@@ -1,11 +1,12 @@
 wb = xlsx_package.workbook
 
 wb.add_worksheet(name: "Catalog") do |sheet|
-  sheet.add_row %w(Item# Product\ Name Item\ Category Item\ Brand Weight Buying\ Price Selling\ Price Expiry\ date In\ stock Supplier Supplier\ Code)
+  sheet.add_row %w(Item# Product\ Name Item\ Category Item\ Brand Weight Buying\ Price Selling\ Price Discount\ % Expiry\ date In\ stock Supplier Supplier\ Code)
 
   @items.each do |item|
    item_category = ItemCategory.find_by(id: item.item_categories_id)&.name
    sheet.add_row [item.id, item.name, item_category, item.item_brand&.name, item.unit, item.buying_price,
-                  item.unit_price, item.expiry_at&.strftime('%B-%y'), item.quantity, item.supplier, item.supplier_code]
+                  item.unit_price, item.discount, item.expiry_at&.strftime('%B-%y'), item.quantity, item.supplier,
+                  item.supplier_code]
   end
 end
