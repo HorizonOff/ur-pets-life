@@ -51,7 +51,7 @@ class OrderMailer < ApplicationMailer
   end
 
   def send_empty_inventory_alert(order_id)
-    @order_ = Order.find_by(id: order_id)
+    @order_id = order_id
     mail(to: ENV['ADMIN'], subject: 'Inventory Alert')
   end
 
