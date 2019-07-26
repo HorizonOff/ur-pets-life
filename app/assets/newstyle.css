@@ -113,7 +113,7 @@ footer p {color: #ffffff;font-size:14px;margin: 0 0 20px;}
 
 
 @media (min-width:768px) and (max-width:3000px) {
-
+	
 }
 
 
@@ -128,9 +128,9 @@ footer p {color: #ffffff;font-size:14px;margin: 0 0 20px;}
 
 
 
-
+    
 @media (min-width:768px) and (max-width:1024px) {
-
+   
  .forth figure figcaption p {   font-size: 15px;}
  .forth figure {height: 196px;}
 	.cta figure {height: 200px;}
@@ -165,31 +165,31 @@ footer p {color: #ffffff;font-size:14px;margin: 0 0 20px;}
 	.banner img {margin-top: 50px;}
 	}
 
-
-
-
-
-
-
+	
+	
+	
+	
+	
+	
 
 
 @media only screen and (device-width:1024px) {
 
-
+	
 }
-
-
+    
+    
 @media only screen and (device-width: 812px) {
 
-
+    
 }
 
 
 
 
-@media screen and (max-width: 767px) {
-
-	header .logo {float: inherit;text-align: center;width: 50px;}
+@media screen and (max-width: 767px) { 
+	
+	header .logo {float: inherit;text-align: center;}
 	header .custbtn {float: inherit;text-align: center;display: table; margin:30px auto 0;}
 	.banner {padding: 150px 0 0;height: 490px;}
 	.banner article h2 {font-size: 20px;line-height: initial;text-align: center;}
@@ -229,15 +229,15 @@ footer p {color: #ffffff;font-size:14px;margin: 0 0 20px;}
 	footer img.logo {width: 200px;}
 	footer img.card {display: none;}
 
-
-
+	
+	
 }
 
 
 
 @media (min-width:568px) and (max-width:767px) {
 
-
+	
 }
 
 
