@@ -8,11 +8,15 @@ module Api
 
       def index
         boardings = boardings_query.find_objects
+        if @user&.is_msh_member?
+          boardings = boardings.select { |center| center[:name].match(/My Second Home/).present? }
+        end
         serialized_centres = ActiveModel::Serializer::CollectionSerializer.new(
           boardings, serializer: BoardingIndexSerializer, scope: serializable_params
         )
 
-        render json: { boardings: serialized_centres, total_count: boardings.total_count }
+        render json: { boardings: serialized_centres,
+                       total_count: @user&.is_msh_member? ? boardings.count : boardings.total_count }
       end
 
       def show

@@ -129,3 +129,6 @@ gem 'zip-zip', '~> 0.3'
 #for video
 gem 'carrierwave-video'
 gem 'video_thumbnailer'
+
+#for send email
+gem 'sendgrid'

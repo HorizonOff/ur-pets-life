@@ -11,7 +11,10 @@ module Api
 
       def create
         @user = User.new(user_params)
-        @user.confirmed_at = Time.now if ::Api::V1::DiscountDomainService.new(@user.email.dup).is_domain_popular
+        @user.confirmed_at = Time.now unless ::Api::V1::DiscountDomainService.new(@user.email.dup).domain_with_discount?
+        if MySecondHouseMemberInvitation.find_by(email: @user.email).present?
+          @user.member_type = MySecondHouseMemberInvitation.find_by(email: @user.email).member_type
+        end
         if @user.save
           sign_in_user
         else

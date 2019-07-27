@@ -177,6 +177,14 @@ function init_datatables(){
                                         { 'searchable': true, 'orderable': true, 'data': 'is_for_trainer', 'targets': 2 },
                                         { 'searchable': false, 'orderable': false, 'data': 'actions', 'targets': 3 } ] },
 
+      'my_second_house_member_invitations': { 'url': '/admin_panel/my_second_house_member_invitations',
+                           'columns': [ { 'searchable': true, 'orderable': true, 'data': 'id', 'targets': 0 },
+                                        { 'searchable': true, 'orderable': true, 'data': 'name', 'targets': 1 },
+                                        { 'searchable': true, 'orderable': true, 'data': 'email', 'targets': 2 },
+                                        { 'searchable': true, 'orderable': true, 'data': 'member_type', 'targets': 3 },
+                                        { 'searchable': true, 'orderable': true, 'data': 'unsubscribe', 'targets': 4 },
+                                        { 'searchable': false, 'orderable': true, 'data': 'created_at', 'targets': 5 } ] },
+
       'discount_domains': { 'url': '/admin_panel/discount_domains', 'order_col': 2, 'order_dir': 'desc',
                            'columns': [ { 'searchable': true, 'orderable': true, 'data': 'domain', 'targets': 0 },
                                         { 'searchable': true, 'orderable': true, 'data': 'discount', 'targets': 1 },
@@ -232,6 +240,8 @@ function init_datatables(){
       init_datatable(table_rules['orders']['url'], table_rules['orders']['columns'], 0, 'desc')
     } else if (datatable.hasClass('discount_domains')){
       init_datatable(table_rules['discount_domains']['url'], table_rules['discount_domains']['columns'], table_rules['discount_domains']['order_col'], table_rules['discount_domains']['order_dir'])
+    } else if (datatable.hasClass('my_second_house_member_invitations')){
+      init_datatable(table_rules['my_second_house_member_invitations']['url'], table_rules['my_second_house_member_invitations']['columns'])
     } else if (datatable.hasClass('ads')){
       init_datatable(table_rules['ads']['url'], table_rules['ads']['columns'], table_rules['ads']['order_col'], table_rules['ads']['order_dir'])
     } else {

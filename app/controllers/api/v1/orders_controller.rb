@@ -155,9 +155,9 @@ module Api
         @total_price_without_discount = 0
         @discounted_items_amount = 0
         discount = ::Api::V1::DiscountDomainService.new(@user.email.dup).dicount_on_email
-        @is_user_from_company = discount.present?
+        @is_user_from_company = discount.positive?
         @usercartitems.each do |cartitem|
-          if discount.present? && cartitem.item.discount.zero?
+          if discount.positive? && cartitem.item.discount.zero? && !(@user.member_type.in?(['silver', 'gold']) && cartitem.item.supplier.in?(["MARS", "NESTLE"]))
             @itemsprice += cartitem.item.price * ((100 - discount).to_f / 100) * cartitem.quantity
           else
             @itemsprice += (cartitem.item.price * cartitem.quantity)
@@ -316,6 +316,7 @@ module Api
         end
       end
 
+
       # DELETE /orders/1
       # DELETE /orders/1.json
       def destroy
@@ -356,6 +357,7 @@ module Api
         return render json: { Message: 'Cart Empty', status: :unprocessable_entity } if @usercartitems.blank?
       end
 
+
       def check_empty_transactions
         if (params[:IsCash] == "false" and (params[:TransactionId].blank? or params[:TransactionDate].blank?))
           return render json: { Message: 'Invalid or empty Transaction reference', status: :unprocessable_entity }
@@ -364,6 +366,10 @@ module Api
 
       def send_inventory_alerts(itemid)
         OrderMailer.send_low_inventory_alert(itemid).deliver_later
+      end
+
+      def send_inventory_alerts(itemid)
+        OrderMailer.send_low_inventory_alert(itemid).deliver
       end
 
       def set_order_notifcation_email(order, is_any_recurring_item)

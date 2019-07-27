@@ -1,0 +1,28 @@
+.row
+  = render partial: 'layouts/admin_panel/errors', locals: { object: @invitation }
+
+  .col-md-6.col-sm-6.col-xs-12
+    .x_panel
+      .x_title
+        %h2 New invitation
+        .clearfix
+      .x_content
+        %br
+
+
+        .form-group
+          = f.label :name, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
+            Name
+          .col-md-9.col-sm-9.col-xs-12
+            = f.text_field :name, class: 'form-control'
+        .form-group
+          = f.label :email, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
+            Email
+          .col-md-9.col-sm-9.col-xs-12
+            = f.text_field :email, class: 'form-control'
+        .form-group
+          = f.label :member_type, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
+            Member type
+          .col-md-9.col-sm-9.col-xs-12
+            = f.select :member_type, options_for_select(MySecondHouseMemberInvitation.member_types.keys.map { |w| [w.humanize, w] }), { include_blank: true }, class: 'form-control select2'
+        = f.submit 'Send invitation', class: 'btn btn-success pull-right'

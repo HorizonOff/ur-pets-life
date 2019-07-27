@@ -31,6 +31,12 @@ class Post < ApplicationRecord
 
   private
 
+  def create_user_post
+    return if user.user_posts.where(post_id: id).any?
+
+    user.user_posts.create(post_id: id)
+  end
+
   def create_media_from_url
     CreateImageWorker.perform_async(id, 'Post') if mobile_image_url.present?
     CreateVideoWorker.perform_async(id, 'Post') if mobile_video_url.present?

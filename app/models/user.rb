@@ -2,6 +2,7 @@ class User < ApplicationRecord
   include EmailCheckable
   GENDER_OPTIONS = %i[male female].freeze
   enum gender: GENDER_OPTIONS
+  enum member_type: { not_member: 0, simple: 1, silver: 2, gold: 3 }
 
   # Include default devise modules. Others available are:
   # :rememberable, :lockable, :timeoutable and :omniauthable
@@ -49,8 +50,8 @@ class User < ApplicationRecord
   has_one :location, as: :place, inverse_of: :place
 
   has_many :orders
-  has_many :order_items, through: :orders
   has_many :user_posts, dependent: :destroy
+  has_many :order_items, through: :orders
   has_many :commented_orders, -> { where('comments_count > 0') }, class_name: 'Order'
   has_many :orders_with_new_comments, -> { where('unread_comments_count_by_user > 0') }, class_name: 'Order'
   has_one :redeem_point
@@ -79,6 +80,18 @@ class User < ApplicationRecord
   delegate :address, to: :location, allow_nil: true
   reverse_geocoded_by 'locations.latitude', 'locations.longitude'
 
+  scope :msh_members, (lambda do
+    joins(:appointments)
+    .joins("LEFT OUTER JOIN day_care_centres ON appointments.bookable_id = day_care_centres.id
+           AND appointments.bookable_type = 'DayCareCentre'")
+    .joins("LEFT OUTER JOIN boardings ON appointments.bookable_id = boardings.id
+           AND appointments.bookable_type = 'Boarding'")
+    .joins("LEFT OUTER JOIN grooming_centres ON appointments.bookable_id = grooming_centres.id
+           AND appointments.bookable_type = 'GroomingCentre'")
+    .where('day_care_centres.name ILIKE :msh OR boardings.name ILIKE :msh OR grooming_centres.name ILIKE :msh',
+           msh: '%My Second Home%').distinct
+  end)
+
   def birthday=(value)
     value = Time.zone.at(value.to_i) if value.present?
     super
@@ -97,6 +110,10 @@ class User < ApplicationRecord
     raise unless exception.message.include?(error_message)
     @gender_backup = value
     self[:gender] = nil
+  end
+
+  def is_msh_member?
+    member_type.in?(['simple', 'silver', 'gold'])
   end
 
   def update_counters

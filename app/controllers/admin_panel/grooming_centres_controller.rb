@@ -7,6 +7,7 @@ module AdminPanel
     before_action :parse_params, only: %i[create update]
 
     def index
+      authorize_super_admin_employee_msh_admin
       respond_to do |format|
         format.html {}
         format.json { filter_grooming_centres }
@@ -138,7 +139,7 @@ module AdminPanel
     end
 
     def filter_and_pagination_query
-      @filter_and_pagination_query ||= ::AdminPanel::FilterAndPaginationQuery.new('GroomingCentre', params)
+      @filter_and_pagination_query ||= ::AdminPanel::FilterAndPaginationQuery.new('GroomingCentre', params, current_admin)
     end
 
     def calendar_params

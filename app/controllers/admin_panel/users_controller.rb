@@ -1,6 +1,6 @@
 module AdminPanel
   class UsersController < AdminPanelController
-    before_action :authorize_super_admin_employee
+    before_action :authorize_super_admin_employee_msh_admin
     before_action :set_user, except: %i[index new create]
     before_action :set_location, only: %i[edit]
 
@@ -78,7 +78,7 @@ module AdminPanel
 
     def user_params
       params.require(:user).permit(:first_name, :last_name, :mobile_number, :gender, :birthday, :email, :spends_eligble,
-                                   :spends_not_eligble,
+                                   :spends_not_eligble, :member_type,
                                    location_attributes: location_params,
                                    redeem_point_attributes: redeem_point_params)
     end
@@ -95,11 +95,12 @@ module AdminPanel
     end
 
     def filter_and_pagination_query
-      @filter_and_pagination_query ||= ::AdminPanel::FilterAndPaginationQuery.new('User', params)
+      @filter_and_pagination_query ||= ::AdminPanel::FilterAndPaginationQuery.new('User', params, current_admin)
     end
 
     def export_data
       @users = User.all.order(:id).includes(:location)
+      @users = @users.msh_members if current_admin.is_msh_admin?
       name = "users #{Time.now.utc.strftime('%d-%M-%Y')}.xlsx"
       response.headers['Content-Disposition'] = "attachment; filename*=UTF-8''#{name}"
     end

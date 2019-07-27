@@ -44,3 +44,8 @@
         = f.label :spends_not_eligble, class: 'control-label col-md-3 col-sm-3 col-xs-12'
         .col-md-9.col-sm-9.col-xs-12
           = f.number_field :spends_not_eligble, class: 'form-control', step: ".01"
+      .form-group
+        = f.label :member_type, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
+          My Second House member
+        .col-md-9.col-sm-9.col-xs-12
+          = f.select :member_type, User.member_types.keys, {}, class: 'form-control select2'

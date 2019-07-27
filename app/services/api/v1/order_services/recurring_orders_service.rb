@@ -43,6 +43,7 @@ module API
 
             user_redeem_points = 0
             permitted_redeem_points = 0
+
             paymentStatus = 0
             trans_date = DateTime.now
 
@@ -79,7 +80,7 @@ module API
 
               discount_per_transaction = 0
               amount_to_be_awarded = subTotal - @discounted_items_amount
-              if amount_to_be_awarded.positive?
+              if amount_to_be_awarded.positive? && discount.blank?
                 if amount_to_be_awarded <= 500
                   discount_per_transaction = (3 * amount_to_be_awarded) / 100
                 elsif amount_to_be_awarded > 500 && amount_to_be_awarded <= 1000

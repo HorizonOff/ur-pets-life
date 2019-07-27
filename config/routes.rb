@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   get '/login', to: 'application#login'
   get '/privacy_policy_new', to:'pages#send_message', as:'view_pp'
   post 'send_message', to: 'pages#send_message', as: 'send_message_post'
+  get 'invitations/:token/unsubscribe', to:'invitations#unsubscribe'
   devise_for :users, only: %i[confirmations passwords omniauth_callbacks],
                      controllers: { confirmations: 'confirmations',
                                     passwords: 'passwords',
@@ -103,7 +104,7 @@ Rails.application.routes.draw do
       resources :vets, only: :show do
         member { get :schedule }
       end
-      resources :appointments, only: %i[index create show] do
+      resources :appointments, only: %i[index create update show] do
         member { put :cancel }
         resources :comments, only: %i[index create]
       end
@@ -236,6 +237,11 @@ Rails.application.routes.draw do
 
     resource :app_version, only: %i[edit update]
     resources :tax_reports, only: %i[index]
+    resources :my_second_house_member_invitations, only: %i[index new create destroy] do
+      collection do
+        post :import
+      end
+    end
     resources :ads, only: %i[index new create] do
       member { put :change_status }
     end

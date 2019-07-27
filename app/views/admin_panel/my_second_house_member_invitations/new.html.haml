@@ -1,0 +1,11 @@
+%div
+
+  .clearfix
+
+  = form_for @invitation, url: admin_panel_my_second_house_member_invitations_path,
+  html: { multipart: true, method: :post, class: 'form-horizontal form-label-left', autocomplete: 'off'} do |f|
+
+    = render partial: 'form', locals: { f: f }
+
+
+  = render partial: 'excel_form'

@@ -12,11 +12,13 @@ class Appointment < ApplicationRecord
   belongs_to :main_appointment, class_name: 'Appointment', optional: true
 
   has_many :diagnoses, dependent: :destroy
+  has_many :medications, dependent: :destroy
   has_one :next_appointment, class_name: 'Appointment', foreign_key: :main_appointment_id
 
   has_many :cart_items, dependent: :destroy
 
   accepts_nested_attributes_for :cart_items
+  accepts_nested_attributes_for :medications
 
   has_many :service_option_details, -> { order(service_option_id: :asc) }, through: :cart_items,
                                                                            source: :serviceable,
@@ -33,6 +35,8 @@ class Appointment < ApplicationRecord
   after_initialize :set_defaults
 
   before_validation :set_start_at, :set_end_at, :set_calendar, :set_admin, :set_number_of_days, on: :create
+  before_validation :delete_medications, on: :update
+
   validates :start_at, presence: { message: 'Date and time are required' }
   validate :vet_id_should_be_vaild, :pet_ids_should_be_valid, :service_ids_should_be_valid, :time_should_be_valid,
            :appointment_overlaps, :dates_should_be_valid
@@ -53,6 +57,16 @@ class Appointment < ApplicationRecord
     without_rejected.where.not(id: id).where('(start_at < :end AND end_at >= :end) OR
                                               (start_at <= :start AND end_at > :start) OR
                                               (start_at >= :start AND end_at <= :end)', start: start_at, end: end_at)
+  end)
+  scope :msh_members, (lambda do
+    joins("LEFT OUTER JOIN day_care_centres ON appointments.bookable_id = day_care_centres.id
+          AND appointments.bookable_type = 'DayCareCentre'")
+    .joins("LEFT OUTER JOIN boardings ON appointments.bookable_id = boardings.id
+           AND appointments.bookable_type = 'Boarding'")
+    .joins("LEFT OUTER JOIN grooming_centres ON appointments.bookable_id = grooming_centres.id
+           AND appointments.bookable_type = 'GroomingCentre'")
+    .where('day_care_centres.name ILIKE :msh OR boardings.name ILIKE :msh OR grooming_centres.name ILIKE :msh',
+           msh: '%My Second Home%')
   end)
 
   def for_clinic?
@@ -181,6 +195,10 @@ class Appointment < ApplicationRecord
     return if !for_clinic? || calendar_id.present? || vet_id.blank?
     current_vet_calendar = vet.calendars.where('start_at <= ? AND end_at >= ?', start_at, end_at).first
     self.calendar = current_vet_calendar if current_vet_calendar
+  end
+
+  def delete_medications
+    medications.where('id IS NOT NULL').delete_all
   end
 
   def set_start_at

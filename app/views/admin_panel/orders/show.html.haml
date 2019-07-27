@@ -22,6 +22,9 @@
                 Customer Name:
                 = @admin_panel_order.user.first_name + ' ' + @admin_panel_order.user.last_name
               %li
+                Member type:
+                = @admin_panel_order.user.member_type
+              %li
                 Email:
                 = @admin_panel_order.user.email
               %li
@@ -107,7 +110,7 @@
                       = link_to 'Cancel', cancel_admin_panel_order_path(q), data: { confirm: 'Are you sure?' }, method: :delete, remote: true, class: 'btn btn-danger btn-xs check_response' if q.status != 'cancelled'
 
 
-- if (@admin_panel_order.order_status_flag != 'delivered' and @admin_panel_order.order_status_flag != 'cancelled' && !@admin_panel_order.is_pre_recurring?)
+- if @admin_panel_order.order_status_flag != 'cancelled' && !@admin_panel_order.is_pre_recurring?
   %div
     .row
       = render partial: 'layouts/admin_panel/errors', locals: { object: @admin_panel_order }

@@ -8,11 +8,15 @@ module Api
 
       def index
         day_care_centres = day_care_centres_query.find_objects
+        if @user&.is_msh_member?
+          day_care_centres = day_care_centres.select { |center| center[:name].match(/My Second Home/).present? }
+        end
         serialized_centres = ActiveModel::Serializer::CollectionSerializer.new(
           day_care_centres, serializer: DayCareCentreIndexSerializer, scope: serializable_params
         )
 
-        render json: { day_care_centres: serialized_centres, total_count: day_care_centres.total_count }
+        render json: { day_care_centres: serialized_centres,
+                       total_count: @user&.is_msh_member? ? day_care_centres.count : day_care_centres.total_count }
       end
 
       def show

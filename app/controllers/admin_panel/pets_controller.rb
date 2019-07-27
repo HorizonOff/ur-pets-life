@@ -1,6 +1,6 @@
 module AdminPanel
   class PetsController < AdminPanelController
-    before_action :authorize_super_admin_employee, only: :index
+    before_action :authorize_super_admin_employee_msh_admin, only: :index
     before_action :set_pet, except: :index
 
     def index
@@ -74,7 +74,7 @@ module AdminPanel
     end
 
     def filter_and_pagination_query
-      @filter_and_pagination_query ||= ::AdminPanel::FilterAndPaginationQuery.new('Pet', params)
+      @filter_and_pagination_query ||= ::AdminPanel::FilterAndPaginationQuery.new('Pet', params, current_admin)
     end
 
     def export_data

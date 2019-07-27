@@ -140,13 +140,6 @@ function init_timepicker(){
     });
   };
 
-  if ($('.month_picker')){
-    $('.month_picker').datetimepicker({
-      format: "MMMM YYYY",
-      viewMode: 'months'
-    });
-  };
-
   if ($('.single_cal2')){
     $('.single_cal2').daterangepicker({
       singleDatePicker: true,
@@ -159,6 +152,13 @@ function init_timepicker(){
         $(this.element[0]).val(chosen_date.format("DD/MM/YYYY"));
     });
   }
+
+  if ($('.month_picker')){
+    $('.month_picker').datetimepicker({
+      format: "MMMM YYYY",
+      viewMode: 'months'
+    });
+  };
 
   if ($('.timepicker')[0]) {
     $('.timepicker.open').datetimepicker({
