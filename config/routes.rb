@@ -145,6 +145,7 @@ Rails.application.routes.draw do
   get 'app_term_conditions', to:'pages#app_term_conditions'
   get 'pets_life_privacy_policy', to: 'pages#new_privacy_policy'
   get 'app_pets_life_privacy_policy', to: 'pages#app_new_privacy_policy'
+  get 'about', to: 'pages#about'
   devise_for :admins, path: 'admin_panel/admins', except: :registrations,
                       controllers: { invitations: 'admin_panel/admins/invitations' }
 

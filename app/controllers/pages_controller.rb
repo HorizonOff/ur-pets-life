@@ -20,6 +20,7 @@ class PagesController < ApplicationController
   def term_conditions; end
   def new_privacy_policy; end
   def cancelation_policy; end
+  def about; end
 
   def app_loyalty_program; end
   def app_new_privacy_policy; end
