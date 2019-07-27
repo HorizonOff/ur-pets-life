@@ -19,11 +19,23 @@ class Post < ApplicationRecord
 
   after_commit :create_media_from_url, :create_user_post, on: :create
 
+  scope :search, (lambda do |search|
+    left_outer_joins(:comments)
+    .where('posts.title ILIKe :search OR posts.message ILIKe :search OR comments.message ILIKe :search',
+           search: "%#{search}%").distinct
+  end)
+
   def update_counters(user_id)
     user_posts.find_by(user_id: user_id)&.update_column(:unread_post_comments_count, 0)
   end
 
   private
+
+  def create_user_post
+    return if user.user_posts.where(post_id: id).any?
+
+    user.user_posts.create(post_id: id)
+  end
 
   def create_media_from_url
     CreateImageWorker.perform_async(id, 'Post') if mobile_image_url.present?

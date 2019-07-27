@@ -138,6 +138,40 @@ ALTER SEQUENCE public.admins_id_seq OWNED BY public.admins.id;
 
 
 --
+-- Name: ads; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.ads (
+    id bigint NOT NULL,
+    name character varying,
+    image character varying,
+    is_active boolean DEFAULT false,
+    view_count integer DEFAULT 0,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: ads_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.ads_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: ads_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.ads_id_seq OWNED BY public.ads.id;
+
+
+--
 -- Name: app_versions; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -195,7 +229,9 @@ CREATE TABLE public.appointments (
     is_viewed boolean DEFAULT false,
     comments_count integer DEFAULT 0,
     unread_comments_count_by_user integer DEFAULT 0 NOT NULL,
-    unread_comments_count_by_admin integer DEFAULT 0 NOT NULL
+    unread_comments_count_by_admin integer DEFAULT 0 NOT NULL,
+    reason_of_visit character varying,
+    findings character varying
 );
 
 
@@ -994,6 +1030,38 @@ CREATE SEQUENCE public.locations_id_seq
 --
 
 ALTER SEQUENCE public.locations_id_seq OWNED BY public.locations.id;
+
+
+--
+-- Name: medications; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.medications (
+    id bigint NOT NULL,
+    appointment_id bigint,
+    name character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: medications_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.medications_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: medications_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.medications_id_seq OWNED BY public.medications.id;
 
 
 --
@@ -1983,7 +2051,17 @@ CREATE TABLE public.users (
     spends_eligble double precision DEFAULT 0.0 NOT NULL,
     spends_not_eligble double precision DEFAULT 0.0 NOT NULL,
     unread_post_comments_count integer DEFAULT 0,
+<<<<<<< HEAD
+    member_type integer DEFAULT 0,
+    unconfirmed_email character varying
+=======
+<<<<<<< HEAD
     member_type integer DEFAULT 0
+=======
+    member_type integer DEFAULT 0,
+    unconfirmed_email character varying
+>>>>>>> master
+>>>>>>> new_task_22_ad
 );
 
 
@@ -2198,6 +2276,13 @@ ALTER TABLE ONLY public.admins ALTER COLUMN id SET DEFAULT nextval('public.admin
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY public.ads ALTER COLUMN id SET DEFAULT nextval('public.ads_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY public.app_versions ALTER COLUMN id SET DEFAULT nextval('public.app_versions_id_seq'::regclass);
 
 
@@ -2339,6 +2424,13 @@ ALTER TABLE ONLY public.items ALTER COLUMN id SET DEFAULT nextval('public.items_
 --
 
 ALTER TABLE ONLY public.locations ALTER COLUMN id SET DEFAULT nextval('public.locations_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.medications ALTER COLUMN id SET DEFAULT nextval('public.medications_id_seq'::regclass);
 
 
 --
@@ -2568,6 +2660,14 @@ ALTER TABLE ONLY public.admins
 
 
 --
+-- Name: ads_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ads
+    ADD CONSTRAINT ads_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: app_versions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2741,6 +2841,14 @@ ALTER TABLE ONLY public.items
 
 ALTER TABLE ONLY public.locations
     ADD CONSTRAINT locations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: medications_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.medications
+    ADD CONSTRAINT medications_pkey PRIMARY KEY (id);
 
 
 --
@@ -3598,6 +3706,13 @@ CREATE INDEX index_locations_on_deleted_at ON public.locations USING btree (dele
 --
 
 CREATE INDEX index_locations_on_place_type_and_place_id ON public.locations USING btree (place_type, place_id);
+
+
+--
+-- Name: index_medications_on_appointment_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_medications_on_appointment_id ON public.medications USING btree (appointment_id);
 
 
 --
@@ -4708,6 +4823,9 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190614103926'),
 ('20190620083531'),
 ('20190620123632'),
-('20190626112218');
-
+('20190626112218'),
+('20190701132734'),
+('20190702125721'),
+('20190704082744'),
+('20190704084608');
 

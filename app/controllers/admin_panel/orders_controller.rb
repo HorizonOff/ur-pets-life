@@ -49,7 +49,6 @@ module AdminPanel
     @parent_object.update_attributes(:unread_comments_count_by_admin => 0)
     @comments = @parent_object.comments.includes(:writable).order(id: :desc).page(params[:page])
     @comment = @parent_object.comments.new
-
   end
   # POST /admin_panel/orders
   # POST /admin_panel/orders.json
@@ -168,6 +167,12 @@ module AdminPanel
     if @admin_panel_order.update(:order_status_flag => statustoupdate)
       @admin_panel_order.order_items.each do |orderitem|
         if orderitem.status != 'cancelled'
+          if statustoupdate == 'cancelled'
+            item = Item.where(:id => orderitem.item_id).first
+            if !item.nil?
+              item.increment!(:quantity, orderitem.Quantity)
+            end
+          end
           orderitem.update(:status => statustoupdate)
         end
       end
@@ -190,14 +195,14 @@ module AdminPanel
         user_redeem_point_reimburse.update(:net_worth => user_redeem_point_reimburse.net_worth + @admin_panel_order.RedeemPoints, :totalavailedpoints => user_redeem_point_reimburse.totalavailedpoints - @admin_panel_order.RedeemPoints)
         @admin_panel_order.update(:Subtotal => 0, :Delivery_Charges => 0, :Vat_Charges => 0, :Total => 0, :order_status_flag => 'cancelled', :earned_points => 0, :RedeemPoints => 0)
 
-        @admin_panel_order.order_items.each do |orderitem|
-          if orderitem.status != "cancelled"
-            item = Item.where(:id => orderitem.item_id).first
-            if !item.nil?
-              item.increment!(:quantity, orderitem.Quantity)
-            end
-          end
-        end
+        # @admin_panel_order.order_items.each do |orderitem|
+        #   if orderitem.status != "cancelled"
+        #     item = Item.where(:id => orderitem.item_id).first
+        #     if !item.nil?
+        #       item.increment!(:quantity, orderitem.Quantity)
+        #     end
+        #   end
+        # end
 
         OrderMailer.send_complete_cancel_order_email_to_customer(@admin_panel_order.id, @admin_panel_order.user.email).deliver
       end
@@ -280,9 +285,12 @@ module AdminPanel
       is_user_present = @@filtered_user_id > 0 ? false : true
 
       @orders = Order.order(:id).includes(:location, {user: [:location]}, {order_items: [item: :item_brand]})
-                                      .where("(users.id = (?) OR #{is_user_present}) AND order_status_flag IN (?)", @@filtered_user_id, ['delivered', 'delivered_by_card', 'delivered_by_cash']).references(:user)
+                                .where("(users.id = (?) OR #{is_user_present}) AND order_status_flag IN (?)",
+                                       @@filtered_user_id, ['delivered', 'delivered_by_card', 'delivered_by_cash'])
+                                .references(:user)
       if params[:from_date].present? && params[:to_date].present?
-        @orders = @orders.created_in_range(params[:from_date].to_date.beginning_of_day, params[:to_date].to_date.end_of_day)
+        @orders = @orders.created_in_range(params[:from_date].to_date.beginning_of_day,
+                                           params[:to_date].to_date.end_of_day)
       end
       user_name = @@filtered_user_id > 0 ? User.where(:id => @@filtered_user_id).first.first_name + '_' : 'all_'
       name = "Orders_for_#{user_name} #{Time.now.utc.strftime('%d-%M-%Y')}.xlsx"

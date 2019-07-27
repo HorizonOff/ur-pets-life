@@ -1,6 +1,6 @@
 module AdminPanel
   class FilterAndPaginationQuery
-    INT_COLUMNS = %w[user_id id Total_Price Quantity order_id item_id unit_price discount price quantity avg_rating weight vets_count status specialization_id pet_type_id experience sex member_type].freeze
+    INT_COLUMNS = %w[user_id id Total_Price Quantity order_id item_id unit_price discount price quantity avg_rating weight vets_count status specialization_id pet_type_id experience sex member_type view_count].freeze
     BOOLEAN_COLUMNS = %w[is_viewed IsRecurring IsHaveCategories is_active is_answered is_super_admin skip_push_sending is_for_trainer].freeze
     ADDITIONAL_PARAMS = { 'city' => { join_model: :location, field: 'locations.city' },
                           'specialization_id' => { join_model: :specializations, field: 'specializations.id' },

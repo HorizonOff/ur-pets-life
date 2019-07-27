@@ -14,7 +14,6 @@ class Comment < ApplicationRecord
   counter_culture :commentable, column_name: proc { |model| model.commentable_type == 'Order' && model.writable_type == 'Admin' && model.read_at.blank? ? 'unread_comments_count_by_user' : nil },
                                 column_names: { ["comments.commentable_type = 'Order' AND comments.writable_type = 'Admin' AND comments.read_at IS NULL"] => 'unread_comments_count_by_user' }
 
-  # validates :message, presence: { message: 'Message is required' }
   validate :content_should_be_valid, :ome_type_of_media
 
   acts_as_paranoid

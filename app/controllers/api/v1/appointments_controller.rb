@@ -18,7 +18,7 @@ module Api
                                                 pets_diagnoses: pets_diagnoses,
                                                 service_option_times: @appointment.service_option_times),
                include: 'vet,service_option_details,service_option_details.service_option_times,
-                         pets,pets.service_details,pets.diagnosis'
+                         pets,pets.service_details,pets.diagnosis,medications'
       end
 
       def create
@@ -31,6 +31,14 @@ module Api
         end
       rescue NameError
         render_422(bookable_type: 'Bookable type is invalid')
+      end
+
+      def update
+        if @appointment.update(appointment_params)
+          render json: { message: 'Appointment updated successfully' }
+        else
+          render_422(parse_errors_messages(@appointment))
+        end
       end
 
       def destroy
@@ -66,12 +74,18 @@ module Api
 
       def appointment_params
         params.require(:appointment).permit(:bookable_type, :bookable_id, :vet_id, :start_at, :number_of_days, :comment,
+                                            :reason_of_visit, :findings,
                                             pet_ids: [],
-                                            cart_items_attributes: cart_items_params)
+                                            cart_items_attributes: cart_items_params,
+                                            medications_attributes: medications_params)
       end
 
       def cart_items_params
         %i[pet_id serviceable_type serviceable_id service_option_time_id]
+      end
+
+      def medications_params
+        %i[name]
       end
 
       def appointments_pagination_query

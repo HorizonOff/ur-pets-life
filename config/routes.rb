@@ -66,6 +66,8 @@ Rails.application.routes.draw do
       get 'pets/:id/health_history', to: 'health_history#index'
       get 'pets/:id/weight_history', to: 'weight_history#index'
       get 'found_pets', to: 'pets#found_pets'
+      get 'get_current_ad', to: 'ads#current'
+      get 'sale_categories', to: 'sales#categories'
       resources :pets, except: %i[new edit] do
         collection { post :found }
         collection { get :can_be_lost }
@@ -102,7 +104,7 @@ Rails.application.routes.draw do
       resources :vets, only: :show do
         member { get :schedule }
       end
-      resources :appointments, only: %i[index create show] do
+      resources :appointments, only: %i[index create update show] do
         member { put :cancel }
         resources :comments, only: %i[index create]
       end
@@ -239,6 +241,9 @@ Rails.application.routes.draw do
       collection do
         post :import
       end
+    end
+    resources :ads, only: %i[index new create] do
+      member { put :change_status }
     end
   end
 end

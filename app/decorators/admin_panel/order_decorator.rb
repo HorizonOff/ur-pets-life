@@ -45,6 +45,12 @@ module AdminPanel
     content_tag(:span, text, class: "label #{span_class}")
   end
 
+  def is_pre_recurring
+    text = model.is_pre_recurring? ? 'Yes' : 'No'
+    span_class = model.is_pre_recurring? ? 'label-default' : 'label-info'
+    content_tag(:span, text, class: "label #{span_class}")
+  end
+
   def Payment_Status
     text = model.Payment_Status == 1 ? 'confirmed' : 'pending'
     span_class = model.Payment_Status == 1 ? 'label-success' : 'label-warning'
@@ -73,6 +79,10 @@ module AdminPanel
 
   def created_at
     model.created_at.strftime('%-d %b %Y %I:%M %p')
+  end
+
+  def delivery_at
+    model.delivery_at&.strftime('%-d %b %Y %I:%M %p')
   end
 
   def actions

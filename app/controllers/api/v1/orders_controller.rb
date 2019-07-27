@@ -8,7 +8,7 @@ module Api
       # GET /orders
       # GET /orders.json
       def index
-        @orders = @user.orders
+        @orders = @user.orders.visible
         if @orders.nil? or @orders.empty?
           render :json => {
             Message: 'No Orders found'
@@ -260,9 +260,8 @@ module Api
               send_inventory_alerts(item.id)
             end
             if !cartitem.recurssion_interval_id.nil?
-              recurrion_interval = RecurssionInterval.where(id: cartitem.recurssion_interval_id).first
-              next_due_date = DateTime.now.to_date
-              next_due_date = next_due_date.to_time + (recurrion_interval.days).days
+              recurrion_interval = cartitem.recurssion_interval
+              next_due_date = Time.current + recurrion_interval.days.days
               @neworderitemcreate.update_attributes(next_recurring_due_date: next_due_date.to_date,
                                                     recurssion_interval_id: cartitem.recurssion_interval_id)
             end
@@ -317,6 +316,7 @@ module Api
         end
       end
 
+
       # DELETE /orders/1
       # DELETE /orders/1.json
       def destroy
@@ -357,6 +357,7 @@ module Api
         return render json: { Message: 'Cart Empty', status: :unprocessable_entity } if @usercartitems.blank?
       end
 
+
       def check_empty_transactions
         if (params[:IsCash] == "false" and (params[:TransactionId].blank? or params[:TransactionDate].blank?))
           return render json: { Message: 'Invalid or empty Transaction reference', status: :unprocessable_entity }
@@ -365,6 +366,10 @@ module Api
 
       def send_inventory_alerts(itemid)
         OrderMailer.send_low_inventory_alert(itemid).deliver_later
+      end
+
+      def send_inventory_alerts(itemid)
+        OrderMailer.send_low_inventory_alert(itemid).deliver
       end
 
       def set_order_notifcation_email(order, is_any_recurring_item)

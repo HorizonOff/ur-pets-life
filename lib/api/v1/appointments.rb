@@ -443,6 +443,66 @@ module Api
         end
       end
 
+      swagger_path '/appointments/{id}' do
+        operation :put do
+          key :description, 'Update appointment'
+          key :consumes, %w[application/json]
+          key :produces, %w[application/json]
+          key :tags, %w[Appointments]
+
+          security do
+            key :api_key, []
+          end
+          parameter do
+            key :name, :id
+            key :in, :path
+            key :type, :integer
+            key :required, true
+            key :example, 1
+          end
+
+          parameter do
+            key :name, :appointment
+            key :in, :body
+            key :required, true
+            schema do
+              key :'$ref', :UpdateAppointmentInput
+            end
+          end
+
+          response 200 do
+            key :description, 'Success response'
+          end
+        end
+      end
+
+      swagger_schema :UpdateAppointmentInput do
+        property :appointment do
+          property :start_at do
+            key :type, :integer
+            key :example, 1516318200
+          end
+          property :reason_of_visit do
+            key :type, :string
+          end
+          property :findings do
+            key :type, :string
+          end
+          property :medications_attributes do
+            items do
+              key :'$ref', :MediciantsInput
+            end
+          end
+        end
+      end
+
+      swagger_schema :MediciantsInput do
+        property :name do
+          key :type, :string
+          key :example, 'med'
+        end
+      end
+
       swagger_path '/appointments/{id}/cancel' do
         operation :put do
           key :description, 'Cancel appointment'

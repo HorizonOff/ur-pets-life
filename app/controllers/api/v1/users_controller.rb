@@ -25,8 +25,14 @@ module Api
       def update
         @user.assign_attributes(user_params.except(:password, :password_confirmation))
         @user.skip_password_validation = true
+        if user_params[:email].present?
+          is_domain_discount = ::Api::V1::DiscountDomainService.new(user_params[:email]).domain_with_discount?
+          @user.skip_reconfirmation! unless is_domain_discount
+        end
+        message = 'User updated successfully.'
+        message += ' E-mail will change after confirmation' if is_domain_discount == true
         if @user.save
-          render json: { message: 'User updated successfully' }
+          render json: { message: message }
         else
           render_422(parse_errors_messages(@user))
         end

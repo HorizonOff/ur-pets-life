@@ -1,0 +1,13 @@
+%div
+  .page-title
+    .title_left
+      %h3 New ad
+
+  .clearfix
+
+  = form_for @ad, url: admin_panel_ads_path,
+  html: { multipart: true, method: :post, class: 'form-horizontal form-label-left with_location', autocomplete: 'off' } do |f|
+
+    = render partial: 'form', locals: { f: f }
+
+    = f.submit 'Create ad', class: 'btn btn-success pull-right'
