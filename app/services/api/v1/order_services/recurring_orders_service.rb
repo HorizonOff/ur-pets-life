@@ -58,15 +58,13 @@ module API
                                         order_status_flag: 'pending', company_discount: company_discount,
                                         is_user_from_company: is_user_from_company)
             if @recurringorder.save
-              send_inventory_alerts(@recurringorder.id) if isoutofstock
-
               order_items.each do |cartitem|
-                neworderitemcreate = OrderItem.new(IsRecurring: false, order_id: @recurringorder.id,
+                @recurringorder.order_items.create(IsRecurring: true,
                                                    item_id: cartitem.item.id, Quantity: cartitem.Quantity,
-                                                   Unit_Price: cartitem.item.price, Total_Price: subTotal,
+                                                   Unit_Price: cartitem.Unit_Price, Total_Price: cartitem.Total_Price,
                                                    IsReviewed: false, status: :pending,
-                                                   isdiscounted: cartitem.item.discount.positive?)
-                neworderitemcreate.save
+                                                   isdiscounted: cartitem.isdiscounted,
+                                                   recurssion_interval_id: cartitem.recurssion_interval_id)
 
                 unless isoutofstock
                   item = Item.where(id: cartitem.item.id).first
@@ -103,7 +101,7 @@ module API
                                                totalearnedpoints: (@user_redeem_point_record.totalearnedpoints +
                                                                   discount_per_transaction))
               @recurringorder.update(earned_points: discount_per_transaction)
-
+              send_empty_inventory_alerts(@recurringorder.id) if isoutofstock
               send_order_sucess_alerts(@recurringorder)
             else
               send_failure_alert_to_admin(orderitem.id)
@@ -118,9 +116,9 @@ module API
         def send_order_sucess_alerts(recurringorder)
           OrderMailer.send_recurring_success_alert_to_admin(recurringorder.id).deliver
           OrderMailer.send_recurring_success_alert_to_customer(recurringorder.id).deliver
-          @user = User.where(:id => recurringorder.user_id).first
-          @user.notifications.create(order: recurringorder, message: 'Your recurring order is scheduled to be automatically placed and
-delivered tomorrow. If you wish to cancel please go to My Account/My Order History/Recurring')
+          @user = recurringorder.user
+          @user.notifications.create(order: recurringorder, message: 'Your recurring order is scheduled to be
+automatically placed and delivered tomorrow. If you wish to cancel please go to My Order History/Recurring')
         end
 
         def send_inventory_alerts(itemid)
