@@ -21,8 +21,10 @@ module AdminPanel
     @shippingaddress = (@shippinglocation.villa_number.blank? ? '' : (@shippinglocation.villa_number + ' '))  + (@shippinglocation.unit_number.blank? ? '' : (@shippinglocation.unit_number + ' ')) + (@shippinglocation.building_name.blank? ? '' : (@shippinglocation.building_name + ' ')) + (@shippinglocation.street.blank? ? '' : (@shippinglocation.street + ' ')) + (@shippinglocation.area.blank? ? '' : (@shippinglocation.area + ' ')) + (@shippinglocation.city.blank? ? '' : @shippinglocation.city)
     @orderitems = OrderItem.includes(:item).where(:order_id => @admin_panel_order.id)
 
-    if @admin_panel_order.order_status_flag == 'pending'
-      @statusoption = [['Confirm', 'confirmed'], ['Cancel', 'cancelled']]
+    if @admin_panel_order.order_status_flag == 'pending' && !@admin_panel_order.IsCash?
+      @statusoption = [['Confirm', 'confirmed'], ['Delivered', 'delivered'], ['Cancel', 'cancelled']]
+    elsif @admin_panel_order.order_status_flag == 'pending'
+      @statusoption = [['Confirm', 'confirmed'], ['Delivered by card', 'delivered_by_card'], ['Delivered by cash', 'delivered_by_cash'], ['Cancel', 'cancelled']]
     elsif @admin_panel_order.order_status_flag == 'confirmed'
       @statusoption = [['On The Way', 'on_the_way'], ['Cancel', 'cancelled']]
     elsif @admin_panel_order.order_status_flag == 'on_the_way' && !@admin_panel_order.IsCash?
