@@ -87,8 +87,9 @@ module AdminPanel
     def item_params
       params.require(:item).permit(:name, :buying_price, :unit_price, :discount, :weight, :unit, :quantity,
                                    :supplier, :supplier_code,
-                                   :pet_type_id, :price, :item_categories_id, :item_brand_id, :short_description,
-                                   :description, :picture, :avatar_cache, :expiry_at)
+                                   :price, :item_brand_id, :short_description,
+                                   :description, :picture, :avatar_cache, :expiry_at,
+                                   item_category_ids: [], pet_type_ids: [])
     end
 
     def filter_items

@@ -283,7 +283,6 @@ module AdminPanel
 
     def export_data
       is_user_present = @@filtered_user_id > 0 ? false : true
-
       @orders = Order.visible.order(:id).includes(:location, { user: [:location] }, { order_items: [item: :item_brand] })
                      .where("(users.id = (?) OR #{is_user_present}) AND order_status_flag IN (?)",
                             @@filtered_user_id, ['delivered', 'delivered_by_card', 'delivered_by_cash'])

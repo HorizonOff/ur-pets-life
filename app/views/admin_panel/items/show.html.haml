@@ -34,12 +34,17 @@
                 = @item.quantity
               %li
                 %label
-                  Pet Type:
-                = @item.pet_type.name if @item.pet_type.present?
+                  Pet Types:
+                -if @item.pet_types.present?
+                  -@item.pet_types.each do |type|
+                    =type.name
               %li
                 %label
-                  Category:
-                = ItemCategory.where(:id => @item.item_categories_id).first.name if @item.item_categories_id.present?
+                  Categories:
+                = @item.item_categories.first.name if @item.item_category_ids.present?
+                -if @item.item_category_ids.present?
+                  -@item.item_categories.each do |category|
+                    =category.name
               %li
                 %label
                   Brand:

@@ -893,6 +893,16 @@ ALTER SEQUENCE public.item_categories_id_seq OWNED BY public.item_categories.id;
 
 
 --
+-- Name: item_categories_items; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.item_categories_items (
+    item_id bigint NOT NULL,
+    item_category_id bigint NOT NULL
+);
+
+
+--
 -- Name: item_categories_pet_types; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -987,6 +997,16 @@ CREATE SEQUENCE public.items_id_seq
 --
 
 ALTER SEQUENCE public.items_id_seq OWNED BY public.items.id;
+
+
+--
+-- Name: items_pet_types; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.items_pet_types (
+    item_id bigint NOT NULL,
+    pet_type_id bigint NOT NULL
+);
 
 
 --
@@ -1400,6 +1420,7 @@ CREATE TABLE public.posts (
     video character varying,
     video_duration integer,
 <<<<<<< HEAD
+<<<<<<< HEAD
     mobile_video_url character varying,
     author_type character varying,
     author_id bigint
@@ -1412,6 +1433,11 @@ CREATE TABLE public.posts (
     author_id bigint
 >>>>>>> master
 >>>>>>> recurring_order
+=======
+    mobile_video_url character varying,
+    author_type character varying,
+    author_id bigint
+>>>>>>> add_multiple_categories_types_and_brands_to_item
 );
 
 
@@ -2061,27 +2087,26 @@ CREATE TABLE public.users (
     spends_eligble double precision DEFAULT 0.0 NOT NULL,
     spends_not_eligble double precision DEFAULT 0.0 NOT NULL,
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
     unread_post_comments_count integer DEFAULT 0
 =======
 >>>>>>> recurring_order
+=======
+>>>>>>> add_multiple_categories_types_and_brands_to_item
     unread_post_comments_count integer DEFAULT 0,
-<<<<<<< HEAD
     member_type integer DEFAULT 0,
     unconfirmed_email character varying
-=======
 <<<<<<< HEAD
-    member_type integer DEFAULT 0
-=======
-    member_type integer DEFAULT 0,
-    unconfirmed_email character varying
 >>>>>>> master
 <<<<<<< HEAD
 >>>>>>> new_task_22_ad
 =======
 >>>>>>> master
 >>>>>>> recurring_order
+=======
+>>>>>>> add_multiple_categories_types_and_brands_to_item
 );
 
 
@@ -3666,6 +3691,13 @@ CREATE INDEX index_grooming_centres_on_name ON public.grooming_centres USING btr
 
 
 --
+-- Name: index_item_categories_items_on_item_id_and_item_category_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_item_categories_items_on_item_id_and_item_category_id ON public.item_categories_items USING btree (item_id, item_category_id);
+
+
+--
 -- Name: index_item_reviews_on_item_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3705,6 +3737,13 @@ CREATE INDEX index_items_on_item_categories_id ON public.items USING btree (item
 --
 
 CREATE INDEX index_items_on_pet_type_id ON public.items USING btree (pet_type_id);
+
+
+--
+-- Name: index_items_pet_types_on_item_id_and_pet_type_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_items_pet_types_on_item_id_and_pet_type_id ON public.items_pet_types USING btree (item_id, pet_type_id);
 
 
 --
@@ -4847,5 +4886,6 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190701132734'),
 ('20190702125721'),
 ('20190704082744'),
-('20190704084608');
+('20190704084608'),
+('20190729084815');
 
