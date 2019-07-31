@@ -26,6 +26,8 @@
                 %th Email
                 %th Phone
                 %th Status
+                %th Online
+                %th Created at
                 %th Actions
               %tr
                 %th{style: 'width:30px'}
@@ -38,5 +40,7 @@
                   = text_field_tag :mobile_number, '', class: 'form-control', style: 'width:100%'
                 %th
                   = select_tag :is_active, options_for_select([[], ['Active', true], ['Locked', false]]), class: 'form-control select2'
+                %th
+                %th
                 %th
             %tbody
