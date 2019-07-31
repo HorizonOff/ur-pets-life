@@ -222,9 +222,9 @@ end
     if (!params[:pageno].nil? and !params[:size].nil?)
       size = params[:size].to_i
       page = params[:pageno].to_i
-      @items = Item.left_outer_joins(:item_categories, :pet_types).where(item_categories: { id: params[:id] }).where(pet_types: { id: params[:pet_type_id] }).where(:item_brand_id => params[:id]).limit(size).offset(page * size)
+      @items = Item.left_outer_joins(:item_categories, :pet_types).where(item_categories: { id: params[:category_id] }).where(pet_types: { id: params[:pet_type_id] }).where(:item_brand_id => params[:id]).limit(size).offset(page * size)
     else
-      @items = Item.left_outer_joins(:item_categories, :pet_types).where(item_categories: { id: params[:id] }).where(pet_types: { id: params[:pet_type_id] }).where(:item_brand_id => params[:id])
+      @items = Item.left_outer_joins(:item_categories, :pet_types).where(item_categories: { id: params[:category_id] }).where(pet_types: { id: params[:pet_type_id] }).where(:item_brand_id => params[:id])
     end
     @items = @items.where(:is_active => true)
     if @items.nil? or @items.empty?
