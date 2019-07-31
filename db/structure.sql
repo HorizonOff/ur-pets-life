@@ -1421,6 +1421,7 @@ CREATE TABLE public.posts (
     video_duration integer,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     mobile_video_url character varying,
     author_type character varying,
     author_id bigint
@@ -1438,6 +1439,11 @@ CREATE TABLE public.posts (
     author_type character varying,
     author_id bigint
 >>>>>>> add_multiple_categories_types_and_brands_to_item
+=======
+    mobile_video_url character varying,
+    author_type character varying,
+    author_id bigint
+>>>>>>> active_user
 );
 
 
@@ -2088,6 +2094,7 @@ CREATE TABLE public.users (
     spends_not_eligble double precision DEFAULT 0.0 NOT NULL,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
     unread_post_comments_count integer DEFAULT 0
@@ -2107,6 +2114,12 @@ CREATE TABLE public.users (
 >>>>>>> recurring_order
 =======
 >>>>>>> add_multiple_categories_types_and_brands_to_item
+=======
+    unread_post_comments_count integer DEFAULT 0,
+    member_type integer DEFAULT 0,
+    unconfirmed_email character varying,
+    last_action_at timestamp without time zone
+>>>>>>> active_user
 );
 
 
@@ -4887,5 +4900,6 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190702125721'),
 ('20190704082744'),
 ('20190704084608'),
-('20190729084815');
+('20190729084815'),
+('20190731121602');
 
