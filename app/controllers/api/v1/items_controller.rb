@@ -42,9 +42,9 @@ class ItemsController < Api::BaseController
         size = params[:size].to_i
         page = params[:pageno].to_i
 
-        @items = Item.where("price BETWEEN (?) AND  (?) AND avg_rating BETWEEN (?) AND (?) AND (#{brand_filter} OR item_brand_id = (?)) AND (#{cat_filter} OR item_categories_id = (?)) AND (#{pet_filter} OR pet_type_id = (?))", params[:lowerprice], params[:upperprice], params[:minrating], params[:maxrating], params[:brand_id], params[:category_id], params[:pet_type_id]).limit(size).offset(page * size)
+        @items = Item.where("price BETWEEN (?) AND  (?) AND avg_rating BETWEEN (?) AND (?) AND (#{brand_filter} OR item_brand_id = (?))", params[:lowerprice], params[:upperprice], params[:minrating], params[:maxrating], params[:brand_id]).limit(size).offset(page * size)
       else
-        @items = Item.where("price BETWEEN (?) AND  (?) AND avg_rating BETWEEN (?) AND (?) AND (#{brand_filter} OR item_brand_id = (?)) AND (#{cat_filter} OR item_categories_id = (?)) AND (#{pet_filter} OR pet_type_id = (?))", params[:lowerprice], params[:upperprice], params[:minrating], params[:maxrating], params[:brand_id], params[:category_id], params[:pet_type_id])
+        @items = Item.where("price BETWEEN (?) AND  (?) AND avg_rating BETWEEN (?) AND (?) AND (#{brand_filter} OR item_brand_id = (?))", params[:lowerprice], params[:upperprice], params[:minrating], params[:maxrating], params[:brand_id])
       end
     else
       key = "%#{params[:keyword]}%"
@@ -55,11 +55,13 @@ class ItemsController < Api::BaseController
         size = params[:size].to_i
         page = params[:pageno].to_i
 
-        @items = Item.includes(:item_brand).where("(lower(item_brands.name) LIKE (?) OR lower(items.name) LIKE (?)) AND price BETWEEN (?) AND  (?) AND avg_rating BETWEEN (?) AND (?) AND (#{brand_filter} OR item_brand_id = (?)) AND (#{cat_filter} OR item_categories_id = (?)) AND (#{pet_filter} OR pet_type_id = (?))", key.downcase, key.downcase, params[:lowerprice], params[:upperprice], params[:minrating], params[:maxrating], params[:brand_id], params[:category_id], params[:pet_type_id]).references(:item_brand).limit(size).offset(page * size)
+        @items = Item.includes(:item_brand).where("(lower(item_brands.name) LIKE (?) OR lower(items.name) LIKE (?)) AND price BETWEEN (?) AND  (?) AND avg_rating BETWEEN (?) AND (?) AND (#{brand_filter} OR item_brand_id = (?))", key.downcase, key.downcase, params[:lowerprice], params[:upperprice], params[:minrating], params[:maxrating], params[:brand_id]).references(:item_brand).limit(size).offset(page * size)
       else
-        @items = Item.includes(:item_brand).where("(lower(item_brands.name) LIKE (?) OR lower(items.name) LIKE (?)) AND price BETWEEN (?) AND  (?) AND avg_rating BETWEEN (?) AND (?) AND (#{brand_filter} OR item_brand_id = (?)) AND (#{cat_filter} OR item_categories_id = (?)) AND (#{pet_filter} OR pet_type_id = (?))", key.downcase, key.downcase, params[:lowerprice], params[:upperprice], params[:minrating], params[:maxrating], params[:brand_id], params[:category_id], params[:pet_type_id]).references(:item_brand)
+        @items = Item.includes(:item_brand).where("(lower(item_brands.name) LIKE (?) OR lower(items.name) LIKE (?)) AND price BETWEEN (?) AND  (?) AND avg_rating BETWEEN (?) AND (?) AND (#{brand_filter} OR item_brand_id = (?))", key.downcase, key.downcase, params[:lowerprice], params[:upperprice], params[:minrating], params[:maxrating], params[:brand_id]).references(:item_brand)
       end
     end
+    @items = @items.left_outer_joins(:item_categories).where(item_categories: { id: params[:category_id] }).distinct if params[:category_id].present?
+    @items = @items.left_outer_joins(:pet_types).where(pet_types: { id: params[:pet_type_id] }).distinct if params[:pet_type_id].present?
     sort_filter = params[:sortby].blank? ? 1 : params[:sortby].to_i
     if sort_filter == 1
       @items = @items.order(name: :asc)
@@ -127,7 +129,7 @@ class ItemsController < Api::BaseController
   def get_items_by_pet_type
     respond_to do |format|
     if PetType.where(:id => params[:id], :IsHaveCategories => false).exists?
-    brand =  Item.where(:pet_type_id => params[:id]).order(id: :asc)
+    brand =  Item.left_outer_joins(:pet_types).where(pet_types: { id: params[:pet_type_id] }).order(id: :asc)
     json_to_render = []
     @items = brand.where(:is_active => true)
     if @items.nil? or @items.empty?
@@ -166,9 +168,9 @@ def get_items_by_item_category
     if (!params[:pageno].nil? and !params[:size].nil?)
       size = params[:size].to_i
       page = params[:pageno].to_i
-      brand =  Item.where(:item_categories_id => params[:id], :pet_type_id => params[:pet_type_id]).limit(size).offset(page * size)
+      brand =  Item.left_outer_joins(:item_categories, :pet_types).where(item_categories: { id: params[:id] }).where(pet_types: { id: params[:pet_type_id] }).limit(size).offset(page * size)
     else
-      brand =  Item.where(:item_categories_id => params[:id], :pet_type_id => params[:pet_type_id])
+      brand =  Item.left_outer_joins(:item_categories, :pet_types).where(item_categories: { id: params[:id] }).where(pet_types: { id: params[:pet_type_id] })
     end
 
   json_to_render = []
@@ -220,9 +222,9 @@ end
     if (!params[:pageno].nil? and !params[:size].nil?)
       size = params[:size].to_i
       page = params[:pageno].to_i
-      @items = Item.where(:item_brand_id => params[:id], :item_categories_id => params[:category_id], :pet_type_id => params[:pet_type_id]).limit(size).offset(page * size)
+      @items = Item.left_outer_joins(:item_categories, :pet_types).where(item_categories: { id: params[:id] }).where(pet_types: { id: params[:pet_type_id] }).where(:item_brand_id => params[:id]).limit(size).offset(page * size)
     else
-      @items = Item.where(:item_brand_id => params[:id], :item_categories_id => params[:category_id], :pet_type_id => params[:pet_type_id])
+      @items = Item.left_outer_joins(:item_categories, :pet_types).where(item_categories: { id: params[:id] }).where(pet_types: { id: params[:pet_type_id] }).where(:item_brand_id => params[:id])
     end
     @items = @items.where(:is_active => true)
     if @items.nil? or @items.empty?

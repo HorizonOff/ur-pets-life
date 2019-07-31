@@ -5,8 +5,8 @@ class Item < ApplicationRecord
   has_many :shopping_cart_items, dependent: :destroy
   has_many :order_items
   has_many :item_reviews
-  belongs_to :item_category, optional: true
-  belongs_to :pet_type, optional: true
+  has_and_belongs_to_many :item_categories
+  has_and_belongs_to_many :pet_types
 
   acts_as_paranoid
 

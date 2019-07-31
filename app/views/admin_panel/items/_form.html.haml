@@ -61,17 +61,17 @@
         .col-md-9.col-sm-9.col-xs-12
           = f.text_field :expiry_at, value: @item.expiry_at&.strftime('%B %Y'), class: 'form-control month_picker'
       .form-group
-        = f.label :pet_type_id, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
+        = f.label :pet_type_ids, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
           Pet Type
           %span.required *
         .col-md-9.col-sm-9.col-xs-12
-          = f.collection_select :pet_type_id, PetType.all, :id, :name, {}, { class: 'select2 clinics_select', required: true, id: 'pet_type_id'}
+          = f.select :pet_type_ids, options_from_collection_for_select(PetType.all, 'id', 'name', @item.pet_types.ids), {}, { class: 'select2 clinics_select', multiple: true, required: true }
       .form-group
-        = f.label :item_categories_id, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
+        = f.label :item_category_ids, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
           Item Category
           %span.required *
         .col-md-9.col-sm-9.col-xs-12
-          = f.collection_select :item_categories_id, ItemCategory.all, :id, :name, {}, { class: 'select2 clinics_select', required: true, id: 'item_category_id'}
+          = f.select :item_category_ids, options_from_collection_for_select(ItemCategory.all, 'id', 'name', @item.item_categories.ids), {}, { class: 'select2 clinics_select', multiple: true, required: true }
       .form-group
         = f.label :item_brand_id, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
           Item Brand
