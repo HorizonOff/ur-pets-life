@@ -3,11 +3,18 @@ wb = xlsx_package.workbook
 wb.add_worksheet(name: "Users") do |sheet|
   sheet.add_row %w(ID First\ Name Last\ Name Email\ Address Mobile\ Number Location Gender Day\ of\ Birth
                    Number\ of\ pets Available\ Redeem\ Points Spends\ Not\ Eligble\ For\ Yearly\ Spends\ Program
-                   Spends\ Eligble\ For\ Yearly\ Spends\ Program)
+                   Spends\ Eligble\ For\ Yearly\ Spends\ Program Online Created\ at)
 
   @users.each do |user|
+    online = if user.last_action_at.blank?
+               'offline'
+             elsif user.last_action_at < (Time.current - 15.minutes)
+              "Last actions at #{user.last_action_at.strftime('%-d %b %Y %I:%M %p')}"
+             else
+              'online'
+             end
     sheet.add_row [user.id, user.first_name, user.last_name, user.email, user.mobile_number, user.address,
                    user.gender, user.birthday&.strftime('%e %b %Y'), user.pets.size, user.redeem_point&.net_worth,
-                   user.spends_not_eligble, user.spends_eligble]
+                   user.spends_not_eligble, user.spends_eligble, online, user.created_at.strftime('%-d %b %Y %I:%M %p')]
   end
 end
