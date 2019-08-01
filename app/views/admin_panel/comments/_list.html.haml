@@ -8,4 +8,8 @@
         = render @comments
       .clearfix
     .x_footer
-      = paginate @comments, remote: true, params: { controller: 'admin_panel/comments', action: 'index', post_id: @post&.id }
+      -if @post
+        = paginate @comments, remote: true, params: { controller: 'admin_panel/comments', action: 'index', post_id: @post&.id }
+      -elsif @parent_object
+        = paginate @comments
+
