@@ -1936,6 +1936,39 @@ CREATE TABLE public.specializations_vets (
 
 
 --
+-- Name: support_chats; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.support_chats (
+    id bigint NOT NULL,
+    user_id bigint,
+    path character varying,
+    status integer DEFAULT 0,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: support_chats_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.support_chats_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: support_chats_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.support_chats_id_seq OWNED BY public.support_chats.id;
+
+
+--
 -- Name: terms_and_conditions; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -2072,7 +2105,8 @@ CREATE TABLE public.users (
     spends_not_eligble double precision DEFAULT 0.0 NOT NULL,
     unread_post_comments_count integer DEFAULT 0,
     member_type integer DEFAULT 0,
-    unconfirmed_email character varying
+    unconfirmed_email character varying,
+    last_action_at timestamp without time zone
 );
 
 
@@ -2595,6 +2629,13 @@ ALTER TABLE ONLY public.specializations ALTER COLUMN id SET DEFAULT nextval('pub
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY public.support_chats ALTER COLUMN id SET DEFAULT nextval('public.support_chats_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY public.terms_and_conditions ALTER COLUMN id SET DEFAULT nextval('public.terms_and_conditions_id_seq'::regclass);
 
 
@@ -3036,6 +3077,14 @@ ALTER TABLE ONLY public.shopping_cart_items
 
 ALTER TABLE ONLY public.specializations
     ADD CONSTRAINT specializations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: support_chats_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.support_chats
+    ADD CONSTRAINT support_chats_pkey PRIMARY KEY (id);
 
 
 --
@@ -4056,6 +4105,13 @@ CREATE INDEX index_specializations_on_is_for_trainer ON public.specializations U
 
 
 --
+-- Name: index_support_chats_on_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_support_chats_on_user_id ON public.support_chats USING btree (user_id);
+
+
+--
 -- Name: index_trainers_on_deleted_at; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -4853,6 +4909,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190702125721'),
 ('20190704082744'),
 ('20190704084608'),
-('20190729084815');
+('20190729084815'),
+('20190731121602'),
+('20190802103532');
 
 

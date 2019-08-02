@@ -21,6 +21,7 @@ Rails.application.routes.draw do
                                     omniauth_callbacks: 'omniauth_callbacks' }
   namespace :api do
     namespace :v1 do
+      resources :support_chats
       resources :apidocs, only: :index
       resources :contact_requests, only: [:create]
       resources :users, only: :create do
@@ -157,6 +158,7 @@ Rails.application.routes.draw do
   namespace :admin_panel do
     root 'dashboard#index'
 
+    resources :support_chats
     resources :admins, only: %w[index destroy] do
       member { put :change_status }
       member { put :restore }
