@@ -2072,8 +2072,12 @@ CREATE TABLE public.users (
     spends_not_eligble double precision DEFAULT 0.0 NOT NULL,
     unread_post_comments_count integer DEFAULT 0,
     member_type integer DEFAULT 0,
+<<<<<<< HEAD
     unconfirmed_email character varying,
     last_action_at timestamp without time zone
+=======
+    unconfirmed_email character varying
+>>>>>>> master
 );
 
 
@@ -4856,5 +4860,4 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190704084608'),
 ('20190729084815'),
 ('20190731121602');
-
 
