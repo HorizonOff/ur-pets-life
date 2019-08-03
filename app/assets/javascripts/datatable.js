@@ -49,7 +49,9 @@ function init_datatables(){
                               { 'searchable': true, 'orderable': true, 'data': 'email', 'targets': 2 },
                               { 'searchable': false, 'orderable': false, 'data': 'mobile_number', 'targets': 3 },
                               { 'searchable': true, 'orderable': true, 'data': 'is_active', 'targets': 4 },
-                              { 'searchable': false, 'orderable': false, 'data': 'actions', 'targets': 5 } ] },
+                              { 'searchable': true, 'orderable': true, 'data': 'last_action_at', 'targets': 5 },
+                              { 'searchable': true, 'orderable': true, 'data': 'created_at', 'targets': 6 },
+                              { 'searchable': false, 'orderable': false, 'data': 'actions', 'targets': 7 } ] },
 
       'contact_requests': { 'url': '/admin_panel/contact_requests', 'order_col': 5, 'order_dir': 'desc',
                             'columns': [ { 'searchable': true, 'orderable': true, 'data': 'id', 'targets': 0 },

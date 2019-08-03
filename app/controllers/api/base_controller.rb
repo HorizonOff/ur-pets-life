@@ -30,6 +30,7 @@ module Api
     def authenticate_token
       @current_session = Session.find_by_token(request.headers['Authorization'])
       @user = @current_session.user if @current_session
+      @user.update_column(:last_action_at, Time.current) if @user
     end
 
     def render_422(errors)
