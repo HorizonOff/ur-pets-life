@@ -132,3 +132,6 @@ gem 'video_thumbnailer'
 
 #for send email
 gem 'sendgrid'
+
+#for chat
+gem 'firebase'

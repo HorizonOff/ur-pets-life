@@ -201,6 +201,10 @@ GEM
     file_validators (2.3.0)
       activemodel (>= 3.2)
       mime-types (>= 1.0)
+    firebase (0.2.8)
+      googleauth
+      httpclient (>= 2.5.3)
+      json
     fog-aws (3.5.0)
       fog-core (~> 2.1)
       fog-json (~> 1.1)
@@ -547,6 +551,7 @@ DEPENDENCIES
   fb_graph2
   fcm
   file_validators
+  firebase
   fog-aws
   font-awesome-rails
   geocoder
