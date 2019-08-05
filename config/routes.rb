@@ -69,6 +69,7 @@ Rails.application.routes.draw do
       get 'found_pets', to: 'pets#found_pets'
       get 'get_current_ad', to: 'ads#current'
       get 'sale_categories', to: 'sales#categories'
+      get 'current_user_support_chat', to: 'support_chats#current_user_support_chat'
       resources :pets, except: %i[new edit] do
         collection { post :found }
         collection { get :can_be_lost }
