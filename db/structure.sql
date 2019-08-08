@@ -2138,6 +2138,7 @@ CREATE TABLE public.users (
     unread_post_comments_count integer DEFAULT 0,
     member_type integer DEFAULT 0,
 <<<<<<< HEAD
+<<<<<<< HEAD
     unconfirmed_email character varying
 <<<<<<< HEAD
 >>>>>>> master
@@ -2158,6 +2159,13 @@ CREATE TABLE public.users (
     unconfirmed_email character varying,
     last_action_at timestamp without time zone
 >>>>>>> support_chat
+=======
+    unconfirmed_email character varying,
+    last_action_at timestamp without time zone
+=======
+    unconfirmed_email character varying
+>>>>>>> master
+>>>>>>> fix_discount_items
 );
 
 

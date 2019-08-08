@@ -33,7 +33,7 @@ class Item < ApplicationRecord
           (Time.current + 4.month).beginning_of_month, (Time.current + 4.month).end_of_month)
   end)
   scope :discounted_items, (lambda do
-    sale.where('items.expiry_at > ? OR items.expiry_at < ?',
+    sale.where('items.expiry_at > ? OR items.expiry_at < ? OR items.expiry_at IS NULL',
                (Time.current + 4.month).end_of_month, Time.current.end_of_month)
   end)
 
