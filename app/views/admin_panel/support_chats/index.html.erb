@@ -1,6 +1,12 @@
 <!-- The core Firebase JS SDK is always required and must be listed first -->
 <script src="https://www.gstatic.com/firebasejs/6.3.4/firebase-app.js"></script>
+<!-- <script src="https://www.gstatic.com/firebasejs/6.3.4/firebase.js"></script> -->
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/3.3.0/firebase.js"></script>
 
+<!-- Firechat -->
+<link rel="stylesheet" href="https://cdn.firebase.com/libs/firechat/3.0.1/firechat.min.css" />
+<script src="https://cdn.firebase.com/libs/firechat/3.0.1/firechat.min.js"></script>
 <!-- TODO: Add SDKs for Firebase products that you want to use
      https://firebase.google.com/docs/web/setup#config-web-app -->
 
@@ -17,4 +23,23 @@
   };
   // Initialize Firebase
   firebase.initializeApp(firebaseConfig);
+</script>
+
+<script>
+  function initChat() {
+    // Get a Firebase Database ref
+    var chatRef = firebase.database().ref("3b5yuiIPR8XBr1oduZtvqSM6YeP2");
+
+    // Create a Firechat instance
+    var chat = new FirechatUI(chatRef, document.getElementById("firechat-wrapper"));
+
+    // Set the Firechat user
+    chat.setUser(1, "user.displayName");
+  }
+</script>
+
+<div id="firechat-wrapper"></div>
+
+<script>
+ initChat();
 </script>
