@@ -157,9 +157,9 @@ module Api
         discount = ::Api::V1::DiscountDomainService.new(@user.email.dup).dicount_on_email
         @is_user_from_company = discount.positive?
         @usercartitems.each do |cartitem|
-          if discount.positive? && cartitem.item.discount.zero?
-            && !(@user.member_type.in?(['silver', 'gold']) && cartitem.item.supplier.in?(["MARS", "NESTLE"]))
-            && @user.name != 'Instashop App'
+          if discount.positive? && cartitem.item.discount.zero? &&
+            !(@user.member_type.in?(['silver', 'gold']) && cartitem.item.supplier.in?(["MARS", "NESTLE"])) &&
+            @user.name != 'Instashop App'
             @itemsprice += cartitem.item.price * ((100 - discount).to_f / 100) * cartitem.quantity
           else
             @itemsprice += (cartitem.item.price * cartitem.quantity)
