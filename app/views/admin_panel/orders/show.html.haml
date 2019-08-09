@@ -40,7 +40,7 @@
                 Subtotal:
                 = @admin_panel_order.Subtotal
               %li
-                Delivery Charges:
+                = @admin_panel_order.user.name != 'Instashop App' ? 'Delivery Charges:' : 'Service Charge(Tax Inclusive):'
                 = @admin_panel_order.Delivery_Charges
               %li
                 VAT Charges:

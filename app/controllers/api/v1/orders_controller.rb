@@ -157,7 +157,9 @@ module Api
         discount = ::Api::V1::DiscountDomainService.new(@user.email.dup).dicount_on_email
         @is_user_from_company = discount.positive?
         @usercartitems.each do |cartitem|
-          if discount.positive? && cartitem.item.discount.zero? && !(@user.member_type.in?(['silver', 'gold']) && cartitem.item.supplier.in?(["MARS", "NESTLE"]))
+          if discount.positive? && cartitem.item.discount.zero? &&
+            !(@user.member_type.in?(['silver', 'gold']) && cartitem.item.supplier.in?(["MARS", "NESTLE"])) &&
+            @user.name != 'Instashop App'
             @itemsprice += cartitem.item.price * ((100 - discount).to_f / 100) * cartitem.quantity
           else
             @itemsprice += (cartitem.item.price * cartitem.quantity)
@@ -171,7 +173,11 @@ module Api
         return render json: { Message: 'Out of Stock', status: :out_of_stock } if isoutofstock == true
 
         subTotal = @itemsprice.to_f.round(2)
-        deliveryCharges = (subTotal < 100 ? 20 : 0)
+        if @user.name != 'Instashop App'
+          deliveryCharges = (subTotal < 100 ? 20 : 0)
+        else
+          deliveryCharges = 5.75
+        end
         company_discount = (@itemsprice - @total_price_without_discount).round(2)
         vatCharges = ((@total_price_without_discount/100).to_f * 5).round(2)
         total = subTotal + deliveryCharges + vatCharges
@@ -243,7 +249,7 @@ module Api
             discount_per_transaction.to_f.ceil
           end
           #@user_redeem_point_record.update(:net_worth => (user_redeem_points - permitted_redeem_points +  discount_per_transaction), :last_net_worth => (user_redeem_points - permitted_redeem_points), :last_reward_type => "Discount Per Transaction", :last_reward_worth => discount_per_transaction, :last_reward_update => Time.now, :totalearnedpoints => (@user_redeem_point_record.totalearnedpoints + discount_per_transaction))
-          @order.update(earned_points: discount_per_transaction)
+          @order.update(earned_points: discount_per_transaction) if @user.name != 'Instashop App'
           is_any_recurring_item = false
           @usercartitems.each do |cartitem|
             @neworderitemcreate = OrderItem.new(IsRecurring: cartitem.IsRecurring, order_id: @order.id,
