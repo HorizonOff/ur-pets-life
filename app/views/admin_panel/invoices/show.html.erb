@@ -17,10 +17,12 @@
             </div>
             <div class="invoice-info-bottom">
                 <div class="customer-info" style="float:left">
-                    <h4>Invoiced To </h4>
-                    <p><%= @order.user.first_name + ' ' + @order.user.last_name %></p>
-                    <p><%= @order.user.mobile_number %></p>
-                    <p><%= @userAddress %></p>
+                    <% if @order.user.name != 'Instashop App' %>
+                        <h4>Invoiced To </h4>
+                        <p><%= @order.user.first_name + ' ' + @order.user.last_name %></p>
+                        <p><%= @order.user.mobile_number %></p>
+                        <p><%= @userAddress %></p>
+                    <% end %>
                     <div class="paid">Paid</div>
                 </div>
                 <div class="info-detail" style="float:right">
@@ -98,17 +100,28 @@
                             <td><%= @order.Vat_Charges %></td>
                         </tr>
                         <tr style="border-bottom: 2px solid #d8d8d7;">
-                            <td>Delivery Charges </td>
+                            <% if @order.user.name != 'Instashop App'%>
+                                <td>Delivery Charges </td>
+                            <% else %>
+                                <td>Service Charge ( Tax Inclusive ) </td>
+                            <% end %>
                             <td><%= @order.Delivery_Charges %></td>
                         </tr>
-                        <tr style="border-bottom: 2px solid #d8d8d7;">
-                            <td>Earned Redeem Points </td>
-                            <td><%= @order.earned_points %></td>
-                        </tr>
-                        <tr style="border-bottom: 2px solid #d8d8d7;">
-                            <td>Availed Redeem Points </td>
-                            <td><%= @order.RedeemPoints? ? @order.RedeemPoints : 0 %></td>
-                        </tr>
+                        <% if @order.user.name != 'Instashop App'%>
+                            <tr style="border-bottom: 2px solid #d8d8d7;">
+                                <td>Earned Redeem Points </td>
+                                <td><%= @order.earned_points %></td>
+                            </tr>
+                            <tr style="border-bottom: 2px solid #d8d8d7;">
+                                <td>Availed Redeem Points </td>
+                                <td><%= @order.RedeemPoints? ? @order.RedeemPoints : 0 %></td>
+                            </tr>
+                        <% else %>
+                            <tr style="border-bottom: 2px solid #d8d8d7;">
+                                <td>Discount </td>
+                                <td><%= @order.RedeemPoints? ? @order.RedeemPoints : 0 %></td>
+                            </tr>
+                        <% end %>
                         <tr style="border-bottom: 2px solid #d8d8d7;">
                             <td><strong>Total</strong></td>
                             <td><strong>AED <%= @order.Total %></strong></td>
