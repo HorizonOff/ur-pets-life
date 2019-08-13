@@ -1,7 +1,7 @@
 module Api
   module V1
-    class SupportChatsController < Api::BaseController
-      def current_user_support_chat
+    class ChatMessagesController < Api::BaseController
+      def create
         @support_chat = current_user.support_chats.without_closed.first
         return render_404 if @support_chat.blank?
 

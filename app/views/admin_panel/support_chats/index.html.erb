@@ -1,14 +1,16 @@
-<!-- The core Firebase JS SDK is always required and must be listed first -->
-<script src="https://www.gstatic.com/firebasejs/6.3.4/firebase-app.js"></script>
-<!-- <script src="https://www.gstatic.com/firebasejs/6.3.4/firebase.js"></script> -->
-<!-- Firebase -->
-<script src="https://www.gstatic.com/firebasejs/3.3.0/firebase.js"></script>
+<div id='chat'>
+  text
+</div>
 
-<!-- Firechat -->
-<link rel="stylesheet" href="https://cdn.firebase.com/libs/firechat/3.0.1/firechat.min.css" />
-<script src="https://cdn.firebase.com/libs/firechat/3.0.1/firechat.min.js"></script>
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/6.3.5/firebase-app.js"></script>
+
 <!-- TODO: Add SDKs for Firebase products that you want to use
      https://firebase.google.com/docs/web/setup#config-web-app -->
+     <!-- Add Firebase products that you want to use -->
+  <script src="https://www.gstatic.com/firebasejs/6.3.5/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/6.3.5/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/6.3.5/firebase-database.js"></script>
 
 <script>
   // Your web app's Firebase configuration
@@ -23,23 +25,21 @@
   };
   // Initialize Firebase
   firebase.initializeApp(firebaseConfig);
+  var database = firebase.database();
+  var starCountRef = firebase.database().ref('3b5yuiIPR8XBr1oduZtvqSM6YeP2').limitToLast(10);
+  // console.log(starCountRef);
+
+  starCountRef.once('value').then(function(snapshot) {
+    debugger
+  });
+
+  // debugger
+  // console.log(starCountRef);
+  // starCountRef.on('value', function(snapshot) {
+  //   updateStarCount(postElement, snapshot.val());
+  // });
+
+  // console.log(database);
 </script>
 
-<script>
-  function initChat() {
-    // Get a Firebase Database ref
-    var chatRef = firebase.database().ref("3b5yuiIPR8XBr1oduZtvqSM6YeP2");
 
-    // Create a Firechat instance
-    var chat = new FirechatUI(chatRef, document.getElementById("firechat-wrapper"));
-
-    // Set the Firechat user
-    chat.setUser(1, "user.displayName");
-  }
-</script>
-
-<div id="firechat-wrapper"></div>
-
-<script>
- initChat();
-</script>

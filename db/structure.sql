@@ -463,6 +463,47 @@ ALTER SEQUENCE public.cart_items_id_seq OWNED BY public.cart_items.id;
 
 
 --
+-- Name: chat_messages; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.chat_messages (
+    id bigint NOT NULL,
+    user_id bigint,
+    support_chat_id bigint,
+    type character varying,
+    text character varying,
+    photo character varying,
+    video character varying,
+    video_duration double precision,
+    mobile_photo_url character varying,
+    mobile_video_url character varying,
+    status integer DEFAULT 1,
+    error_message character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: chat_messages_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.chat_messages_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: chat_messages_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.chat_messages_id_seq OWNED BY public.chat_messages.id;
+
+
+--
 -- Name: ckeditor_assets; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -2377,6 +2418,13 @@ ALTER TABLE ONLY public.cart_items ALTER COLUMN id SET DEFAULT nextval('public.c
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY public.chat_messages ALTER COLUMN id SET DEFAULT nextval('public.chat_messages_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY public.ckeditor_assets ALTER COLUMN id SET DEFAULT nextval('public.ckeditor_assets_id_seq'::regclass);
 
 
@@ -2781,6 +2829,14 @@ ALTER TABLE ONLY public.calendars
 
 ALTER TABLE ONLY public.cart_items
     ADD CONSTRAINT cart_items_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: chat_messages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.chat_messages
+    ADD CONSTRAINT chat_messages_pkey PRIMARY KEY (id);
 
 
 --
@@ -3479,6 +3535,20 @@ CREATE INDEX index_cart_items_on_service_option_time_id ON public.cart_items USI
 --
 
 CREATE INDEX index_cart_items_on_serviceable_type_and_serviceable_id ON public.cart_items USING btree (serviceable_type, serviceable_id);
+
+
+--
+-- Name: index_chat_messages_on_support_chat_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_chat_messages_on_support_chat_id ON public.chat_messages USING btree (support_chat_id);
+
+
+--
+-- Name: index_chat_messages_on_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_chat_messages_on_user_id ON public.chat_messages USING btree (user_id);
 
 
 --
@@ -4911,6 +4981,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190704084608'),
 ('20190729084815'),
 ('20190731121602'),
-('20190802103532');
+('20190802103532'),
+('20190813122720');
 
 
