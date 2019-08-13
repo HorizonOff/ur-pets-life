@@ -50,6 +50,7 @@ class User < ApplicationRecord
   has_one :location, as: :place, inverse_of: :place
 
   has_many :support_chats
+  has_many :chat_messages
   has_many :orders
   has_many :user_posts, dependent: :destroy
   has_many :order_items, through: :orders

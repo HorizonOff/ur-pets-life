@@ -1,3 +1,5 @@
 class SupportChatSerializer < ActiveModel::Serializer
-  attributes :path
+  attributes :id
+
+  has_many :chat_messages, serializer: ChatMessageSerializer
 end
