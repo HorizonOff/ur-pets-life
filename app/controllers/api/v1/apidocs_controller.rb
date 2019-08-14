@@ -59,6 +59,7 @@ module Api
         Api::V1::Ads,
         Api::V1::Sales,
         Api::V1::SupportChats,
+        Api::V1::ChatMessages,
         self
       ].freeze
 

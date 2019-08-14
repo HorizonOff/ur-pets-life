@@ -3,7 +3,7 @@ class CreateChatMessages < ActiveRecord::Migration[5.1]
     create_table :chat_messages do |t|
       t.references :user
       t.references :support_chat
-      t.string :type
+      t.integer :m_type
       t.string :text
       t.string :photo
       t.string :video

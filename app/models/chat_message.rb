@@ -1,5 +1,6 @@
 class ChatMessage < ApplicationRecord
   enum status: { pending: 0, posted: 1, error: 2 }
+  enum m_type: { user: 0, admin: 1, system: 2 }
 
   belongs_to :user, optional: true
   belongs_to :support_chat
@@ -44,7 +45,7 @@ class ChatMessage < ApplicationRecord
   end
 
   def create_media_from_url
-    CreateImageWorker.perform_async(id, 'ChatMessage') if mobile_photo_url.present?
+    CreatePhotoWorker.perform_async(id, 'ChatMessage') if mobile_photo_url.present?
     CreateVideoWorker.perform_async(id, 'ChatMessage') if mobile_video_url.present?
   end
 
