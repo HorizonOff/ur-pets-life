@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   resources :item_brands
   resources :item_categories
   mount Ckeditor::Engine => '/ckeditor'
+  mount ActionCable.server => '/cable'
   root 'pages#newlanding'
   get '/login', to: 'application#login'
   get '/privacy_policy_new', to:'pages#send_message', as:'view_pp'

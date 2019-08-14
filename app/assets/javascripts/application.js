@@ -31,6 +31,7 @@
 //= require location.js
 //= require datatable.js
 //= require toastr
+//= require cable
 
 //= require_self
 
