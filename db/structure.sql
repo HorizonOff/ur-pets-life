@@ -470,7 +470,7 @@ CREATE TABLE public.chat_messages (
     id bigint NOT NULL,
     user_id bigint,
     support_chat_id bigint,
-    type character varying,
+    m_type integer,
     text character varying,
     photo character varying,
     video character varying,

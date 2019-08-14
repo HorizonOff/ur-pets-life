@@ -16,6 +16,10 @@ module Api
         model.created_at.to_i
       end
 
+      def video_duration
+        model.video_duration&.round
+      end
+
       private
 
       def photo_hash
