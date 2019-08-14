@@ -202,6 +202,7 @@ module Api
           end
         end
 
+
         if permitted_redeem_points > subTotal
           permitted_redeem_points = subTotal
         end
@@ -236,7 +237,7 @@ module Api
           end
           discount_per_transaction = 0
           amount_to_be_awarded = subTotal - permitted_redeem_points - @discounted_items_amount
-          if amount_to_be_awarded > 0 && discount.blank?
+          if amount_to_be_awarded > 0 && (discount.blank? || discount.zero?) && @user.name != 'Instashop App'
             if amount_to_be_awarded <= 500
               discount_per_transaction =+ (3*amount_to_be_awarded)/100
             elsif amount_to_be_awarded > 500 and amount_to_be_awarded <= 1000
@@ -248,8 +249,9 @@ module Api
             end
             discount_per_transaction.to_f.ceil
           end
+
           #@user_redeem_point_record.update(:net_worth => (user_redeem_points - permitted_redeem_points +  discount_per_transaction), :last_net_worth => (user_redeem_points - permitted_redeem_points), :last_reward_type => "Discount Per Transaction", :last_reward_worth => discount_per_transaction, :last_reward_update => Time.now, :totalearnedpoints => (@user_redeem_point_record.totalearnedpoints + discount_per_transaction))
-          @order.update(earned_points: discount_per_transaction) if @user.name != 'Instashop App'
+          @order.update(earned_points: discount_per_transaction)
           is_any_recurring_item = false
           @usercartitems.each do |cartitem|
             @neworderitemcreate = OrderItem.new(IsRecurring: cartitem.IsRecurring, order_id: @order.id,
