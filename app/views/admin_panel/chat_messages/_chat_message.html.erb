@@ -1,0 +1,16 @@
+<div class="d-none" data-role="message-template">
+  <div class="chat-message-container">
+    <div class="row no-gutters">
+
+      <div class="col">
+        <div class="message-content <%=chat_message.m_type=='admin' ? 'admin-message' : 'user-message' %>">
+          <p class="mb-1" data-role="message-text"><%= chat_message.text %></p>
+
+          <div class="text-right">
+            <small data-role="message-date"><%= chat_message.timestamp %></small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -24,13 +24,13 @@ class ChatMessage < ApplicationRecord
   end
 
   def message_to_user
-    # return unless status == 'posted'
-    # return if status != 'posted' ||
-    # return unless ENV['BLACK_PREVIEW'] == 'true'
-
-    # send_to_channel
+    send_to_channel
     # update_user_chats_info
     # send_push
+  end
+
+  def timestamp
+    created_at.strftime('%H:%M:%S %d %B %Y')
   end
 
   private
@@ -66,28 +66,22 @@ class ChatMessage < ApplicationRecord
   end
 
   def send_push
-    resiver_ids = chat.user_chats.where.not(user_id: @user_ids).pluck(:user_id)
+    resiver_ids = support_chat.where.not(user_id: @user_ids).pluck(:user_id)
     PushSendingChatMessageWorker.perform_async(id, resiver_ids)
   end
 
   def send_to_channel
-    redis_key = "chat-#{chat_id}"
-    redis_key_upd = "chat-upd-#{chat_id}"
-    @session_ids = JSON.parse($redis.get(redis_key_upd) || '[]').uniq
+    redis_key = "chat-#{support_chat_id}"
+    @session_ids = JSON.parse($redis.get(redis_key) || '[]').uniq
     user_ids_from_session = Session.where(id: @session_ids).pluck(:user_id)
-    @user_ids = JSON.parse($redis.get(redis_key) || '[]').concat(user_ids_from_session).push(user_id).uniq
+    @user_ids = user_ids_from_session
+    decorated_message = ::Api::V1::ChatMessageDecorator.decorate(self)
 
-    # ActionCable.server.broadcast(
-    #   "chat-#{chat_id}:messages",
-    #   chat_message: ActiveModelSerializers::SerializableResource.new(decorate, adapter: :attributes,
-    #                                                                            serializer: ChatMessageSerializer)
-    #                                                             .as_json
-    # )
-    # ActionCable.server.broadcast(
-    #   "chat-upd-#{chat_id}:messages",
-    #   chat_message: ActiveModelSerializers::SerializableResource.new(decorate, adapter: :attributes,
-    #                                                                            serializer: ChatMessageSerializer)
-    #                                                             .as_json
-    # )
+    ActionCable.server.broadcast(
+      "chat-#{support_chat_id}:messages",
+      chat_message: ActiveModelSerializers::SerializableResource.new(decorated_message, adapter: :attributes,
+                                                                               serializer: ChatMessageSerializer)
+                                                                .as_json
+    )
   end
 end

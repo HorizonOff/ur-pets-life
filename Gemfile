@@ -133,3 +133,5 @@ gem 'video_thumbnailer'
 #for send email
 gem 'sendgrid'
 
+#for chat form
+gem 'simple_form'
