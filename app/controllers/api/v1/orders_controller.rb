@@ -159,7 +159,7 @@ module Api
         @usercartitems.each do |cartitem|
           if discount.positive? && cartitem.item.discount.zero? &&
             !(@user.member_type.in?(['silver', 'gold']) && cartitem.item.supplier.in?(["MARS", "NESTLE"])) &&
-            @user.name != 'Instashop App'
+            @user.email != 'development@urpetslife.com'
             @itemsprice += cartitem.item.price * ((100 - discount).to_f / 100) * cartitem.quantity
           else
             @itemsprice += (cartitem.item.price * cartitem.quantity)
@@ -173,7 +173,7 @@ module Api
         return render json: { Message: 'Out of Stock', status: :out_of_stock } if isoutofstock == true
 
         subTotal = @itemsprice.to_f.round(2)
-        if @user.name != 'Instashop App'
+        if @user.email != 'development@urpetslife.com'
           deliveryCharges = (subTotal < 100 ? 20 : 0)
         else
           deliveryCharges = 5.75
@@ -237,7 +237,7 @@ module Api
           end
           discount_per_transaction = 0
           amount_to_be_awarded = subTotal - permitted_redeem_points - @discounted_items_amount
-          if amount_to_be_awarded > 0 && (discount.blank? || discount.zero?) && @user.name != 'Instashop App'
+          if amount_to_be_awarded > 0 && (discount.blank? || discount.zero?) && @user.email != 'development@urpetslife.com'
             if amount_to_be_awarded <= 500
               discount_per_transaction =+ (3*amount_to_be_awarded)/100
             elsif amount_to_be_awarded > 500 and amount_to_be_awarded <= 1000

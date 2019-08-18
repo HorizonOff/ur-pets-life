@@ -17,7 +17,7 @@
             </div>
             <div class="invoice-info-bottom">
                 <div class="customer-info" style="float:left">
-                    <% if @order.user.name != 'Instashop App' %>
+                    <% if @order.user.email != 'development@urpetslife.com' %>
                         <h4>Invoiced To </h4>
                         <p><%= @order.user.first_name + ' ' + @order.user.last_name %></p>
                         <p><%= @order.user.mobile_number %></p>
@@ -106,14 +106,14 @@
                           </tr>
                         <% end %>
                         <tr style="border-bottom: 2px solid #d8d8d7;">
-                            <% if @order.user.name != 'Instashop App'%>
+                            <% if @order.user.email != 'development@urpetslife.com'%>
                                 <td>Delivery Charges </td>
                             <% else %>
                                 <td>Service Charge ( Tax Inclusive ) </td>
                             <% end %>
                             <td><%= @order.Delivery_Charges %></td>
                         </tr>
-                        <% if @order.user.name != 'Instashop App'%>
+                        <% if @order.user.email != 'development@urpetslife.com'%>
                             <tr style="border-bottom: 2px solid #d8d8d7;">
                                 <td>Earned Redeem Points </td>
                                 <td><%= @order.earned_points %></td>
