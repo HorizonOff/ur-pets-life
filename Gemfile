@@ -20,7 +20,7 @@ gem 'fb_graph2'
 gem 'rest-client'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 # gem 'rails', '~> 5.1.4'
-gem 'rails', git: 'https://github.com/rails/rails.git', branch: '5-1-stable'
+gem 'rails', '~> 5.2.3'
 # Use postgresql as the database for Active Record
 gem 'pg', '~> 0.18'
 # Use Puma as the app server
@@ -46,7 +46,7 @@ gem 'dotenv-rails'
 gem 'swagger-blocks'
 gem 'rubocop', '~> 0.51.0', require: false
 gem 'devise'
-gem 'devise_invitable', '~> 1.7.0'
+gem 'devise_invitable'
 gem 'haml-rails', '~> 1.0'
 gem 'active_model_serializers'
 
@@ -58,7 +58,7 @@ gem 'geocoder'
 gem 'aws-sdk-rails'
 gem 'aws-sdk-s3'
 
-gem 'paper_trail', '~> 7.1'
+gem 'paper_trail'
 
 gem 'jquery-rails'
 gem "font-awesome-rails"
@@ -133,3 +133,5 @@ gem 'video_thumbnailer'
 #for send email
 gem 'sendgrid'
 
+#for chat form
+gem 'simple_form'

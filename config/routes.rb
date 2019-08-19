@@ -166,6 +166,7 @@ Rails.application.routes.draw do
     root 'dashboard#index'
 
     resources :support_chats
+    resources :chat_messages
     resources :admins, only: %w[index destroy] do
       member { put :change_status }
       member { put :restore }

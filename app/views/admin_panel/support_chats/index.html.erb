@@ -1,45 +1,7 @@
-<div id='chat'>
-  text
-</div>
+<h1>Support chats</h1>
 
-<!-- The core Firebase JS SDK is always required and must be listed first -->
-<script src="https://www.gstatic.com/firebasejs/6.3.5/firebase-app.js"></script>
-
-<!-- TODO: Add SDKs for Firebase products that you want to use
-     https://firebase.google.com/docs/web/setup#config-web-app -->
-     <!-- Add Firebase products that you want to use -->
-  <script src="https://www.gstatic.com/firebasejs/6.3.5/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/6.3.5/firebase-firestore.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/6.3.5/firebase-database.js"></script>
-
-<script>
-  // Your web app's Firebase configuration
-  var firebaseConfig = {
-    apiKey: "AIzaSyCg2i3gMEvmI4BHRV2iJVAi81ZB11Fvvw4",
-    authDomain: "urpetslife-186708.firebaseapp.com",
-    databaseURL: "https://urpetslife-186708.firebaseio.com",
-    projectId: "urpetslife-186708",
-    storageBucket: "urpetslife-186708.appspot.com",
-    messagingSenderId: "169628979206",
-    appId: "1:169628979206:web:bd022fa852dc9d95"
-  };
-  // Initialize Firebase
-  firebase.initializeApp(firebaseConfig);
-  var database = firebase.database();
-  var starCountRef = firebase.database().ref('3b5yuiIPR8XBr1oduZtvqSM6YeP2').limitToLast(10);
-  // console.log(starCountRef);
-
-  starCountRef.once('value').then(function(snapshot) {
-    debugger
-  });
-
-  // debugger
-  // console.log(starCountRef);
-  // starCountRef.on('value', function(snapshot) {
-  //   updateStarCount(postElement, snapshot.val());
-  // });
-
-  // console.log(database);
-</script>
+<ul>
+  <%= render @support_chats %>
+</ul>
 
 

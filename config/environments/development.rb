@@ -1,4 +1,6 @@
 Rails.application.configure do
+  config.action_cable.url = 'ws://localhost:3000/cable'
+  config.action_cable.allowed_request_origins = [ 'http://localhost:3000', 'http://127.0.0.1:3000' ]
   # Settings specified here will take precedence over those in config/application.rb.
 
   # In the development environment your application's code is reloaded on
@@ -53,7 +55,7 @@ Rails.application.configure do
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
   config.action_mailer.delivery_method = :letter_opener
   config.action_mailer.default_url_options = { host: ENV['HOST_NAME'], port: 3000 }
-  config.reload_classes_only_on_change = false
+  # config.reload_classes_only_on_change = false
   config.action_mailer.smtp_settings = {
     address: 'smtp.gmail.com',
     port: 587,
