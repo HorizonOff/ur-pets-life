@@ -3,7 +3,7 @@
     <div class="row no-gutters">
 
       <div class="col">
-        <div class="message-content <%=chat_message.m_type=='admin' ? 'admin-message' : 'user-message' %>">
+        <div class="message-content <%=chat_message.m_type %>">
           <p class="mb-1" data-role="message-text"><%= chat_message.text %></p>
 
           <div class="text-right">
