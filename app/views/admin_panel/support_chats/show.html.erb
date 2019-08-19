@@ -5,16 +5,22 @@
 
     <div id="messages" class="chat" data-channel-subscribe="room" data-support-chat-id="<%= @support_chat.id %>">
       <%= render @support_chat.chat_messages %>
-    </div>
-
-    <%= form_for @chat_message, url: admin_panel_chat_messages_path, remote: true do |f| %>
+      <%= form_for @chat_message, url: admin_panel_chat_messages_path, remote: true do |f| %>
       <div class="form-inline">
         <%= f.hidden_field :support_chat_id, value: @support_chat.id %>
         <%= f.text_field :text, autocomplete: 'off', class: 'form-control input-chat-message' %>
-        <%= f.submit "Send", class: 'btn btn-primary' %>
+        <div class="image-upload">
+           <label for="file-input">
+             <span class="glyphicon glyphicon-camera"></span>
+           </label>
+
+           <%= f.file_field :photo, id:"file-input" %>
+        </div>
+        <%= f.submit "Send", class: 'btn btn-primary chat-send-btn' %>
       </div>
 
     <% end %>
+    </div>
 
     <div class="d-none" data-role="message-template">
       <div class="chat-message-container">

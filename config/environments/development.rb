@@ -55,7 +55,7 @@ Rails.application.configure do
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
   config.action_mailer.delivery_method = :letter_opener
   config.action_mailer.default_url_options = { host: ENV['HOST_NAME'], port: 3000 }
-  config.reload_classes_only_on_change = false
+  # config.reload_classes_only_on_change = false
   config.action_mailer.smtp_settings = {
     address: 'smtp.gmail.com',
     port: 587,

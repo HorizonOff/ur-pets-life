@@ -1,7 +1,5 @@
 class ChatMessagesChannel < ApplicationCable::Channel
   def subscribed
-    # binding.pry
-    stop_all_streams
     stream_from "chat-#{params['chat_id']}:messages"
     redis_key = "chat-#{params['chat_id']}"
     all_ids = JSON.parse($redis.get(redis_key) || '[]')
@@ -11,7 +9,6 @@ class ChatMessagesChannel < ApplicationCable::Channel
   end
 
   def unsubscribed
-    stop_all_streams
     redis_key = "chat-#{params['chat_id']}"
     all_ids = JSON.parse($redis.get(redis_key) || '[]')
     all_ids.delete(current_session&.id)

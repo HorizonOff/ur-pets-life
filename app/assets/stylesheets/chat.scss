@@ -9,6 +9,7 @@
 }
 
 .chat {
+  position: relative;
   border: 1px solid lighten(#aa66cc, 40%);
   background: lighten(#aa66cc, 50%);
   height: 70vh;
@@ -66,4 +67,39 @@
   .text-right {
     display:none;
   }
+}
+
+.image-upload > input
+{
+   display: none;
+}
+
+.image-upload > label{
+  cursor:pointer;
+}
+
+.image-upload {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
+.new-chat-message{
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width:200%;
+}
+
+.form-inline .form-control .input-chat-message {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width:100%;
+}
+
+.chat-send-btn {
+  position: absolute;
+  bottom: 0;
+  right: 0;
 }

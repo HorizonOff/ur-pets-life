@@ -6,7 +6,9 @@ module AdminPanel
       cookies.signed[:user_id] = User.first.id
       @chat_message = ChatMessage.create m_type: 'admin',
                                          support_chat: @support_chat,
-                                         text: params.dig(:chat_message, :text)
+                                         text: params.dig(:chat_message, :text),
+                                         photo: params.dig(:chat_message, :photo),
+                                         video: params.dig(:chat_message, :video)
     end
 
     protected
