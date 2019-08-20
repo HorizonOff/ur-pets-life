@@ -26,7 +26,7 @@ class ChatMessage < ApplicationRecord
   def message_to_user
     send_to_channel
     # update_user_chats_info
-    # send_push
+    send_push
   end
 
   def timestamp
@@ -66,7 +66,7 @@ class ChatMessage < ApplicationRecord
   end
 
   def send_push
-    resiver_ids = support_chat.where.not(user_id: @user_ids).pluck(:user_id)
+    resiver_ids = @user_ids.include?(support_chat.user.id) ? [] : [support_chat.user.id]
     PushSendingChatMessageWorker.perform_async(id, resiver_ids)
   end
 

@@ -217,3 +217,8 @@ $(document).on('click', '.photo_preview', function() {
   $('.modal-body').html(html_text)
   $('#photo_preview').modal('show');
 });
+
+// $(document).on('click', '.chat-send-btn', function() {
+//   $('#new_chat_message input[type="text"]').val('');
+//   $('#new_chat_message input[type="file"]').val('');
+// });
