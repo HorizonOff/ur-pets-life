@@ -4,29 +4,32 @@
     <h1><%= @support_chat.user.name %></h1>
 
     <div id="messages" class="chat" data-channel-subscribe="room" data-support-chat-id="<%= @support_chat.id %>">
-      <%= render @support_chat.chat_messages %>
-      <%= form_for @chat_message, url: admin_panel_chat_messages_path, remote: true do |f| %>
-      <div class="form-inline">
-        <%= f.hidden_field :support_chat_id, value: @support_chat.id %>
-        <%= f.text_field :text, autocomplete: 'off', class: 'form-control input-chat-message' %>
-        <div class="image-upload">
-           <label for="file-input">
-             <span class="glyphicon glyphicon-picture"></span>
-           </label>
-
-           <%= f.file_field :photo, id:"file-input" %>
-        </div>
-        <div class="video-upload">
-           <label for="file-input">
-             <span class="glyphicon glyphicon-facetime-video"></span>
-           </label>
-
-           <%= f.file_field :video, id:"file-input" %>
-        </div>
-        <%= f.submit "Send", class: 'btn btn-primary chat-send-btn' %>
+      <div id="messages-pool">
+        <%= render @support_chat.chat_messages %>
       </div>
+      <div id='chat-form'>
+        <%= form_for @chat_message, url: admin_panel_chat_messages_path, remote: true do |f| %>
+          <div class="form-inline">
+            <%= f.hidden_field :support_chat_id, value: @support_chat.id %>
+            <%= f.text_field :text, autocomplete: 'off', class: 'form-control input-chat-message' %>
+            <div class="image-upload">
+               <label for="file-input">
+                 <span class="glyphicon glyphicon-picture"></span>
+               </label>
 
-    <% end %>
+               <%= f.file_field :photo, id:"file-input" %>
+            </div>
+            <div class="video-upload">
+               <label for="file-input">
+                 <span class="glyphicon glyphicon-facetime-video"></span>
+               </label>
+
+               <%= f.file_field :video, id:"file-input" %>
+            </div>
+            <%= f.submit "Send", class: 'btn btn-primary chat-send-btn' %>
+          </div>
+        <% end %>
+      </div>
     </div>
   </div>
 </div>
