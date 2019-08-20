@@ -13,6 +13,15 @@ module Api
           support_chat_id: @support_chat.id
         }
       end
+
+      def close
+        @support_chat = current_user.support_chats.without_closed.first
+        return render_404 if @support_chat.blank?
+
+        @support_chat.status = 'closed'
+        @support_chat.save
+        render json: { message: 'Chat closed' }
+      end
     end
   end
 end

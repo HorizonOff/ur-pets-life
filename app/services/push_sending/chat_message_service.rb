@@ -15,7 +15,7 @@ module PushSending
         badge: ios_badge,
         # unread_notifications_count: unread_notifications_count,
         # unread_messages_count: unread_messages_count,
-        type: 'chat_message',
+        source_type: 'ChatMessage',
         chat_message: ActiveModelSerializers::SerializableResource.new(
           chat_message, adapter: :attributes, serializer: ChatMessageSerializer
         ).as_json }
@@ -26,7 +26,7 @@ module PushSending
         data: { chat_message: ActiveModelSerializers::SerializableResource.new(
           chat_message, adapter: :attributes, serializer: ChatMessageSerializer
         ).as_json,
-                type: 'chat_message',
+                source_type: 'ChatMessage',
                 title: 'UrPetsLife',
                 badge: android_badge
                 # unread_notifications_count: unread_notifications_count,
