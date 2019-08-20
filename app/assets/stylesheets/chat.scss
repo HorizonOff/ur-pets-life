@@ -15,7 +15,8 @@
   height: 70vh;
   width: 50%;
   border-radius: 5px 5px 0 0;
-  overflow-y: none;
+  overflow-x: none;
+  overflow-y: auto;
 
   .chat-message-container {
     padding: 5px;
@@ -81,9 +82,21 @@
 .image-upload {
   position: absolute;
   bottom: 0;
-  left: 0;
+  right: 75px;
+}
+.video-upload > input
+{
+   display: none;
 }
 
+.video-upload > label{
+  cursor:pointer;
+}
+.video-upload {
+  position: absolute;
+  bottom: 0;
+  right: 53px;
+}
 .new-chat-message{
   position: absolute;
   bottom: 0;
@@ -91,7 +104,7 @@
   width:200%;
 }
 
-.form-inline .form-control .input-chat-message {
+#chat_message_text {
   position: absolute;
   bottom: 0;
   left: 0;
@@ -102,4 +115,6 @@
   position: absolute;
   bottom: 0;
   right: 0;
+  padding: 5px;
+  margin: 1px;
 }
