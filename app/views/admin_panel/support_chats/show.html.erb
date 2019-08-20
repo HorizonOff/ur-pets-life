@@ -11,29 +11,35 @@
         <%= f.text_field :text, autocomplete: 'off', class: 'form-control input-chat-message' %>
         <div class="image-upload">
            <label for="file-input">
-             <span class="glyphicon glyphicon-camera"></span>
+             <span class="glyphicon glyphicon-picture"></span>
            </label>
 
            <%= f.file_field :photo, id:"file-input" %>
+        </div>
+        <div class="video-upload">
+           <label for="file-input">
+             <span class="glyphicon glyphicon-facetime-video"></span>
+           </label>
+
+           <%= f.file_field :video, id:"file-input" %>
         </div>
         <%= f.submit "Send", class: 'btn btn-primary chat-send-btn' %>
       </div>
 
     <% end %>
     </div>
+  </div>
+</div>
+<div class="d-none" data-role="message-template">
+  <div class="chat-message-container">
+    <div class="row no-gutters">
 
-    <div class="d-none" data-role="message-template">
-      <div class="chat-message-container">
-        <div class="row no-gutters">
+      <div class="col">
+        <div class="message-content">
+          <p class="mb-1" data-role="message-text"></p>
 
-          <div class="col">
-            <div class="message-content">
-              <p class="mb-1" data-role="message-text"></p>
-
-              <div class="text-right">
-                <small data-role="message-date"></small>
-              </div>
-            </div>
+          <div class="text-right">
+            <small data-role="message-date"></small>
           </div>
         </div>
       </div>
