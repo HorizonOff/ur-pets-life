@@ -20,6 +20,7 @@ module Api
 
         @support_chat.status = 'closed'
         @support_chat.save
+        @support_chat.create_message_chat_closed_by_user
         render json: { message: 'Chat closed' }
       end
     end
