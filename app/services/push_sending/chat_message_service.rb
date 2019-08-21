@@ -1,7 +1,7 @@
 module PushSending
   class ChatMessageService < PushSending::BaseService
     def initialize(chat_message, user)
-      @chat_message = chat_message.decorate
+      @chat_message = ::Api::V1::ChatMessageDecorator.decorate(chat_message)
       @user = user
     end
 
@@ -10,7 +10,7 @@ module PushSending
     attr_reader :chat_message, :user, :author
 
     def ios_options
-      { alert: { title: chat_message.user.name, body: chat_message.text },
+      { alert: { title: 'UrPetsLife', body: chat_message.text },
         sound: 'default',
         badge: ios_badge,
         # unread_notifications_count: unread_notifications_count,

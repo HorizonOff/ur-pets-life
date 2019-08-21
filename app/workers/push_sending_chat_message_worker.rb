@@ -1,8 +1,6 @@
 class PushSendingChatMessageWorker
   include Sidekiq::Worker
 
-  sidekiq_options queue: :push_and_sms
-
   def perform(id, user_ids)
     @chat_message = ChatMessage.find_by(id: id)
     @users = User.where(id: user_ids).includes(:sessions)
