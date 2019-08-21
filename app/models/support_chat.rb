@@ -6,8 +6,6 @@ class SupportChat < ApplicationRecord
 
   scope :without_closed, -> { where.not(status: 2) }
 
-  private
-
   def create_message_chat_closed_by_user
     chat_messages.create(m_type: 'system', system_type: 'closed_by_user', text: 'Chat closed by user', status: 'posted')
   end
