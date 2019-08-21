@@ -4,7 +4,6 @@ module PushSending
       sessions = user.sessions
       ios_push_tokens = sessions.where(device_type: 'ios').pluck(:push_token).compact.uniq
       android_push_tokens = sessions.where(device_type: 'android').pluck(:push_token).compact.uniq
-
       send_push_to_ios(ios_push_tokens)
       send_push_to_android(android_push_tokens)
     end
@@ -29,7 +28,6 @@ module PushSending
       return if tokens.blank?
 
       fcm = FCM.new(ENV['FCM_SERVER_KEY'])
-
       fcm.send(tokens, android_options)
     end
 
