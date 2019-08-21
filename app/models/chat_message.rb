@@ -1,6 +1,7 @@
 class ChatMessage < ApplicationRecord
   enum status: { pending: 0, posted: 1, error: 2 }
   enum m_type: { user: 0, admin: 1, system: 2 }
+  enum system_type: { closed_by_user: 0, closed_by_admin: 1 }
 
   belongs_to :user, optional: true
   belongs_to :support_chat
@@ -66,6 +67,8 @@ class ChatMessage < ApplicationRecord
   end
 
   def send_push
+    return if m_type == 'user'
+
     resiver_ids = @user_ids.include?(support_chat.user.id) ? [] : [support_chat.user.id]
     PushSendingChatMessageWorker.perform_async(id, resiver_ids)
   end
