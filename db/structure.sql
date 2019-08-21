@@ -480,7 +480,8 @@ CREATE TABLE public.chat_messages (
     status integer DEFAULT 1,
     error_message character varying,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    system_type integer
 );
 
 
@@ -4982,6 +4983,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190729084815'),
 ('20190731121602'),
 ('20190802103532'),
-('20190813122720');
+('20190813122720'),
+('20190821124915');
 
 
