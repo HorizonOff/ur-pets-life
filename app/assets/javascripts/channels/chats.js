@@ -16,9 +16,21 @@ $( document ).on('turbolinks:load', function() {
           content.find('.message-content').addClass(data.chat_message.m_type);
           content.find('[data-role="message-text"]').text(data.chat_message.text);
           content.find('[data-role="message-date"]').text(data.chat_message.timestamp);
+          if (data.chat_message.photo.url) {
+            content.find('[data-role="message-img"]').attr("src", data.chat_message.photo.url);
+            content.find('[data-role="message-video"]').addClass('display-none');
+          } else if (data.chat_message.video.url) {
+            content.find('[data-role="message-video"]').attr("src", data.chat_message.video.url);
+            content.find('[data-role="message-img"]').addClass('display-none');
+          } else {
+            content.find('[data-role="message-video"]').addClass('display-none');
+            content.find('[data-role="message-img"]').addClass('display-none');
+          }
           $('#messages-pool').append(content);
           var height = $element[0].scrollHeight;
           $element.scrollTop(height);
+          $('#new_chat_message').find('input[type="text"]').val('');
+          $('#new_chat_message').find('input[type="file"]').val('');
         },
       });
     });
