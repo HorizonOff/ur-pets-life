@@ -1989,7 +1989,9 @@ CREATE TABLE public.support_chats (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     unread_message_count_by_user integer DEFAULT 0,
-    unread_message_count_by_admin integer DEFAULT 0
+    unread_message_count_by_admin integer DEFAULT 0,
+    user_last_visit_at timestamp without time zone DEFAULT now(),
+    admin_last_visit_at timestamp without time zone DEFAULT now()
 );
 
 
