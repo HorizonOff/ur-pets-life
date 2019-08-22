@@ -19,6 +19,10 @@ class ChatMessage < ApplicationRecord
   validates :photo, file_size: { less_than: 15.megabytes }
   validates :video, file_size: { less_than: 120.megabytes }
 
+  scope :created_after, (lambda do |time|
+    where('chat_messages.created_at > ?', time) if time
+  end)
+
   def content_should_be_valid
     errors.add(:base, 'Should be text or video or photo') if photo.blank? && video.blank? && text.blank? &&
                                                              mobile_photo_url.blank? && mobile_video_url.blank?
@@ -26,7 +30,7 @@ class ChatMessage < ApplicationRecord
 
   def message_to_user
     send_to_channel
-    # update_user_chats_info
+    update_user_chats_info
     send_push
   end
 
@@ -51,19 +55,18 @@ class ChatMessage < ApplicationRecord
   end
 
   def update_user_chats_info
-    chat.user_chats.each do |user_chat|
-      user_chat.deleted_at = nil
-      if user_chat.user_id.in?(@user_ids)
-        user_chat.last_visit_at = Time.now
-        user_chat.unread_messages_count = 0
-        user_chat.visible_messages_count = chat.chat_messages.created_after(user_chat.visible_from).count
-      else
-        user_chat.visible_messages_count = chat.chat_messages.created_after(user_chat.visible_from).count
-        user_chat.unread_messages_count = chat.chat_messages.where.not(user_id: user_chat.user_id)
-                                              .created_after(user_chat.last_visit_at).count
-      end
-      user_chat.save
+    # binding.pry
+    return if m_type == 'system'
+
+    # binding.pry
+    if user_id.in?(@user_ids)
+      support_chat.unread_message_count_by_user = 0
+      support_chat.user_last_visit_at = Time.now
+    else
+      support_chat.unread_message_count_by_user = support_chat.chat_messages.where(m_type: 'admin')
+                                                              .created_after(support_chat.user_last_visit_at).count
     end
+    support_chat.save
   end
 
   def send_push
