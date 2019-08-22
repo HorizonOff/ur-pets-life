@@ -7,7 +7,7 @@
       <div id="messages-pool">
         <%= render @support_chat.chat_messages.order(created_at: :asc) %>
       </div>
-      <div id='chat-form'>
+      <div id='chat-form' class="<%= 'display-none' if @support_chat.closed? %>">
         <%= form_for @chat_message, url: admin_panel_chat_messages_path, remote: true do |f| %>
           <div class="form-inline">
             <%= f.hidden_field :support_chat_id, value: @support_chat.id %>
