@@ -1987,7 +1987,9 @@ CREATE TABLE public.support_chats (
     path character varying,
     status integer DEFAULT 0,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    unread_message_count_by_user integer DEFAULT 0,
+    unread_message_count_by_admin integer DEFAULT 0
 );
 
 
@@ -4984,6 +4986,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190731121602'),
 ('20190802103532'),
 ('20190813122720'),
-('20190821124915');
+('20190821124915'),
+('20190822065827');
 
 

@@ -20,8 +20,7 @@ module PushSending
       { alert: { title: 'UrPetsLife', body: chat_message_body },
         sound: 'default',
         badge: ios_badge,
-        # unread_notifications_count: unread_notifications_count,
-        # unread_messages_count: unread_messages_count,
+        unread_message_count_by_user: chat_message.support_chat.unread_message_count_by_user,
         source_type: 'ChatMessage'
       }
     end
@@ -31,9 +30,8 @@ module PushSending
         data: { body: chat_message_body,
                 title: 'UrPetsLife',
                 source_type: 'ChatMessage',
-                badge: android_badge
-                # unread_notifications_count: unread_notifications_count,
-                # unread_messages_count: unread_messages_count
+                badge: android_badge,
+                unread_message_count_by_user: chat_message.support_chat.unread_message_count_by_user
               }
       }
     end
