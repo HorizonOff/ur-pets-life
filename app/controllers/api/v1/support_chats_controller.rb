@@ -5,6 +5,7 @@ module Api
         @support_chat = current_user.support_chats.without_closed.first
         return render_404 if @support_chat.blank?
 
+        @support_chat.reset_unread_messages_count
         @messages = @support_chat.chat_messages.limit(params[:per_page])
         @messages = ::Api::V1::ChatMessageDecorator.decorate_collection(@messages)
         render json: {

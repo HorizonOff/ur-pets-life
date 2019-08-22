@@ -55,10 +55,8 @@ class ChatMessage < ApplicationRecord
   end
 
   def update_user_chats_info
-    # binding.pry
     return if m_type == 'system'
 
-    # binding.pry
     if user_id.in?(@user_ids)
       support_chat.unread_message_count_by_user = 0
       support_chat.user_last_visit_at = Time.now

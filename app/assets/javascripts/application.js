@@ -222,3 +222,11 @@ $(document).on('click', '.photo_preview', function() {
 //   $('#new_chat_message input[type="text"]').val('');
 //   $('#new_chat_message input[type="file"]').val('');
 // });
+
+// $( document ).on('turbolinks:load', function() {
+//   $('#new_chat_message').ajaxSend(function() {
+//     debugger
+//     $(this).find('input[type="text"]').val('');
+//     $(this).find('input[type="file"]').val('');
+//   });
+// });
