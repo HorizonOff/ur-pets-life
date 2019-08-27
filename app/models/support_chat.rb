@@ -10,6 +10,10 @@ class SupportChat < ApplicationRecord
     chat_messages.create(m_type: 'system', system_type: 'closed_by_user', text: 'Chat closed by user', status: 'posted')
   end
 
+  def create_message_chat_closed_by_admin
+    chat_messages.create(m_type: 'system', system_type: 'closed_by_admin', text: 'Chat closed by admin', status: 'posted')
+  end
+
   def reset_unread_messages_count
     self.user_last_visit_at = Time.now
     self.unread_message_count_by_user = 0

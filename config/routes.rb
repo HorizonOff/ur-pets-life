@@ -166,7 +166,9 @@ Rails.application.routes.draw do
   namespace :admin_panel do
     root 'dashboard#index'
 
-    resources :support_chats
+    resources :support_chats do
+      member { get :close }
+    end
     resources :chat_messages
     resources :admins, only: %w[index destroy] do
       member { put :change_status }
