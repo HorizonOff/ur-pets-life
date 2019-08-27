@@ -5,9 +5,15 @@ module AdminPanel
     end
 
     def show
-      cookies.signed[:user_id] = User.first.id
       @support_chat = SupportChat.includes(:chat_messages).find_by(id: params[:id])
       @chat_message = ChatMessage.new
+    end
+
+    def close
+      @support_chat = SupportChat.find_by(id: params[:id])
+      @support_chat.update(status: 'closed')
+      @support_chat.create_message_chat_closed_by_admin
+      render json: { message: 'Chat closed' }
     end
   end
 end
