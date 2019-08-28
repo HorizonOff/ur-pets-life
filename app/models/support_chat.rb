@@ -4,6 +4,8 @@ class SupportChat < ApplicationRecord
   belongs_to :user
   has_many :chat_messages
 
+  after_commit :send_email_to_admin, on: :create
+
   scope :without_closed, -> { where.not(status: 2) }
 
   def create_message_chat_closed_by_user
@@ -18,5 +20,11 @@ class SupportChat < ApplicationRecord
     self.user_last_visit_at = Time.now
     self.unread_message_count_by_user = 0
     save
+  end
+
+  private
+
+  def send_email_to_admin
+    SupportChatMailer.send_email_to_admin_on_first_message(id).deliver_later
   end
 end
