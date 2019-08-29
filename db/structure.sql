@@ -463,6 +463,48 @@ ALTER SEQUENCE public.cart_items_id_seq OWNED BY public.cart_items.id;
 
 
 --
+-- Name: chat_messages; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.chat_messages (
+    id bigint NOT NULL,
+    user_id bigint,
+    support_chat_id bigint,
+    m_type integer,
+    text character varying,
+    photo character varying,
+    video character varying,
+    video_duration double precision,
+    mobile_photo_url character varying,
+    mobile_video_url character varying,
+    status integer DEFAULT 1,
+    error_message character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    system_type integer
+);
+
+
+--
+-- Name: chat_messages_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.chat_messages_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: chat_messages_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.chat_messages_id_seq OWNED BY public.chat_messages.id;
+
+
+--
 -- Name: ckeditor_assets; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1936,6 +1978,43 @@ CREATE TABLE public.specializations_vets (
 
 
 --
+-- Name: support_chats; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.support_chats (
+    id bigint NOT NULL,
+    user_id bigint,
+    path character varying,
+    status integer DEFAULT 0,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    unread_message_count_by_user integer DEFAULT 0,
+    unread_message_count_by_admin integer DEFAULT 0,
+    user_last_visit_at timestamp without time zone DEFAULT now(),
+    admin_last_visit_at timestamp without time zone DEFAULT now()
+);
+
+
+--
+-- Name: support_chats_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.support_chats_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: support_chats_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.support_chats_id_seq OWNED BY public.support_chats.id;
+
+
+--
 -- Name: terms_and_conditions; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -2072,12 +2151,9 @@ CREATE TABLE public.users (
     spends_not_eligble double precision DEFAULT 0.0 NOT NULL,
     unread_post_comments_count integer DEFAULT 0,
     member_type integer DEFAULT 0,
-<<<<<<< HEAD
     unconfirmed_email character varying,
-    last_action_at timestamp without time zone
-=======
-    unconfirmed_email character varying
->>>>>>> master
+    last_action_at timestamp without time zone,
+    pay_code character varying
 );
 
 
@@ -2348,6 +2424,13 @@ ALTER TABLE ONLY public.cart_items ALTER COLUMN id SET DEFAULT nextval('public.c
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY public.chat_messages ALTER COLUMN id SET DEFAULT nextval('public.chat_messages_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY public.ckeditor_assets ALTER COLUMN id SET DEFAULT nextval('public.ckeditor_assets_id_seq'::regclass);
 
 
@@ -2600,6 +2683,13 @@ ALTER TABLE ONLY public.specializations ALTER COLUMN id SET DEFAULT nextval('pub
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY public.support_chats ALTER COLUMN id SET DEFAULT nextval('public.support_chats_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY public.terms_and_conditions ALTER COLUMN id SET DEFAULT nextval('public.terms_and_conditions_id_seq'::regclass);
 
 
@@ -2745,6 +2835,14 @@ ALTER TABLE ONLY public.calendars
 
 ALTER TABLE ONLY public.cart_items
     ADD CONSTRAINT cart_items_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: chat_messages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.chat_messages
+    ADD CONSTRAINT chat_messages_pkey PRIMARY KEY (id);
 
 
 --
@@ -3041,6 +3139,14 @@ ALTER TABLE ONLY public.shopping_cart_items
 
 ALTER TABLE ONLY public.specializations
     ADD CONSTRAINT specializations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: support_chats_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.support_chats
+    ADD CONSTRAINT support_chats_pkey PRIMARY KEY (id);
 
 
 --
@@ -3435,6 +3541,20 @@ CREATE INDEX index_cart_items_on_service_option_time_id ON public.cart_items USI
 --
 
 CREATE INDEX index_cart_items_on_serviceable_type_and_serviceable_id ON public.cart_items USING btree (serviceable_type, serviceable_id);
+
+
+--
+-- Name: index_chat_messages_on_support_chat_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_chat_messages_on_support_chat_id ON public.chat_messages USING btree (support_chat_id);
+
+
+--
+-- Name: index_chat_messages_on_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_chat_messages_on_user_id ON public.chat_messages USING btree (user_id);
 
 
 --
@@ -4058,6 +4178,13 @@ CREATE INDEX index_shopping_cart_items_on_user_id ON public.shopping_cart_items 
 --
 
 CREATE INDEX index_specializations_on_is_for_trainer ON public.specializations USING btree (is_for_trainer);
+
+
+--
+-- Name: index_support_chats_on_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_support_chats_on_user_id ON public.support_chats USING btree (user_id);
 
 
 --
@@ -4859,5 +4986,11 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190704082744'),
 ('20190704084608'),
 ('20190729084815'),
-('20190731121602');
+('20190731121602'),
+('20190802103532'),
+('20190813122720'),
+('20190821124915'),
+('20190822065827'),
+('20190828123543');
+
 
