@@ -60,6 +60,7 @@ module Api
         Api::V1::Sales,
         Api::V1::SupportChats,
         Api::V1::ChatMessages,
+        Api::V1::UsedPayCodes,
         self
       ].freeze
 

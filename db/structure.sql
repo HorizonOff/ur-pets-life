@@ -2185,6 +2185,7 @@ CREATE TABLE public.users (
     member_type integer DEFAULT 0,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     unconfirmed_email character varying
 <<<<<<< HEAD
 >>>>>>> master
@@ -2212,6 +2213,11 @@ CREATE TABLE public.users (
     unconfirmed_email character varying
 >>>>>>> master
 >>>>>>> fix_discount_items
+=======
+    unconfirmed_email character varying,
+    last_action_at timestamp without time zone,
+    pay_code character varying
+>>>>>>> pay_codes
 );
 
 
@@ -5048,5 +5054,6 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190802103532'),
 ('20190813122720'),
 ('20190821124915'),
-('20190822065827');
+('20190822065827'),
+('20190828123543');
 
