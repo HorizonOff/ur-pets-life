@@ -2083,6 +2083,39 @@ ALTER SEQUENCE public.trainers_id_seq OWNED BY public.trainers.id;
 
 
 --
+-- Name: used_pay_codes; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.used_pay_codes (
+    id bigint NOT NULL,
+    user_id bigint,
+    order_id bigint,
+    code_user_id integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: used_pay_codes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.used_pay_codes_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: used_pay_codes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.used_pay_codes_id_seq OWNED BY public.used_pay_codes.id;
+
+
+--
 -- Name: user_posts; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -2704,6 +2737,13 @@ ALTER TABLE ONLY public.trainers ALTER COLUMN id SET DEFAULT nextval('public.tra
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY public.used_pay_codes ALTER COLUMN id SET DEFAULT nextval('public.used_pay_codes_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY public.user_posts ALTER COLUMN id SET DEFAULT nextval('public.user_posts_id_seq'::regclass);
 
 
@@ -3163,6 +3203,14 @@ ALTER TABLE ONLY public.terms_and_conditions
 
 ALTER TABLE ONLY public.trainers
     ADD CONSTRAINT trainers_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: used_pay_codes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.used_pay_codes
+    ADD CONSTRAINT used_pay_codes_pkey PRIMARY KEY (id);
 
 
 --
@@ -4230,6 +4278,27 @@ CREATE INDEX index_trainers_on_name ON public.trainers USING btree (name);
 
 
 --
+-- Name: index_used_pay_codes_on_code_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_used_pay_codes_on_code_user_id ON public.used_pay_codes USING btree (code_user_id);
+
+
+--
+-- Name: index_used_pay_codes_on_order_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_used_pay_codes_on_order_id ON public.used_pay_codes USING btree (order_id);
+
+
+--
+-- Name: index_used_pay_codes_on_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_used_pay_codes_on_user_id ON public.used_pay_codes USING btree (user_id);
+
+
+--
 -- Name: index_user_posts_on_post_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -4573,11 +4642,27 @@ ALTER TABLE ONLY public.user_posts
 
 
 --
+-- Name: fk_rails_741753181e; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.used_pay_codes
+    ADD CONSTRAINT fk_rails_741753181e FOREIGN KEY (order_id) REFERENCES public.orders(id);
+
+
+--
 -- Name: fk_rails_758836b4f0; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.sessions
     ADD CONSTRAINT fk_rails_758836b4f0 FOREIGN KEY (user_id) REFERENCES public.users(id);
+
+
+--
+-- Name: fk_rails_780afa10b5; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.used_pay_codes
+    ADD CONSTRAINT fk_rails_780afa10b5 FOREIGN KEY (user_id) REFERENCES public.users(id);
 
 
 --
@@ -4991,6 +5076,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190813122720'),
 ('20190821124915'),
 ('20190822065827'),
-('20190828123543');
+('20190828123543'),
+('20190829111604');
 
 

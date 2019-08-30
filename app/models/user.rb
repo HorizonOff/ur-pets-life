@@ -69,6 +69,8 @@ class User < ApplicationRecord
   has_many :comments, as: :writable, dependent: :destroy
   has_many :notifications
   has_many :unread_notifications, -> { where(viewed_at: nil) }, class_name: 'Notification'
+  has_many :used_pay_codes
+  has_many :code_users, class_name: 'UsedPayCode', foreign_key: :code_user_id
 
   accepts_nested_attributes_for :location, update_only: true, reject_if: :all_blank
   accepts_nested_attributes_for :redeem_point, update_only: true, reject_if: :all_blank
