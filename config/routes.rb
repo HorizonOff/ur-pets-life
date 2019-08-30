@@ -74,6 +74,7 @@ Rails.application.routes.draw do
       get 'current_user_support_chat', to: 'support_chats#current_user_support_chat'
       get 'close_support_chat', to: 'support_chats#close'
       get 'pay_code', to: 'used_pay_codes#pay_code'
+      get 'check_pay_code', to: 'used_pay_codes#check_pay_code'
       resources :pets, except: %i[new edit] do
         collection { post :found }
         collection { get :can_be_lost }
