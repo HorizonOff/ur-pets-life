@@ -49,7 +49,7 @@ module Api
           end
 
           parameter do
-            key :name, :order
+            key :name, :body
             key :in, :body
             key :required, true
 

@@ -409,7 +409,7 @@ module Api
 
       # Never trust parameters from the scary internet, only allow the white list through.
       def order_params
-        params.require(:order).permit(:TransactionId, :TransactionDate, :IsCash)
+        params.permit(:TransactionId, :TransactionDate, :IsCash)
       end
     end
   end
