@@ -216,3 +216,7 @@ $(document).on('click', '.photo_preview', function() {
   $('.modal-body').html(html_text)
   $('#photo_preview').modal('show');
 });
+
+$(document).on('click', '.abc', function () {
+    alert("hello");
+});

@@ -38,7 +38,7 @@ module AdminPanel
 
   # GET /admin_panel/orders/new
   def new
-    @admin_panel_order = OrderItem.new
+    @order = Order.new
   end
 
   # GET /admin_panel/orders/1/edit

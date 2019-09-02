@@ -1,11 +1,69 @@
 .row
-  = render partial: 'layouts/admin_panel/errors', locals: { object: @admin_panel_order }
+  = render partial: 'layouts/admin_panel/errors', locals: { object: @order }
 - content_for :head do
   %meta{name: "turbolinks-cache-control", content:"no-cache"}
-.col-md-6.col-sm-6.col-xs-12
+.col-12
   .x_panel
     .x_title
-      %h2 Order Item
+      %h2 New Order
       .clearfix
     .x_content
       %br
+
+      .form-group
+        .col-12
+          = form_for @order do |f|
+            -#= ff.hidden_field :latitude
+            -#= ff.hidden_field :longitude
+            -#.form-group
+            -#  = ff.label :city
+            -#  = ff.text_field :city, class: 'form-control check_geocoder'
+            -#.form-group
+            -#  = ff.label :area
+            -#  = ff.text_field :area, class: 'form-control check_geocoder'
+            -#.form-group
+            -#  = ff.label :street
+            -#  = ff.text_field :street, class: 'form-control check_geocoder'
+            .form-group
+              = label_tag 'New User'
+              = radio_button_tag 'user_type', "new_user", true, class: "flat abc"
+              -#= f.radio_button :user_type, :new_user, id: 'user_type', checked: true, class: 'flat'
+              = label_tag 'Existed User'
+              = radio_button_tag 'user_type', "registered_user", false, class: "flat abc"
+              -#= f.radio_button :user_type, :registered_user, id: 'user_type', class: 'flat'
+            .form-group
+              = label_tag 'User name'
+              = f.text_field :client_name, class: 'form-control'
+            -#.form-group.building{style: "display:#{'none' if ff.object.villa?}"}
+            .form-group
+              = label_tag 'User number'
+              = f.text_field :client_number, class: 'form-control'
+            .form-group
+              = label_tag 'User name'
+              = select_tag :user_id, options_from_collection_for_select(User.all, :id, :name),
+                  class: 'form-control select2 additional_parameter', include_blank: true
+            .form-group
+              = label_tag 'Add Item'
+              = f.fields_for :order_items do |fl|
+                = render 'admin_panel/orders/order_fields', f: fl
+              .links
+                = link_to_add_association f, :order_items, class: 'btn btn-primary', partial: 'admin_panel/orders/order_fields' do
+                  = '+ '
+                  %span.fa.fa-plane{"aria-hidden" => "true"}
+
+
+
+            -#.form-group.villa{style: "display:#{'none' if ff.object.building?}"}
+              = ff.label :villa_number
+              = ff.text_field :villa_number, class: 'form-control check_geocoder'
+            -#.form-group
+            -#  = ff.label :comment
+            -#  = ff.text_area :comment, rows: 5, class: 'form-control no-resize'
+
+
+
+
+      -#.col-md-6.col-sm-6.col-xs-12
+      -#  = render partial: 'admin_panel/orders/order_fields'
+
+-#= f.submit class: 'btn btn-success show_loader'

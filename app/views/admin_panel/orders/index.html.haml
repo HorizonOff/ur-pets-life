@@ -4,6 +4,7 @@
   .page-title
     .title_left
       %h3 Orders
+      = link_to 'Create order', new_admin_panel_order_path, class: 'btn btn-info btn-round pull-left'
     .title_right
       = form_tag admin_panel_orders_path, method: :get do
         = hidden_field_tag :format, :xlsx

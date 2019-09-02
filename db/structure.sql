@@ -1,5 +1,6 @@
 SET statement_timeout = 0;
 SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
@@ -1232,7 +1233,9 @@ CREATE TABLE public.orders (
     company_discount double precision,
     is_user_from_company boolean DEFAULT false,
     delivery_at timestamp without time zone,
-    is_pre_recurring boolean DEFAULT false
+    is_pre_recurring boolean DEFAULT false,
+    client_name character varying,
+    client_number character varying
 );
 
 
@@ -2071,13 +2074,9 @@ CREATE TABLE public.users (
     spends_eligble double precision DEFAULT 0.0 NOT NULL,
     spends_not_eligble double precision DEFAULT 0.0 NOT NULL,
     unread_post_comments_count integer DEFAULT 0,
-    member_type integer DEFAULT 0,
-<<<<<<< HEAD
     unconfirmed_email character varying,
+    member_type integer DEFAULT 0,
     last_action_at timestamp without time zone
-=======
-    unconfirmed_email character varying
->>>>>>> master
 );
 
 
@@ -2275,392 +2274,392 @@ ALTER SEQUENCE public.wishlists_id_seq OWNED BY public.wishlists.id;
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: additional_services id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.additional_services ALTER COLUMN id SET DEFAULT nextval('public.additional_services_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: admins id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.admins ALTER COLUMN id SET DEFAULT nextval('public.admins_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: ads id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.ads ALTER COLUMN id SET DEFAULT nextval('public.ads_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: app_versions id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.app_versions ALTER COLUMN id SET DEFAULT nextval('public.app_versions_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: appointments id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.appointments ALTER COLUMN id SET DEFAULT nextval('public.appointments_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: blocked_times id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.blocked_times ALTER COLUMN id SET DEFAULT nextval('public.blocked_times_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: boardings id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.boardings ALTER COLUMN id SET DEFAULT nextval('public.boardings_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: breeds id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.breeds ALTER COLUMN id SET DEFAULT nextval('public.breeds_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: calendars id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.calendars ALTER COLUMN id SET DEFAULT nextval('public.calendars_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: cart_items id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.cart_items ALTER COLUMN id SET DEFAULT nextval('public.cart_items_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: ckeditor_assets id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.ckeditor_assets ALTER COLUMN id SET DEFAULT nextval('public.ckeditor_assets_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: clinics id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.clinics ALTER COLUMN id SET DEFAULT nextval('public.clinics_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: comments id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.comments ALTER COLUMN id SET DEFAULT nextval('public.comments_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: contact_requests id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.contact_requests ALTER COLUMN id SET DEFAULT nextval('public.contact_requests_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: day_care_centres id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.day_care_centres ALTER COLUMN id SET DEFAULT nextval('public.day_care_centres_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: diagnoses id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.diagnoses ALTER COLUMN id SET DEFAULT nextval('public.diagnoses_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: discount_domains id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.discount_domains ALTER COLUMN id SET DEFAULT nextval('public.discount_domains_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: favorites id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.favorites ALTER COLUMN id SET DEFAULT nextval('public.favorites_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: grooming_centres id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.grooming_centres ALTER COLUMN id SET DEFAULT nextval('public.grooming_centres_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: item_brands id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.item_brands ALTER COLUMN id SET DEFAULT nextval('public.item_brands_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: item_categories id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.item_categories ALTER COLUMN id SET DEFAULT nextval('public.item_categories_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: item_reviews id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.item_reviews ALTER COLUMN id SET DEFAULT nextval('public.item_reviews_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: items id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.items ALTER COLUMN id SET DEFAULT nextval('public.items_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: locations id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.locations ALTER COLUMN id SET DEFAULT nextval('public.locations_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: medications id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.medications ALTER COLUMN id SET DEFAULT nextval('public.medications_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: my_second_house_member_invitations id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.my_second_house_member_invitations ALTER COLUMN id SET DEFAULT nextval('public.my_second_house_member_invitations_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: notifications id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.notifications ALTER COLUMN id SET DEFAULT nextval('public.notifications_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: order_items id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.order_items ALTER COLUMN id SET DEFAULT nextval('public.order_items_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: orders id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.orders ALTER COLUMN id SET DEFAULT nextval('public.orders_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: pet_types id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.pet_types ALTER COLUMN id SET DEFAULT nextval('public.pet_types_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: pets id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.pets ALTER COLUMN id SET DEFAULT nextval('public.pets_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: pictures id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.pictures ALTER COLUMN id SET DEFAULT nextval('public.pictures_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: posts id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.posts ALTER COLUMN id SET DEFAULT nextval('public.posts_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: qualifications id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.qualifications ALTER COLUMN id SET DEFAULT nextval('public.qualifications_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: recipes id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.recipes ALTER COLUMN id SET DEFAULT nextval('public.recipes_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: recurssion_intervals id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.recurssion_intervals ALTER COLUMN id SET DEFAULT nextval('public.recurssion_intervals_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: redeem_points id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.redeem_points ALTER COLUMN id SET DEFAULT nextval('public.redeem_points_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: schedules id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.schedules ALTER COLUMN id SET DEFAULT nextval('public.schedules_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: service_details id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.service_details ALTER COLUMN id SET DEFAULT nextval('public.service_details_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: service_option_details id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.service_option_details ALTER COLUMN id SET DEFAULT nextval('public.service_option_details_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: service_option_times id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.service_option_times ALTER COLUMN id SET DEFAULT nextval('public.service_option_times_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: service_options id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.service_options ALTER COLUMN id SET DEFAULT nextval('public.service_options_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: service_types id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.service_types ALTER COLUMN id SET DEFAULT nextval('public.service_types_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: sessions id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.sessions ALTER COLUMN id SET DEFAULT nextval('public.sessions_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: shopping_cart_items id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.shopping_cart_items ALTER COLUMN id SET DEFAULT nextval('public.shopping_cart_items_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: specializations id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.specializations ALTER COLUMN id SET DEFAULT nextval('public.specializations_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: terms_and_conditions id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.terms_and_conditions ALTER COLUMN id SET DEFAULT nextval('public.terms_and_conditions_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: trainers id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.trainers ALTER COLUMN id SET DEFAULT nextval('public.trainers_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: user_posts id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.user_posts ALTER COLUMN id SET DEFAULT nextval('public.user_posts_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: users id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: vaccinations id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.vaccinations ALTER COLUMN id SET DEFAULT nextval('public.vaccinations_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: vaccine_types id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.vaccine_types ALTER COLUMN id SET DEFAULT nextval('public.vaccine_types_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: versions id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.versions ALTER COLUMN id SET DEFAULT nextval('public.versions_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: vets id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.vets ALTER COLUMN id SET DEFAULT nextval('public.vets_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: wishlists id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.wishlists ALTER COLUMN id SET DEFAULT nextval('public.wishlists_id_seq'::regclass);
 
 
 --
--- Name: additional_services_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: additional_services additional_services_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.additional_services
@@ -2668,7 +2667,7 @@ ALTER TABLE ONLY public.additional_services
 
 
 --
--- Name: admins_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: admins admins_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.admins
@@ -2676,7 +2675,7 @@ ALTER TABLE ONLY public.admins
 
 
 --
--- Name: ads_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: ads ads_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.ads
@@ -2684,7 +2683,7 @@ ALTER TABLE ONLY public.ads
 
 
 --
--- Name: app_versions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: app_versions app_versions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.app_versions
@@ -2692,7 +2691,7 @@ ALTER TABLE ONLY public.app_versions
 
 
 --
--- Name: appointments_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: appointments appointments_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.appointments
@@ -2700,7 +2699,7 @@ ALTER TABLE ONLY public.appointments
 
 
 --
--- Name: ar_internal_metadata_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: ar_internal_metadata ar_internal_metadata_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.ar_internal_metadata
@@ -2708,7 +2707,7 @@ ALTER TABLE ONLY public.ar_internal_metadata
 
 
 --
--- Name: blocked_times_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: blocked_times blocked_times_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.blocked_times
@@ -2716,7 +2715,7 @@ ALTER TABLE ONLY public.blocked_times
 
 
 --
--- Name: boardings_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: boardings boardings_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.boardings
@@ -2724,7 +2723,7 @@ ALTER TABLE ONLY public.boardings
 
 
 --
--- Name: breeds_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: breeds breeds_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.breeds
@@ -2732,7 +2731,7 @@ ALTER TABLE ONLY public.breeds
 
 
 --
--- Name: calendars_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: calendars calendars_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.calendars
@@ -2740,7 +2739,7 @@ ALTER TABLE ONLY public.calendars
 
 
 --
--- Name: cart_items_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: cart_items cart_items_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.cart_items
@@ -2748,7 +2747,7 @@ ALTER TABLE ONLY public.cart_items
 
 
 --
--- Name: ckeditor_assets_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: ckeditor_assets ckeditor_assets_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.ckeditor_assets
@@ -2756,7 +2755,7 @@ ALTER TABLE ONLY public.ckeditor_assets
 
 
 --
--- Name: clinics_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: clinics clinics_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.clinics
@@ -2764,7 +2763,7 @@ ALTER TABLE ONLY public.clinics
 
 
 --
--- Name: comments_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: comments comments_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.comments
@@ -2772,7 +2771,7 @@ ALTER TABLE ONLY public.comments
 
 
 --
--- Name: contact_requests_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: contact_requests contact_requests_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.contact_requests
@@ -2780,7 +2779,7 @@ ALTER TABLE ONLY public.contact_requests
 
 
 --
--- Name: day_care_centres_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: day_care_centres day_care_centres_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.day_care_centres
@@ -2788,7 +2787,7 @@ ALTER TABLE ONLY public.day_care_centres
 
 
 --
--- Name: diagnoses_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: diagnoses diagnoses_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.diagnoses
@@ -2796,7 +2795,7 @@ ALTER TABLE ONLY public.diagnoses
 
 
 --
--- Name: discount_domains_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: discount_domains discount_domains_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.discount_domains
@@ -2804,7 +2803,7 @@ ALTER TABLE ONLY public.discount_domains
 
 
 --
--- Name: favorites_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: favorites favorites_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.favorites
@@ -2812,7 +2811,7 @@ ALTER TABLE ONLY public.favorites
 
 
 --
--- Name: grooming_centres_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: grooming_centres grooming_centres_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.grooming_centres
@@ -2820,7 +2819,7 @@ ALTER TABLE ONLY public.grooming_centres
 
 
 --
--- Name: item_brands_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: item_brands item_brands_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.item_brands
@@ -2828,7 +2827,7 @@ ALTER TABLE ONLY public.item_brands
 
 
 --
--- Name: item_categories_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: item_categories item_categories_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.item_categories
@@ -2836,7 +2835,7 @@ ALTER TABLE ONLY public.item_categories
 
 
 --
--- Name: item_reviews_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: item_reviews item_reviews_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.item_reviews
@@ -2844,7 +2843,7 @@ ALTER TABLE ONLY public.item_reviews
 
 
 --
--- Name: items_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: items items_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.items
@@ -2852,7 +2851,7 @@ ALTER TABLE ONLY public.items
 
 
 --
--- Name: locations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: locations locations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.locations
@@ -2860,7 +2859,7 @@ ALTER TABLE ONLY public.locations
 
 
 --
--- Name: medications_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: medications medications_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.medications
@@ -2868,7 +2867,7 @@ ALTER TABLE ONLY public.medications
 
 
 --
--- Name: my_second_house_member_invitations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: my_second_house_member_invitations my_second_house_member_invitations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.my_second_house_member_invitations
@@ -2876,7 +2875,7 @@ ALTER TABLE ONLY public.my_second_house_member_invitations
 
 
 --
--- Name: notifications_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: notifications notifications_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.notifications
@@ -2884,7 +2883,7 @@ ALTER TABLE ONLY public.notifications
 
 
 --
--- Name: order_items_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: order_items order_items_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.order_items
@@ -2892,7 +2891,7 @@ ALTER TABLE ONLY public.order_items
 
 
 --
--- Name: orders_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: orders orders_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.orders
@@ -2900,7 +2899,7 @@ ALTER TABLE ONLY public.orders
 
 
 --
--- Name: pet_types_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: pet_types pet_types_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.pet_types
@@ -2908,7 +2907,7 @@ ALTER TABLE ONLY public.pet_types
 
 
 --
--- Name: pets_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: pets pets_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.pets
@@ -2916,7 +2915,7 @@ ALTER TABLE ONLY public.pets
 
 
 --
--- Name: pictures_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: pictures pictures_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.pictures
@@ -2924,7 +2923,7 @@ ALTER TABLE ONLY public.pictures
 
 
 --
--- Name: posts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: posts posts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.posts
@@ -2932,7 +2931,7 @@ ALTER TABLE ONLY public.posts
 
 
 --
--- Name: qualifications_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: qualifications qualifications_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.qualifications
@@ -2940,7 +2939,7 @@ ALTER TABLE ONLY public.qualifications
 
 
 --
--- Name: recipes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: recipes recipes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.recipes
@@ -2948,7 +2947,7 @@ ALTER TABLE ONLY public.recipes
 
 
 --
--- Name: recurssion_intervals_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: recurssion_intervals recurssion_intervals_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.recurssion_intervals
@@ -2956,7 +2955,7 @@ ALTER TABLE ONLY public.recurssion_intervals
 
 
 --
--- Name: redeem_points_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: redeem_points redeem_points_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.redeem_points
@@ -2964,7 +2963,7 @@ ALTER TABLE ONLY public.redeem_points
 
 
 --
--- Name: schedules_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: schedules schedules_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.schedules
@@ -2972,7 +2971,7 @@ ALTER TABLE ONLY public.schedules
 
 
 --
--- Name: schema_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: schema_migrations schema_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.schema_migrations
@@ -2980,7 +2979,7 @@ ALTER TABLE ONLY public.schema_migrations
 
 
 --
--- Name: service_details_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: service_details service_details_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.service_details
@@ -2988,7 +2987,7 @@ ALTER TABLE ONLY public.service_details
 
 
 --
--- Name: service_option_details_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: service_option_details service_option_details_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.service_option_details
@@ -2996,7 +2995,7 @@ ALTER TABLE ONLY public.service_option_details
 
 
 --
--- Name: service_option_times_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: service_option_times service_option_times_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.service_option_times
@@ -3004,7 +3003,7 @@ ALTER TABLE ONLY public.service_option_times
 
 
 --
--- Name: service_options_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: service_options service_options_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.service_options
@@ -3012,7 +3011,7 @@ ALTER TABLE ONLY public.service_options
 
 
 --
--- Name: service_types_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: service_types service_types_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.service_types
@@ -3020,7 +3019,7 @@ ALTER TABLE ONLY public.service_types
 
 
 --
--- Name: sessions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: sessions sessions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.sessions
@@ -3028,7 +3027,7 @@ ALTER TABLE ONLY public.sessions
 
 
 --
--- Name: shopping_cart_items_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: shopping_cart_items shopping_cart_items_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.shopping_cart_items
@@ -3036,7 +3035,7 @@ ALTER TABLE ONLY public.shopping_cart_items
 
 
 --
--- Name: specializations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: specializations specializations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.specializations
@@ -3044,7 +3043,7 @@ ALTER TABLE ONLY public.specializations
 
 
 --
--- Name: terms_and_conditions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: terms_and_conditions terms_and_conditions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.terms_and_conditions
@@ -3052,7 +3051,7 @@ ALTER TABLE ONLY public.terms_and_conditions
 
 
 --
--- Name: trainers_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: trainers trainers_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.trainers
@@ -3060,7 +3059,7 @@ ALTER TABLE ONLY public.trainers
 
 
 --
--- Name: user_posts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: user_posts user_posts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.user_posts
@@ -3068,7 +3067,7 @@ ALTER TABLE ONLY public.user_posts
 
 
 --
--- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.users
@@ -3076,7 +3075,7 @@ ALTER TABLE ONLY public.users
 
 
 --
--- Name: vaccinations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: vaccinations vaccinations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.vaccinations
@@ -3084,7 +3083,7 @@ ALTER TABLE ONLY public.vaccinations
 
 
 --
--- Name: vaccine_types_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: vaccine_types vaccine_types_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.vaccine_types
@@ -3092,7 +3091,7 @@ ALTER TABLE ONLY public.vaccine_types
 
 
 --
--- Name: versions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: versions versions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.versions
@@ -3100,7 +3099,7 @@ ALTER TABLE ONLY public.versions
 
 
 --
--- Name: vets_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: vets vets_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.vets
@@ -3108,7 +3107,7 @@ ALTER TABLE ONLY public.vets
 
 
 --
--- Name: wishlists_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: wishlists wishlists_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.wishlists
@@ -4278,7 +4277,7 @@ CREATE INDEX index_wishlists_on_user_id ON public.wishlists USING btree (user_id
 
 
 --
--- Name: fk_rails_012133d340; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: clinics fk_rails_012133d340; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.clinics
@@ -4286,7 +4285,7 @@ ALTER TABLE ONLY public.clinics
 
 
 --
--- Name: fk_rails_07b8c492c1; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: item_reviews fk_rails_07b8c492c1; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.item_reviews
@@ -4294,7 +4293,7 @@ ALTER TABLE ONLY public.item_reviews
 
 
 --
--- Name: fk_rails_0fa4bae6b1; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: pets fk_rails_0fa4bae6b1; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.pets
@@ -4302,7 +4301,7 @@ ALTER TABLE ONLY public.pets
 
 
 --
--- Name: fk_rails_191805e18e; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: item_reviews fk_rails_191805e18e; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.item_reviews
@@ -4310,7 +4309,7 @@ ALTER TABLE ONLY public.item_reviews
 
 
 --
--- Name: fk_rails_19904d1dd0; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: recipes fk_rails_19904d1dd0; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.recipes
@@ -4318,7 +4317,7 @@ ALTER TABLE ONLY public.recipes
 
 
 --
--- Name: fk_rails_1e59adc8b4; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: calendars fk_rails_1e59adc8b4; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.calendars
@@ -4326,7 +4325,7 @@ ALTER TABLE ONLY public.calendars
 
 
 --
--- Name: fk_rails_214fd881af; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: breeds fk_rails_214fd881af; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.breeds
@@ -4334,7 +4333,7 @@ ALTER TABLE ONLY public.breeds
 
 
 --
--- Name: fk_rails_247b774c63; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: day_care_centres fk_rails_247b774c63; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.day_care_centres
@@ -4342,7 +4341,7 @@ ALTER TABLE ONLY public.day_care_centres
 
 
 --
--- Name: fk_rails_27ea9098b6; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: cart_items fk_rails_27ea9098b6; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.cart_items
@@ -4350,7 +4349,7 @@ ALTER TABLE ONLY public.cart_items
 
 
 --
--- Name: fk_rails_360f47fcb6; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: shopping_cart_items fk_rails_360f47fcb6; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.shopping_cart_items
@@ -4358,7 +4357,7 @@ ALTER TABLE ONLY public.shopping_cart_items
 
 
 --
--- Name: fk_rails_38a7c4b06f; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: user_posts fk_rails_38a7c4b06f; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.user_posts
@@ -4366,7 +4365,7 @@ ALTER TABLE ONLY public.user_posts
 
 
 --
--- Name: fk_rails_3e402078fd; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: order_items fk_rails_3e402078fd; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.order_items
@@ -4374,7 +4373,7 @@ ALTER TABLE ONLY public.order_items
 
 
 --
--- Name: fk_rails_46a2bc0d7b; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: service_details fk_rails_46a2bc0d7b; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.service_details
@@ -4382,7 +4381,7 @@ ALTER TABLE ONLY public.service_details
 
 
 --
--- Name: fk_rails_5102d9670d; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: shopping_cart_items fk_rails_5102d9670d; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.shopping_cart_items
@@ -4390,7 +4389,7 @@ ALTER TABLE ONLY public.shopping_cart_items
 
 
 --
--- Name: fk_rails_53a5878905; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: redeem_points fk_rails_53a5878905; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.redeem_points
@@ -4398,7 +4397,7 @@ ALTER TABLE ONLY public.redeem_points
 
 
 --
--- Name: fk_rails_53e2df5fce; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: items fk_rails_53e2df5fce; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.items
@@ -4406,7 +4405,7 @@ ALTER TABLE ONLY public.items
 
 
 --
--- Name: fk_rails_54c616f418; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: pets fk_rails_54c616f418; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.pets
@@ -4414,7 +4413,7 @@ ALTER TABLE ONLY public.pets
 
 
 --
--- Name: fk_rails_5b9551c291; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: orders fk_rails_5b9551c291; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.orders
@@ -4422,7 +4421,7 @@ ALTER TABLE ONLY public.orders
 
 
 --
--- Name: fk_rails_5f0de18556; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: cart_items fk_rails_5f0de18556; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.cart_items
@@ -4430,7 +4429,7 @@ ALTER TABLE ONLY public.cart_items
 
 
 --
--- Name: fk_rails_636732d23d; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: notifications fk_rails_636732d23d; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.notifications
@@ -4438,7 +4437,7 @@ ALTER TABLE ONLY public.notifications
 
 
 --
--- Name: fk_rails_6c6a346128; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: user_posts fk_rails_6c6a346128; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.user_posts
@@ -4446,7 +4445,7 @@ ALTER TABLE ONLY public.user_posts
 
 
 --
--- Name: fk_rails_758836b4f0; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: sessions fk_rails_758836b4f0; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.sessions
@@ -4454,7 +4453,7 @@ ALTER TABLE ONLY public.sessions
 
 
 --
--- Name: fk_rails_79d7faf1bd; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: grooming_centres fk_rails_79d7faf1bd; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.grooming_centres
@@ -4462,7 +4461,7 @@ ALTER TABLE ONLY public.grooming_centres
 
 
 --
--- Name: fk_rails_7a115718fc; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: pets fk_rails_7a115718fc; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.pets
@@ -4470,7 +4469,7 @@ ALTER TABLE ONLY public.pets
 
 
 --
--- Name: fk_rails_7a3e8824e1; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: vaccinations fk_rails_7a3e8824e1; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.vaccinations
@@ -4478,7 +4477,7 @@ ALTER TABLE ONLY public.vaccinations
 
 
 --
--- Name: fk_rails_7d9dad7484; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: items fk_rails_7d9dad7484; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.items
@@ -4486,7 +4485,7 @@ ALTER TABLE ONLY public.items
 
 
 --
--- Name: fk_rails_859d9950f0; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: appointments fk_rails_859d9950f0; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.appointments
@@ -4494,7 +4493,7 @@ ALTER TABLE ONLY public.appointments
 
 
 --
--- Name: fk_rails_97ab850fb8; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: contact_requests fk_rails_97ab850fb8; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.contact_requests
@@ -4502,7 +4501,7 @@ ALTER TABLE ONLY public.contact_requests
 
 
 --
--- Name: fk_rails_9877f90194; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: shopping_cart_items fk_rails_9877f90194; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.shopping_cart_items
@@ -4510,7 +4509,7 @@ ALTER TABLE ONLY public.shopping_cart_items
 
 
 --
--- Name: fk_rails_9d113f9d4b; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: notifications fk_rails_9d113f9d4b; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.notifications
@@ -4518,7 +4517,7 @@ ALTER TABLE ONLY public.notifications
 
 
 --
--- Name: fk_rails_9e31213785; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: appointments fk_rails_9e31213785; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.appointments
@@ -4526,7 +4525,7 @@ ALTER TABLE ONLY public.appointments
 
 
 --
--- Name: fk_rails_a11712551f; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: cart_items fk_rails_a11712551f; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.cart_items
@@ -4534,7 +4533,7 @@ ALTER TABLE ONLY public.cart_items
 
 
 --
--- Name: fk_rails_a2ee297040; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: notifications fk_rails_a2ee297040; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.notifications
@@ -4542,7 +4541,7 @@ ALTER TABLE ONLY public.notifications
 
 
 --
--- Name: fk_rails_a3ca26ac4d; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: order_items fk_rails_a3ca26ac4d; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.order_items
@@ -4550,7 +4549,7 @@ ALTER TABLE ONLY public.order_items
 
 
 --
--- Name: fk_rails_a77d9b33fe; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: appointments fk_rails_a77d9b33fe; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.appointments
@@ -4558,7 +4557,7 @@ ALTER TABLE ONLY public.appointments
 
 
 --
--- Name: fk_rails_a7d0f42310; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: boardings fk_rails_a7d0f42310; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.boardings
@@ -4566,7 +4565,7 @@ ALTER TABLE ONLY public.boardings
 
 
 --
--- Name: fk_rails_b080fb4855; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: notifications fk_rails_b080fb4855; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.notifications
@@ -4574,7 +4573,7 @@ ALTER TABLE ONLY public.notifications
 
 
 --
--- Name: fk_rails_b2f5576160; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: diagnoses fk_rails_b2f5576160; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.diagnoses
@@ -4582,7 +4581,7 @@ ALTER TABLE ONLY public.diagnoses
 
 
 --
--- Name: fk_rails_bdf324d099; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: vaccinations fk_rails_bdf324d099; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.vaccinations
@@ -4590,7 +4589,7 @@ ALTER TABLE ONLY public.vaccinations
 
 
 --
--- Name: fk_rails_c8228c5f59; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: vets fk_rails_c8228c5f59; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.vets
@@ -4598,7 +4597,7 @@ ALTER TABLE ONLY public.vets
 
 
 --
--- Name: fk_rails_d0b857f867; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: items fk_rails_d0b857f867; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.items
@@ -4606,7 +4605,7 @@ ALTER TABLE ONLY public.items
 
 
 --
--- Name: fk_rails_d0e2182ccd; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: wishlists fk_rails_d0e2182ccd; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.wishlists
@@ -4614,7 +4613,7 @@ ALTER TABLE ONLY public.wishlists
 
 
 --
--- Name: fk_rails_d15744e438; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: favorites fk_rails_d15744e438; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.favorites
@@ -4622,7 +4621,7 @@ ALTER TABLE ONLY public.favorites
 
 
 --
--- Name: fk_rails_d537a727d4; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: service_details fk_rails_d537a727d4; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.service_details
@@ -4630,7 +4629,7 @@ ALTER TABLE ONLY public.service_details
 
 
 --
--- Name: fk_rails_d552b889ea; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: diagnoses fk_rails_d552b889ea; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.diagnoses
@@ -4638,7 +4637,7 @@ ALTER TABLE ONLY public.diagnoses
 
 
 --
--- Name: fk_rails_e3cb28f071; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: order_items fk_rails_e3cb28f071; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.order_items
@@ -4646,7 +4645,7 @@ ALTER TABLE ONLY public.order_items
 
 
 --
--- Name: fk_rails_e45eff1e25; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: service_option_times fk_rails_e45eff1e25; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.service_option_times
@@ -4654,7 +4653,7 @@ ALTER TABLE ONLY public.service_option_times
 
 
 --
--- Name: fk_rails_e53fecd820; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: service_option_details fk_rails_e53fecd820; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.service_option_details
@@ -4662,7 +4661,7 @@ ALTER TABLE ONLY public.service_option_details
 
 
 --
--- Name: fk_rails_eb66139660; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: wishlists fk_rails_eb66139660; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.wishlists
@@ -4670,7 +4669,7 @@ ALTER TABLE ONLY public.wishlists
 
 
 --
--- Name: fk_rails_f49bb25abc; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: item_reviews fk_rails_f49bb25abc; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.item_reviews
@@ -4678,7 +4677,7 @@ ALTER TABLE ONLY public.item_reviews
 
 
 --
--- Name: fk_rails_f4fa737302; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: appointments fk_rails_f4fa737302; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.appointments
@@ -4686,7 +4685,7 @@ ALTER TABLE ONLY public.appointments
 
 
 --
--- Name: fk_rails_f868b47f6a; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: orders fk_rails_f868b47f6a; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.orders
@@ -4694,7 +4693,7 @@ ALTER TABLE ONLY public.orders
 
 
 --
--- Name: fk_rails_fd5a31cf2f; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: notifications fk_rails_fd5a31cf2f; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.notifications
@@ -4702,7 +4701,7 @@ ALTER TABLE ONLY public.notifications
 
 
 --
--- Name: fk_rails_fef139bea2; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: posts fk_rails_fef139bea2; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.posts
@@ -4859,5 +4858,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190704082744'),
 ('20190704084608'),
 ('20190729084815'),
-('20190731121602');
+('20190731121602'),
+('20190830092721');
+
 
