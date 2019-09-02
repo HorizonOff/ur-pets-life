@@ -3,7 +3,7 @@ module Api
     class OrdersController < Api::BaseController
       before_action :set_order, only: [:show, :edit, :update, :destroy]
       before_action :set_usercartitems, only: [:create]
-      before_action :check_empty_transactions, only: [:create]
+      # before_action :check_empty_transactions, only: [:create]
 
       # GET /orders
       # GET /orders.json
@@ -311,19 +311,37 @@ module Api
         end
       end
 
-      # PATCH/PUT /orders/1
-      # PATCH/PUT /orders/1.json
       def update
-        respond_to do |format|
-          format.json do
-            render json: {
-            Message: 'Order update not allowed',
-            status: :unprocessable_entity
+        @order.update(order_params)
+        return render json: {
+            Message: 'Order was successfully updated.',
+            status: :updated,
+            VatPercentage: "5",
+            #EarnedPoints: discount_per_transaction,
+            OrderDetails: @order.as_json(
+              :only => [:id, :Subtotal, :Delivery_Charges, :Vat_Charges, :Total, :Delivery_Date, :Order_Notes, :IsCash, :shipmenttime, :RedeemPoints, :earned_points, :company_discount, :is_user_from_company],
+              :include => {
+                :location => {
+                  :only => [:id, :latitude, :longitude, :city, :area, :street, :building_name, :unit_number, :villa_number]
+                },
+                :order_items => {
+                  :only => [:id, :Quantity, :IsRecurring, :IsReviewed, :status],
+                  :include => {
+                    :item => {
+                      :only => [:id, :picture, :name, :price, :discount, :description, :weight, :unit, :quantity, :short_description]
+                    },
+                    :recurssion_interval =>  {
+                      :only => [:id, :days, :weeks, :label]
+                    },
+                    :item_reviews => {
+                      :only => [:id, :user_id, :item_id, :rating, :comment]
+                    }
+                  }
+                }
+              }
+            )
           }
-          end
-        end
       end
-
 
       # DELETE /orders/1
       # DELETE /orders/1.json
@@ -388,9 +406,10 @@ module Api
         OrderMailer.send_recurring_order_notification_email_to_admin(order.id).deliver_later
         OrderMailer.send_recurring_order_placement_notification_to_customer(@user.email, order.id).deliver_later
       end
+
       # Never trust parameters from the scary internet, only allow the white list through.
       def order_params
-        params.require(:order).permit(:Delivery_Date, :Order_Notes, :IsCash,  :location_id, :RedeemPoints)
+        params.require(:order).permit(:TransactionId, :TransactionDate, :IsCash)
       end
     end
   end
