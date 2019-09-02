@@ -179,8 +179,9 @@ module Api
           deliveryCharges = 5.75
         end
         company_discount = (@itemsprice - @total_price_without_discount).round(2)
+        code_discount = ::Api::V1::DiscountCodeService.new(params[:pay_code], @user, subTotal).discount_from_code
         vatCharges = ((@total_price_without_discount/100).to_f * 5).round(2)
-        total = subTotal + deliveryCharges + vatCharges
+        total = subTotal + deliveryCharges + vatCharges + code_discount
         user_redeem_points = 0
         requested_redeem_points = params[:RedeemPoints].to_i
         permitted_redeem_points = 0
@@ -225,9 +226,14 @@ module Api
                            Total: total, Order_Status: 1, Payment_Status: paymentStatus,
                            Delivery_Date: params[:Delivery_Date], Order_Notes: params[:Order_Notes],
                            IsCash: params[:IsCash], location_id: params[:location_id], is_viewed: false,
-                           order_status_flag: 'pending', company_discount: company_discount,
-                           is_user_from_company: @is_user_from_company)
+                           order_status_flag: 'pending', code_discount: code_discount,
+                           company_discount: company_discount, is_user_from_company: @is_user_from_company)
         if @order.save
+          if @order.code_discount != 0
+            pay_code_owner = User.find_by(pay_code: params[:pay_code])
+            UsedPayCode.create(user_id: pay_code_owner.id, order_id: @order.id, code_user_id: @user)
+          end
+
           if permitted_redeem_points > 0
             @user_redeem_point_record.update(net_worth: (user_redeem_points - permitted_redeem_points),
                                              last_net_worth: user_redeem_points, last_reward_type: 'Order Deduction',

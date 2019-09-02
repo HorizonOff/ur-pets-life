@@ -1274,7 +1274,8 @@ CREATE TABLE public.orders (
     company_discount double precision,
     is_user_from_company boolean DEFAULT false,
     delivery_at timestamp without time zone,
-    is_pre_recurring boolean DEFAULT false
+    is_pre_recurring boolean DEFAULT false,
+    code_discount integer DEFAULT 0
 );
 
 
@@ -5077,6 +5078,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190821124915'),
 ('20190822065827'),
 ('20190828123543'),
-('20190829111604');
+('20190829111604'),
+('20190830115524');
 
 
