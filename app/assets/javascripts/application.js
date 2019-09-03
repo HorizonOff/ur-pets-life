@@ -106,6 +106,16 @@ function init_select2(){
   }
 }
 
+$.each([ '#items' ], function( index, value ){
+    $(document).on('cocoon:after-insert', value, function(e, added_element) {
+        added_element.find('.select_item').select2({
+            placeholder: 'Select ...',
+            allowClear: true,
+            width: '100%'
+        });
+    });
+});
+
 $(document).on('cocoon:after-insert', '#service_option_times', function(e, added_element) {
   init_timepicker();
 })

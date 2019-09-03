@@ -4,8 +4,8 @@
   - else
   .x_content
     .col-md-7.col-3
-      = f.select :item, options_from_collection_for_select(Item.all, :id, :name), {},
-                 { class: 'form-control select2 additional_parameter' }``
+      = f.select :item, options_from_collection_for_select(Item.all, :id, :name), {include_blank: true},
+                 { class: 'form-control select_item' }
 
     .col-md-3.col-3
       = f.text_field :Quantity, class: 'form-control', placeholder: 'Quantity'
@@ -14,5 +14,3 @@
       = link_to_remove_association f, class: 'btn btn-danger full-width' do
         = '-'
         %span.fa.fa-plane{"aria-hidden" => "true"}
-
-    .ln_solid

@@ -41,8 +41,8 @@
             .form-group
               = label_tag 'User name'
               = select_tag :user_id, options_from_collection_for_select(User.all, :id, :name),
-                  class: 'form-control select2 additional_parameter', include_blank: true
-            .form-group
+                  class: 'form-control select2', include_blank: true
+            #items.form-group
               = label_tag 'Add Item'
               = f.fields_for :order_items do |fl|
                 = render 'admin_panel/orders/order_fields', f: fl
