@@ -207,7 +207,7 @@ module Api
           permitted_redeem_points = subTotal
         end
 
-        if params[:IsCash] == 'false'
+        if params[:IsCash] == 'false' && params[:TransactionId].present?
           @user.update_attributes(last_transaction_ref: params[:TransactionId],
                                   last_transaction_date: params[:TransactionDate])
           paymentStatus = 1
@@ -409,7 +409,7 @@ module Api
 
       # Never trust parameters from the scary internet, only allow the white list through.
       def order_params
-        params.permit(:TransactionId, :TransactionDate, :IsCash)
+        params.permit(:TransactionId, :TransactionDate, :IsCash, :Payment_Status)
       end
     end
   end
