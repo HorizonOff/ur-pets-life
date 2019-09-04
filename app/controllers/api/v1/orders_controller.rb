@@ -290,7 +290,7 @@ module Api
             VatPercentage: "5",
             #EarnedPoints: discount_per_transaction,
             OrderDetails: @order.as_json(
-              :only => [:id, :Subtotal, :Delivery_Charges, :Vat_Charges, :Total, :Delivery_Date, :Order_Notes, :IsCash, :shipmenttime, :RedeemPoints, :earned_points, :company_discount, :is_user_from_company],
+              :only => [:id, :Subtotal, :Delivery_Charges, :Vat_Charges, :Total, :Delivery_Date, :Order_Notes, :IsCash, :shipmenttime, :RedeemPoints, :earned_points, :company_discount, :is_user_from_company, :code_discount],
               :include => {
                 :location => {
                   :only => [:id, :latitude, :longitude, :city, :area, :street, :building_name, :unit_number, :villa_number]
@@ -325,7 +325,7 @@ module Api
             VatPercentage: "5",
             #EarnedPoints: discount_per_transaction,
             OrderDetails: @order.as_json(
-              :only => [:id, :Subtotal, :Delivery_Charges, :Vat_Charges, :Total, :Delivery_Date, :Order_Notes, :IsCash, :shipmenttime, :RedeemPoints, :earned_points, :company_discount, :is_user_from_company],
+              :only => [:id, :Subtotal, :Delivery_Charges, :Vat_Charges, :Total, :Delivery_Date, :Order_Notes, :IsCash, :shipmenttime, :RedeemPoints, :earned_points, :company_discount, :is_user_from_company, :code_discount],
               :include => {
                 :location => {
                   :only => [:id, :latitude, :longitude, :city, :area, :street, :building_name, :unit_number, :villa_number]
