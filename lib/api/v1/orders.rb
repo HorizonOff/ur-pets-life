@@ -72,6 +72,10 @@ module Api
       end
 
       swagger_schema :OrderInput do
+        property :pay_code do
+          key :type, :string
+          key :example, '0012'
+        end
         property :IsCash do
           key :type, :integer
           key :example, 0
