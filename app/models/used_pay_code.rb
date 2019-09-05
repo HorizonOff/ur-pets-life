@@ -16,6 +16,6 @@ class UsedPayCode < ApplicationRecord
   def add_redeem_points
     redeem_p = user.redeem_point
     redeem_p.update(totalearnedpoints: redeem_p.totalearnedpoints + 30,
-                    totalavailedpoints: redeem_p.totalavailedpoints + 30)
+                    net_worth: redeem_p.net_worth + 30)
   end
 end
