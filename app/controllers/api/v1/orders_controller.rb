@@ -231,7 +231,7 @@ module Api
         if @order.save
           if @order.code_discount != 0
             pay_code_owner = User.find_by(pay_code: params[:pay_code])
-            UsedPayCode.create(user_id: pay_code_owner.id, order_id: @order.id, code_user_id: @user)
+            UsedPayCode.create(user_id: pay_code_owner.id, order_id: @order.id, code_user_id: @user.id)
           end
 
           if permitted_redeem_points > 0
