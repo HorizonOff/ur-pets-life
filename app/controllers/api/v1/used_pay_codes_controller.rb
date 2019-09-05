@@ -11,7 +11,7 @@ module Api
         return render_422('Code not found') if user.blank?
         return render_422('You can not use your own code') if user == current_user
         return render_422('This code already used 3 times') if user.used_pay_codes.count >= 3
-        return render_422('Each user can use one code') if UsedPayCodes.where(code_user_id: current_user.id).any?
+        return render_422('Each user can use one code') if UsedPayCode.where(code_user_id: current_user.id).any?
 
         render json: { message: 'Code checked' }.to_json
       end
