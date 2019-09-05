@@ -1,5 +1,18 @@
-%h1 New admin_panel_order
+%div
+  .page-title
+    .title_left
+      %h3 New Order
 
-= render 'form'
+  .clearfix
+
+  = form_for @order, url: admin_panel_orders_path,
+  html: { multipart: true, method: :post, class: 'form-horizontal form-label-left with_location', autocomplete: 'off' } do |f|
+
+    = render partial: 'form', locals: { f: f }
+
+    = f.submit 'Create order', class: 'btn btn-success pull-right'
+
+:javascript
+  init_map();
 
 = link_to 'Back', admin_panel_orders_path

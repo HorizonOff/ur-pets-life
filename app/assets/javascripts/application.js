@@ -73,6 +73,19 @@ function init_icheck(){
         hide_and_disable_inputs($('div.building'))
       }
     });
+    $(document).on("ifChecked", "input.user_type", function() {
+      if ($(this).val() != 'new_user') {
+          $('div.new_user').removeClass('hiden');
+          enable_inputs($('div.new_user'));
+          $('div.registered_user').addClass('hiden');
+          disable_inputs($('div.registered_user'));
+      } else {
+          $('div.registered_user').removeClass('hiden');
+          enable_inputs($('div.registered_user'));
+          $('div.new_user').addClass('hiden');
+          disable_inputs($('div.new_user'));
+      }
+    });
     $('input.flat[name*="use_clinic_location"]').on('ifChecked', function(){
       use_clinic_location = true;
       disable_inputs($('.location_tab_fields'));
@@ -108,7 +121,7 @@ function init_select2(){
 
 $.each([ '#items' ], function( index, value ){
     $(document).on('cocoon:after-insert', value, function(e, added_element) {
-        added_element.find('.select_item').select2({
+        added_element.find('.select2').select2({
             placeholder: 'Select ...',
             allowClear: true,
             width: '100%'
@@ -118,7 +131,7 @@ $.each([ '#items' ], function( index, value ){
 
 $(document).on('cocoon:after-insert', '#service_option_times', function(e, added_element) {
   init_timepicker();
-})
+});
 
 function init_timepicker(){
   if ($('.single_cal1')){
@@ -225,8 +238,4 @@ $(document).on('click', '.photo_preview', function() {
   html_text = '<img src="' + $(this).data('url') + '" alt="photo preview" style="max-width:100%;">'
   $('.modal-body').html(html_text)
   $('#photo_preview').modal('show');
-});
-
-$(document).on('click', '.abc', function () {
-    alert("hello");
 });

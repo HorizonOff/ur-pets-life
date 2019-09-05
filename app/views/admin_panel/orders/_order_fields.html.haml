@@ -5,12 +5,12 @@
   .x_content
     .col-md-7.col-3
       = f.select :item, options_from_collection_for_select(Item.all, :id, :name), {include_blank: true},
-                 { class: 'form-control select_item' }
+                 { class: 'form-control select2' }
 
     .col-md-3.col-3
-      = f.text_field :Quantity, class: 'form-control', placeholder: 'Quantity'
+      = f.number_field :Quantity, min: 1, class: 'form-control', value: 1
 
     .col-md-2.col-3
       = link_to_remove_association f, class: 'btn btn-danger full-width' do
         = '-'
-        %span.fa.fa-plane{"aria-hidden" => "true"}
+        %span.fa.fa-shopping-basket{"aria-hidden" => "true"}
