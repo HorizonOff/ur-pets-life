@@ -1,16 +1,17 @@
 class UsedPayCode < ApplicationRecord
   belongs_to :user
   belongs_to :order
+  belongs_to :order
   belongs_to :code_user, class_name: 'User', foreign_key: :code_user_id
 
-  after_commit :create_new_pay_code, :add_redeem_points, on: :create
+  has_many :notifications
 
-  private
+  # after_commit :create_new_pay_code, :add_redeem_points, on: :create
 
   def create_new_pay_code
     return if code_user.pay_code.present?
 
-    code_user.update_column(:pay_code, "%04d" % [code_user.id + 9])
+    code_user.generate_pay_code
   end
 
   def add_redeem_points

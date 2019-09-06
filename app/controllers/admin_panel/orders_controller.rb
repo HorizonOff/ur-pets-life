@@ -184,6 +184,13 @@ module AdminPanel
       if statustoupdate.in?(['delivered', 'delivered_by_card', 'delivered_by_cash'])
         set_order_delivery_invoice(@admin_panel_order.id, orderuser.email)
         @admin_panel_order.update_attributes(Payment_Status: 1)
+        if @admin_panel_order.used_pay_code.present?
+          @admin_panel_order.used_pay_code.notifications
+            .create(message: 'You recieve 30 redeem point, because your friend use your code for a order',
+                    user_id: @admin_panel_order.used_pay_code.user.id)
+          @admin_panel_order.used_pay_code.create_new_pay_code
+          @admin_panel_order.used_pay_code.add_redeem_points
+        end
       end
 
       if statustoupdate == 'confirmed'

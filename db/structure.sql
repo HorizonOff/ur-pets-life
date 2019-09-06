@@ -1177,7 +1177,8 @@ CREATE TABLE public.notifications (
     updated_at timestamp without time zone NOT NULL,
     viewed_at timestamp without time zone,
     is_for_vaccine boolean DEFAULT false,
-    order_id bigint
+    order_id bigint,
+    used_pay_code_id integer
 );
 
 
@@ -3950,6 +3951,13 @@ CREATE INDEX index_notifications_on_pet_id ON public.notifications USING btree (
 
 
 --
+-- Name: index_notifications_on_used_pay_code_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_notifications_on_used_pay_code_id ON public.notifications USING btree (used_pay_code_id);
+
+
+--
 -- Name: index_notifications_on_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -5079,6 +5087,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190822065827'),
 ('20190828123543'),
 ('20190829111604'),
-('20190830115524');
+('20190830115524'),
+('20190906114619');
 
 
