@@ -43,6 +43,9 @@
                 = @admin_panel_order.user.email != 'development@urpetslife.com' ? 'Delivery Charges:' : 'Service Charge(Tax Inclusive):'
                 = @admin_panel_order.Delivery_Charges
               %li
+                Code discount:
+                = @admin_panel_order.code_discount
+              %li
                 VAT Charges:
                 = @admin_panel_order.Vat_Charges
               %li

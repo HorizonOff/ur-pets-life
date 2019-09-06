@@ -96,6 +96,16 @@ class User < ApplicationRecord
            msh: '%My Second Home%').distinct
   end)
 
+  def generate_pay_code
+    loop do
+      code = rand.to_s[2..6]
+      unless User.where(pay_code: code).any?
+        update_column(:pay_code, code)
+        break
+      end
+    end
+  end
+
   def birthday=(value)
     value = Time.zone.at(value.to_i) if value.present?
     super
