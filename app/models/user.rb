@@ -56,7 +56,8 @@ class User < ApplicationRecord
   has_many :orders_with_new_comments, -> { where('unread_comments_count_by_user > 0') }, class_name: 'Order'
   has_one :redeem_point
   has_many :favorites, -> { order(created_at: :asc) }, dependent: :destroy
-  has_many :sessions, dependent: :destroy
+  # has_many :sessions, dependent: :destroy
+  has_many :sessions, as: :client, class_name: 'Session', dependent: :destroy
   has_many :pets, dependent: :destroy
   has_many :wishlists
   has_many :shopping_cart_items, -> { order('created_at DESC') }
