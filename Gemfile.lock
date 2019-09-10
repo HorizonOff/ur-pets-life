@@ -397,6 +397,7 @@ GEM
     rb-inotify (0.10.0)
       ffi (~> 1.0)
     redis (4.1.2)
+    rb-readline (0.5.5)
     representable (3.0.4)
       declarative (< 0.1.0)
       declarative-option (< 0.2.0)
@@ -578,7 +579,11 @@ DEPENDENCIES
   pundit
   rails (~> 5.2.3)
   rails_12factor
+<<<<<<< HEAD
   redis (>= 3.3.1)
+=======
+  rb-readline
+>>>>>>> add_order_create
   rest-client
   roo (~> 2.8.0)
   rspec-rails (~> 3.6)

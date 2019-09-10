@@ -20,16 +20,16 @@
                 = @admin_panel_order.Order_Notes
               %li
                 Customer Name:
-                = @admin_panel_order.user.first_name + ' ' + @admin_panel_order.user.last_name
+                = @admin_panel_order.client_name || @admin_panel_order.user.first_name + ' ' + @admin_panel_order.user.last_name
               %li
                 Member type:
-                = @admin_panel_order.user.member_type
+                = @admin_panel_order.user&.member_type
               %li
                 Email:
-                = @admin_panel_order.user.email
+                = @admin_panel_order.user&.email
               %li
                 Mobile:
-                = @admin_panel_order.user.mobile_number
+                = @admin_panel_order.user&.mobile_number || @admin_panel_order.client_number
               %li
                 Cash On Delivery:
                 = @admin_panel_order.IsCash? ? 'Yes': 'No'
@@ -40,7 +40,7 @@
                 Subtotal:
                 = @admin_panel_order.Subtotal
               %li
-                = @admin_panel_order.user.email != 'development@urpetslife.com' ? 'Delivery Charges:' : 'Service Charge(Tax Inclusive):'
+                = @admin_panel_order.user&.email != 'development@urpetslife.com' ? 'Delivery Charges:' : 'Service Charge(Tax Inclusive):'
                 = @admin_panel_order.Delivery_Charges
               %li
                 Code discount:
@@ -70,14 +70,15 @@
                 Pre order:
                 = @admin_panel_order.is_pre_recurring?
 
-              %p.title
-                %b Comments:
-                = @admin_panel_order.comments_count
-              %p= @admin_panel_order.last_comment.nil? ? '' : @admin_panel_order.last_comment.message
-              = link_to ordercomments_admin_panel_order_path(@admin_panel_order), class: 'btn btn-info btn-xs' do
-                View history
-                - if @admin_panel_order.unread_comments_count_by_admin.present? && !@admin_panel_order.unread_comments_count_by_admin.zero?
-                  %span.badge= @admin_panel_order.unread_comments_count_by_admin
+              - if @admin_panel_order.user.present?
+                %p.title
+                  %b Comments:
+                  = @admin_panel_order.comments_count
+                %p= @admin_panel_order.last_comment.nil? ? '' : @admin_panel_order.last_comment.message
+                = link_to ordercomments_admin_panel_order_path(@admin_panel_order), class: 'btn btn-info btn-xs' do
+                  View history
+                  - if @admin_panel_order.unread_comments_count_by_admin.present? && !@admin_panel_order.unread_comments_count_by_admin.zero?
+                    %span.badge= @admin_panel_order.unread_comments_count_by_admin
 
           .col-md-9.col-sm-9.col-xs-12
             .profile_title
