@@ -1888,9 +1888,10 @@ CREATE TABLE public.sessions (
     device_type character varying,
     device_id character varying,
     push_token character varying,
-    user_id bigint,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    client_id integer,
+    client_type character varying
 );
 
 
@@ -2221,6 +2222,7 @@ CREATE TABLE public.users (
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     unconfirmed_email character varying
 <<<<<<< HEAD
 >>>>>>> master
@@ -2253,6 +2255,11 @@ CREATE TABLE public.users (
     last_action_at timestamp without time zone,
     pay_code character varying
 >>>>>>> pay_codes
+=======
+    unconfirmed_email character varying,
+    last_action_at timestamp without time zone,
+    pay_code character varying
+>>>>>>> ur_pets_life_management
 );
 
 
@@ -4260,17 +4267,24 @@ CREATE INDEX index_service_types_on_serviceable_type_and_serviceable_id ON publi
 
 
 --
+-- Name: index_sessions_on_client_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_sessions_on_client_id ON public.sessions USING btree (client_id);
+
+
+--
+-- Name: index_sessions_on_client_type; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_sessions_on_client_type ON public.sessions USING btree (client_type);
+
+
+--
 -- Name: index_sessions_on_token; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_sessions_on_token ON public.sessions USING btree (token);
-
-
---
--- Name: index_sessions_on_user_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_sessions_on_user_id ON public.sessions USING btree (user_id);
 
 
 --
@@ -4716,6 +4730,7 @@ ALTER TABLE ONLY public.user_posts
 
 --
 -- Name: fk_rails_741753181e; Type: FK CONSTRAINT; Schema: public; Owner: -
+<<<<<<< HEAD
 --
 
 ALTER TABLE ONLY public.used_pay_codes
@@ -4724,10 +4739,20 @@ ALTER TABLE ONLY public.used_pay_codes
 
 --
 -- Name: fk_rails_758836b4f0; Type: FK CONSTRAINT; Schema: public; Owner: -
+=======
+>>>>>>> ur_pets_life_management
 --
 
-ALTER TABLE ONLY public.sessions
-    ADD CONSTRAINT fk_rails_758836b4f0 FOREIGN KEY (user_id) REFERENCES public.users(id);
+ALTER TABLE ONLY public.used_pay_codes
+    ADD CONSTRAINT fk_rails_741753181e FOREIGN KEY (order_id) REFERENCES public.orders(id);
+
+
+--
+-- Name: fk_rails_780afa10b5; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.used_pay_codes
+    ADD CONSTRAINT fk_rails_780afa10b5 FOREIGN KEY (user_id) REFERENCES public.users(id);
 
 
 --
@@ -5152,5 +5177,6 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190828123543'),
 ('20190829111604'),
 ('20190830115524'),
-('20190906114619');
+('20190906114619'),
+('20190910084344');
 

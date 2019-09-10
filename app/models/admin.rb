@@ -17,6 +17,7 @@ class Admin < ApplicationRecord
 
   has_many :comments, as: :writable, dependent: :destroy
   has_many :posts, as: :author, class_name: 'Post', dependent: :destroy
+  has_many :sessions, as: :client, class_name: 'Session', dependent: :destroy
 
   has_many :vets, through: :clinic
 
@@ -50,5 +51,9 @@ class Admin < ApplicationRecord
   def update_counters_for_order
     self.unread_commented_appointments_count = orders.where('unread_comments_count_by_admin > 0').count
     save
+  end
+
+  def confirmed?
+    true
   end
 end

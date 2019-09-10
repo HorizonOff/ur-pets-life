@@ -1,5 +1,7 @@
 class Session < ApplicationRecord
-  belongs_to :user
+  # belongs_to :user
+
+  belongs_to :client, polymorphic: true
 
   before_validation :check_device_type
   validates_uniqueness_of :device_id
