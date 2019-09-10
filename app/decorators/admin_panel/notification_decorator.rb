@@ -3,6 +3,11 @@ module AdminPanel
     decorates :notification
     delegate_all
 
+
+    def name
+      model.user&.name
+    end
+
     def skip_push_sending
       text = model.skip_push_sending? ? 'No' : 'Yes'
       span_class = model.skip_push_sending? ? 'label-danger' : 'label-success'
