@@ -1,16 +1,16 @@
 class Order < ApplicationRecord
-  belongs_to :user
+  belongs_to :user, optional: true
   belongs_to :location
   has_many :order_items, dependent: :destroy
   has_many :notifications
   accepts_nested_attributes_for :order_items, allow_destroy: true
-  accepts_nested_attributes_for :location, update_only: true
+  accepts_nested_attributes_for :location
   enum order_status_flag: { pending: "pending", confirmed: "confirmed", on_the_way: "on_the_way",
                             delivered: "delivered", delivered_by_card: "delivered_by_card",
                             delivered_by_cash: "delivered_by_cash",
                             cancelled: "cancelled" }, _prefix: :order_status_flag
 
-  acts_as_paranoid without_default_scope: true
+  # acts_as_paranoid without_default_scope: true
 
   has_many :comments, as: :commentable, dependent: :destroy
   has_many :user_comments, -> { where(writable_type: 'User') }, as: :commentable, class_name: 'Comment'
@@ -55,6 +55,8 @@ class Order < ApplicationRecord
   end
 
   def update_user_spends
+    return if user.blank?
+
     user.update_spends
   end
 end

@@ -3,7 +3,7 @@ module AdminPanel
   delegate_all
 
   def user_id
-    model.user.name
+    model.user&.name || model.client_name
   end
 
   def location_id
@@ -58,7 +58,7 @@ module AdminPanel
   end
 
   def Order_Notes
-    model.Order_Notes.truncate(50)
+    model.Order_Notes&.truncate(50)
   end
 
   def Total
@@ -87,7 +87,7 @@ module AdminPanel
 
   def actions
     links = (link_to 'View Details', url_helpers.admin_panel_order_path(model), class: 'btn btn-primary btn-xs')
-    if model.order_status_flag.in?(['delivered', 'delivered_by_card', 'delivered_by_cash'])
+    if model.order_status_flag.in?(['delivered', 'delivered_by_card', 'delivered_by_cash']) || model.client_name.present?
       links += (link_to 'Download Invoice', url_helpers.invoice_admin_panel_order_path(model, :format => :pdf), class: 'btn btn-info btn-xs')
     end
     links

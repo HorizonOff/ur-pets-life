@@ -11,8 +11,7 @@
     = render partial: 'form', locals: { f: f }
 
     = f.submit 'Create order', class: 'btn btn-success pull-right'
+    = link_to 'Cancel', admin_panel_orders_path, class: 'btn btn-danger pull-right'
 
 :javascript
   init_map();
-
-= link_to 'Back', admin_panel_orders_path

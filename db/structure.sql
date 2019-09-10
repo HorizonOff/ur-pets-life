@@ -1236,7 +1236,7 @@ CREATE TABLE public.orders (
     is_pre_recurring boolean DEFAULT false,
     client_name character varying,
     client_number character varying,
-    admin_discount integer
+    admin_discount integer DEFAULT 0
 );
 
 

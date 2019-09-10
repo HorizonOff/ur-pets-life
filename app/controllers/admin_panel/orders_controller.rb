@@ -57,16 +57,129 @@ module AdminPanel
   # POST /admin_panel/orders
   # POST /admin_panel/orders.json
   def create
-    @admin_panel_order = OrderItem.new(admin_panel_order_params)
+    is_out_of_stock = false
+    @items_price = 0
+    @total_price_without_discount = 0
+    @discounted_items_amount = 0
+    permitted_redeem_points = 0
+    admin_discount = 0
+    discount = @user.present? ? ::Api::V1::DiscountDomainService.new(@user.email.dup).dicount_on_email : 0
+    @is_user_from_company = discount.positive?
+    @user = User.find_by_id(params['user_id'])
 
-    respond_to do |format|
-      if @admin_panel_order.save
-        format.html { redirect_to @admin_panel_order, notice: 'Order was successfully created.' }
-        format.json { render :show, status: :created, location: @admin_panel_order }
+    params['order']['order_items_attributes'].each do |hash_key, hash_value|
+      item = Item.find_by_id(hash_value['item_id'])
+      if discount.positive? && item.discount.zero? &&
+          !(@user.member_type.in?(['silver', 'gold']) && item.supplier.in?(["MARS", "NESTLE"])) &&
+          @user.email != 'development@urpetslife.com'
+        @items_price += item.price * ((100 - discount).to_f / 100) * hash_value['quantity'].to_i
       else
-        format.html { render :new }
-        format.json { render json: @admin_panel_order.errors, status: :unprocessable_entity }
+        @items_price += (item.price * hash_value['quantity'].to_i)
       end
+      @total_price_without_discount += (item.price * hash_value['quantity'].to_i)
+      if item.discount > 0
+        @discounted_items_amount += (item.price * hash_value['quantity'].to_i)
+      end
+      is_out_of_stock = true if item.quantity < hash_value['quantity'].to_i
+    end
+    render :new if is_out_of_stock
+
+    subTotal = @items_price.to_f.round(2)
+    if @user.blank? || @user.email != 'development@urpetslife.com'
+      deliveryCharges = (subTotal < 100 ? 20 : 0)
+    else
+      deliveryCharges = 5.75
+    end
+
+    admin_discount = params['order'][:admin_discount].to_i if params['order'][:admin_discount].present?
+    company_discount = (@items_price - @total_price_without_discount).round(2)
+    vatCharges = ((@total_price_without_discount/100).to_f * 5).round(2)
+    total = subTotal + deliveryCharges + vatCharges
+    admin_discount = total if admin_discount > total
+    total -= admin_discount
+
+    if @user.present?
+      user_redeem_points = 0
+      requested_redeem_points = params[:RedeemPoints].to_i
+      paymentStatus = 0
+      if @user.redeem_point.present?
+        @user_redeem_point_record = @user.redeem_point
+      else
+        @user_redeem_point_record = RedeemPoint.new(user_id: @user.id, net_worth: 0, last_net_worth: 0,
+                                                    totalearnedpoints: 0, totalavailedpoints: 0)
+        @user_redeem_point_record.save
+      end
+      user_redeem_points = @user_redeem_point_record.net_worth
+
+      if requested_redeem_points > 0
+        if requested_redeem_points <= user_redeem_points
+          permitted_redeem_points = requested_redeem_points
+        else
+          permitted_redeem_points = user_redeem_points
+        end
+      end
+
+      if permitted_redeem_points > subTotal
+        permitted_redeem_points = subTotal
+      end
+    end
+    binding.pry
+
+    @order = Order.new(user_id: params['user_id'], RedeemPoints: permitted_redeem_points,
+                       Subtotal: @total_price_without_discount,
+                       Delivery_Charges: deliveryCharges, shipmenttime: 'with in 7 days', Vat_Charges: vatCharges,
+                       Total: total, Order_Status: 1, Payment_Status: paymentStatus,
+                       Delivery_Date: params[:Delivery_Date], Order_Notes: params[:Order_Notes],
+                       IsCash: true, is_viewed: false, location_attributes: order_params['location_attributes'],
+                       order_status_flag: 'pending', company_discount: company_discount,
+                       is_user_from_company: @is_user_from_company, client_name: params['order'][:client_name],
+                       client_number: params['order'][:client_number], admin_discount: admin_discount)
+
+    if @order.save
+      if permitted_redeem_points > 0
+        @user_redeem_point_record.update(net_worth: (user_redeem_points - permitted_redeem_points),
+                                         last_net_worth: user_redeem_points, last_reward_type: 'Order Deduction',
+                                         last_reward_worth: permitted_redeem_points, last_reward_update: Time.now,
+                                         totalavailedpoints: (@user_redeem_point_record.totalavailedpoints
+                                         + permitted_redeem_points))
+      end
+      discount_per_transaction = 0
+      amount_to_be_awarded = subTotal - permitted_redeem_points - @discounted_items_amount
+      if amount_to_be_awarded > 0 && @user.present? && (discount.blank? || discount.zero?) && @user.email != 'development@urpetslife.com'
+        if amount_to_be_awarded <= 500
+          discount_per_transaction =+ (3*amount_to_be_awarded)/100
+        elsif amount_to_be_awarded > 500 and amount_to_be_awarded <= 1000
+          discount_per_transaction =+ (5*amount_to_be_awarded)/100
+        elsif amount_to_be_awarded > 1000 and amount_to_be_awarded <= 2000
+          discount_per_transaction =+ (7.5*amount_to_be_awarded)/100
+        elsif amount_to_be_awarded > 2000
+          discount_per_transaction =+ (10*amount_to_be_awarded)/100
+        end
+        discount_per_transaction.to_f.ceil
+      end
+      #@user_redeem_point_record.update(:net_worth => (user_redeem_points - permitted_redeem_points +  discount_per_transaction), :last_net_worth => (user_redeem_points - permitted_redeem_points), :last_reward_type => "Discount Per Transaction", :last_reward_worth => discount_per_transaction, :last_reward_update => Time.now, :totalearnedpoints => (@user_redeem_point_record.totalearnedpoints + discount_per_transaction))
+      @order.update(earned_points: discount_per_transaction)
+      is_any_recurring_item = false
+      params['order']['order_items_attributes'].each do |hash_key, hash_value|
+        item = Item.find_by_id(hash_value['item_id'])
+
+          @new_order_item_create = OrderItem.new(IsRecurring: false, order_id: @order.id,
+                                              item_id: item.id, Quantity: hash_value['quantity'].to_i,
+                                              Unit_Price: item.price,
+                                              Total_Price: (item.price * hash_value['quantity'].to_i),
+                                              IsReviewed: false, status: :pending,
+                                              isdiscounted: (item.discount > 0 ? true : false),
+                                              next_recurring_due_date: DateTime.now)
+          @new_order_item_create.save
+
+          item.decrement!(:quantity, hash_value['quantity'].to_i)
+          if item.quantity < 3
+            send_inventory_alerts(item.id)
+          end
+      end
+      redirect_to admin_panel_order_path(@order)
+    else
+      render :new
     end
   end
 
@@ -180,35 +293,39 @@ module AdminPanel
           orderitem.update(:status => statustoupdate)
         end
       end
-      orderuser = User.where(:id => @admin_panel_order.user_id).first
-      orderuser.notifications.create(order: @admin_panel_order, message: 'Your Order status for Order # ' + @admin_panel_order.id.to_s + ' has been ' + (statustoupdate == 'cancelled' ? 'Cancelled' : 'updated to ' + (statustoupdate == 'on_the_way' ? 'on the way' : statustoupdate)))
 
-      if statustoupdate.in?(['delivered', 'delivered_by_card', 'delivered_by_cash'])
-        set_order_delivery_invoice(@admin_panel_order.id, orderuser.email)
-        @admin_panel_order.update_attributes(Payment_Status: 1)
-      end
+      @admin_panel_order.update_attributes(Payment_Status: 1) if statustoupdate.in?(['delivered', 'delivered_by_card', 'delivered_by_cash'])
 
-      if statustoupdate == 'confirmed'
-        user_redeem_points_record = RedeemPoint.where(:user_id => @admin_panel_order.user_id).first
-        user_redeem_points_record.update(:net_worth => user_redeem_points_record.net_worth + @admin_panel_order.earned_points, :last_net_worth => user_redeem_points_record.net_worth, :last_reward_type => "Discount Per Transaction", :last_reward_worth => @admin_panel_order.earned_points, :last_reward_update => Time.now, :totalearnedpoints => (user_redeem_points_record.totalearnedpoints + @admin_panel_order.earned_points))
-        send_order_confirmation_email_to_customer(@admin_panel_order.id)
-      end
+      if @admin_panel_order.user_id.present?
+        orderuser = User.where(:id => @admin_panel_order.user_id).first
+        orderuser.notifications.create(order: @admin_panel_order, message: 'Your Order status for Order # ' + @admin_panel_order.id.to_s + ' has been ' + (statustoupdate == 'cancelled' ? 'Cancelled' : 'updated to ' + (statustoupdate == 'on_the_way' ? 'on the way' : statustoupdate)))
 
-      if statustoupdate == 'cancelled'
-        user_redeem_point_reimburse = RedeemPoint.where(:user_id => @admin_panel_order.user_id).first
-        user_redeem_point_reimburse.update(:net_worth => user_redeem_point_reimburse.net_worth + @admin_panel_order.RedeemPoints, :totalavailedpoints => user_redeem_point_reimburse.totalavailedpoints - @admin_panel_order.RedeemPoints)
-        @admin_panel_order.update(:Subtotal => 0, :Delivery_Charges => 0, :Vat_Charges => 0, :Total => 0, :order_status_flag => 'cancelled', :earned_points => 0, :RedeemPoints => 0)
+        if statustoupdate.in?(['delivered', 'delivered_by_card', 'delivered_by_cash'])
+          set_order_delivery_invoice(@admin_panel_order.id, orderuser.email)
+        end
 
-        # @admin_panel_order.order_items.each do |orderitem|
-        #   if orderitem.status != "cancelled"
-        #     item = Item.where(:id => orderitem.item_id).first
-        #     if !item.nil?
-        #       item.increment!(:quantity, orderitem.Quantity)
-        #     end
-        #   end
-        # end
+        if statustoupdate == 'confirmed'
+          user_redeem_points_record = RedeemPoint.where(:user_id => @admin_panel_order.user_id).first
+          user_redeem_points_record.update(:net_worth => user_redeem_points_record.net_worth + @admin_panel_order.earned_points, :last_net_worth => user_redeem_points_record.net_worth, :last_reward_type => "Discount Per Transaction", :last_reward_worth => @admin_panel_order.earned_points, :last_reward_update => Time.now, :totalearnedpoints => (user_redeem_points_record.totalearnedpoints + @admin_panel_order.earned_points))
+          send_order_confirmation_email_to_customer(@admin_panel_order.id)
+        end
 
-        OrderMailer.send_complete_cancel_order_email_to_customer(@admin_panel_order.id, @admin_panel_order.user.email).deliver
+        if statustoupdate == 'cancelled'
+          user_redeem_point_reimburse = RedeemPoint.where(:user_id => @admin_panel_order.user_id).first
+          user_redeem_point_reimburse.update(:net_worth => user_redeem_point_reimburse.net_worth + @admin_panel_order.RedeemPoints, :totalavailedpoints => user_redeem_point_reimburse.totalavailedpoints - @admin_panel_order.RedeemPoints)
+          @admin_panel_order.update(:Subtotal => 0, :Delivery_Charges => 0, :Vat_Charges => 0, :Total => 0, :order_status_flag => 'cancelled', :earned_points => 0, :RedeemPoints => 0)
+
+          # @admin_panel_order.order_items.each do |orderitem|
+          #   if orderitem.status != "cancelled"
+          #     item = Item.where(:id => orderitem.item_id).first
+          #     if !item.nil?
+          #       item.increment!(:quantity, orderitem.Quantity)
+          #     end
+          #   end
+          # end
+
+          OrderMailer.send_complete_cancel_order_email_to_customer(@admin_panel_order.id, @admin_panel_order.user.email).deliver
+        end
       end
 
       flash[:success] = 'Order Item was successfully updated'
@@ -230,6 +347,18 @@ module AdminPanel
   end
 
   private
+    def send_inventory_alerts(itemid)
+      OrderMailer.send_low_inventory_alert(itemid).deliver_later
+    end
+
+    def order_params
+      params.require(:order).permit(location_attributes: location_params)
+    end
+
+    def location_params
+      %i[latitude longitude city area street building_type building_name unit_number villa_number comment]
+    end
+
     # Use callbacks to share common setup or constraints between actions.
     def set_admin_panel_order
       @admin_panel_order = Order.find(params[:id])
