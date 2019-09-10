@@ -52,8 +52,10 @@ module AdminPanel
         @scope = scope.select("users.*, concat(users.first_name, ' ', users.last_name) as name")
       elsif model == 'Appointment'
         @scope = scope.includes(:vet, :user).joins(:user)
-      elsif model == 'Post' || model == 'Notification'
+      elsif model == 'Post'
         @scope = scope.includes(:author)
+      elsif model == 'Notification'
+        @scope = scope.includes(:user)
       elsif model == 'Admin'
         @scope = scope.with_deleted
       elsif model == 'Order'
