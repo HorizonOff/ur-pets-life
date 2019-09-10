@@ -123,7 +123,6 @@ module AdminPanel
         permitted_redeem_points = subTotal
       end
     end
-    binding.pry
 
     @order = Order.new(user_id: params['user_id'], RedeemPoints: permitted_redeem_points,
                        Subtotal: @total_price_without_discount,
@@ -157,7 +156,7 @@ module AdminPanel
         end
         discount_per_transaction.to_f.ceil
       end
-      #@user_redeem_point_record.update(:net_worth => (user_redeem_points - permitted_redeem_points +  discount_per_transaction), :last_net_worth => (user_redeem_points - permitted_redeem_points), :last_reward_type => "Discount Per Transaction", :last_reward_worth => discount_per_transaction, :last_reward_update => Time.now, :totalearnedpoints => (@user_redeem_point_record.totalearnedpoints + discount_per_transaction))
+
       @order.update(earned_points: discount_per_transaction)
       is_any_recurring_item = false
       params['order']['order_items_attributes'].each do |hash_key, hash_value|
@@ -314,15 +313,6 @@ module AdminPanel
           user_redeem_point_reimburse = RedeemPoint.where(:user_id => @admin_panel_order.user_id).first
           user_redeem_point_reimburse.update(:net_worth => user_redeem_point_reimburse.net_worth + @admin_panel_order.RedeemPoints, :totalavailedpoints => user_redeem_point_reimburse.totalavailedpoints - @admin_panel_order.RedeemPoints)
           @admin_panel_order.update(:Subtotal => 0, :Delivery_Charges => 0, :Vat_Charges => 0, :Total => 0, :order_status_flag => 'cancelled', :earned_points => 0, :RedeemPoints => 0)
-
-          # @admin_panel_order.order_items.each do |orderitem|
-          #   if orderitem.status != "cancelled"
-          #     item = Item.where(:id => orderitem.item_id).first
-          #     if !item.nil?
-          #       item.increment!(:quantity, orderitem.Quantity)
-          #     end
-          #   end
-          # end
 
           OrderMailer.send_complete_cancel_order_email_to_customer(@admin_panel_order.id, @admin_panel_order.user.email).deliver
         end
