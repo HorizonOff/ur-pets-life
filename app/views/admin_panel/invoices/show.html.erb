@@ -17,10 +17,10 @@
             </div>
             <div class="invoice-info-bottom">
                 <div class="customer-info" style="float:left">
-                    <% if @order.user.email != 'development@urpetslife.com' %>
+                    <% if @order.user&.email != 'development@urpetslife.com' %>
                         <h4>Invoiced To </h4>
-                        <p><%= @order.user.first_name + ' ' + @order.user.last_name %></p>
-                        <p><%= @order.user.mobile_number %></p>
+                        <p><%= @order.client_name || @order.user.first_name + ' ' + @order.user.last_name %></p>
+                        <p><%= @order.client_number || @order.user.mobile_number %></p>
                         <p><%= @userAddress %></p>
                     <% end %>
                     <div class="paid">Paid</div>
@@ -100,14 +100,14 @@
                             <td><%= @order.Vat_Charges %></td>
                         </tr>
                         <tr style="border-bottom: 2px solid #d8d8d7;">
-                            <% if @order.user.email != 'development@urpetslife.com'%>
+                            <% if @order.user&.email != 'development@urpetslife.com'%>
                                 <td>Delivery Charges </td>
                             <% else %>
                                 <td>Service Charge ( Tax Inclusive ) </td>
                             <% end %>
                             <td><%= @order.Delivery_Charges %></td>
                         </tr>
-                        <% if @order.user.email != 'development@urpetslife.com'%>
+                        <% if @order.user.present? && @order.user.email != 'development@urpetslife.com'%>
                             <tr style="border-bottom: 2px solid #d8d8d7;">
                                 <td>" Pay It Forward " Discount </td>
                                 <td><%= @order.code_discount %></td>
@@ -123,7 +123,7 @@
                         <% else %>
                             <tr style="border-bottom: 2px solid #d8d8d7;">
                                 <td>Discount </td>
-                                <td><%= @order.RedeemPoints? ? @order.RedeemPoints : 0 %></td>
+                                <td><%= (@order.RedeemPoints? ? @order.RedeemPoints : 0).to_i + @order.admin_discount%></td>
                             </tr>
                         <% end %>
                         <tr style="border-bottom: 2px solid #d8d8d7;">
