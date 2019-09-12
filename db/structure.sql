@@ -116,7 +116,8 @@ CREATE TABLE public.admins (
     unread_commented_orders_count integer DEFAULT 0 NOT NULL,
     is_cataloger boolean DEFAULT false,
     is_msh_admin boolean DEFAULT false,
-    last_action_at timestamp without time zone
+    last_action_at timestamp without time zone,
+    role integer
 );
 
 
@@ -1282,6 +1283,7 @@ CREATE TABLE public.orders (
     client_number character varying,
     admin_discount integer DEFAULT 0,
     code_discount integer DEFAULT 0
+    driver_id integer
 );
 
 
@@ -4006,6 +4008,13 @@ CREATE INDEX index_order_items_on_status ON public.order_items USING btree (stat
 
 
 --
+-- Name: index_orders_on_driver_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_orders_on_driver_id ON public.orders USING btree (driver_id);
+
+
+--
 -- Name: index_orders_on_location_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -5096,6 +5105,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190830115524'),
 ('20190906114619'),
 ('20190910084344'),
-('20190911130338');
+('20190911130338'),
+('20190911143742'),
+('20190912084338');
 
 
