@@ -13,9 +13,9 @@ module AdminPanel
     end
 
     def employee_or_super_admin?
-      if current_admin.is_super_admin?
+      if current_admin.super_admin?
         true
-      elsif current_admin.is_employee?
+      elsif current_admin.employee?
         true
       else
         false
@@ -23,11 +23,11 @@ module AdminPanel
     end
 
     def employee_or_super_admin_or_msh_admin?
-      if current_admin.is_super_admin?
+      if current_admin.super_admin?
         true
-      elsif current_admin.is_employee?
+      elsif current_admin.employee?
         true
-      elsif current_admin.is_msh_admin?
+      elsif current_admin.msh_admin?
         true
       else
         false
@@ -35,11 +35,11 @@ module AdminPanel
     end
 
     def cataloger_or_employee_or_super_admin?
-      if current_admin.is_super_admin?
+      if current_admin.super_admin?
         true
-      elsif current_admin.is_employee?
+      elsif current_admin.employee?
         true
-      elsif current_admin.is_cataloger?
+      elsif current_admin.cataloger?
         true
       else
         false

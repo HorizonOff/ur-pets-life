@@ -7,13 +7,13 @@ class ApplicationPolicy
   end
 
   def super_admin?
-    user.is_super_admin?
+    user.super_admin?
   end
 
   def employee_or_super_admin?
-    if user.is_super_admin?
+    if user.super_admin?
       true
-    elsif user.is_employee?
+    elsif user.employee?
       true
     else
       false
@@ -21,7 +21,7 @@ class ApplicationPolicy
   end
 
   def msh_admin?
-    if user.is_msh_admin?
+    if user.msh_admin?
       true
     else
       false
@@ -29,11 +29,11 @@ class ApplicationPolicy
   end
 
   def employee_or_super_admin_or_msh_admin?
-    if user.is_super_admin?
+    if user.super_admin?
       true
-    elsif user.is_employee?
+    elsif user.employee?
       true
-    elsif user.is_msh_admin?
+    elsif user.msh_admin?
       true
     else
       false
@@ -41,11 +41,11 @@ class ApplicationPolicy
   end
 
   def cataloger_or_employee_or_super_admin?
-    if user.is_super_admin?
+    if user.super_admin?
       true
-    elsif user.is_employee?
+    elsif user.employee?
       true
-    elsif user.is_cataloger?
+    elsif user.cataloger?
       true
     else
       false
@@ -61,9 +61,9 @@ class ApplicationPolicy
     end
 
     def resolve
-      if user.is_super_admin? || user.is_employee?
+      if user.super_admin? || user.employee?
         scope.all
-      elsif user.is_msh_admin?
+      elsif user.msh_admin?
         scope.msh_members
       else
         scope.joins(:admin).where(admins: { id: user.id })
