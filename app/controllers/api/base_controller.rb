@@ -52,7 +52,8 @@ module Api
         if session.save
           @user.update_attribute(:sign_in_count, @user.sign_in_count + 1)
           is_first_login = @user.sign_in_count == 1
-          render json: { user: @user.name, session_token: session.token, first_login: is_first_login }, status: :ok
+          render json: { user: @user.name, session_token: session.token, first_login: is_first_login,
+                         role: @user.try(:role)  }, status: :ok
         else
           render_422(parse_errors_messages(session))
         end

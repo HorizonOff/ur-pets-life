@@ -9,6 +9,8 @@ module Api
       # GET /orders.json
       def index
         @orders = @user.orders.visible
+        @orders = Order.visible if @user.try(:role) == 'super_admin'
+
         if @orders.nil? or @orders.empty?
           render :json => {
             Message: 'No Orders found'
@@ -19,29 +21,29 @@ module Api
             page = params[:pageno].to_i
             @orders = @orders.limit(size).offset(page * size)
           end
-        render json: @orders.as_json(
-          :only => [:id, :Subtotal, :shipmenttime, :Delivery_Charges, :Vat_Charges, :Total, :Delivery_Date, :Order_Notes, :IsCash, :RedeemPoints, :earned_points],
-          :include => {
-            :location => {
-              :only => [:id, :latitude, :longitude, :city, :area, :street, :building_name, :unit_number, :villa_number]
-            },
-            :order_items => {
-              :only => [:id, :Quantity, :IsRecurring, :IsReviewed, :status],
-              :include => {
-                :item => {
-                  :only => [:id, :picture, :name, :price, :discount, :description, :weight, :unit, :short_description]
-                },
-                :recurssion_interval =>  {
-                  :only => [:id, :days, :weeks, :label]
-                },
-                :item_reviews => {
-                  :only => [:id, :user_id, :item_id, :rating, :comment]
+          render json: @orders.as_json(
+            :only => [:id, :Subtotal, :shipmenttime, :Delivery_Charges, :Vat_Charges, :Total, :Delivery_Date, :Order_Notes, :IsCash, :RedeemPoints, :earned_points],
+            :include => {
+              :location => {
+                :only => [:id, :latitude, :longitude, :city, :area, :street, :building_name, :unit_number, :villa_number]
+              },
+              :order_items => {
+                :only => [:id, :Quantity, :IsRecurring, :IsReviewed, :status],
+                :include => {
+                  :item => {
+                    :only => [:id, :picture, :name, :price, :discount, :description, :weight, :unit, :short_description]
+                  },
+                  :recurssion_interval =>  {
+                    :only => [:id, :days, :weeks, :label]
+                  },
+                  :item_reviews => {
+                    :only => [:id, :user_id, :item_id, :rating, :comment]
+                  }
                 }
               }
             }
-          }
-        )
-      end
+          )
+        end
       end
 
       # GET /orders/1

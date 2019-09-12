@@ -1,4 +1,5 @@
 class Admin < ApplicationRecord
+  enum role: { simple_admin: 0, super_admin: 1, employee: 2, cataloger: 3, msh_admin: 4, driver: 5 }
   include EmailCheckable
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :registerable,, :timeoutable and :omniauthable
@@ -14,6 +15,7 @@ class Admin < ApplicationRecord
 
   has_many :appointments, dependent: :nullify
   has_many :notifications
+  has_many :orders, class_name: 'Order', foreign_key: 'driver_id'
 
   has_many :comments, as: :writable, dependent: :destroy
   has_many :posts, as: :author, class_name: 'Post', dependent: :destroy
