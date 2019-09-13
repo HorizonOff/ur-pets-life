@@ -9,6 +9,9 @@ wb.add_worksheet(name: "Orders") do |sheet|
     order_date = orderinfo.created_at.to_date.to_s
     invoice_no = 'INV-' + orderinfo.id.to_s
     redeem_points = orderinfo.RedeemPoints? ? orderinfo.RedeemPoints : 0
+    admin_discount = orderinfo.admin_discount || 0
+    code_discount = orderinfo.code_discount
+    redeem_points += admin_discount - code_discount
 
     orderinfo.order_items.each do |orderitem|
       if orderitem.status != 'cancelled'

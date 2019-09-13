@@ -55,6 +55,9 @@
                 Availed Points:
                 = @admin_panel_order.RedeemPoints? ? @admin_panel_order.RedeemPoints : 0
               %li
+                Discount:
+                = @admin_panel_order.admin_discount
+              %li
                 Net Payable Amount:
                 = @admin_panel_order.order_status_flag == 'cancelled' ? 0 : @admin_panel_order.Total - (@admin_panel_order.RedeemPoints? ? @admin_panel_order.RedeemPoints : 0)
               %li

@@ -138,3 +138,8 @@ img.big-avatar {
     display: inline-flex;
     align-items: center;
 }
+
+.pre_price {
+    display: inline;
+    margin: 0 10px;
+}

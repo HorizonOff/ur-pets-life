@@ -239,3 +239,28 @@ $(document).on('click', '.photo_preview', function() {
   $('.modal-body').html(html_text)
   $('#photo_preview').modal('show');
 });
+
+$(document).on("change", ".changed_subtotal", function(){
+    var result = 0;
+    var admin_discount = $('#order_admin_discount').val();
+    var redeem_points = $('#order_RedeemPoints').val();
+    var user_id = $('#user_id').val();
+    var order_items = [];
+
+    $('.order_item').each(function () {
+        let order_id = $(this).find('.item_id').val();
+        let quantity = $(this).find('.quantity').val();
+        order_items.push({order_id, quantity});
+    });
+
+    $.ajax({
+        type: 'get',
+        url: '/admin_panel/calculating_price',
+        data: { item: { admin_discount: admin_discount, RedeemPoints: redeem_points, user_id: user_id, order_items: [ order_items ] }}
+    }).done(function (data) {
+        $('.subtotal_price')[0].innerHTML = data['subtotal'];
+        $('.total_price')[0].innerHTML = data['total'];
+    }).fail(function (jqXHR, ajaxOptions, thrownError) {
+        console.log('server not responding...');
+    });
+});
