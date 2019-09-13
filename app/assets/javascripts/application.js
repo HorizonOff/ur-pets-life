@@ -270,7 +270,7 @@ $(document).on("change", ".changed_subtotal", function(){
     $('.order_item').each(function () {
         var order_id = $(this).find('.item_id').val();
         var quantity = $(this).find('.quantity').val();
-        order_items.push({order_id, quantity});
+        order_items.push({order_id: order_id, quantity: quantity});
     });
 
     $.ajax({

@@ -1282,7 +1282,7 @@ CREATE TABLE public.orders (
     client_name character varying,
     client_number character varying,
     admin_discount integer DEFAULT 0,
-    code_discount integer DEFAULT 0
+    code_discount integer DEFAULT 0,
     driver_id integer
 );
 
