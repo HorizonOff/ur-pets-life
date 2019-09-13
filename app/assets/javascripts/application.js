@@ -248,9 +248,9 @@ $(document).on("change", ".changed_subtotal", function(){
     var order_items = [];
 
     $('.order_item').each(function () {
-        let order_id = $(this).find('.item_id').val();
-        let quantity = $(this).find('.quantity').val();
-        order_items.push({order_id, quantity});
+        var order_id = $(this).find('.item_id').val();
+        var quantity = $(this).find('.quantity').val();
+        order_items.push({order_id: order_id, quantity: quantity});
     });
 
     $.ajax({
