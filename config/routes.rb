@@ -167,6 +167,7 @@ Rails.application.routes.draw do
 
   namespace :admin_panel do
     root 'dashboard#index'
+    get 'calculating_price', to: 'orders#calculating_price'
 
     resources :support_chats do
       member { get :close }
@@ -179,7 +180,7 @@ Rails.application.routes.draw do
     resources :orders do
       member { get :invoice }
       member { delete :cancel }
-      member { get :ordercomments}
+      member { get :ordercomments }
       resources :comments, only: %i[index create]
     end
     resources :invoices do

@@ -2,13 +2,13 @@
   - if f.object._destroy
     = f.hidden_field :_destroy
   - else
-  .x_content
+  .x_content.order_item
     .col-md-7.col-3
       = f.select :item_id, options_from_collection_for_select(Item.all, :id, :name), {include_blank: true},
-                 { class: 'form-control select2' }
+                 { class: 'form-control select2 changed_subtotal item_id' }
 
     .col-md-3.col-3
-      = f.number_field :quantity, min: 1, class: 'form-control', value: 1
+      = f.number_field :quantity, min: 1, class: 'form-control changed_subtotal quantity', value: 1
 
     .col-md-2.col-3
       = link_to_remove_association f, class: 'btn btn-danger full-width' do

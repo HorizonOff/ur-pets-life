@@ -61,28 +61,30 @@ module AdminPanel
     @items_price = 0
     @total_price_without_discount = 0
     @discounted_items_amount = 0
+    @user = User.find_by_id(params['user_id'])
     permitted_redeem_points = 0
     admin_discount = 0
     discount = @user.present? ? ::Api::V1::DiscountDomainService.new(@user.email.dup).dicount_on_email : 0
     @is_user_from_company = discount.positive?
-    @user = User.find_by_id(params['user_id'])
 
     params['order']['order_items_attributes'].each do |hash_key, hash_value|
-      item = Item.find_by_id(hash_value['item_id'])
-      if discount.positive? && item.discount.zero? &&
-          !(@user.member_type.in?(['silver', 'gold']) && item.supplier.in?(["MARS", "NESTLE"])) &&
+      @item = Item.find_by_id(hash_value['item_id'])
+      next if @item == nil
+      hash_value['quantity'] = @item.quantity if @item.quantity < hash_value['quantity'].to_i
+
+      if discount.positive? && @item.discount.zero? &&
+          !(@user.member_type.in?(['silver', 'gold']) && @item.supplier.in?(["MARS", "NESTLE"])) &&
           @user.email != 'development@urpetslife.com'
-        @items_price += item.price * ((100 - discount).to_f / 100) * hash_value['quantity'].to_i
+        @items_price += @item.price * ((100 - discount).to_f / 100) * hash_value['quantity'].to_i
       else
-        @items_price += (item.price * hash_value['quantity'].to_i)
+        @items_price += (@item.price * hash_value['quantity'].to_i)
       end
-      @total_price_without_discount += (item.price * hash_value['quantity'].to_i)
-      if item.discount > 0
-        @discounted_items_amount += (item.price * hash_value['quantity'].to_i)
+      @total_price_without_discount += (@item.price * hash_value['quantity'].to_i)
+      if @item.discount > 0
+        @discounted_items_amount += (@item.price * hash_value['quantity'].to_i)
       end
-      is_out_of_stock = true if item.quantity < hash_value['quantity'].to_i
     end
-    render :new if is_out_of_stock
+    return redirect_to new_admin_panel_order_path, flash: { error: "Item must exist!" } if @item == nil
 
     subTotal = @items_price.to_f.round(2)
     if @user.blank? || @user.email != 'development@urpetslife.com'
@@ -100,7 +102,7 @@ module AdminPanel
 
     if @user.present?
       user_redeem_points = 0
-      requested_redeem_points = params[:RedeemPoints].to_i
+      requested_redeem_points = params['order'][:RedeemPoints].to_i
       paymentStatus = 0
       if @user.redeem_point.present?
         @user_redeem_point_record = @user.redeem_point
@@ -123,7 +125,6 @@ module AdminPanel
         permitted_redeem_points = subTotal
       end
     end
-
     @order = Order.new(user_id: params['user_id'], RedeemPoints: permitted_redeem_points,
                        Subtotal: @total_price_without_discount,
                        Delivery_Charges: deliveryCharges, shipmenttime: 'with in 7 days', Vat_Charges: vatCharges,
@@ -180,6 +181,62 @@ module AdminPanel
     else
       render :new
     end
+  end
+
+  def calculating_price
+    @items_price = 0
+    @total_price_without_discount = 0
+    @discounted_items_amount = 0
+    @user = User.find_by_id(params['item']['user_id'])
+    admin_discount = 0
+    discount = @user.present? ? ::Api::V1::DiscountDomainService.new(@user.email.dup).dicount_on_email : 0
+
+    params['item']['order_items']['0'].each do |item, hash_value|
+      @item = Item.find_by_id(hash_value['order_id'])
+      next if @item == nil
+      hash_value['quantity'] = @item.quantity if @item.quantity < hash_value['quantity'].to_i
+
+      if discount.positive? && @item.discount.zero? &&
+          !(@user.member_type.in?(['silver', 'gold']) && @item.supplier.in?(["MARS", "NESTLE"])) &&
+          @user.email != 'development@urpetslife.com'
+        @items_price += @item.price * ((100 - discount).to_f / 100) * hash_value['quantity'].to_i
+      else
+        @items_price += (@item.price * hash_value['quantity'].to_i)
+      end
+      @total_price_without_discount += (@item.price * hash_value['quantity'].to_i)
+      if @item.discount > 0
+        @discounted_items_amount += (@item.price * hash_value['quantity'].to_i)
+      end
+    end
+
+    subTotal = @items_price.to_f.round(2)
+    if @user.blank? || @user.email != 'development@urpetslife.com'
+      deliveryCharges = (subTotal < 100 ? 20 : 0)
+    else
+      deliveryCharges = 5.75
+    end
+    admin_discount = params['item'][:admin_discount].to_i
+    redeem_points = params['item'][:RedeemPoints].to_i
+    vatCharges = ((@total_price_without_discount/100).to_f * 5).round(2)
+    total = subTotal + deliveryCharges + vatCharges
+    if admin_discount > total && redeem_points > 0
+      admin_discount = total
+      redeem_points = 0
+    elsif redeem_points + admin_discount > total && redeem_points != 0
+      with_discount = total - admin_discount
+      admin_discount = 0
+      if redeem_points > with_discount
+        redeem_points = with_discount
+      else
+        with_discount -= redeem_points
+        redeem_points = 0
+      end
+      total = with_discount
+    end
+    admin_discount = total if admin_discount > total
+
+    total -= admin_discount + redeem_points
+    render json: { subtotal: subTotal, total: total.round(2) }
   end
 
   def invoice
