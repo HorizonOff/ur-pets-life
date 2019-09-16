@@ -353,7 +353,7 @@ module AdminPanel
       orderuser = User.where(:id => @admin_panel_order.user_id).first
       orderuser.notifications.create(order: @admin_panel_order, message: 'Your Order status for Order # ' + @admin_panel_order.id.to_s + ' has been ' + (statustoupdate == 'cancelled' ? 'Cancelled' : 'updated to ' + (statustoupdate == 'on_the_way' ? 'on the way' : statustoupdate)))
 
-      if statustoupdate.in?(['delivered', 'delivered_by_card', 'delivered_by_cash'])
+      if statustoupdate.in?(%w(delivered delivered_by_card delivered_by_cash))
         set_order_delivery_invoice(@admin_panel_order.id, orderuser.email)
         @admin_panel_order.update_attributes(Payment_Status: 1)
         if @admin_panel_order.used_pay_code.present?
@@ -361,12 +361,15 @@ module AdminPanel
             .create(message: '30 points have been added to your account since your friend used your Pay It Forward code',
                     user_id: @admin_panel_order.used_pay_code.user.id)
           @admin_panel_order.used_pay_code.notifications
-            .create(message: 'A Pay It Forward code is now available for you so you can share it with 3 of your friends and recieve 30 points from each of them. You can find the code under “ My Codes “ in the main Menu',
+            .create(message: 'A Pay It Forward code is now available for you so you can share it with 3 of your friends and receive 30 points from each of them. You can find the code under “ My Codes “ in the main Menu',
                     user_id: @admin_panel_order.used_pay_code.code_user.id)
           @admin_panel_order.used_pay_code.create_new_pay_code
           @admin_panel_order.used_pay_code.add_redeem_points
-        else
-          @admin_panel_order.user.generate_pay_code if @admin_panel_order.user.pay_code.blank?
+        elsif @admin_panel_order.user.pay_code.blank?
+          @admin_panel_order.user.generate_pay_code
+          @admin_panel_order.used_pay_code.notifications
+            .create(message: 'A Pay It Forward code is now available for you so you can share it with 3 of your friends and receive 30 points from each of them. You can find the code under “ My Codes “ in the main Menu',
+                    user_id: @admin_panel_order.user_id)
         end
 
         if statustoupdate == 'confirmed'
