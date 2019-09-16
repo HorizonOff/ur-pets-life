@@ -1,6 +1,6 @@
 class Item < ApplicationRecord
   mount_uploader :picture, PhotoUploader
-  belongs_to :item_brand, optional: true
+  belongs_to :item_brand, optional: true, dependent: :destroy
   has_many :wishlists
   has_many :shopping_cart_items, dependent: :destroy
   has_many :order_items
@@ -44,6 +44,6 @@ class Item < ApplicationRecord
   private
 
   def any_item_relitions?
-    wishlists.blank? && order_items.blank? && item_reviews.blank?
+    wishlists.blank? && order_items.blank? && item_reviews.blank? && item_brand.blank?
   end
 end

@@ -583,7 +583,10 @@ DEPENDENCIES
   rails (~> 5.2.3)
   rails_12factor
   rb-readline
+<<<<<<< HEAD
   redis (>= 3.3.1)
+=======
+>>>>>>> fix_deleting_of_brands
   rest-client
   roo (~> 2.8.0)
   rspec-rails (~> 3.6)

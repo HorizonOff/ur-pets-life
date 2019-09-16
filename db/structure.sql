@@ -871,7 +871,8 @@ CREATE TABLE public.item_brands (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     picture character varying,
-    brand_discount double precision
+    brand_discount double precision,
+    deleted_at timestamp without time zone
 );
 
 
@@ -902,6 +903,16 @@ CREATE SEQUENCE public.item_brands_id_seq
 --
 
 ALTER SEQUENCE public.item_brands_id_seq OWNED BY public.item_brands.id;
+
+
+--
+-- Name: item_brands_items; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.item_brands_items (
+    item_id bigint NOT NULL,
+    item_brand_id bigint NOT NULL
+);
 
 
 --
@@ -4678,6 +4689,7 @@ ALTER TABLE ONLY public.user_posts
 
 ALTER TABLE ONLY public.used_pay_codes
     ADD CONSTRAINT fk_rails_741753181e FOREIGN KEY (order_id) REFERENCES public.orders(id);
+<<<<<<< HEAD
 
 
 --
@@ -4689,6 +4701,19 @@ ALTER TABLE ONLY public.used_pay_codes
 
 
 --
+=======
+
+
+--
+-- Name: used_pay_codes fk_rails_780afa10b5; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.used_pay_codes
+    ADD CONSTRAINT fk_rails_780afa10b5 FOREIGN KEY (user_id) REFERENCES public.users(id);
+
+
+--
+>>>>>>> fix_deleting_of_brands
 -- Name: grooming_centres fk_rails_79d7faf1bd; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -5107,6 +5132,12 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190910084344'),
 ('20190911130338'),
 ('20190911143742'),
+<<<<<<< HEAD
 ('20190912084338');
+=======
+('20190912084338'),
+('20190916082922'),
+('20190916085330');
+>>>>>>> fix_deleting_of_brands
 
 
