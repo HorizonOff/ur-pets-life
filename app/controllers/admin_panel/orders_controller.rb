@@ -193,6 +193,8 @@ module AdminPanel
                     user_id: @admin_panel_order.used_pay_code.code_user.id)
           @admin_panel_order.used_pay_code.create_new_pay_code
           @admin_panel_order.used_pay_code.add_redeem_points
+        else
+          @admin_panel_order.user.generate_pay_code if @admin_panel_order.user.pay_code.blank?
         end
       end
 
