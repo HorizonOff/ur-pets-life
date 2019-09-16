@@ -44,6 +44,6 @@ class Item < ApplicationRecord
   private
 
   def any_item_relitions?
-    wishlists.blank? && order_items.blank? && item_reviews.blank? && item_brand.blank?
+    wishlists.blank? && order_items.blank? && item_reviews.blank?
   end
 end

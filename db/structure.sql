@@ -906,16 +906,6 @@ ALTER SEQUENCE public.item_brands_id_seq OWNED BY public.item_brands.id;
 
 
 --
--- Name: item_brands_items; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.item_brands_items (
-    item_id bigint NOT NULL,
-    item_brand_id bigint NOT NULL
-);
-
-
---
 -- Name: item_categories; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -5120,6 +5110,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190911143742'),
 ('20190912084338'),
 ('20190916082922'),
-('20190916085330');
+('20190916085330'),
+('20190916154332');
 
 
