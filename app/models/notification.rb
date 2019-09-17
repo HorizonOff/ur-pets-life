@@ -4,6 +4,7 @@ class Notification < ApplicationRecord
   belongs_to :appointment, optional: true
   belongs_to :pet, optional: true
   belongs_to :order, optional: true
+  belongs_to :used_pay_code, optional: true
 
   before_validation :set_user
 

@@ -49,6 +49,8 @@ class User < ApplicationRecord
   has_many :item_reviews
   has_one :location, as: :place, inverse_of: :place
 
+  has_many :support_chats
+  has_many :chat_messages
   has_many :orders
   has_many :user_posts, dependent: :destroy
   has_many :order_items, through: :orders
@@ -56,7 +58,8 @@ class User < ApplicationRecord
   has_many :orders_with_new_comments, -> { where('unread_comments_count_by_user > 0') }, class_name: 'Order'
   has_one :redeem_point
   has_many :favorites, -> { order(created_at: :asc) }, dependent: :destroy
-  has_many :sessions, dependent: :destroy
+  # has_many :sessions, dependent: :destroy
+  has_many :sessions, as: :client, class_name: 'Session', dependent: :destroy
   has_many :pets, dependent: :destroy
   has_many :wishlists
   has_many :shopping_cart_items, -> { order('created_at DESC') }
@@ -69,6 +72,8 @@ class User < ApplicationRecord
   has_many :comments, as: :writable, dependent: :destroy
   has_many :notifications
   has_many :unread_notifications, -> { where(viewed_at: nil) }, class_name: 'Notification'
+  has_many :used_pay_codes
+  has_many :code_users, class_name: 'UsedPayCode', foreign_key: :code_user_id
 
   accepts_nested_attributes_for :location, update_only: true, reject_if: :all_blank
   accepts_nested_attributes_for :redeem_point, update_only: true, reject_if: :all_blank
@@ -91,6 +96,16 @@ class User < ApplicationRecord
     .where('day_care_centres.name ILIKE :msh OR boardings.name ILIKE :msh OR grooming_centres.name ILIKE :msh',
            msh: '%My Second Home%').distinct
   end)
+
+  def generate_pay_code
+    loop do
+      code = rand.to_s[2..6]
+      unless User.where(pay_code: code).any?
+        update_column(:pay_code, code)
+        break
+      end
+    end
+  end
 
   def birthday=(value)
     value = Time.zone.at(value.to_i) if value.present?

@@ -1,0 +1,33 @@
+<div class="banner" style=" background-image: url(<%= asset_path 'newlanding/banner.png' %>);">
+  <h1>Sale</h1>
+</div>
+
+<div class="container">
+
+  <hr class="mt-2 mb-5">
+
+  <div class="row text-center text-lg-left">
+    <% @sale.each do |item| %>
+      <div class="col-lg-2 col-md-2 col-2 sale">
+        <div class="card shop-card" style="width: 100%;">
+          <div class='image-zone'>
+            <span class="card-notify-badge"><%= item.discount&.to_i %>% OFF</span>
+            <img src="<%= item.picture_url %>" class="card-img-top shop-card-img" alt="...">
+          </div>
+          <div class="card-body">
+            <span class="card-bottom-badge"><%= item.unit.truncate(15) %></span>
+            <h5 class="card-title"><%= item.name.truncate(46) %></h5>
+            <!-- <p class="card-text"><%= item.short_description %></p> -->
+            <h4 class="card-title">AED <%= item.price&.round(2) %></h5>
+            <% if item.discount.positive? %>
+              <h5 class="card-text text-line-through">AED <%= item.unit_price&.round(2) %></p>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <div class='text-center'>
+    <%= paginate @sale %>
+  </div>
+</div>

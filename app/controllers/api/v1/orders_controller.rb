@@ -19,29 +19,42 @@ module Api
             page = params[:pageno].to_i
             @orders = @orders.limit(size).offset(page * size)
           end
-        render json: @orders.as_json(
-          :only => [:id, :Subtotal, :shipmenttime, :Delivery_Charges, :Vat_Charges, :Total, :Delivery_Date, :Order_Notes, :IsCash, :RedeemPoints, :earned_points],
-          :include => {
-            :location => {
-              :only => [:id, :latitude, :longitude, :city, :area, :street, :building_name, :unit_number, :villa_number]
-            },
-            :order_items => {
-              :only => [:id, :Quantity, :IsRecurring, :IsReviewed, :status],
-              :include => {
-                :item => {
-                  :only => [:id, :picture, :name, :price, :discount, :description, :weight, :unit, :short_description]
-                },
-                :recurssion_interval =>  {
-                  :only => [:id, :days, :weeks, :label]
-                },
-                :item_reviews => {
-                  :only => [:id, :user_id, :item_id, :rating, :comment]
+          render json: @orders.as_json(
+            :only => [:id, :Subtotal, :shipmenttime, :Delivery_Charges, :Vat_Charges, :Total, :Delivery_Date, :Order_Notes, :IsCash, :RedeemPoints, :earned_points],
+            :include => {
+              :location => {
+                :only => [:id, :latitude, :longitude, :city, :area, :street, :building_name, :unit_number, :villa_number]
+              },
+              :order_items => {
+                :only => [:id, :Quantity, :IsRecurring, :IsReviewed, :status],
+                :include => {
+                  :item => {
+                    :only => [:id, :picture, :name, :price, :discount, :description, :weight, :unit, :short_description]
+                  },
+                  :recurssion_interval =>  {
+                    :only => [:id, :days, :weeks, :label]
+                  },
+                  :item_reviews => {
+                    :only => [:id, :user_id, :item_id, :rating, :comment]
+                  }
                 }
               }
             }
-          }
-        )
+          )
+        end
       end
+
+      def admin_orders
+        @orders = @user.orders.visible
+        @orders = Order.visible if @user.try(:role) == 'super_admin'
+        orders_count = @orders.count
+        @orders = @orders.order(created_at: :desc).page(params[:page]).per(params[:per_page])
+        return render json: { Message: 'No Orders found' } if @orders.blank?
+
+        serialized_orders = ActiveModel::Serializer::CollectionSerializer.new(
+          @orders, serializer: OrderSerializer
+        )
+        render json: { orders: serialized_orders, total_count: orders_count }
       end
 
       # GET /orders/1
@@ -179,8 +192,9 @@ module Api
           deliveryCharges = 5.75
         end
         company_discount = (@itemsprice - @total_price_without_discount).round(2)
+        code_discount = ::Api::V1::DiscountCodeService.new(params[:pay_code], @user, subTotal).discount_from_code
         vatCharges = ((@total_price_without_discount/100).to_f * 5).round(2)
-        total = subTotal + deliveryCharges + vatCharges
+        total = subTotal + deliveryCharges + vatCharges + code_discount
         user_redeem_points = 0
         requested_redeem_points = params[:RedeemPoints].to_i
         permitted_redeem_points = 0
@@ -225,9 +239,14 @@ module Api
                            Total: total, Order_Status: 1, Payment_Status: paymentStatus,
                            Delivery_Date: params[:Delivery_Date], Order_Notes: params[:Order_Notes],
                            IsCash: params[:IsCash], location_id: params[:location_id], is_viewed: false,
-                           order_status_flag: 'pending', company_discount: company_discount,
-                           is_user_from_company: @is_user_from_company)
+                           order_status_flag: 'pending', code_discount: code_discount,
+                           company_discount: company_discount, is_user_from_company: @is_user_from_company)
         if @order.save
+          if @order.code_discount != 0
+            pay_code_owner = User.find_by(pay_code: params[:pay_code])
+            UsedPayCode.create(user_id: pay_code_owner.id, order_id: @order.id, code_user_id: @user.id)
+          end
+
           if permitted_redeem_points > 0
             @user_redeem_point_record.update(net_worth: (user_redeem_points - permitted_redeem_points),
                                              last_net_worth: user_redeem_points, last_reward_type: 'Order Deduction',
@@ -284,7 +303,7 @@ module Api
             VatPercentage: "5",
             #EarnedPoints: discount_per_transaction,
             OrderDetails: @order.as_json(
-              :only => [:id, :Subtotal, :Delivery_Charges, :Vat_Charges, :Total, :Delivery_Date, :Order_Notes, :IsCash, :shipmenttime, :RedeemPoints, :earned_points, :company_discount, :is_user_from_company],
+              :only => [:id, :Subtotal, :Delivery_Charges, :Vat_Charges, :Total, :Delivery_Date, :Order_Notes, :IsCash, :shipmenttime, :RedeemPoints, :earned_points, :company_discount, :is_user_from_company, :code_discount],
               :include => {
                 :location => {
                   :only => [:id, :latitude, :longitude, :city, :area, :street, :building_name, :unit_number, :villa_number]
@@ -319,7 +338,7 @@ module Api
             VatPercentage: "5",
             #EarnedPoints: discount_per_transaction,
             OrderDetails: @order.as_json(
-              :only => [:id, :Subtotal, :Delivery_Charges, :Vat_Charges, :Total, :Delivery_Date, :Order_Notes, :IsCash, :shipmenttime, :RedeemPoints, :earned_points, :company_discount, :is_user_from_company],
+              :only => [:id, :Subtotal, :Delivery_Charges, :Vat_Charges, :Total, :Delivery_Date, :Order_Notes, :IsCash, :shipmenttime, :RedeemPoints, :earned_points, :company_discount, :is_user_from_company, :code_discount],
               :include => {
                 :location => {
                   :only => [:id, :latitude, :longitude, :city, :area, :street, :building_name, :unit_number, :villa_number]
@@ -392,10 +411,6 @@ module Api
 
       def send_inventory_alerts(itemid)
         OrderMailer.send_low_inventory_alert(itemid).deliver_later
-      end
-
-      def send_inventory_alerts(itemid)
-        OrderMailer.send_low_inventory_alert(itemid).deliver
       end
 
       def set_order_notifcation_email(order, is_any_recurring_item)

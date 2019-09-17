@@ -1,7 +1,7 @@
 class Location < ApplicationRecord
   BUILDING_OPTIONS = %i[building villa].freeze
   enum building_type: BUILDING_OPTIONS
-  belongs_to :place, polymorphic: true
+  belongs_to :place, polymorphic: true, optional: true
 
   has_many :orders
 

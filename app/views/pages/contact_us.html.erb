@@ -1,0 +1,39 @@
+<div class="banner" style=" background-image: url(<%= asset_path 'newlanding/banner.png' %>);">
+  <h1>Contact us</h1>
+</div>
+
+<div class="getintouch">
+  <div class="container">
+    <div class="row">
+      <h2>Get in Touch</h2>
+      <p>Whether you're a Pet's Owner, an Establishment or just simply a animals enthousiast,<br>
+         we would love to hear from you.</p>
+    </div>
+    <div class="form">
+
+        <%= form_for (@contact_request), remote: true, url: send_message_post_path do |f| %>
+        <div class="col-md-6 col-sm-6">
+          <div class="form-group">
+            <%= f.text_field :user_name, placeholder: 'Your Name', required: "required" %>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-6">
+          <div class="form-group">
+            <%= f.email_field :email, placeholder: 'Your Email Address', required: "required" %>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="form-group">
+            <%= f.text_area :message , placeholder: 'Write your message...', required: "required" %>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="form-group">
+            <%= f.submit "Send" %>
+          </div>
+        </div>
+        <% end %>
+
+    </div>
+  </div>
+</div>

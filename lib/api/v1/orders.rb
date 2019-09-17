@@ -4,6 +4,68 @@ module Api
       include Swagger::Blocks
 
       swagger_path '/orders' do
+        operation :get do
+          key :description, 'Return list of orders'
+          key :consumes, %w[application/json]
+          key :produces, %w[application/json]
+          key :tags, %W[Orders]
+
+          security do
+            key :api_key, []
+          end
+
+          parameter do
+            key :name, :pageno
+            key :in, :query
+            key :type, :integer
+            key :example, 1
+          end
+
+          parameter do
+            key :name, :size
+            key :in, :query
+            key :type, :integer
+            key :example, 20
+          end
+
+          response 200 do
+            key :description, 'Success response'
+          end
+        end
+      end
+
+      swagger_path '/admin_orders' do
+        operation :get do
+          key :description, 'Return list of orders'
+          key :consumes, %w[application/json]
+          key :produces, %w[application/json]
+          key :tags, %W[Orders]
+
+          security do
+            key :api_key, []
+          end
+
+          parameter do
+            key :name, :page
+            key :in, :query
+            key :type, :integer
+            key :example, 1
+          end
+
+          parameter do
+            key :name, :per_page
+            key :in, :query
+            key :type, :integer
+            key :example, 20
+          end
+
+          response 200 do
+            key :description, 'Success response'
+          end
+        end
+      end
+
+      swagger_path '/orders' do
         operation :post do
           key :description, 'Create order'
           key :consumes, %w[application/json]
@@ -72,6 +134,10 @@ module Api
       end
 
       swagger_schema :OrderInput do
+        property :pay_code do
+          key :type, :string
+          key :example, '0012'
+        end
         property :IsCash do
           key :type, :integer
           key :example, 0

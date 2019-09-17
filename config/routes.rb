@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   resources :item_brands
   resources :item_categories
   mount Ckeditor::Engine => '/ckeditor'
+  mount ActionCable.server => '/cable'
   root 'pages#newlanding'
   get '/login', to: 'application#login'
   get '/privacy_policy_new', to:'pages#send_message', as:'view_pp'
@@ -21,6 +22,8 @@ Rails.application.routes.draw do
                                     omniauth_callbacks: 'omniauth_callbacks' }
   namespace :api do
     namespace :v1 do
+      resources :support_chats
+      resources :chat_messages
       resources :apidocs, only: :index
       resources :contact_requests, only: [:create]
       resources :users, only: :create do
@@ -68,6 +71,11 @@ Rails.application.routes.draw do
       get 'found_pets', to: 'pets#found_pets'
       get 'get_current_ad', to: 'ads#current'
       get 'sale_categories', to: 'sales#categories'
+      get 'current_user_support_chat', to: 'support_chats#current_user_support_chat'
+      get 'close_support_chat', to: 'support_chats#close'
+      get 'pay_code', to: 'used_pay_codes#pay_code'
+      get 'check_pay_code', to: 'used_pay_codes#check_pay_code'
+      get 'admin_orders', to: 'orders#admin_orders'
       resources :pets, except: %i[new edit] do
         collection { post :found }
         collection { get :can_be_lost }
@@ -145,6 +153,11 @@ Rails.application.routes.draw do
   get 'app_term_conditions', to:'pages#app_term_conditions'
   get 'pets_life_privacy_policy', to: 'pages#new_privacy_policy'
   get 'app_pets_life_privacy_policy', to: 'pages#app_new_privacy_policy'
+  get 'about', to: 'pages#about'
+  get 'loyalty_programs', to: 'pages#loyalty_programs'
+  get 'stray_cat_community', to: 'pages#stray_cat_community'
+  get 'sale', to: 'pages#sale'
+  get 'contact_us', to: 'pages#contact_us'
   devise_for :admins, path: 'admin_panel/admins', except: :registrations,
                       controllers: { invitations: 'admin_panel/admins/invitations' }
 
@@ -155,7 +168,12 @@ Rails.application.routes.draw do
 
   namespace :admin_panel do
     root 'dashboard#index'
+    get 'calculating_price', to: 'orders#calculating_price'
 
+    resources :support_chats do
+      member { get :close }
+    end
+    resources :chat_messages
     resources :admins, only: %w[index destroy] do
       member { put :change_status }
       member { put :restore }
@@ -163,7 +181,7 @@ Rails.application.routes.draw do
     resources :orders do
       member { get :invoice }
       member { delete :cancel }
-      member { get :ordercomments}
+      member { get :ordercomments }
       resources :comments, only: %i[index create]
     end
     resources :invoices do

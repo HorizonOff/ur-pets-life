@@ -1,0 +1,53 @@
+<%= stylesheet_link_tag 'chat', media: 'all', 'data-turbolinks-track': 'reload' %>
+<div class="row">
+  <div class="col-md-9.col-sm-9.col-xs-9">
+    <h1><%= @support_chat.user.name %></h1>
+    <button type="button" class="close-chat close-chat-js btn btn-danger">Close chat</button>
+
+    <div id="messages" class="chat" data-channel-subscribe="room" data-support-chat-id="<%= @support_chat.id %>">
+      <div id="messages-pool">
+        <%= render @support_chat.chat_messages.order(created_at: :asc) %>
+      </div>
+      <div id='chat-form' class="<%= 'display-none' if @support_chat.closed? %>">
+        <%= form_for @chat_message, url: admin_panel_chat_messages_path, remote: true do |f| %>
+          <div class="form-inline">
+            <%= f.hidden_field :support_chat_id, value: @support_chat.id %>
+            <%= f.text_field :text, autocomplete: 'off', class: 'form-control input-chat-message' %>
+            <div class="image-upload">
+               <label for="photo-input">
+                 <span class="glyphicon glyphicon-picture"></span>
+               </label>
+
+               <%= f.file_field :photo, id:"photo-input" %>
+            </div>
+            <div class="video-upload">
+               <label for="video-input">
+                 <span class="glyphicon glyphicon-facetime-video"></span>
+               </label>
+
+               <%= f.file_field :video, id:"video-input" %>
+            </div>
+            <%= f.submit "Send", class: 'btn btn-primary chat-send-btn' %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="d-none" data-role="message-template">
+  <div class="chat-message-container">
+    <div class="row no-gutters">
+
+      <div class="col">
+        <div class="message-content">
+          <p class="mb-1" data-role="message-text"></p>
+          <img src='' data-role="message-img"  class='chat-image'>
+          <video src='' data-role="message-video"  class='chat-video'></video>
+          <div class="text-right">
+            <small data-role="message-date"></small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,50 @@
+- content_for :head do
+  %meta{name: "turbolinks-cache-control", content:"no-cache"}
+.col-12
+  .x_panel
+    .x_title
+      %h2 New Order
+      .clearfix
+    .x_content
+      %br
+
+      .form-group
+        .col-12
+          .form-group
+            = label_tag 'New User'
+            = radio_button_tag 'user_type', "new_user", true, class: "flat user_type"
+
+            = label_tag 'Existed User'
+            = radio_button_tag 'user_type', "registered_user", false, class: "flat user_type"
+          .form-group.registered_user
+            = label_tag 'User name'
+            = f.text_field :client_name, class: 'form-control', required: true
+          .form-group.registered_user
+            = label_tag 'User number'
+            = f.number_field :client_number, class: 'form-control', required: true
+          .form-group.new_user.hiden
+            = label_tag 'User name'
+            = select_tag :user_id, options_from_collection_for_select(User.all, :id, :name),
+                class: 'form-control select2 changed_subtotal', include_blank: true
+          #items.form-group
+            = label_tag 'Add Item'
+            = f.fields_for :order_items do |f|
+              = render 'admin_panel/orders/order_fields', f: f
+            .links
+              = link_to_add_association f, :order_items, class: 'btn btn-primary', partial: 'admin_panel/orders/order_fields' do
+                = '+ '
+                %span.fa.fa-shopping-basket{"aria-hidden" => "true"}
+              .form-discount
+                = label_tag 'Discount'
+                = f.number_field :admin_discount, min: 0, class: 'border-discount changed_subtotal', value: 0
+                .new_user.hiden
+                  = label_tag 'Redeem Points'
+                  = f.number_field :RedeemPoints, min: 0, class: 'border-discount changed_subtotal', value: 0
+          .form-group
+            = label_tag 'Subtotal'
+            %p.subtotal_price.pre_price
+              0
+          .form-group
+            = label_tag 'Total'
+            %p.total_price.pre_price
+              0

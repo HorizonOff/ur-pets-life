@@ -35,6 +35,10 @@ module Api
               property :push_token do
                 key :type, :string
               end
+              property :is_admin do
+                key :type, :boolean
+                key :example, true
+              end
             end
           end
 

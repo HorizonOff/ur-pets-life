@@ -13,13 +13,13 @@
     #sidebar-menu.main_menu_side.hidden-print.main_menu
       .menu_section
         %ul.nav.side-menu
-          - if current_admin.is_employee?
+          - if current_admin.employee?
             = render 'layouts/admin_panel/employee_sidebar'
-          - elsif current_admin.is_super_admin?
+          - elsif current_admin.super_admin?
             = render 'layouts/admin_panel/super_admin_sidebar'
-          - elsif current_admin.is_cataloger?
+          - elsif current_admin.cataloger?
             = render 'layouts/admin_panel/cataloger_sidebar'
-          - elsif current_admin.is_msh_admin?
+          - elsif current_admin.msh_admin?
             = render 'layouts/admin_panel/msh_sidebar'
           - else
             = render 'layouts/admin_panel/simple_admin_sidebar'

@@ -3,15 +3,10 @@
 		<div class="row">
 			<div class="col-md-6 col-sm-6">
 				<article>
-					<h2>From Paws to Tails, we care
-because pets are family</h2>
-			<p>Ur Pets Life is an awesome new app for
-managing your pets life in real-time,
-anytime anywhere, at no cost.
-</p>
-		<a href='https://itunes.apple.com/us/app/ur-pets-life/id1356559735?ls=1&mt=8' target="_blank"><img src="<%= asset_path 'newlanding/app-store.png' %>" alt=""></a>
-			<a href='https://play.google.com/store/apps/details?id=com.foxtrapp.pets' target="_blank"><img src="<%= asset_path 'newlanding/google.png' %>" alt=""></a>
-
+					<h2>From Paws To Tails we care, because pets are family.</h2>
+					<p>Ur Pets Life is the first mobile application worldwide that brings you a full 360° solution and services that your pet can ever require.</p>
+					<a href='https://itunes.apple.com/us/app/ur-pets-life/id1356559735?ls=1&mt=8' target="_blank"><img src="<%= asset_path 'newlanding/app-store.png' %>" alt=""></a>
+					<a href='https://play.google.com/store/apps/details?id=com.foxtrapp.pets' target="_blank"><img src="<%= asset_path 'newlanding/google.png' %>" alt=""></a>
 				</article>
 			</div>
 			<div class="col-md-6 col-sm-6">
@@ -236,7 +231,7 @@ anytime anywhere, at no cost.
 	<div class="container">
 		<div class="row">
 			<h2>Know What's Up</h2>
-			<p>Our pets are parts of our family and they should be treated the same way. Ur Pets life<br> offers you a variety of services with details that weren't accessible before. With this user-<br>friendly App, you can now search and choose from more than 1 establishment that fits<br> your loved ones needs, and no longer must worry about lost or found pets since our<br> Unique software can help you connect with the entire pet community.</p>
+			<p>Our pets are parts of our family and they should be treated the same way. Ur Pets life<br> offers you a variety of services with details that weren't accessible before. With this user-<br>friendly App, you can now search and choose from more than 1 establishment that fits<br> your loved one's needs, and no longer must worry about lost or found pets since our<br> Unique software can help you connect with the entire pet community.</p>
 		</div>
 		<div class="row marginTop multiple-items">
 			<div class="col-md-4 col-sm-4">
@@ -361,11 +356,11 @@ Pet Spas/Clinics and more
 <div class="cta2">
 	<div class="container">
 		<article>
-			<h2>More than
-				<strong>70 Brands</strong>
+			<h2>More then
+				<strong>80 Brands</strong>
 			</h2>
-			<h2>More than
-				<strong>3,000 Items</strong>
+			<h2>More then
+				<strong>10,000 Items</strong>
 			</h2>
 			<h2>Products for
 				<strong>Dogs/Cats/Birds/Hamsters and more</strong>
@@ -383,7 +378,7 @@ Pet Spas/Clinics and more
 			<div class="col-md-6 col-sm-12">
 				<article>
 					<h2>Super Simple. Super Quick.</h2>
-					<p>No need to always carry your pets passports to the different establishment or
+					<p>No need to always carry your pet's passports to the different establishment or
 even keep checking it for whenever you need any data, with simple steps you
 can create your pets digital passport to be stored and linked with any
 establishment you book with</p>
@@ -403,42 +398,6 @@ weight development, health factors and get reminders on due date for the essenti
 Your data is stored forever and will be shared on the spot with any booking you make to save you<br>
 the hassle of giving all these info by phone or in person.</p>
 	<img src="<%= asset_path 'newlanding/app-2.png' %>" alt="">
-		</div>
-	</div>
-</div>
-
-<div class="getintouch">
-	<div class="container">
-		<div class="row">
-			<h2>Get in Touch</h2>
-			<p>Whether you're a Pet's Owner, an Establishment or just simply a animals enthousiast,<br>
-we would love to hear from you.</p>
-		</div>
-		<div class="form">
-
-			  <%= form_for (@contact_request), remote: true, url: send_message_post_path do |f| %>
-				<div class="col-md-6 col-sm-6">
-					<div class="form-group">
-						<%= f.text_field :user_name, placeholder: 'Your Name', required: "required" %>
-					</div>
-				</div>
-				<div class="col-md-6 col-sm-6">
-					<div class="form-group">
-						<%= f.email_field :email, placeholder: 'Your Email Address', required: "required" %>
-					</div>
-				</div>
-				<div class="col-md-12">
-					<div class="form-group">
-						<%= f.text_area :message , placeholder: 'Write your message...', required: "required" %>
-					</div>
-				</div>
-				<div class="col-md-12">
-					<div class="form-group">
-						<%= f.submit "Send" %>
-					</div>
-				</div>
-				<% end %>
-
 		</div>
 	</div>
 </div>

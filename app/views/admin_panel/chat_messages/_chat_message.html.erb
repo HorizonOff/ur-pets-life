@@ -1,0 +1,20 @@
+<div class="chat-message-container">
+  <div class="row no-gutters">
+
+    <div class="col">
+      <div class="message-content <%=chat_message.m_type %>">
+        <p class="mb-1" data-role="message-text"><%= chat_message.text %></p>
+        <% if chat_message.photo.present? || chat_message.mobile_photo_url.present? %>
+          <img src="<%= chat_message.photo_url || chat_message.mobile_photo_url %>" class='chat-image'>
+
+        <% elsif chat_message.video.present? || chat_message.mobile_video_url.present? %>
+          <%= video_tag(chat_message.video_url || chat_message.mobile_video_url, controls: true, class: 'chat-video') %>
+        <% end %>
+        <div class="text-right">
+          <small data-role="message-date"><%= chat_message.timestamp %></small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

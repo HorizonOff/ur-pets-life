@@ -5,12 +5,31 @@
 
 <header>
 	<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-	<div class="container">
-		<div class="row">
-			<div class="logo">
-				<a href="https://urpets.herokuapp.com"><img src="<%= asset_path 'newlanding/logo.png' %>" alt=""></a>
-			</div>
-			<a href="/admin_panel" class="custbtn">Log in for <span>establishment owner</span></a>
-		</div>
-	</div>
+
+  <nav class="navbar navbar-default bootsnav">
+    <div class="container">
+      <!-- Start Header Navigation -->
+      <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
+              <i class="fa fa-bars"></i>
+          </button>
+          <a class="navbar-brand" href="/"><img src="<%= asset_path 'newlanding/logo2.png' %>" class="navbar-logo" alt=""></a>
+      </div>
+      <!-- End Header Navigation -->
+
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="navbar-menu">
+
+         <ul class="nav navbar-nav navbar-center">
+
+              <li><a href="/about">About</a></li>
+              <li><a href="/loyalty_programs">Loyalty Programs</a></li>
+              <li><a href="/sale">Sale</a></li>
+              <li><a href="/stray_cat_community">Stray Cat Community</a></li>
+              <li><a href="/contact_us">Contact us</a></li>
+              <li><a href="/admin_panel">Log in for <span>establishment owner</span></a></li>
+          </ul>
+      </div><!-- /.navbar-collapse -->
+    </div>
+  </nav>
 </header>

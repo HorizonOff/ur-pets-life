@@ -29,7 +29,7 @@ module Api
 
     def authenticate_token
       @current_session = Session.find_by_token(request.headers['Authorization'])
-      @user = @current_session.user if @current_session
+      @user = @current_session.client if @current_session
       @user.update_column(:last_action_at, Time.current) if @user
     end
 
@@ -52,7 +52,8 @@ module Api
         if session.save
           @user.update_attribute(:sign_in_count, @user.sign_in_count + 1)
           is_first_login = @user.sign_in_count == 1
-          render json: { user: @user.name, session_token: session.token, first_login: is_first_login }, status: :ok
+          render json: { user: @user.name, session_token: session.token, first_login: is_first_login,
+                         role: @user.try(:role)  }, status: :ok
         else
           render_422(parse_errors_messages(session))
         end
