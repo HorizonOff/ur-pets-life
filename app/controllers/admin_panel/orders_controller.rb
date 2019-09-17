@@ -195,7 +195,7 @@ module AdminPanel
           @admin_panel_order.used_pay_code.add_redeem_points
         elsif @admin_panel_order.user.pay_code.blank?
           @admin_panel_order.user.generate_pay_code
-          @admin_panel_order.used_pay_code.notifications
+          @admin_panel_order.user.notifications
             .create(message: 'A Pay It Forward code is now available for you so you can share it with 3 of your friends and receive 30 points from each of them. You can find the code under “ My Codes “ in the main Menu',
                     user_id: @admin_panel_order.user_id)
         end
