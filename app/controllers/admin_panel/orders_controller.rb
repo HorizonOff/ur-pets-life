@@ -360,10 +360,12 @@ module AdminPanel
           @admin_panel_order.used_pay_code.notifications
             .create(message: '30 points have been added to your account since your friend used your Pay It Forward code',
                     user_id: @admin_panel_order.used_pay_code.user.id)
-          @admin_panel_order.used_pay_code.notifications
-            .create(message: 'A Pay It Forward code is now available for you so you can share it with 3 of your friends and receive 30 points from each of them. You can find the code under “ My Codes “ in the main Menu',
-                    user_id: @admin_panel_order.used_pay_code.code_user.id)
-          @admin_panel_order.used_pay_code.create_new_pay_code
+          if @admin_panel_order.user.pay_code.blank?
+            @admin_panel_order.used_pay_code.notifications
+              .create(message: 'A Pay It Forward code is now available for you so you can share it with 3 of your friends and receive 30 points from each of them. You can find the code under “ My Codes “ in the main Menu',
+                      user_id: @admin_panel_order.used_pay_code.code_user.id)
+            @admin_panel_order.used_pay_code.create_new_pay_code
+          end
           @admin_panel_order.used_pay_code.add_redeem_points
         elsif @admin_panel_order.user.pay_code.blank?
           @admin_panel_order.user.generate_pay_code
