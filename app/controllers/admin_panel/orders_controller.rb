@@ -192,12 +192,12 @@ module AdminPanel
     discount = @user.present? ? ::Api::V1::DiscountDomainService.new(@user.email.dup).dicount_on_email : 0
 
     params['item']['order_items']['0'].each do |item, hash_value|
-      @item = Item.find_by_id(hash_value['order_id'])
+      @item = Item.find_by_id(hash_value['item_id'])
       next if @item == nil
       hash_value['quantity'] = @item.quantity if @item.quantity < hash_value['quantity'].to_i
 
       if discount.positive? && @item.discount.zero? &&
-          !(@user.member_type.in?(['silver', 'gold']) && @item.supplier.in?(["MARS", "NESTLE"])) &&
+          !(@user.member_type.in?(%w(silver gold)) && @item.supplier.in?(%w(MARS NESTLE))) &&
           @user.email != 'development@urpetslife.com'
         @items_price += @item.price * ((100 - discount).to_f / 100) * hash_value['quantity'].to_i
       else
@@ -237,6 +237,13 @@ module AdminPanel
 
     total -= admin_discount + redeem_points
     render json: { subtotal: subTotal, total: total.round(2) }
+  end
+
+  def max_quantity
+    binding.pry
+    quantity = Item.find_by(id: params['item']['item_id'])&.quantity
+
+    render json: { quantity: quantity || 1}
   end
 
   def invoice
