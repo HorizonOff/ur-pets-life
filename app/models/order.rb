@@ -1,6 +1,7 @@
 class Order < ApplicationRecord
   belongs_to :user, optional: true
   belongs_to :driver, class_name: 'Admin', foreign_key: 'driver_id', optional: true
+  belongs_to :unregistered_user, optional: true
   belongs_to :location
   has_one :used_pay_code
 

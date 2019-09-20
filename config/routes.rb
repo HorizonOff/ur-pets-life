@@ -169,6 +169,7 @@ Rails.application.routes.draw do
   namespace :admin_panel do
     root 'dashboard#index'
     get 'calculating_price', to: 'orders#calculating_price'
+    get 'max_quantity', to: 'orders#max_quantity'
 
     resources :support_chats do
       member { get :close }

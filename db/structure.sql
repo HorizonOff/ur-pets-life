@@ -1280,11 +1280,10 @@ CREATE TABLE public.orders (
     is_user_from_company boolean DEFAULT false,
     delivery_at timestamp without time zone,
     is_pre_recurring boolean DEFAULT false,
-    client_name character varying,
-    client_number character varying,
     admin_discount integer DEFAULT 0,
     code_discount integer DEFAULT 0,
-    driver_id integer
+    driver_id integer,
+    unregistered_user_id integer
 );
 
 
@@ -2094,6 +2093,38 @@ ALTER SEQUENCE public.trainers_id_seq OWNED BY public.trainers.id;
 
 
 --
+-- Name: unregistered_users; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.unregistered_users (
+    id bigint NOT NULL,
+    name character varying,
+    number character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: unregistered_users_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.unregistered_users_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: unregistered_users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.unregistered_users_id_seq OWNED BY public.unregistered_users.id;
+
+
+--
 -- Name: used_pay_codes; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -2745,6 +2776,16 @@ ALTER TABLE ONLY public.trainers ALTER COLUMN id SET DEFAULT nextval('public.tra
 
 
 --
+<<<<<<< HEAD
+=======
+-- Name: unregistered_users id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.unregistered_users ALTER COLUMN id SET DEFAULT nextval('public.unregistered_users_id_seq'::regclass);
+
+
+--
+>>>>>>> add_order_create
 -- Name: used_pay_codes id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -3217,6 +3258,17 @@ ALTER TABLE ONLY public.trainers
 
 
 --
+<<<<<<< HEAD
+=======
+-- Name: unregistered_users unregistered_users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.unregistered_users
+    ADD CONSTRAINT unregistered_users_pkey PRIMARY KEY (id);
+
+
+--
+>>>>>>> add_order_create
 -- Name: used_pay_codes used_pay_codes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -4216,6 +4268,7 @@ CREATE INDEX index_service_types_on_serviceable_type_and_serviceable_id ON publi
 --
 
 CREATE INDEX index_sessions_on_client_id ON public.sessions USING btree (client_id);
+<<<<<<< HEAD
 
 
 --
@@ -4229,6 +4282,21 @@ CREATE INDEX index_sessions_on_client_type ON public.sessions USING btree (clien
 -- Name: index_sessions_on_token; Type: INDEX; Schema: public; Owner: -
 --
 
+=======
+
+
+--
+-- Name: index_sessions_on_client_type; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_sessions_on_client_type ON public.sessions USING btree (client_type);
+
+
+--
+-- Name: index_sessions_on_token; Type: INDEX; Schema: public; Owner: -
+--
+
+>>>>>>> add_order_create
 CREATE UNIQUE INDEX index_sessions_on_token ON public.sessions USING btree (token);
 
 
@@ -5109,6 +5177,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190911130338'),
 ('20190911143742'),
 <<<<<<< HEAD
+<<<<<<< HEAD
 ('20190912084338');
 =======
 ('20190912084338'),
@@ -5120,5 +5189,13 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190916085330'),
 ('20190916154332');
 >>>>>>> fix_deleting_of_brands
+=======
+('20190912084338'),
+('20190916082922'),
+('20190916085330'),
+('20190916154332'),
+('20190919100321'),
+('20190920134238');
+>>>>>>> add_order_create
 
 

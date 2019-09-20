@@ -143,3 +143,7 @@ img.big-avatar {
     display: inline;
     margin: 0 10px;
 }
+
+.order_item {
+    padding-bottom: 10px;
+}
