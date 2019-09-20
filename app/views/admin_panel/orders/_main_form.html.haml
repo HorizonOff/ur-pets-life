@@ -19,7 +19,7 @@
 
           .relation_block
             = f.fields_for :unregistered_user, f.object.unregistered_user do |t|
-              .form-group
+              .form-group.registered_user
                 = label_tag 'Unregistered users'
                 = select_tag :unregistered_user_id, options_from_collection_for_select(UnregisteredUser.all, :id, :name),
                 class: 'form-control select2', include_blank: true
