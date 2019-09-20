@@ -360,42 +360,44 @@ module AdminPanel
         end
       end
 
-      orderuser = User.where(:id => @admin_panel_order.user_id).first
-      orderuser.notifications.create(order: @admin_panel_order, message: 'Your Order status for Order # ' + @admin_panel_order.id.to_s + ' has been ' + (statustoupdate == 'cancelled' ? 'Cancelled' : 'updated to ' + (statustoupdate == 'on_the_way' ? 'on the way' : statustoupdate)))
+      if @admin_panel_order.user_id.present?
+        orderuser = User.where(:id => @admin_panel_order.user_id).first
+        orderuser.notifications.create(order: @admin_panel_order, message: 'Your Order status for Order # ' + @admin_panel_order.id.to_s + ' has been ' + (statustoupdate == 'cancelled' ? 'Cancelled' : 'updated to ' + (statustoupdate == 'on_the_way' ? 'on the way' : statustoupdate)))
 
-      if statustoupdate.in?(%w(delivered delivered_by_card delivered_by_cash))
-        set_order_delivery_invoice(@admin_panel_order.id, orderuser.email)
-        @admin_panel_order.update_attributes(Payment_Status: 1)
-        if @admin_panel_order.used_pay_code.present?
-          @admin_panel_order.used_pay_code.notifications
-            .create(message: '30 points have been added to your account since your friend used your Pay It Forward code',
-                    user_id: @admin_panel_order.used_pay_code.user.id)
-          if @admin_panel_order.user.pay_code.blank?
+        if statustoupdate.in?(%w(delivered delivered_by_card delivered_by_cash))
+          set_order_delivery_invoice(@admin_panel_order.id, orderuser.email)
+          @admin_panel_order.update_attributes(Payment_Status: 1)
+          if @admin_panel_order.used_pay_code.present?
             @admin_panel_order.used_pay_code.notifications
+              .create(message: '30 points have been added to your account since your friend used your Pay It Forward code',
+                      user_id: @admin_panel_order.used_pay_code.user.id)
+            if @admin_panel_order.user.pay_code.blank?
+              @admin_panel_order.used_pay_code.notifications
+                .create(message: 'A Pay It Forward code is now available for you so you can share it with 3 of your friends and receive 30 points from each of them. You can find the code under “ My Codes “ in the main Menu',
+                        user_id: @admin_panel_order.used_pay_code.code_user.id)
+              @admin_panel_order.used_pay_code.create_new_pay_code
+            end
+            @admin_panel_order.used_pay_code.add_redeem_points
+          elsif @admin_panel_order.user.pay_code.blank?
+            @admin_panel_order.user.generate_pay_code
+            @admin_panel_order.user.notifications
               .create(message: 'A Pay It Forward code is now available for you so you can share it with 3 of your friends and receive 30 points from each of them. You can find the code under “ My Codes “ in the main Menu',
-                      user_id: @admin_panel_order.used_pay_code.code_user.id)
-            @admin_panel_order.used_pay_code.create_new_pay_code
+                      user_id: @admin_panel_order.user_id)
           end
-          @admin_panel_order.used_pay_code.add_redeem_points
-        elsif @admin_panel_order.user.pay_code.blank?
-          @admin_panel_order.user.generate_pay_code
-          @admin_panel_order.user.notifications
-            .create(message: 'A Pay It Forward code is now available for you so you can share it with 3 of your friends and receive 30 points from each of them. You can find the code under “ My Codes “ in the main Menu',
-                    user_id: @admin_panel_order.user_id)
-        end
 
-        if statustoupdate == 'confirmed'
-          user_redeem_points_record = RedeemPoint.where(:user_id => @admin_panel_order.user_id).first
-          user_redeem_points_record.update(:net_worth => user_redeem_points_record.net_worth + @admin_panel_order.earned_points, :last_net_worth => user_redeem_points_record.net_worth, :last_reward_type => "Discount Per Transaction", :last_reward_worth => @admin_panel_order.earned_points, :last_reward_update => Time.now, :totalearnedpoints => (user_redeem_points_record.totalearnedpoints + @admin_panel_order.earned_points))
-          send_order_confirmation_email_to_customer(@admin_panel_order.id)
-        end
+          if statustoupdate == 'confirmed'
+            user_redeem_points_record = RedeemPoint.where(:user_id => @admin_panel_order.user_id).first
+            user_redeem_points_record.update(:net_worth => user_redeem_points_record.net_worth + @admin_panel_order.earned_points, :last_net_worth => user_redeem_points_record.net_worth, :last_reward_type => "Discount Per Transaction", :last_reward_worth => @admin_panel_order.earned_points, :last_reward_update => Time.now, :totalearnedpoints => (user_redeem_points_record.totalearnedpoints + @admin_panel_order.earned_points))
+            send_order_confirmation_email_to_customer(@admin_panel_order.id)
+          end
 
-        if statustoupdate == 'cancelled'
-          user_redeem_point_reimburse = RedeemPoint.where(:user_id => @admin_panel_order.user_id).first
-          user_redeem_point_reimburse.update(:net_worth => user_redeem_point_reimburse.net_worth + @admin_panel_order.RedeemPoints, :totalavailedpoints => user_redeem_point_reimburse.totalavailedpoints - @admin_panel_order.RedeemPoints)
-          @admin_panel_order.update(:Subtotal => 0, :Delivery_Charges => 0, :Vat_Charges => 0, :Total => 0, :order_status_flag => 'cancelled', :earned_points => 0, :RedeemPoints => 0)
+          if statustoupdate == 'cancelled'
+            user_redeem_point_reimburse = RedeemPoint.where(:user_id => @admin_panel_order.user_id).first
+            user_redeem_point_reimburse.update(:net_worth => user_redeem_point_reimburse.net_worth + @admin_panel_order.RedeemPoints, :totalavailedpoints => user_redeem_point_reimburse.totalavailedpoints - @admin_panel_order.RedeemPoints)
+            @admin_panel_order.update(:Subtotal => 0, :Delivery_Charges => 0, :Vat_Charges => 0, :Total => 0, :order_status_flag => 'cancelled', :earned_points => 0, :RedeemPoints => 0)
 
-          OrderMailer.send_complete_cancel_order_email_to_customer(@admin_panel_order.id, @admin_panel_order.user.email).deliver
+            OrderMailer.send_complete_cancel_order_email_to_customer(@admin_panel_order.id, @admin_panel_order.user.email).deliver
+          end
         end
       end
 
