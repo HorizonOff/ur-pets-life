@@ -62,6 +62,7 @@ module AdminPanel
     @total_price_without_discount = 0
     @discounted_items_amount = 0
     @user = User.find_by_id(params['user_id'])
+    @unregistered_user = UnregisteredUser.find_by_id(params['unregistered_user_id'])
     permitted_redeem_points = 0
     admin_discount = 0
     discount = @user.present? ? ::Api::V1::DiscountDomainService.new(@user.email.dup).dicount_on_email : 0
@@ -125,15 +126,18 @@ module AdminPanel
         permitted_redeem_points = subTotal
       end
     end
-    @order = Order.new(user_id: params['user_id'], RedeemPoints: permitted_redeem_points,
-                       Subtotal: @total_price_without_discount,
+    check_for_unregistered_user if @unregistered_user.blank?
+    unregistered_user_id = @unregistered_user&.id
+    return redirect_to new_admin_panel_order_path, flash: { error: "User must exist!" } if unregistered_user_id.blank?
+
+    @order = Order.new(user_id: params['user_id'], unregistered_user_id: unregistered_user_id,
+                       RedeemPoints: permitted_redeem_points, Subtotal: @total_price_without_discount,
                        Delivery_Charges: deliveryCharges, shipmenttime: 'with in 7 days', Vat_Charges: vatCharges,
                        Total: total, Order_Status: 1, Payment_Status: paymentStatus,
                        Delivery_Date: params[:Delivery_Date], Order_Notes: params[:Order_Notes],
                        IsCash: true, is_viewed: false, location_attributes: order_params['location_attributes'],
                        order_status_flag: 'pending', company_discount: company_discount,
-                       is_user_from_company: @is_user_from_company, client_name: params['order'][:client_name],
-                       client_number: params['order'][:client_number], admin_discount: admin_discount)
+                       is_user_from_company: @is_user_from_company, admin_discount: admin_discount)
 
     if @order.save
       if permitted_redeem_points > 0
@@ -240,7 +244,6 @@ module AdminPanel
   end
 
   def max_quantity
-    binding.pry
     quantity = Item.find_by(id: params['item']['item_id'])&.quantity
 
     render json: { quantity: quantity || 1}
@@ -401,6 +404,14 @@ module AdminPanel
   end
 
   private
+    def check_for_unregistered_user
+      if params['order']['unregistered_user']['name'].present?
+        UnregisteredUser.create(name: params['order']['unregistered_user']['name'],
+                                number: params['order']['unregistered_user']['name'])
+        @unregistered_user = UnregisteredUser.last
+      end
+    end
+
     def send_inventory_alerts(itemid)
       OrderMailer.send_low_inventory_alert(itemid).deliver_later
     end

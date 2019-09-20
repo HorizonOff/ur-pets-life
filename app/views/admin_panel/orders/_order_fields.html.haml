@@ -2,7 +2,7 @@
   - if f.object._destroy
     = f.hidden_field :_destroy
   - else
-  .x_content.order_item
+  .row.order_item
     .col-md-7.col-3
       = f.select :item_id, options_from_collection_for_select(Item.all.where('quantity > 0'), :id, :name),
                  {include_blank: true}, { class: 'form-control select2 changed_subtotal item_id item_change' }
