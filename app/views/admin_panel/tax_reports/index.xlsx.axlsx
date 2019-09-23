@@ -5,7 +5,7 @@ wb.add_worksheet(name: "Orders") do |sheet|
   @tax_reports.each do |report|
     invoce_date = report.delivery_at.present? ? report.delivery_at.strftime('%d/%m/%Y') : report.created_at.strftime('%d/%m/%Y')
     invoice_no = 'INV-' + report.id.to_s
-    customer_name = report.user.first_name + ' ' + report.user.last_name
+    customer_name = report.unregistered_user&.name || report.user.first_name + ' ' + report.user.last_name
     redeem_points = report.RedeemPoints? ? report.RedeemPoints : 0
     net_payable_amount = report.Total - redeem_points
     sheet.add_row [invoce_date, invoice_no, customer_name, report.location.city, net_payable_amount]

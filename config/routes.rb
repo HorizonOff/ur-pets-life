@@ -157,6 +157,8 @@ Rails.application.routes.draw do
 
   namespace :admin_panel do
     root 'dashboard#index'
+    get 'calculating_price', to: 'orders#calculating_price'
+    get 'max_quantity', to: 'orders#max_quantity'
 
     resources :admins, only: %w[index destroy] do
       member { put :change_status }
@@ -165,7 +167,7 @@ Rails.application.routes.draw do
     resources :orders do
       member { get :invoice }
       member { delete :cancel }
-      member { get :ordercomments}
+      member { get :ordercomments }
       resources :comments, only: %i[index create]
     end
     resources :invoices do

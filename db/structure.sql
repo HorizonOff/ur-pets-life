@@ -1281,6 +1281,7 @@ CREATE TABLE public.orders (
     delivery_at timestamp without time zone,
     is_pre_recurring boolean DEFAULT false,
 <<<<<<< HEAD
+<<<<<<< HEAD
     client_name character varying,
     client_number character varying,
     admin_discount integer DEFAULT 0,
@@ -1289,6 +1290,12 @@ CREATE TABLE public.orders (
 =======
     code_discount integer DEFAULT 0
 >>>>>>> pay_codes
+=======
+    admin_discount integer DEFAULT 0,
+    code_discount integer DEFAULT 0,
+    driver_id integer,
+    unregistered_user_id integer
+>>>>>>> add_order_create
 );
 
 
@@ -2103,6 +2110,38 @@ ALTER SEQUENCE public.trainers_id_seq OWNED BY public.trainers.id;
 
 
 --
+-- Name: unregistered_users; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.unregistered_users (
+    id bigint NOT NULL,
+    name character varying,
+    number character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: unregistered_users_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.unregistered_users_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: unregistered_users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.unregistered_users_id_seq OWNED BY public.unregistered_users.id;
+
+
+--
 -- Name: used_pay_codes; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -2773,6 +2812,13 @@ ALTER TABLE ONLY public.trainers ALTER COLUMN id SET DEFAULT nextval('public.tra
 
 
 --
+-- Name: unregistered_users id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.unregistered_users ALTER COLUMN id SET DEFAULT nextval('public.unregistered_users_id_seq'::regclass);
+
+
+--
 -- Name: used_pay_codes id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -3269,6 +3315,17 @@ ALTER TABLE ONLY public.trainers
 
 --
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+-- Name: unregistered_users unregistered_users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.unregistered_users
+    ADD CONSTRAINT unregistered_users_pkey PRIMARY KEY (id);
+
+
+--
+>>>>>>> add_order_create
 -- Name: used_pay_codes used_pay_codes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 =======
 -- Name: used_pay_codes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
@@ -4750,6 +4807,15 @@ ALTER TABLE ONLY public.used_pay_codes
 
 ALTER TABLE ONLY public.used_pay_codes
     ADD CONSTRAINT fk_rails_741753181e FOREIGN KEY (order_id) REFERENCES public.orders(id);
+<<<<<<< HEAD
+
+
+--
+-- Name: used_pay_codes fk_rails_780afa10b5; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.used_pay_codes
+    ADD CONSTRAINT fk_rails_780afa10b5 FOREIGN KEY (user_id) REFERENCES public.users(id);
 
 
 --
@@ -5194,4 +5260,6 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190912084338'),
 ('20190916082922'),
 ('20190916085330'),
-('20190916154332');
+('20190916154332'),
+('20190919100321'),
+('20190920134238');

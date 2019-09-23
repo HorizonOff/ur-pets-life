@@ -9,6 +9,9 @@ wb.add_worksheet(name: "Orders") do |sheet|
     order_date = orderinfo.created_at.to_date.to_s
     invoice_no = 'INV-' + orderinfo.id.to_s
     redeem_points = orderinfo.RedeemPoints? ? orderinfo.RedeemPoints : 0
+    admin_discount = orderinfo.admin_discount || 0
+    code_discount = orderinfo.code_discount
+    redeem_points += admin_discount - code_discount
 
     orderinfo.order_items.each do |orderitem|
       if orderitem.status != 'cancelled'
@@ -24,7 +27,7 @@ wb.add_worksheet(name: "Orders") do |sheet|
           total_selling = amount_selling - redeem_points + vat_selling
           redeem_points = 0
         end
-        customer_name = orderinfo.user.first_name + ' ' + orderinfo.user.last_name
+        customer_name = orderinfo.unregistered_user&.name || orderinfo.user.first_name + ' ' + orderinfo.user.last_name
         sheet.add_row [order_date, invoice_no, customer_name, orderinfo.location.city, orderitem.item&.name,
                        orderitem.item.item_brand&.name, orderitem.Quantity, orderitem.item.buying_price, '5%',
                        vat_buying, orderitem.Unit_Price, '5%', vat_selling, amount_buying, amount_selling,

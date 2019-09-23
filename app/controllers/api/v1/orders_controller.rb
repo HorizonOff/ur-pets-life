@@ -400,10 +400,6 @@ module Api
         OrderMailer.send_low_inventory_alert(itemid).deliver_later
       end
 
-      def send_inventory_alerts(itemid)
-        OrderMailer.send_low_inventory_alert(itemid).deliver
-      end
-
       def set_order_notifcation_email(order, is_any_recurring_item)
         OrderMailer.send_order_notification_email_to_admin(order.id).deliver_later
         OrderMailer.send_order_placement_notification_to_customer(@user.email, order.id).deliver_later
