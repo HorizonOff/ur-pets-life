@@ -2777,7 +2777,10 @@ ALTER TABLE ONLY public.trainers ALTER COLUMN id SET DEFAULT nextval('public.tra
 
 --
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> add_order_create
 -- Name: unregistered_users id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -2785,6 +2788,9 @@ ALTER TABLE ONLY public.unregistered_users ALTER COLUMN id SET DEFAULT nextval('
 
 
 --
+<<<<<<< HEAD
+>>>>>>> add_order_create
+=======
 >>>>>>> add_order_create
 -- Name: used_pay_codes id; Type: DEFAULT; Schema: public; Owner: -
 --
@@ -3259,7 +3265,10 @@ ALTER TABLE ONLY public.trainers
 
 --
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> add_order_create
 -- Name: unregistered_users unregistered_users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3268,6 +3277,9 @@ ALTER TABLE ONLY public.unregistered_users
 
 
 --
+<<<<<<< HEAD
+>>>>>>> add_order_create
+=======
 >>>>>>> add_order_create
 -- Name: used_pay_codes used_pay_codes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
@@ -4747,6 +4759,10 @@ ALTER TABLE ONLY public.user_posts
 
 ALTER TABLE ONLY public.used_pay_codes
     ADD CONSTRAINT fk_rails_741753181e FOREIGN KEY (order_id) REFERENCES public.orders(id);
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> add_order_create
 
 
 --
@@ -4758,6 +4774,17 @@ ALTER TABLE ONLY public.used_pay_codes
 
 
 --
+<<<<<<< HEAD
+=======
+-- Name: used_pay_codes fk_rails_780afa10b5; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.used_pay_codes
+    ADD CONSTRAINT fk_rails_780afa10b5 FOREIGN KEY (user_id) REFERENCES public.users(id);
+
+
+--
+>>>>>>> add_order_create
 -- Name: grooming_centres fk_rails_79d7faf1bd; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -5176,26 +5203,9 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190910084344'),
 ('20190911130338'),
 ('20190911143742'),
-<<<<<<< HEAD
-<<<<<<< HEAD
-('20190912084338');
-=======
-('20190912084338'),
-('20190916082922'),
-<<<<<<< HEAD
-('20190916085330');
->>>>>>> fix_deleting_of_brands
-=======
-('20190916085330'),
-('20190916154332');
->>>>>>> fix_deleting_of_brands
-=======
 ('20190912084338'),
 ('20190916082922'),
 ('20190916085330'),
 ('20190916154332'),
 ('20190919100321'),
 ('20190920134238');
->>>>>>> add_order_create
-
-
