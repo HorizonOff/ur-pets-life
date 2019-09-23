@@ -4725,6 +4725,15 @@ ALTER TABLE ONLY public.user_posts
 
 ALTER TABLE ONLY public.used_pay_codes
     ADD CONSTRAINT fk_rails_741753181e FOREIGN KEY (order_id) REFERENCES public.orders(id);
+<<<<<<< HEAD
+
+
+--
+-- Name: used_pay_codes fk_rails_780afa10b5; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.used_pay_codes
+    ADD CONSTRAINT fk_rails_780afa10b5 FOREIGN KEY (user_id) REFERENCES public.users(id);
 
 
 --
@@ -5160,5 +5169,3 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190916154332'),
 ('20190919100321'),
 ('20190920134238');
-
-
