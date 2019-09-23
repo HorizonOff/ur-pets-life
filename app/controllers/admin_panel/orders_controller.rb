@@ -62,7 +62,7 @@ module AdminPanel
     @total_price_without_discount = 0
     @discounted_items_amount = 0
     @user = User.find_by_id(params['user_id'])
-    @unregistered_user = UnregisteredUser.find_by_id(params['unregistered_user_id'])
+    @unregistered_user = UnregisteredUser.find_by_id(params['unregistered_user_id']) if @user.blank?
     permitted_redeem_points = 0
     admin_discount = 0
     discount = @user.present? ? ::Api::V1::DiscountDomainService.new(@user.email.dup).dicount_on_email : 0
@@ -74,7 +74,7 @@ module AdminPanel
       hash_value['quantity'] = @item.quantity if @item.quantity < hash_value['quantity'].to_i
 
       if discount.positive? && @item.discount.zero? &&
-          !(@user.member_type.in?(['silver', 'gold']) && @item.supplier.in?(["MARS", "NESTLE"])) &&
+          !(@user.member_type.in?(%w(silver gold)) && @item.supplier.in?(%w(MARS NESTLE))) &&
           @user.email != 'development@urpetslife.com'
         @items_price += @item.price * ((100 - discount).to_f / 100) * hash_value['quantity'].to_i
       else
@@ -421,11 +421,10 @@ module AdminPanel
 
   private
     def check_for_unregistered_user
-      if params['order']['unregistered_user']['name'].present?
-        UnregisteredUser.create(name: params['order']['unregistered_user']['name'],
-                                number: params['order']['unregistered_user']['name'])
-        @unregistered_user = UnregisteredUser.last
-      end
+      return if params['order']['unregistered_user']['name'].blank?
+
+      @unregistered_user = UnregisteredUser.find_or_create_by(name: params['order']['unregistered_user']['name'],
+                                                              number: params['order']['unregistered_user']['number'])
     end
 
     def send_inventory_alerts(itemid)

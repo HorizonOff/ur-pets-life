@@ -17,16 +17,16 @@
             = label_tag 'Existed User'
             = radio_button_tag 'user_type', "registered_user", false, class: "flat user_type"
 
-          .relation_block
+          .value_block
             = f.fields_for :unregistered_user, f.object.unregistered_user do |t|
-              .form-group.registered_user
+              .form-group.registered_user.select
                 = label_tag 'Unregistered users'
                 = select_tag :unregistered_user_id, options_from_collection_for_select(UnregisteredUser.all, :id, :name),
-                class: 'form-control select2', include_blank: true
-              .form-group.registered_user
+                class: 'form-control select2', id: 'select_tag', include_blank: true
+              .form-group.registered_user.user_filed
                 = label_tag 'User name'
                 = t.text_field :name, class: 'form-control'
-              .form-group.registered_user
+              .form-group.registered_user.user_field
                 = label_tag 'User number'
                 = t.number_field :number, class: 'form-control'
           .form-group.new_user.hiden
