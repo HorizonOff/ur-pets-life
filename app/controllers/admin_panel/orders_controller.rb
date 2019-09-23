@@ -401,6 +401,12 @@ module AdminPanel
         end
       end
 
+      flash[:success] = 'Order Item was successfully updated'
+      redirect_to controller: 'orders', action: 'show', id: @admin_panel_order.id
+    else
+      render :show
+    end
+  end
   # DELETE /admin_panel/orders/1
   # DELETE /admin_panel/orders/1.json
   def destroy
