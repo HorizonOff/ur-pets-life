@@ -1280,9 +1280,11 @@ CREATE TABLE public.orders (
     is_user_from_company boolean DEFAULT false,
     delivery_at timestamp without time zone,
     is_pre_recurring boolean DEFAULT false,
+    client_name character varying,
+    client_number character varying,
     admin_discount integer DEFAULT 0,
     code_discount integer DEFAULT 0,
-    driver_id integer,
+    driver_id integer
     unregistered_user_id integer
 );
 
@@ -2000,8 +2002,8 @@ CREATE TABLE public.support_chats (
     updated_at timestamp without time zone NOT NULL,
     unread_message_count_by_user integer DEFAULT 0,
     unread_message_count_by_admin integer DEFAULT 0,
-    user_last_visit_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
-    admin_last_visit_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP
+    user_last_visit_at timestamp without time zone DEFAULT now(),
+    admin_last_visit_at timestamp without time zone DEFAULT now()
 );
 
 
@@ -2776,11 +2778,6 @@ ALTER TABLE ONLY public.trainers ALTER COLUMN id SET DEFAULT nextval('public.tra
 
 
 --
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> add_order_create
 -- Name: unregistered_users id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -2788,10 +2785,6 @@ ALTER TABLE ONLY public.unregistered_users ALTER COLUMN id SET DEFAULT nextval('
 
 
 --
-<<<<<<< HEAD
->>>>>>> add_order_create
-=======
->>>>>>> add_order_create
 -- Name: used_pay_codes id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -2936,7 +2929,7 @@ ALTER TABLE ONLY public.cart_items
 
 
 --
--- Name: chat_messages chat_messages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: chat_messages_pkey; Type: CONSTRAINT; Schema: public; Owner: ->>>>>>> fix_creating_orders
 --
 
 ALTER TABLE ONLY public.chat_messages
@@ -2944,7 +2937,7 @@ ALTER TABLE ONLY public.chat_messages
 
 
 --
--- Name: ckeditor_assets ckeditor_assets_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: ckeditor_assets_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.ckeditor_assets
@@ -3240,7 +3233,7 @@ ALTER TABLE ONLY public.specializations
 
 
 --
--- Name: support_chats support_chats_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: support_chats_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.support_chats
@@ -3248,7 +3241,7 @@ ALTER TABLE ONLY public.support_chats
 
 
 --
--- Name: terms_and_conditions terms_and_conditions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: terms_and_conditions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.terms_and_conditions
@@ -3264,11 +3257,6 @@ ALTER TABLE ONLY public.trainers
 
 
 --
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> add_order_create
 -- Name: unregistered_users unregistered_users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3277,11 +3265,7 @@ ALTER TABLE ONLY public.unregistered_users
 
 
 --
-<<<<<<< HEAD
->>>>>>> add_order_create
-=======
->>>>>>> add_order_create
--- Name: used_pay_codes used_pay_codes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: used_pay_codes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.used_pay_codes
@@ -3289,7 +3273,7 @@ ALTER TABLE ONLY public.used_pay_codes
 
 
 --
--- Name: user_posts user_posts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: user_posts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.user_posts
@@ -4294,7 +4278,6 @@ CREATE INDEX index_sessions_on_client_type ON public.sessions USING btree (clien
 -- Name: index_sessions_on_token; Type: INDEX; Schema: public; Owner: -
 --
 
-=======
 
 
 --
@@ -4308,7 +4291,6 @@ CREATE INDEX index_sessions_on_client_type ON public.sessions USING btree (clien
 -- Name: index_sessions_on_token; Type: INDEX; Schema: public; Owner: -
 --
 
->>>>>>> add_order_create
 CREATE UNIQUE INDEX index_sessions_on_token ON public.sessions USING btree (token);
 
 
@@ -4754,15 +4736,11 @@ ALTER TABLE ONLY public.user_posts
 
 
 --
--- Name: used_pay_codes fk_rails_741753181e; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_rails_741753181e; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.used_pay_codes
     ADD CONSTRAINT fk_rails_741753181e FOREIGN KEY (order_id) REFERENCES public.orders(id);
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> add_order_create
 
 
 --
@@ -4774,8 +4752,6 @@ ALTER TABLE ONLY public.used_pay_codes
 
 
 --
-<<<<<<< HEAD
-=======
 -- Name: used_pay_codes fk_rails_780afa10b5; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -4784,8 +4760,15 @@ ALTER TABLE ONLY public.used_pay_codes
 
 
 --
->>>>>>> add_order_create
--- Name: grooming_centres fk_rails_79d7faf1bd; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_rails_780afa10b5; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.used_pay_codes
+    ADD CONSTRAINT fk_rails_780afa10b5 FOREIGN KEY (user_id) REFERENCES public.users(id);
+
+
+--
+-- Name: fk_rails_79d7faf1bd; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.grooming_centres

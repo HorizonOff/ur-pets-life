@@ -4,7 +4,6 @@ class Order < ApplicationRecord
   belongs_to :unregistered_user, optional: true
   belongs_to :location
   has_one :used_pay_code
-
   has_many :order_items, dependent: :destroy
   has_many :notifications
   accepts_nested_attributes_for :order_items, allow_destroy: true

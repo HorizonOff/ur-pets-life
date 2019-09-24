@@ -1,6 +1,6 @@
 class Comment < ApplicationRecord
   belongs_to :writable,    -> { with_deleted }, polymorphic: true
-  belongs_to :commentable, -> { with_deleted }, polymorphic: true, counter_cache: true
+  belongs_to :commentable, -> { unscope(where: :deleted_at) }, polymorphic: true, counter_cache: true
 
   counter_culture :commentable, column_name: proc { |model| model.commentable_type == 'Appointment' && model.writable_type == 'User' && model.read_at.blank? ? 'unread_comments_count_by_admin' : nil },
                                 column_names: { ["comments.commentable_type = 'Appointment' AND comments.writable_type = 'User' AND comments.read_at IS NULL"] => 'unread_comments_count_by_admin' }
