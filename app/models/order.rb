@@ -13,6 +13,8 @@ class Order < ApplicationRecord
                             delivered_by_cash: "delivered_by_cash",
                             cancelled: "cancelled" }, _prefix: :order_status_flag
 
+  acts_as_paranoid without_default_scope: true
+
   has_many :comments, as: :commentable, dependent: :destroy
   has_many :user_comments, -> { where(writable_type: 'User') }, as: :commentable, class_name: 'Comment'
   has_many :admin_comments, -> { where(writable_type: 'Admin') }, as: :commentable, class_name: 'Comment'
