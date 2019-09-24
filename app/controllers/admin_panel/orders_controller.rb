@@ -128,14 +128,15 @@ module AdminPanel
     end
     check_for_unregistered_user if @unregistered_user.blank?
     unregistered_user_id = @unregistered_user&.id
-    return redirect_to new_admin_panel_order_path, flash: { error: "User must exist!" } if unregistered_user_id.blank?
+    return redirect_to new_admin_panel_order_path, flash: { error: "User must exist!" } if unregistered_user_id.blank? && @user.blank?
+    @location_id = @user&.location.present? ? @user.location.id : create_new_location
 
     @order = Order.new(user_id: params['user_id'], unregistered_user_id: unregistered_user_id,
                        RedeemPoints: permitted_redeem_points, Subtotal: @total_price_without_discount,
                        Delivery_Charges: deliveryCharges, shipmenttime: 'with in 7 days', Vat_Charges: vatCharges,
                        Total: total, Order_Status: 1, Payment_Status: paymentStatus,
                        Delivery_Date: params[:Delivery_Date], Order_Notes: params[:Order_Notes],
-                       IsCash: true, is_viewed: false, location_attributes: order_params['location_attributes'],
+                       IsCash: true, is_viewed: false, location_id: @location_id,
                        order_status_flag: 'pending', company_discount: company_discount,
                        is_user_from_company: @is_user_from_company, admin_discount: admin_discount)
 
@@ -419,7 +420,7 @@ module AdminPanel
 
   private
     def check_for_unregistered_user
-      return if params['order']['unregistered_user']['name'].blank?
+      return if params['order']['unregistered_user'].blank?
 
       @unregistered_user = UnregisteredUser.find_or_create_by(name: params['order']['unregistered_user']['name'],
                                                               number: params['order']['unregistered_user']['number'])
@@ -427,6 +428,10 @@ module AdminPanel
 
     def send_inventory_alerts(itemid)
       OrderMailer.send_low_inventory_alert(itemid).deliver_later
+    end
+
+    def create_new_location
+      @location = Location.create(order_params[:location_attributes]).id
     end
 
     def order_params
