@@ -396,6 +396,8 @@ GEM
     rb-inotify (0.10.0)
       ffi (~> 1.0)
     rb-readline (0.5.5)
+    recaptcha (5.1.0)
+      json
     redis (4.1.1)
     representable (3.0.4)
       declarative (< 0.1.0)
@@ -577,6 +579,7 @@ DEPENDENCIES
   rails!
   rails_12factor
   rb-readline
+  recaptcha
   rest-client
   roo (~> 2.8.0)
   rspec-rails (~> 3.6)

@@ -1,0 +1,22 @@
+.banner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 250px;
+
+  h1 {
+    color: white;
+  }
+
+}
+
+.contentPage, .pravicy_policy_page {
+  margin: auto;
+  max-width: 1200px;
+  text-align: justify;
+
+  h2 {margin: 40px 0; }
+  p { margin-bottom: 40px; }
+  li { margin-bottom: 40px; }
+
+}

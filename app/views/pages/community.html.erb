@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+    <body>
+		
+		<div class="b_donwnload">
+			<div class="b_width">
+				<div class="container">
+					<a href='https://itunes.apple.com/us/app/ur-pets-life/id1356559735?ls=1&mt=8' class="b_ios"><img src="<%= asset_path 'home/app-store-badge-us-black.svg' %>"></a>
+					<a href='https://play.google.com/store/apps/details?id=com.foxtrapp.pets' class="b_android"><img src="<%= asset_path 'home/google-play-badge-us.svg' %>"></a>
+				</div>
+			</div>
+		</div>
+		
+		<div class="side_menu">
+      <a href="index" class="tab"><img src="<%= asset_path 'navbar/foot.svg' %>">Home</a>
+      <a href="about" class="tab"><img src="<%= asset_path 'navbar/foot.svg' %>">About</a>
+      <a class="tab"><img src="<%= asset_path 'navbar/foot.svg' %>">Loyalty & Referral</a>
+      <a href="loyalty" class="tab additional">Loyalty Programs</a>
+      <a href="pay_it_forward" class="tab additional">Pay it Forward</a>
+      <a href="sale" class="tab"><img src="<%= asset_path 'navbar/foot.svg' %>">Sale</a>
+      <a href="community" class="tab active"><img src="<%= asset_path 'navbar/foot.svg' %>">Stray Cat Community</a>
+      <a href="contact_us" class="tab"><img src="<%= asset_path 'navbar/foot.svg' %>">Contact us</a>
+		</div>
+		                
+        <div class="navbar">
+            
+            <div class="desktop">
+                
+                <img class="logo" src="<%= asset_path 'navbar/logo.svg' %>">
+
+                <a href="index" class="tab"><img src="<%= asset_path 'navbar/foot.svg' %>">Home</a>
+                <a href="about" class="tab"><img src="<%= asset_path 'navbar/foot.svg' %>">About</a>
+                <a href="loyalty" id="loyalty" class="tab"><img src="<%= asset_path 'navbar/foot.svg' %>">Loyalty & Referral</a>
+                <a href="sale" class="tab"><img src="<%= asset_path 'navbar/foot.svg' %>">Sale</a>
+                <a href="community" class="tab active"><img src="<%= asset_path 'navbar/foot.svg' %>">Stray Cat Community</a>
+                <a href="contact_us" class="tab"><img src="<%= asset_path 'navbar/foot.svg' %>">Contact us</a>
+				
+				<div class="context_menu">
+					<a href="loyalty">Loyalty Programs</a>
+					<a href="pay_it_forward">Pay it Forward</a>
+				</div>
+                
+                <a href="<%= admin_panel_root_path %>" class="login"><img src="<%= asset_path 'navbar/key.svg' %>">Log In</a>
+                
+            </div>
+            
+            <div class="device tablet">
+				
+				<button class="hamburger hamburger--squeeze " type="button">
+  					<span class="hamburger-box">
+    					<span class="hamburger-inner"></span>
+  					</span>
+				</button>
+                
+                <img class="logo" src="<%= asset_path 'navbar/logo.svg' %>">
+                <a href="log_in" class="login"><img src="<%= asset_path 'navbar/key.svg' %>">Log In</a>
+                
+            </div>
+            
+            <div class="device mobile">
+				
+				<button class="hamburger hamburger--squeeze " type="button">
+  					<span class="hamburger-box">
+    					<span class="hamburger-inner"></span>
+  					</span>
+				</button>
+                
+                <img class="logo" src="<%= asset_path 'navbar/logo.svg' %>">
+                <a href="log_in"><img class="key" src="<%= asset_path 'navbar/key.svg' %>"></a>
+                
+            </div>
+            
+        </div>
+                
+		<div class="b_header community_header"> 
+            <h1 class="b_width">Nobody deserves<br> to stay hungry</h1>
+        </div>
+        
+		<p class="b_comment mb2 comment">
+			The kind hearted people of UAE have been selflessly feeding the region's stray cats.<br><br>There is nothing as comforting as feeding a starving soul. Let us all join hands to support the wonderful cause and make a difference in the lives of the needy animals. Ur Pets Life is has been helping hundreds of good Samaritans to obtain discounts and freebies on their shopping needs for the strays in order for them to save some money and have more room to help others.<br><br>If you are an animal lover and are feeding UAE's stray cats from your own pocket, we are here to extend you some help.<br><br><b>Mail us at</b> <span class="orange">info@urpetslife.com</span> or <b>call us at</b> <span class="orange">04-8849449</span> to avail good deals and discounts in food for cats.<br><br><span class="blue">Coming Soon TNR Program</span>
+        </p>
+		
+		<h1 class="b_h1 mb1">Supporting <span>UAE’s Stray Cats</span></h1>
+		
+		<div class="b_width mb1 gallery">
+			
+			<img class="logo" src="<%= asset_path 'community/white-logo-no-text.svg' %>">
+			<button class="left"><img src="<%= asset_path 'community/left.svg' %>"></button>
+			<button class="right"><img src="<%= asset_path 'community/right.svg' %>"></button>
+			
+			<div class="corusel">
+			
+				<div class="cat_item">
+					<img src="<%= asset_path 'community/gallery/1.jpg' %>">
+					<div class="description">
+						<p>We understand it’s hard to stay hungry and not able to say anything.</p>
+					</div>
+				</div>
+			
+				<div class="cat_item">
+					<img src="<%= asset_path 'community/gallery/2.jpg' %>">
+					<div class="description">
+						<p>He who feeds a hungry animal, feeds his own soul: Charlie Chaplin.</p>
+					</div>
+				</div>
+			
+				<div class="cat_item">
+					<img src="<%= asset_path 'community/gallery/3.jpg' %>">
+					<div class="description">
+						<p>Lets up help you feed the stray cats of UAE.</p>
+					</div>
+				</div>
+			
+				<div class="cat_item">
+					<img src="<%= asset_path 'community/gallery/4.jpg' %>">
+					<div class="description">
+						<p>A little care can make a big difference</p>
+					</div>
+				</div>
+			
+			</div>
+			
+			<div class="page">
+				<span class="point"></span>
+				<span class="point"></span>
+				<span class="point"></span>
+				<span class="point"></span>
+			</div>
+			
+		</div>
+		
+				<div class="bottom">
+			<div class="b_width">
+				
+				<div>
+					<img class="logo" src="<%= asset_path 'bottom/logo-white.svg' %>">
+					<p class="hide">Ur Pets Life is the first fully dedicated mobile application in the UAE targeting pet owners and pet businesses.<br><br>We give pet owners the chance to shop or book services for their pets in a click of a button while also accumulating loyalty points along the way.<br><br>We also give the opportunity for pet business owners to showcase and advertise their business to reach a wider network of audience.</p>
+				</div>
+				
+				<div>
+					
+					<p><span>Address</span></p>
+					<p>Iridium building, al barsha first, Dubai<br>UAE, P.O.Box 454742</p>
+					<br>
+					
+					<p><span>Call Us</span></p>
+					<p>04-8849449 between 9 am to 6 pm 7 days a week</p>
+					<br>
+					
+					<p><span>Email Us</span></p>
+					<p><span>shopping@urpetslife.com</span></p>
+					<p>for shopping related questions</p>
+					<br>
+					
+					<p><span>Competitions@urpetslife.com</span></p>
+					<p>for any competition related questions</p>
+					<br>
+					
+					<p class="hide"><span>Info@urpetslife.com</span></p>
+					<p class="hide">for any other question related to other application services</p>
+					
+				</div>
+				
+				<div class="contact_us">
+          <a href='https://itunes.apple.com/us/app/ur-pets-life/id1356559735?ls=1&mt=8' class="hide"><img class="store" src="<%= asset_path 'bottom/app-store-badge-us-black.svg' %>"></a>
+          <a href='https://play.google.com/store/apps/details?id=com.foxtrapp.pets' class="hide"><img class="store" src="<%= asset_path 'bottom/google-play-badge-us.svg' %>"></a>
+					
+					<p class="hide" >Follow Us</p>
+					
+					<div class="links">
+            <a href='https://www.facebook.com/urpetslife'><img src="<%= asset_path 'bottom/facebook.svg' %>"></a>
+            <a href='https://www.instagram.com/urpetslife'><img src="<%= asset_path 'bottom/ig.svg' %>"></a>
+					</div>
+					
+				</div>
+				
+				
+			</div>
+			
+			<div class="b_width">
+				
+				<div class="product">
+					<p>© Ur Pets Life 2019.</p>
+					<img src="<%= asset_path 'bottom/foxtrapp-logo-only-white.png' %>">
+					<p>Powered by Foxtrapp</p>
+				</div>
+				
+				<div class="privacy">
+          <a href="term_conditions">Terms & Condition</a><hr>
+          <a href="privacy_policy">Privacy Policy</a><hr>
+          <a href="cancelation_policy">Cancellation Policy</a>
+				</div>
+				
+				<div class="cash">
+					<img src="<%= asset_path 'bottom/telr.png' %>">
+					<img src="<%= asset_path 'bottom/visa.svg' %>">
+					<img src="<%= asset_path 'bottom/mastercard.svg' %>">
+				</div>
+				
+			</div>
+			
+		</div>
+		
+    </body>
+    
+</html>

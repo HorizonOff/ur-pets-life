@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html>
+    <body>
+		
+		<div class="b_donwnload">
+			<div class="b_width">
+				<div class="container">
+					<a href='https://itunes.apple.com/us/app/ur-pets-life/id1356559735?ls=1&mt=8' class="b_ios"><img src="<%= asset_path 'home/app-store-badge-us-black.svg' %>"></a>
+					<a href='https://play.google.com/store/apps/details?id=com.foxtrapp.pets' class="b_android"><img src="<%= asset_path 'home/google-play-badge-us.svg' %>"></a>
+				</div>
+			</div>
+		</div>
+
+    <div class="side_menu">
+        <a href="index" class="tab"><img src="<%= asset_path 'navbar/foot.svg' %>">Home</a>
+        <a href="about" class="tab active"><img src="<%= asset_path 'navbar/foot.svg' %>">About</a>
+        <a class="tab"><img src="<%= asset_path 'navbar/foot.svg' %>">Loyalty & Referral</a>
+        <a href="loyalty" class="tab additional">Loyalty Programs</a>
+        <a href="pay_it_forward" class="tab additional">Pay it Forward</a>
+        <a href="sale" class="tab"><img src="<%= asset_path 'navbar/foot.svg' %>">Sale</a>
+        <a href="community" class="tab"><img src="<%= asset_path 'navbar/foot.svg' %>">Stray Cat Community</a>
+        <a href="contact_us" class="tab"><img src="<%= asset_path 'navbar/foot.svg' %>">Contact us</a>
+    </div>
+		                
+        <div class="navbar">
+            
+            <div class="desktop">
+                
+                <img class="logo" src="<%= asset_path 'navbar/logo.svg' %>">
+
+                <a href="index" class="tab"><img src="<%= asset_path 'navbar/foot.svg' %>">Home</a>
+                <a href="about" class="tab active"><img src="<%= asset_path 'navbar/foot.svg' %>">About</a>
+                <a href="loyalty" id="loyalty" class="tab"><img src="<%= asset_path 'navbar/foot.svg' %>">Loyalty & Referral</a>
+                <a href="sale" class="tab"><img src="<%= asset_path 'navbar/foot.svg' %>">Sale</a>
+                <a href="community" class="tab"><img src="<%= asset_path 'navbar/foot.svg' %>">Stray Cat Community</a>
+                <a href="contact_us" class="tab"><img src="<%= asset_path 'navbar/foot.svg' %>">Contact us</a>
+				
+				<div class="context_menu">
+					<a href="loyalty">Loyalty Programs</a>
+					<a href="pay_it_forward">Pay it Forward</a>
+				</div>
+                
+                <a href='<%= admin_panel_root_path %>' class="login"><img src="<%= asset_path 'navbar/key.svg' %>">Log In</a>
+                
+            </div>
+            
+            <div class="device tablet">
+				
+				<button class="hamburger hamburger--squeeze " type="button">
+  					<span class="hamburger-box">
+    					<span class="hamburger-inner"></span>
+  					</span>
+				</button>
+                
+                <img class="logo" src="<%= asset_path'navbar/logo.svg' %>">
+                <a href="log_in" class="login"><img src="<%= asset_path 'navbar/key.svg' %>">Log In</a>
+                
+            </div>
+            
+            <div class="device mobile">
+				
+				<button class="hamburger hamburger--squeeze " type="button">
+  					<span class="hamburger-box">
+    					<span class="hamburger-inner"></span>
+  					</span>
+				</button>
+                
+                <img class="logo" src="<%= asset_path 'navbar/logo.svg' %>">
+                <a href="log_in"><img class="key" src="<%= asset_path 'navbar/key.svg' %>"></a>
+                
+            </div>
+            
+        </div>
+        
+        <div class="b_header about_header"> 
+            <h1 class="b_width">Get to know us more,<br>what we offer & member reviews</h1>
+        </div>
+                
+		<p class="b_comment mb2 long_comment">With our busy lives and our love for having a furry little family member, comes a big responsibility, a lot of worrying and some major expenses. And we never had the luxury to rely on strangers or get help when we needed it the most for our pets.<br><br>Well with Ur Pets Life full list of services and excellent service and care for pets, we can give your our solemn promise that we will always be here for <span class="hide">all our members, that we are always willing to help in anything you require and most importantly that we will make sure we minimize your spends on all your shopping needs to reach to a point where these savings will work as your pet insurance.<br><br>Now of course every business owners will tell you the same beautiful words and gives you a lot of promises that you either think they are too good to be true or that you end up extremely disappointed.</span><br><span class="more">Read More...</span><span class="hide hide_more">Hide</span>
+        </p>
+        
+        <h1 class="b_h1 mb1">What Ur Pets Life <span>Offers</span></h1>
+        
+        <div class="b_width close">
+            
+            <div class="offers_item">
+                <img src="<%= asset_path 'about/offers/cart.svg' %>">
+                <div>
+                    <h2>A Shopping Section</h2>
+                    <p>With more than 80 brands that you can choose from for your Dog, Cat, Bird, Rabbit, Guinea Pig and more. With our 5 fixed and ongoing loyalty programs, you can end up saving more then 25%. To find out more please click on the “Loyalty Programs “ icon in the shopping section.</p>
+                </div>
+            </div>
+            
+            <div class="offers_item">
+                <img src="<%= asset_path 'about/offers/microchip.svg' %>">
+                <div>
+                    <h2>Centralized Microchip Database</h2>
+                    <p>With a lot of people asking for a centralized microchip database so we can reunite the found pets with their owners, we have created that for all pet lovers instead of jumping from clinic to clinic to find out if this pet is registered with them.</p>
+                </div>
+            </div>
+            
+            <div class="offers_item">
+                <img src="<%= asset_path 'about/offers/messenger.svg' %>">
+                <div>
+                    <h2>Messenger System</h2>
+                    <p>We have created our own messenger system that connects you with pets establishments and our shopping facility since using your private whatsupp is not favourable for everyone.</p>
+                </div>
+            </div>
+            
+            <div class="offers_item">
+                <img src="<%= asset_path 'about/offers/owner.svg' %>">
+                <div>
+                    <h2>Pet Business Owners</h2>
+                    <p>If you are a pet business owner and would like to list your business and reach thousands of pet lovers free of charge, please contact us.</p>
+                </div>
+            </div>
+            
+            <div class="offers_item">
+                <img src="<%= asset_path 'about/offers/paw-multi-colored.svg' %>">
+                <div>
+                    <h2>Adoption Section</h2>
+                    <p>An adoption section where every adoption agency out there can post their pets and reach out to thousands of Fur loving Humans to make finding a home for these lovely fur babies easier</p>
+                </div>
+            </div>
+            
+            <div class="offers_item">
+                <img src="<%= asset_path 'about/offers/network.svg' %>">
+                <div>
+                    <h2>Connects Pet Owners</h2>
+                    <p>Ur Pets Life connects pet owners to verified and trustworthy pet business around them such as boarding places, day care facilities, grooming salons, trainers and more</p>
+                </div>
+            </div>
+            
+            <div class="offers_item">
+                <img src="<%= asset_path 'about/offers/passport-card.svg' %>">
+                <div>
+                    <h2>Digital Passport</h2>
+                    <p>Are you tired of keeping your pets passport on hand at all time, or searching for it when you need to find some information about them? Well Ur Pets Life has created the first fully operational digital passport for your passport where you can track their weight history, health history, vaccinations reminders, and pictures so whenever you need to access these information it is as simple as a click of a button</p>
+                </div>
+            </div>
+            
+            <div class="offers_item">
+                <img src="<%= asset_path 'about/offers/community.svg' %>">
+                <div>
+                    <h2>Community Page</h2>
+                    <p>And of course we have created a community page on the mobile application where all users can chat, help each other and share pictures and videos with each other and that can only be seen by registered pet members. You no longer have to go through all the post to find what interest you, you can select your favourite topic and see the thread about it.</p>
+                </div>
+            </div>
+            
+            <div class="offers_item">
+                <img src="<%= asset_path 'about/offers/geofencing.svg' %>">
+                <div>
+                    <h2>Geo-Fencing technology</h2>
+                    <p>All us dog and cat lovers, we follow a lot of pet social media groups and we end up seeing a lot of missing pets and heart broken parents. We couldn’t just stand and do nothing and only rely on posting about our missing pet and hope that someone in our community is online and checking our post so they can help us, so we ended up creating a Community Geo-Fencing technology where if God forbid we lost our pet, with just 1 click every pet lover in our community will be notified on the spot about our missing pet and his details so that they can help us search for it instantly since we all know the first 10 to 20 min are crucial to finding our pet.</p>
+                </div>
+            </div>
+            
+        </div>
+		
+		
+		<button id="view_all">View all</button>
+        
+        <h1 class="b_h1 desktop">If you're still a bit sceptical, please read some of the <span>reviews</span><br>our lovely and long time members</h1>
+		<h1 class="b_h1 mobile">Our Member <span>Reviews</span></h1>
+        
+        <div class="b_width desktop_view">
+            
+            <div class="review_item">
+                <img class="avatar" src="<%= asset_path 'about/peopels/wissam.png' %>">
+                <div class="content">
+                    <div class="user_name">
+                        <h2>Wissam Azzi</h2>
+                        <div class="rating">
+                            <img src="<%= asset_path 'about/star.svg' %>">
+                            <img src="<%= asset_path 'about/star.svg' %>">
+                            <img src="<%= asset_path 'about/star.svg' %>">
+                            <img src="<%= asset_path 'about/star.svg' %>">
+                            <img src="<%= asset_path 'about/star.svg' %>">
+                        </div>
+                    </div>
+                    <p>“One of the best Apps and services at the moment in Dubai. Ur Pets Life made it easier for us to shop, get info, book our boarding's and day care…Also they are always active on social media providing us with information. The most amazing part is that they send us freebies with every order which my pet loves. Keep it up guys!”</p>
+                </div>
+            </div>
+            
+            <div class="review_item">
+                <img class="avatar" src="<%= asset_path 'about/peopels/tthavav.png' %>">
+                <div class="content">
+                    <div class="user_name">
+                        <h2>Laura Clavero</h2>
+                        <div class="rating">
+                            <img src="<%= asset_path 'about/star.svg' %>">
+                            <img src="<%= asset_path 'about/star.svg' %>">
+                            <img src="<%= asset_path 'about/star.svg' %>">
+                            <img src="<%= asset_path 'about/star.svg' %>">
+                            <img src="<%= asset_path 'about/star.svg' %>">
+                        </div>
+                    </div>
+                    <p>“The app it’s really helpful and convenient, the home delivery option and possibility of payment via Cc is a plus for us. Prices are also really competitive compare with other shops and regularly providing sales and discounts. All employees amazing and helpful, always happy to help on any of the requests I have done. Max gets even more happy with his extra toys”</p>
+                </div>
+            </div>
+            
+            <div class="review_item">
+                <img class="avatar" src="<%= asset_path 'about/peopels/haaanan.png' %>">
+                <div class="content">
+                    <div class="user_name">
+                        <h2>Haaannan</h2>
+                        <div class="rating">
+                            <img src="<%= asset_path 'about/star.svg' %>">
+                            <img src="<%= asset_path 'about/star.svg' %>">
+                            <img src="<%= asset_path 'about/star.svg' %>">
+                            <img src="<%= asset_path 'about/star.svg' %>">
+                            <img src="<%= asset_path 'about/star.svg' %>">
+                        </div>
+                    </div>
+                    <p>“Incredible service and attentiveness, speedy delivery and wide variety of product selection. Highly recommend for all pet parents!”</p>
+                </div>
+            </div>
+            
+            <div class="review_item">
+                <img class="avatar" src="<%= asset_path 'about/peopels/veneci.png' %>">
+                <div class="content">
+                    <div class="user_name">
+                        <h2>Venecia Dsilva</h2>
+                        <div class="rating">
+                            <img src="<%= asset_path 'about/star.svg' %>">
+                            <img src="<%= asset_path 'about/star.svg' %>">
+                            <img src="<%= asset_path 'about/star.svg' %>">
+                            <img src="<%= asset_path 'about/star.svg' %>">
+                            <img src="<%= asset_path 'about/star.svg' %>">
+                        </div>
+                    </div>
+                    <p>“I am happy with the service I received from urpetslife last Saturday for the food delivery for my puppy.  It was done quite efficiently, and prince loved all the goodies that came along with it”</p>
+                </div>
+            </div>
+            
+            <div class="review_item">
+                <img class="avatar" src="<%= asset_path 'about/peopels/tthavav.png' %>">
+                <div class="content">
+                    <div class="user_name">
+                        <h2>Tthavav</h2>
+                        <div class="rating">
+                            <img src="<%= asset_path 'about/star.svg' %>">
+                            <img src="<%= asset_path 'about/star.svg' %>">
+                            <img src="<%= asset_path 'about/star.svg' %>">
+                            <img src="<%= asset_path 'about/star.svg' %>">
+                            <img src="<%= asset_path 'about/star.svg' %>">
+                        </div>
+                    </div>
+                    <p>“This app is really convenient. Everything gets delivered the same day, and they make sure to ring and confirm delivery. Also, love the little extra treats and toys that come with my order. Keep it up!”</p>
+                </div>
+            </div>
+            
+            <div class="review_item">
+                <img class="avatar" src="<%= asset_path 'about/peopels/tugcepera.png' %>">
+                <div class="content">
+                    <div class="user_name">
+                        <h2>Tugcepera</h2>
+                        <div class="rating">
+                            <img src="<%= asset_path 'about/star.svg' %>">
+                            <img src="<%= asset_path 'about/star.svg' %>">
+                            <img src="<%= asset_path 'about/star.svg' %>">
+                            <img src="<%= asset_path 'about/star.svg' %>">
+                            <img src="<%= asset_path 'about/star.svg' %>">
+                        </div>
+                    </div>
+                    <p>“Gifts were amazing and service very quick”</p>
+                </div>
+            </div>
+            
+            <div class="review_item">
+                <img class="avatar" src="<%= asset_path 'about/peopels/ramy.png' %>">
+                <div class="content">
+                    <div class="user_name">
+                        <h2>Ramy Lahdo</h2>
+                        <div class="rating">
+                            <img src="<%= asset_path 'about/star.svg' %>">
+                            <img src="<%= asset_path 'about/star.svg' %>">
+                            <img src="<%= asset_path 'about/star.svg' %>">
+                            <img src="<%= asset_path 'about/star.svg' %>">
+                            <img src="<%= asset_path 'about/star.svg' %>">
+                        </div>
+                    </div>
+                    <p>“The App has everything you need”</p>
+                </div>
+            </div>
+            
+            <div class="review_item">
+                <img class="avatar" src="<%= asset_path 'about/peopels/khaled.png' %>">
+                <div class="content">
+                    <div class="user_name">
+                        <h2>Khaled Sheta</h2>
+                        <div class="rating">
+                            <img src="<%= asset_path 'about/star.svg' %>">
+                            <img src="<%= asset_path 'about/star.svg' %>">
+                            <img src="<%= asset_path 'about/star.svg' %>">
+                            <img src="<%= asset_path 'about/star.svg' %>">
+                            <img src="<%= asset_path 'about/star.svg' %>">
+                        </div>
+                    </div>
+                    <p>“The App is so helpful and easy to use”</p>
+                </div>
+            </div>
+            
+        </div>
+		
+		<div class="b_width mobile_view"> 
+			
+			<div class="r_item">
+				<div class="item_header">
+					<img class="avatar" src="<%= asset_path 'about/peopels/wissam.png' %>">
+					<div class="title">
+						<h2>Wissam Azzi</h2>
+						<div class="rating">
+              <img src="<%= asset_path 'about/star.svg' %>">
+              <img src="<%= asset_path 'about/star.svg' %>">
+              <img src="<%= asset_path 'about/star.svg' %>">
+              <img src="<%= asset_path 'about/star.svg' %>">
+              <img src="<%= asset_path 'about/star.svg' %>">
+						</div>
+					</div>
+				</div>
+				<p>“One of the best Apps and services at the moment in Dubai. Ur Pets Life made it easier for us to shop, get info, book our boarding's and day care…Also they are always active on social media providing us with information. The most amazing part is that they send us freebies with every order which my pet loves. Keep it up guys!”</p>
+			</div>
+			
+			<div class="r_item">
+				<div class="item_header">
+					<img class="avatar" src="<%= asset_path 'about/peopels/tthavav.png' %>">
+					<div class="title">
+						<h2>Laura Clavero</h2>
+						<div class="rating">
+              <img src="<%= asset_path 'about/star.svg' %>">
+              <img src="<%= asset_path 'about/star.svg' %>">
+              <img src="<%= asset_path 'about/star.svg' %>">
+              <img src="<%= asset_path 'about/star.svg' %>">
+              <img src="<%= asset_path 'about/star.svg' %>">
+						</div>
+					</div>
+				</div>
+				<p>“The app it’s really helpful and convenient, the home delivery option and possibility of payment via Cc is a plus for us. Prices are also really competitive compare with other shops and regularly providing sales and discounts. All employees amazing and helpful, always happy to help on any of the requests I have done. Max gets even more happy with his extra toys”</p>
+			</div>
+			
+			<div class="r_item">
+				<div class="item_header">
+					<img class="avatar" src="<%= asset_path 'about/peopels/haaanan.png' %>">
+					<div class="title">
+						<h2>Haaannan</h2>
+						<div class="rating">
+              <img src="<%= asset_path 'about/star.svg' %>">
+              <img src="<%= asset_path 'about/star.svg' %>">
+              <img src="<%= asset_path 'about/star.svg' %>">
+              <img src="<%= asset_path 'about/star.svg' %>">
+              <img src="<%= asset_path 'about/star.svg' %>">
+						</div>
+					</div>
+				</div>
+				<p>“Incredible service and attentiveness, speedy delivery and wide variety of product selection. Highly recommend for all pet parents!”</p>
+			</div>
+			
+			<div class="r_item">
+				<div class="item_header">
+					<img class="avatar" src="<%= asset_path 'about/peopels/veneci.png' %>">
+					<div class="title">
+						<h2>Venecia Dsilva</h2>
+						<div class="rating">
+              <img src="<%= asset_path 'about/star.svg' %>">
+              <img src="<%= asset_path 'about/star.svg' %>">
+              <img src="<%= asset_path 'about/star.svg' %>">
+              <img src="<%= asset_path 'about/star.svg' %>">
+              <img src="<%= asset_path 'about/star.svg' %>">
+						</div>
+					</div>
+				</div>
+				<p>“I am happy with the service I received from urpetslife last Saturday for the food delivery for my puppy.  It was done quite efficiently, and prince loved all the goodies that came along with it”</p>
+			</div>
+			
+			<div class="r_item">
+				<div class="item_header">
+					<img class="avatar" src="<%= asset_path 'about/peopels/tthavav.png' %>">
+					<div class="title">
+						<h2>Tthavav</h2>
+						<div class="rating">
+              <img src="<%= asset_path 'about/star.svg' %>">
+              <img src="<%= asset_path 'about/star.svg' %>">
+              <img src="<%= asset_path 'about/star.svg' %>">
+              <img src="<%= asset_path 'about/star.svg' %>">
+              <img src="<%= asset_path 'about/star.svg' %>">
+						</div>
+					</div>
+				</div>
+				<p>“This app is really convenient. Everything gets delivered the same day, and they make sure to ring and confirm delivery. Also, love the little extra treats and toys that come with my order. Keep it up!”</p>
+			</div>
+			
+			<div class="r_item">
+				<div class="item_header">
+					<img class="avatar" src="<%= asset_path 'about/peopels/tugcepera.png' %>">
+					<div class="title">
+						<h2>Tugcepera</h2>
+						<div class="rating">
+              <img src="<%= asset_path 'about/star.svg' %>">
+              <img src="<%= asset_path 'about/star.svg' %>">
+              <img src="<%= asset_path 'about/star.svg' %>">
+              <img src="<%= asset_path 'about/star.svg' %>">
+              <img src="<%= asset_path 'about/star.svg' %>">
+						</div>
+					</div>
+				</div>
+				<p>“Gifts were amazing and service very quick”</p>
+			</div>
+			
+			<div class="r_item">
+				<div class="item_header">
+					<img class="avatar" src="<%= asset_path 'about/peopels/ramy.png' %>">
+					<div class="title">
+						<h2>Ramy Lahdo</h2>
+						<div class="rating">
+              <img src="<%= asset_path 'about/star.svg' %>">
+              <img src="<%= asset_path 'about/star.svg' %>">
+              <img src="<%= asset_path 'about/star.svg' %>">
+              <img src="<%= asset_path 'about/star.svg' %>">
+              <img src="<%= asset_path 'about/star.svg' %>">
+						</div>
+					</div>
+				</div>
+				<p>“The App has everything you need”</p>
+			</div>
+			
+			<div class="r_item">
+				<div class="item_header">
+					<img class="avatar" src="<%= asset_path 'about/peopels/khaled.png' %>">
+					<div class="title">
+						<h2>Khaled Sheta</h2>
+						<div class="rating">
+              <img src="<%= asset_path 'about/star.svg' %>">
+              <img src="<%= asset_path 'about/star.svg' %>">
+              <img src="<%= asset_path 'about/star.svg' %>">
+              <img src="<%= asset_path 'about/star.svg' %>">
+              <img src="<%= asset_path 'about/star.svg' %>">
+						</div>
+					</div>
+				</div>
+				<p>“The App is so helpful and easy to use”</p>
+			</div>
+			
+			
+		</div>
+		
+		<div class="bottom">
+			<div class="b_width">
+				
+				<div>
+					<img class="logo" src="<%= asset_path 'bottom/logo-white.svg' %>">
+					<p class="hide">Ur Pets Life is the first fully dedicated mobile application in the UAE targeting pet owners and pet businesses.<br><br>We give pet owners the chance to shop or book services for their pets in a click of a button while also accumulating loyalty points along the way.<br><br>We also give the opportunity for pet business owners to showcase and advertise their business to reach a wider network of audience.</p>
+				</div>
+				
+				<div>
+					
+					<p><span>Address</span></p>
+					<p>Iridium building, al barsha first, Dubai<br>UAE, P.O.Box 454742</p>
+					<br>
+					
+					<p><span>Call Us</span></p>
+					<p>04-8849449 between 9 am to 6 pm 7 days a week</p>
+					<br>
+					
+					<p><span>Email Us</span></p>
+					<p><span>shopping@urpetslife.com</span></p>
+					<p>for shopping related questions</p>
+					<br>
+					
+					<p><span>Competitions@urpetslife.com</span></p>
+					<p>for any competition related questions</p>
+					<br>
+					
+					<p class="hide"><span>Info@urpetslife.com</span></p>
+					<p class="hide">for any other question related to other application services</p>
+					
+				</div>
+				
+				<div class="contact_us">
+          <a href='https://itunes.apple.com/us/app/ur-pets-life/id1356559735?ls=1&mt=8' class="hide"><img class="store" src="<%= asset_path 'bottom/app-store-badge-us-black.svg' %>"></a>
+          <a href='https://play.google.com/store/apps/details?id=com.foxtrapp.pets' class="hide"><img class="store" src="<%= asset_path 'bottom/google-play-badge-us.svg' %>"></a>
+					
+					<p class="hide" >Follow Us</p>
+					
+					<div class="links">
+            <a href='https://www.facebook.com/urpetslife'><img src="<%= asset_path 'bottom/facebook.svg' %>"></a>
+            <a href='https://www.instagram.com/urpetslife'><img src="<%= asset_path 'bottom/ig.svg' %>"></a>
+					</div>
+					
+				</div>
+				
+				
+			</div>
+			
+			<div class="b_width">
+				
+				<div class="product">
+					<p>© Ur Pets Life 2019.</p>
+					<img src="<%= asset_path 'bottom/foxtrapp-logo-only-white.png' %>">
+					<p>Powered by Foxtrapp</p>
+				</div>
+				
+				<div class="privacy">
+          <a href="term_conditions">Terms & Condition</a><hr>
+          <a href="privacy_policy">Privacy Policy</a><hr>
+          <a href="cancelation_policy">Cancellation Policy</a>
+				</div>
+				
+				<div class="cash">
+					<img src="<%= asset_path 'bottom/telr.png' %>">
+					<img src="<%= asset_path 'bottom/visa.svg' %>">
+					<img src="<%= asset_path 'bottom/mastercard.svg' %>">
+				</div>
+				
+			</div>
+			
+		</div>
+        
+    </body>
+    
+</html>

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+    <body>
+		
+		<div class="b_donwnload">
+			<div class="b_width">
+				<div class="container">
+					<a href='https://itunes.apple.com/us/app/ur-pets-life/id1356559735?ls=1&mt=8' class="b_ios"><img src="<%= asset_path 'home/app-store-badge-us-black.svg' %>"></a>
+					<a href='https://play.google.com/store/apps/details?id=com.foxtrapp.pets' class="b_android"><img src="<%= asset_path 'home/google-play-badge-us.svg' %>"></a>
+				</div>
+			</div>
+		</div>
+		
+		<div class="side_menu">
+        <a href="index" class="tab"><img src="<%= asset_path 'navbar/foot.svg' %>">Home</a>
+        <a href="about" class="tab"><img src="<%= asset_path 'navbar/foot.svg' %>">About</a>
+        <a class="tab active"><img src="<%= asset_path 'navbar/foot.svg' %>">Loyalty & Referral</a>
+        <a href="loyalty" class="tab additional">Loyalty Programs</a>
+        <a href="pay_it_forward" class="tab additional">Pay it Forward</a>
+        <a href="sale" class="tab"><img src="<%= asset_path 'navbar/foot.svg' %>">Sale</a>
+        <a href="community" class="tab"><img src="<%= asset_path 'navbar/foot.svg' %>">Stray Cat Community</a>
+        <a href="contact_us" class="tab"><img src="<%= asset_path 'navbar/foot.svg' %>">Contact us</a>
+		</div>
+		                
+        <div class="navbar">
+            
+            <div class="desktop">
+                
+                <img class="logo" src="<%= asset_path 'navbar/logo.svg' %>">
+
+                <a href="index" class="tab"><img src="<%= asset_path 'navbar/foot.svg' %>">Home</a>
+                <a href="about" class="tab"><img src="<%= asset_path 'navbar/foot.svg' %>">About</a>
+                <a href="loyalty" id="loyalty" class="tab active"><img src="<%= asset_path 'navbar/foot.svg' %>">Loyalty & Referral</a>
+                <a href="sale" class="tab"><img src="<%= asset_path 'navbar/foot.svg' %>">Sale</a>
+                <a href="community" class="tab"><img src="<%= asset_path 'navbar/foot.svg' %>">Stray Cat Community</a>
+                <a href="contact_us" class="tab"><img src="<%= asset_path 'navbar/foot.svg' %>">Contact us</a>
+				
+				<div class="context_menu">
+					<a href="loyalty">Loyalty Programs</a>
+					<a href="pay_it_forward">Pay it Forward</a>
+				</div>
+                
+                <a href="<%= admin_panel_root_path %>" class="login"><img src="<%= asset_path 'navbar/key.svg' %>">Log In</a>
+                
+            </div>
+            
+            <div class="device tablet">
+				
+				<button class="hamburger hamburger--squeeze " type="button">
+  					<span class="hamburger-box">
+    					<span class="hamburger-inner"></span>
+  					</span>
+				</button>
+                
+                <img class="logo" src="<%= asset_path 'navbar/logo.svg' %>">
+                <a href="log_in" class="login"><img src="<%= asset_path 'navbar/key.svg' %>">Log In</a>
+                
+            </div>
+            
+            <div class="device mobile">
+				
+				<button class="hamburger hamburger--squeeze " type="button">
+  					<span class="hamburger-box">
+    					<span class="hamburger-inner"></span>
+  					</span>
+				</button>
+                
+                <img class="logo" src="<%= asset_path 'navbar/logo.svg' %>">
+                <a href="log_in"><img class="key" src="<%= asset_path 'navbar/key.svg' %>"></a>
+                
+            </div>
+            
+        </div>
+        
+        <div class="b_header loyalty_header"> 
+            <h1 class="b_width">With us, you save a<br>minimum of 15% more than<br>any other pet shop out there</h1>
+			<div class="switcher">
+				<div class="b_width">
+					<a class="active">Loyalty Programs</a>
+					<a href="pay_it_forward">Pay it Forward</a>
+				</div>
+			</div>
+        </div>
+        
+        <p class="b_comment">We don’t claim to be the biggest, nor do we claim to have more brand then others but we do claim and confirm that by doing your pet shopping with us, you save a minimum of 15% more then any other pet shop out there. You can even have a chance to have all your monthly shopping done free of charge.<br><br>Now the real question is, how can we save 25% on our shopping? Or how is possible to shop for free? With our 4 fixed and ongoing loyalty program, the above has become a reality for the first time ever.
+        </p>
+        
+		<button class="control left" id="left_loyalty"><img src="<%= asset_path 'loyalty/6-a.svg' %>"></button>
+		<button class="control right" id="right_loyalty"><img src="<%= asset_path 'loyalty/6-a-2.svg' %>"></button>
+		
+        <div class="b_width pets_container" id="pets_container">
+            
+            <div class="loyalty_item active">
+                <img src="<%= asset_path 'loyalty/pets/loyalty-1.jpg' %>">
+                <p>Loyalty Program<span>1</span></p>
+            </div>
+            
+            <div class="loyalty_item">
+                <img src="<%= asset_path 'loyalty/pets/loyalty-2.jpg' %>">
+                <p>Loyalty Program<span>2</span></p>
+            </div>
+            
+            <div class="loyalty_item">
+                <img id="bird" src="<%= asset_path 'loyalty/pets/loyalty-3.jpg' %>">
+                <p>Loyalty Program<span>3</span></p>
+            </div>
+            
+            <div class="loyalty_item">
+                <img src="<%= asset_path 'loyalty/pets/loyalty-4.jpg' %>">
+                <p>Loyalty Program<span>4</span></p>
+            </div>
+            
+            <div class="loyalty_item">
+                <img id="rabbit" src="<%= asset_path 'loyalty/pets/loyalty-5.jpg' %>">
+                <p>Loyalty Program<span>5</span></p>
+            </div>
+            
+        </div>
+        
+        <div class="b_width info_container" id="info_container">
+            
+            <ul class="loyalty_info active">
+                <li>Spend between AED 0 to 500 and get a <span>WHOPPING 3%</span> cash back to your account</li>
+                <li>Spend between AED 500 to 1,000 and get a <span>CRAZY 5%</span> cash back to your account</li>
+                <li>Spend AED 1,000 to 2,000 and get the <span>UNBELIEVABLE 7.5%</span> cash back to your account</li>
+                <li>And if you have a big pet family and have to spend more than 2,000 well you will get the <span>JACKPOT of 10%</span> cash back</li>
+            </ul>
+			
+			<ul class="loyalty_info">
+				<li>Get rewarded again on your spends with our yearly loyalty program.</li>
+				<li>Spend AED 5,000 to AED 10,000 between Jan 1st and Dec 31st and get an <span>additional 3% back</span></li>
+				<li>Spends AED 10,000 + between Jan 1st and Dec 31st and get an <span>additional 5% back</span></li>
+            </ul>
+			
+			<ul class="loyalty_info">
+				<li>With every order we send you <span>free Toys, Treats, Accessories & Food</span></li>
+            </ul>
+			
+			<ul class="loyalty_info">
+				<li>At the end of every month we do an online raffle draw where 25 of our shopping members will be selected randomly and will each win <span>AED 100 cash back</span> to their account</li>
+            </ul>
+			
+			<ul class="loyalty_info">
+				<li>Receive Cash to your account for your <span>pets birthday</span></li>
+            </ul>
+            
+        </div>
+        
+        <div class="b_width terms">
+            
+            <p>Terms & Conditions:</p>
+            
+            <ul>
+                <li>Loyalty Program 1 & 2 are not valid on discounted items or discount codes</li>
+                <li>Points can not be transferred between accounts</li>
+                <li>If no orders have been made for a 6 month period, all previous points will expire</li>
+                <li>Free delivery on any order above AED 100. AED 20 delivery charge will apply for orders less then AED 100.</li>
+            </ul>
+            
+        </div>
+		
+		<div class="bottom">
+			<div class="b_width">
+				
+				<div>
+					<img class="logo" src="<%= asset_path 'bottom/logo-white.svg' %>">
+					<p class="hide">Ur Pets Life is the first fully dedicated mobile application in the UAE targeting pet owners and pet businesses.<br><br>We give pet owners the chance to shop or book services for their pets in a click of a button while also accumulating loyalty points along the way.<br><br>We also give the opportunity for pet business owners to showcase and advertise their business to reach a wider network of audience.</p>
+				</div>
+				
+				<div>
+					
+					<p><span>Address</span></p>
+					<p>Iridium building, al barsha first, Dubai<br>UAE, P.O.Box 454742</p>
+					<br>
+					
+					<p><span>Call Us</span></p>
+					<p>04-8849449 between 9 am to 6 pm 7 days a week</p>
+					<br>
+					
+					<p><span>Email Us</span></p>
+					<p><span>shopping@urpetslife.com</span></p>
+					<p>for shopping related questions</p>
+					<br>
+					
+					<p><span>Competitions@urpetslife.com</span></p>
+					<p>for any competition related questions</p>
+					<br>
+					
+					<p class="hide"><span>Info@urpetslife.com</span></p>
+					<p class="hide">for any other question related to other application services</p>
+					
+				</div>
+				
+				<div class="contact_us">
+          <a href='https://itunes.apple.com/us/app/ur-pets-life/id1356559735?ls=1&mt=8' class="hide"><img class="store" src="<%= asset_path 'bottom/app-store-badge-us-black.svg' %>"></a>
+          <a href='https://play.google.com/store/apps/details?id=com.foxtrapp.pets' class="hide"><img class="store" src="<%= asset_path 'bottom/google-play-badge-us.svg' %>"></a>
+					
+					<p class="hide" >Follow Us</p>
+					
+					<div class="links">
+            <a href='https://www.facebook.com/urpetslife'><img src="<%= asset_path 'bottom/facebook.svg' %>"></a>
+            <a href='https://www.instagram.com/urpetslife'><img src="<%= asset_path 'bottom/ig.svg' %>"></a>
+					</div>
+					
+				</div>
+				
+				
+			</div>
+			
+			<div class="b_width">
+				
+				<div class="product">
+					<p>© Ur Pets Life 2019.</p>
+					<img src="<%= asset_path 'bottom/foxtrapp-logo-only-white.png' %>">
+					<p>Powered by Foxtrapp</p>
+				</div>
+				
+				<div class="privacy">
+          <a href="term_conditions">Terms & Condition</a><hr>
+          <a href="privacy_policy">Privacy Policy</a><hr>
+          <a href="cancelation_policy">Cancellation Policy</a>
+				</div>
+				
+				<div class="cash">
+					<img src="<%= asset_path 'bottom/telr.png' %>">
+					<img src="<%= asset_path 'bottom/visa.svg' %>">
+					<img src="<%= asset_path 'bottom/mastercard.svg' %>">
+				</div>
+				
+			</div>
+			
+		</div>
+                        
+    </body>
+    
+</html>

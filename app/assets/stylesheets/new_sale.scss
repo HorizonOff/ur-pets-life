@@ -1,0 +1,309 @@
+.pages_sale {
+    body {
+        background: #f9f9f9;
+    }
+
+    .sale_header {
+        background-image: url('sale/shutterstock-759553846@3x.png');
+        background-size: cover;
+        background-position: top;
+        margin-bottom: 40px;
+    }
+
+    .sale_filter {
+        margin-bottom: 30px;
+    }
+
+    .sale_filter .buttons button {
+        color: #575757;
+        border: solid 1px #575757;
+        font-size: 14px;
+        font-family: "lato";
+        font-weight: bold;
+        padding: 10px 30px;
+        border-radius: 30px;
+        margin-left: 14px;
+        transition: ease 0.2s;
+        background: none;
+    }
+
+    .sale_filter .buttons .active {
+        color: white;
+        border: solid 1px rgba(0, 0, 0, 0);
+        background: #f8951d
+    }
+
+    .sale_filter button:hover {
+        color: white;
+        border: solid 1px rgba(0, 0, 0, 0);
+        background: #f8951d
+    }
+
+    .sale_filter .list {
+        flex-grow: 1;
+        align-items: center;
+        display: flex;
+    }
+
+    .sale_filter .buttons_list {
+        display: none;
+    }
+
+    .sale_filter .list:last-child {
+        justify-content: flex-end;
+    }
+
+    .sale_filter .list > * {
+        margin-right: 20px;
+    }
+
+    .sale_filter .list .select {
+        display: flex;
+        height: 100%;
+        justify-content: center;
+        align-items: center;
+        border: solid 1px #cccccc;
+        border-radius: 20px;
+        padding: 0 20px;
+        background: white;
+    }
+
+    .sale_filter .list .select p {
+        color: #575757;
+    }
+
+    .sale_filter .list .select select {
+        font-family: "Lato";
+        border: none;
+        background: none;
+        font-size: 15px;
+        color: #373a3c;
+    }
+
+    .sale_filter .list .select select:focus {
+        border: none;
+    }
+
+    .sale_item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        background: white;
+        position: relative;
+        margin: 15px;
+        width: 22%;
+        border-radius: 10px;
+        border: solid 1px #dadada;
+        overflow: hidden;
+    }
+
+    .sale_item > * {
+        margin-bottom: 10px;
+    }
+
+    .sale_item > *:last-child {
+        margin-bottom: 0
+    }
+
+    .sale_item .sale {
+        color: white;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        font-family: "Lato";
+        font-weight: bold;
+        position: absolute;
+        background: #f81d1d;
+        top: 12px;
+        left: 12px;
+        width: 60px;
+        height: 60px;
+        border-radius: 30px;
+    }
+
+    .sale_item .sale .percent {
+        font-size: 22px;
+    }
+
+    .sale_item .sale .off {
+        font-size: 16px;
+    }
+
+    .sale_item img {
+        width: 100%;
+        height: 200px;
+        object-fit: contain;
+    }
+
+    .sale_item .weight {
+        color: #575757;
+        font-family: "Lato";
+        font-weight: bold;
+        padding: 8px 10px;
+        border: solid 1px #dadada;
+        border-radius: 20px;
+    }
+
+    .sale_item .name {
+        color: #575757;
+        font-family: "Lato";
+        font-size: 15px;
+        padding: 0 15px;
+        height: 30px;
+    }
+
+    .sale_item .old_price {
+        color: #b4b4b4;
+        font-family: "Lato";
+        font-weight: bold;
+        font-size: 17px;
+        text-decoration: line-through;
+    }
+
+    .sale_item .new_price {
+        color: white;
+        font-family: "Lato";
+        font-weight: bold;
+        background: #1c5879;
+        font-size: 22px;
+        width: 100%;
+        padding: 10px 0;
+    }
+
+    .sale_pagination {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+        margin-bottom: 50px;
+    }
+
+    .sale_pagination .container {
+        color: #575757;
+        font-family: "Lato";
+        font-size: 16px;
+        display: flex;
+    }
+
+    .sale_pagination .container span {
+        background: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 40px;
+        height: 40px;
+        border-left: solid 2px #eceeef;
+        border-top: solid 2px #eceeef;
+        border-bottom: solid 2px #eceeef;
+        border-right: solid 2px #eceeef;
+    }
+
+    .sale_pagination .container .current {
+        z-index: 5;
+        color: white;
+        border-color: #f8951d;
+        background: #f8951d;
+    }
+
+    .sale_pagination .container *:last-child {
+        display: flex;
+        text-decoration: none;
+        color: grey;
+    }
+
+
+    @media screen and (max-width: 1200px) {
+        .sale_item {
+            width: 21%;
+            border-radius: 30px;
+        }
+    }
+
+    @media only screen and (max-device-width: 765px) {
+
+        .sale_header {
+            background-image: url('sale/sale.jpg');
+            background-position: right;
+        }
+
+        .sale_header h1 {
+            margin-left: 60px;
+        }
+
+        .sale_item {
+            width: 46%;
+            border-radius: 30px;
+        }
+
+        .sale_item .sale {
+            top: 24px;
+            left: 24px;
+            width: 120px;
+            height: 120px;
+            border-radius: 60px;
+        }
+
+        .sale_item .sale .percent {
+            font-size: 30pt;
+        }
+
+        .sale_item .sale .off {
+            font-size: 24pt;
+        }
+
+        .sale_item .weight {
+            font-size: 30pt;
+            width: 300px;
+            padding: 20px 0;
+            border-radius: 30pt;
+        }
+
+        .sale_item .name {
+            font-size: 30pt;
+            margin: 40px 0;
+        }
+
+        .sale_item .old_price {
+            font-size: 28pt;
+            margin-bottom: 40px;
+        }
+
+        .sale_item .new_price {
+            font-size: 30pt;
+            padding: 30px 0;
+        }
+
+        .sale_filter .buttons {
+            display: none;
+        }
+
+        .sale_filter .list p {
+            display: none;
+        }
+
+        .sale_filter .buttons_list {
+            display: block;
+        }
+
+        .sale_filter .list .select {
+            height: 100px;
+            border-radius: 50px;
+            padding: 0 50px
+        }
+
+        .sale_filter .list .select select {
+            font-size: 25pt;
+        }
+
+        .sale_pagination .container {
+            font-size: 24pt;
+        }
+
+        .sale_pagination .container span {
+            width: 80px;
+            height: 80px
+        }
+
+    }
+}
