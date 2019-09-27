@@ -1280,8 +1280,6 @@ CREATE TABLE public.orders (
     is_user_from_company boolean DEFAULT false,
     delivery_at timestamp without time zone,
     is_pre_recurring boolean DEFAULT false,
-    client_name character varying,
-    client_number character varying,
     admin_discount integer DEFAULT 0,
     code_discount integer DEFAULT 0,
     driver_id integer
@@ -2929,7 +2927,7 @@ ALTER TABLE ONLY public.cart_items
 
 
 --
--- Name: chat_messages_pkey; Type: CONSTRAINT; Schema: public; Owner: ->>>>>>> fix_creating_orders
+-- Name: chat_messages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.chat_messages

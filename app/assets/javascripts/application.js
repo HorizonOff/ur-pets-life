@@ -31,6 +31,7 @@
 //= require location.js
 //= require datatable.js
 //= require order_create.js
+//= require new_log_in.js
 //= require toastr
 //= require cable
 

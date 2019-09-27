@@ -54,6 +54,7 @@ gem 'carrierwave', '~> 1.0'
 gem "mini_magick"
 gem "fog-aws"
 gem 'geocoder'
+gem 'recaptcha'
 #for delete files from aws by link
 gem 'aws-sdk-rails'
 gem 'aws-sdk-s3'

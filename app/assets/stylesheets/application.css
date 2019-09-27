@@ -20,6 +20,8 @@
  *= require daterangepicker
  *= require dataTables.bootstrap.min
  *= require buttons.bootstrap.min
+ *= require new_log_in
+ *= require new_reset_password
  *= require toastr
  *= require_self
  */

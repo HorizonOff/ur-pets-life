@@ -1,0 +1,151 @@
+.navbar {
+    z-index: 20;
+    position: fixed;
+    align-items: center;
+    color: white;
+    height: 80px;
+    width: 100%;
+    box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.32);
+    background: image_url('navbar/pattern-1.svg'), linear-gradient(#24AABE, #23AEC2);
+	top: 0;
+}
+
+.navbar .logo   { height: 100px; align-self: flex-start; }
+.navbar img     { height: 20px; margin-right: 8px; }
+
+.navbar .hamburger { opacity: 1;}
+.navbar .hamburger.is-active { opacity: 1;}
+
+.navbar
+.hamburger-inner,
+.hamburger-inner::before,
+.hamburger-inner::after {
+	background-color: white;
+	height: 6px;
+}
+
+.navbar
+.hamburger.is-active
+.hamburger-inner,
+.hamburger.is-active .hamburger-inner::before,
+.hamburger.is-active .hamburger-inner::after { background-color: white; }
+
+
+.navbar .login {
+    display: flex;
+    align-items: center;
+    padding: 6px 10px;
+    border: solid 2px white;
+    border-radius: 20px;
+    font-weight: bold;
+	text-decoration: none;
+	color: white;
+}
+
+.navbar .active {
+    background: #f8951d;
+    border-radius: 20px;
+    font-weight: bold;
+}
+
+.navbar .device {
+    padding: 0 30px;
+    display: flex;
+    align-items: center;
+    height: inherit;
+}
+
+.navbar .device .logo {
+    flex-grow: 1;
+}
+
+/*Desktop*/
+
+.navbar .desktop {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    height: inherit;
+    padding: 0 30px;
+}
+
+.navbar .desktop .tab  {
+    display: flex;
+    align-items: center;
+    margin-left: 5px;
+    text-decoration: none;
+    color: white;
+    cursor: pointer;
+	padding: 10px 15px;
+}
+
+.navbar .desktop .tab:hover {
+    border-radius: 25px;
+	box-shadow: inset 0 0 0 3px #f8951d;
+}
+
+.navbar .desktop .login { margin-left: 30px; }
+.navbar .mobile .key { height: 30px; }
+
+/*Settings*/
+
+.navbar .tablet { display: none; }
+.navbar .mobile { display: none; }
+
+/*Context_menu*/
+
+.navbar .context_menu {
+	position: absolute;
+	display: none;
+	flex-direction: column;
+	padding: 20px 30px;
+	border-radius: 12px;
+	top: 60px;
+	left: 43%;
+	background: white;
+}
+
+.navbar .context_menu::before {
+	position: absolute;
+	top: -3px;
+	left: 15px;
+	width: 20px;
+	height: 20px;
+	background: white;
+	transform: rotate(45deg);
+	content: "";
+}
+
+.navbar .context_menu a { text-decoration: none; color: #575757; }
+.navbar .context_menu a:first-child { margin-bottom: 8px; }
+.navbar .context_menu a:hover { color: #f8951d; }
+
+
+@media screen and (max-width: 1200px) {
+
+    .navbar .desktop    { display: none; }
+    .navbar .tablet     { display: flex; }
+    .navbar .mobile     { display: none; }
+
+}
+
+@media screen and (max-width: 1000px) {
+
+    .navbar .desktop    { display: none; }
+    .navbar .tablet     { display: none; }
+    .navbar .mobile     { display: flex; }
+
+}
+
+@media only screen and (max-device-width: 765px) {
+
+	.navbar { height: 130px; }
+	.navbar .logo   { height: 160px; align-self: flex-start; }
+	.navbar .menu   { height: 50px; }
+	.navbar .mobile .key { height: 50px; }
+	.navbar .device { padding: 0 60px; }
+
+	.navbar .hamburger { transform: scale(1.8);}
+
+}
