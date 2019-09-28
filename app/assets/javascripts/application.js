@@ -32,6 +32,7 @@
 //= require datatable.js
 //= require order_create.js
 //= require new_log_in.js
+//= require new_contact_us.js
 //= require toastr
 //= require cable
 

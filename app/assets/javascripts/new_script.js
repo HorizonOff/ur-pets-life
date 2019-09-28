@@ -34,36 +34,36 @@ $(document).on('turbolinks:load',function(){
 	
 //=============================================================================
 	
-	// var isShowDownload = false;
-	//
-	// $(window).scroll(function() {
-    //
-	//     var wLoc = window.location.pathname;
-    //     if (wLoc.includes("/index") || wLoc.includes("/log_in") || wLoc.includes("/reset_password")) { return }
-    //
-	// 	var header = $('.b_header').position().top + 100;
-	// 	var bottom = $('.bottom').position().top - 800;
-    //
-	// 	var topPos = $(window).scrollTop();
-	//
-	// 	if (topPos > header && topPos < bottom ) {
-	// 		showingBadge(true)
-	// 	} else {
-	// 		showingBadge(false);
-	// 	}
-	//
-	// });
-	//
-	// function showingBadge(isShow) {
-	//
-	// 	if (!isShowDownload && isShow) {
-	// 		$('.b_donwnload').animate({ bottom: 0 }, 200);
-	// 		isShowDownload = !isShowDownload;
-	// 	} else if ( isShowDownload && !isShow ) {
-	// 		$('.b_donwnload').animate({ bottom: -200}, 200);
-	// 		isShowDownload = !isShowDownload;
-	// 	}
-	// }
+	var isShowDownload = false;
+
+	$(window).scroll(function() {
+
+	    var wLoc = window.location.pathname;
+        if (wLoc.includes("/index") || wLoc.includes("/log_in") || wLoc.includes("/reset_password")) { return }
+
+		var header = $('.b_header').position().top + 100;
+		var bottom = $('.bottom').position().top - 800;
+
+		var topPos = $(window).scrollTop();
+
+		if (topPos > header && topPos < bottom ) {
+			showingBadge(true)
+		} else {
+			showingBadge(false);
+		}
+
+	});
+
+	function showingBadge(isShow) {
+
+		if (!isShowDownload && isShow) {
+			$('.b_donwnload').animate({ bottom: 0 }, 200);
+			isShowDownload = !isShowDownload;
+		} else if ( isShowDownload && !isShow ) {
+			$('.b_donwnload').animate({ bottom: -200}, 200);
+			isShowDownload = !isShowDownload;
+		}
+	}
 	
 //=============================================================================
 	
