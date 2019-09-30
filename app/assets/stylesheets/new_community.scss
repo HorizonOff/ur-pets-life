@@ -8,7 +8,7 @@
   }
 
   .community_header {
-    background-image: url('community/shutterstock-565141900@3x.png');
+    background: image_url('community/shutterstock-565141900@3x.png');
     background-size: cover;
     background-position: top;
     margin-bottom: 40px;
@@ -119,7 +119,7 @@
 
     .community_header {
       margin-bottom: 40px;
-      background-image: url('community/stray-cat.jpg');
+      background: image_url('community/stray-cat.jpg');
       background-position: -60px 0px;
     }
     .community_header h1 {
@@ -171,11 +171,11 @@
     }
   }
 
-  @supports (-webkit-overflow-scrolling: touch) {
-
-    .comment {
-      font-size: 24pt;
-    }
-
-  }
+  //@supports (-webkit-overflow-scrolling: touch) {
+  //
+  //  .comment {
+  //    font-size: 24pt;
+  //  }
+  //
+  //}
 }

@@ -4,7 +4,7 @@
     }
 
     .sale_header {
-        background-image: url('sale/shutterstock-759553846@3x.png');
+        background: image_url('sale/shutterstock-759553846@3x.png');
         background-size: cover;
         background-position: top;
         margin-bottom: 40px;
@@ -222,7 +222,7 @@
     @media only screen and (max-device-width: 765px) {
 
         .sale_header {
-            background-image: url('sale/sale.jpg');
+            background: image_url('sale/sale.jpg');
             background-position: right;
         }
 
