@@ -1,0 +1,58 @@
+<div class="side_menu">
+  <a href="index" class="tab"><img src="<%= asset_path 'navbar/foot.svg' %>">Home</a>
+  <a href="about" class="tab"><img src="<%= asset_path 'navbar/foot.svg' %>">About</a>
+  <a class="tab"><img src="<%= asset_path 'navbar/foot.svg' %>">Loyalty & Referral</a>
+  <a href="loyalty" class="tab additional">Loyalty Programs</a>
+  <a href="pay_it_forward" class="tab additional">Pay it Forward</a>
+  <a href="sale" class="tab"><img src="<%= asset_path 'navbar/foot.svg' %>">Sale</a>
+  <a href="community" class="tab"><img src="<%= asset_path 'navbar/foot.svg' %>">Stray Cat Community</a>
+  <a href="contact_us" class="tab"><img src="<%= asset_path 'navbar/foot.svg' %>">Contact us</a>
+</div>
+
+<div class="navbar">
+  <div class="desktop">
+
+    <img class="logo" src="<%= asset_path 'navbar/logo.svg' %>">
+
+    <a href="index" class="tab"><img src="<%= asset_path 'navbar/foot.svg' %>">Home</a>
+    <a href="about" class="tab"><img src="<%= asset_path 'navbar/foot.svg' %>">About</a>
+    <a href="loyalty" id="loyalty" class="tab"><img src="<%= asset_path 'navbar/foot.svg' %>">Loyalty & Referral</a>
+    <a href="sale" class="tab"><img src="<%= asset_path 'navbar/foot.svg' %>">Sale</a>
+    <a href="community" class="tab"><img src="<%= asset_path 'navbar/foot.svg' %>">Stray Cat Community</a>
+    <a href="contact_us" class="tab"><img src="<%= asset_path 'navbar/foot.svg' %>">Contact us</a>
+
+    <div class="context_menu">
+      <a href="loyalty">Loyalty Programs</a>
+      <a href="pay_it_forward">Pay it Forward</a>
+    </div>
+
+    <a href="<%= admin_panel_root_path %>" class="login"><img src="<%= asset_path 'navbar/key.svg' %>">Log In</a>
+
+  </div>
+
+  <div class="device tablet">
+
+    <button class="hamburger hamburger--squeeze " type="button">
+              <span class="hamburger-box">
+                <span class="hamburger-inner"></span>
+              </span>
+    </button>
+
+    <img class="logo" src="<%= asset_path 'navbar/logo.svg' %>">
+    <a href="<%= admin_panel_root_path %>" class="login"><img src="<%= asset_path 'navbar/key.svg' %>">Log In</a>
+
+  </div>
+
+  <div class="device mobile">
+
+    <button class="hamburger hamburger--squeeze " type="button">
+              <span class="hamburger-box">
+                <span class="hamburger-inner"></span>
+              </span>
+    </button>
+
+    <img class="logo" src="<%= asset_path 'navbar/logo.svg' %>">
+    <a href="<%= admin_panel_root_path %>"><img class="key" src="<%= asset_path 'navbar/key.svg' %>"></a>
+
+  </div>
+</div>
