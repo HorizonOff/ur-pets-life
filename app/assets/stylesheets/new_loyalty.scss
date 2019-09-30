@@ -5,7 +5,7 @@
 
   .loyalty_header {
     position: relative;
-    background-image: url('loyalty/hero-loyalty@3x.jpg');
+    background: image_url('loyalty/hero-loyalty@3x.jpg');
     background-size: cover;
     background-position: top;
     margin-bottom: 40px;
@@ -150,7 +150,7 @@
 
     .loyalty_header {
       margin-bottom: 40px;
-      background-image: url('loyalty/loyalty.jpg');
+      background: image_url('loyalty/loyalty.jpg');
       background-position: -100px -90px;
       background-size: 180%;
     }

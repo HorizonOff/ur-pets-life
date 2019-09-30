@@ -29,7 +29,7 @@
 
   .about_header {
     background-size: cover;
-    background-image: url('about/shutterstock-633334241@3x.jpg');
+    background: image_url('about/shutterstock-633334241@3x.jpg');
     background-position: top;
     margin-bottom: 40px;
   }
@@ -121,7 +121,7 @@
   @media only screen and (max-device-width: 765px) {
 
     .about_header {
-      background: url('about/about.jpg') center;
+      background: image_url('about/about.jpg') center;
       background-size: 170%;
     }
     .about_header h1 {
@@ -250,19 +250,19 @@
 
   }
 
-  @supports (-webkit-overflow-scrolling: touch) {
-
-    .long_comment {
-      font-size: 25pt;
-    }
-
-    .r_item .item_header .avatar {
-      width: 200px;
-      height: 200px;
-    }
-    .r_item p {
-      font-size: 24pt;
-    }
-
-  }
+  //@supports (-webkit-overflow-scrolling: touch) {
+  //
+  //  .long_comment {
+  //    font-size: 25pt;
+  //  }
+  //
+  //  .r_item .item_header .avatar {
+  //    width: 200px;
+  //    height: 200px;
+  //  }
+  //  .r_item p {
+  //    font-size: 24pt;
+  //  }
+  //
+  //}
 }

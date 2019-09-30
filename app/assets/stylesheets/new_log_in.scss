@@ -1,245 +1,245 @@
-  body {
-    background: white !important;
-  }
+body {
+  background: white !important;
+}
 
-  .back_btn {
-      position: absolute;
-      top: 8%;
-      left: 8%;
-  }
+.back_btn {
+    position: absolute;
+    top: 8%;
+    left: 8%;
+}
 
-  .close_btn {
-      display: none;
-  }
+.close_btn {
+    display: none;
+}
 
-  .log_in_form {
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 30px;
-      width: 400px;
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 1px 10px 0 rgba(209, 209, 209, 0.5);
-      margin: 100px auto 30px;
-  }
+.log_in_form {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px;
+    width: 400px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 1px 10px 0 rgba(209, 209, 209, 0.5);
+    margin: 100px auto 30px;
+}
 
-  .log_in_form form {
+.log_in_form form {
+  width: 100%;
+}
+
+.log_in_form .logo {
+    width: 60%;
+    margin-bottom: 10px;
+}
+
+.log_in_form .head {
+    font-weight: bold;
+    color: #1c5879;
+    font-size: 18px;
+    margin-bottom: 30px;
+}
+
+.log_in_form .login_btn {
     width: 100%;
-  }
+    height: 40px;
+    border: none;
+    border-radius: 20px;
+    background: #f8951d;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    margin: 20px 0 40px 0;
+}
 
-  .log_in_form .logo {
-      width: 60%;
-      margin-bottom: 10px;
-  }
+.log_in_form  .remember {
+    display: flex;
+    justify-content: center;
+}
 
-  .log_in_form .head {
-      font-weight: bold;
-      color: #1c5879;
-      font-size: 18px;
-      margin-bottom: 30px;
-  }
+.bottom_img {
+    z-index: -2;
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+}
 
-  .log_in_form .login_btn {
-      width: 100%;
-      height: 40px;
-      border: none;
-      border-radius: 20px;
-      background: #f8951d;
-      color: white;
-      font-size: 16px;
-      font-weight: bold;
-      margin: 20px 0 40px 0;
-  }
+.b_input, .b_input * {
+    width: 100%;
+    position: relative;
+}
 
-  .log_in_form  .remember {
-      display: flex;
-      justify-content: center;
-  }
+.b_input .content {
+    display: flex;
+    height: 45px;
+    flex-direction: column;
+    justify-content: flex-end;
+    border-bottom: 1px solid #1c5879;
+    padding-bottom: 4px;
+    transition: ease 1s;
+}
 
-  .bottom_img {
-      z-index: -2;
-      position: absolute;
-      width: 100%;
-      bottom: 0;
-  }
+.b_input .content p {
+    transition: ease 0.2s;
+    color: #1c5879;
+    font-size: 15px;
+    font-family: "Lato"
+}
 
-  .b_input, .b_input * {
-      width: 100%;
-      position: relative;
-  }
+.b_input .content input {
+    transition: ease 0.2s;
+    height: 0;
+    border: none;
+    font-size: 15px;
+}
 
-  .b_input .content {
-      display: flex;
-      height: 45px;
-      flex-direction: column;
-      justify-content: flex-end;
-      border-bottom: 1px solid #1c5879;
-      padding-bottom: 4px;
-      transition: ease 1s;
-  }
+.b_input .error {
+    visibility: hidden;
+}
 
-  .b_input .content p {
-      transition: ease 0.2s;
-      color: #1c5879;
-      font-size: 15px;
-      font-family: "Lato"
-  }
+.b_input .visibility {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 30px;
+}
 
-  .b_input .content input {
-      transition: ease 0.2s;
-      height: 0;
-      border: none;
-      font-size: 15px;
-  }
+.active .content p {
+    font-size: 10px
+}
 
-  .b_input .error {
-      visibility: hidden;
-  }
+.active .content input {
+    height: 100%;
+}
 
-  .b_input .visibility {
-      position: absolute;
-      right: 0;
-      bottom: 0;
-      width: 30px;
-  }
+.log_in_form .remember span {
+    font-size: 14px;
+    font-family: "Lato";
+    color: #373a3c;
+}
 
-  .active .content p {
-      font-size: 10px
-  }
+.forgot_password {
+    display: block;
+    margin: auto;
+    text-align: center;
+    font-family: "Lato";
+    color: #575757;
+}
 
-  .active .content input {
-      height: 100%;
-  }
-
-  .log_in_form .remember span {
-      font-size: 14px;
-      font-family: "Lato";
-      color: #373a3c;
-  }
-
-  .forgot_password {
-      display: block;
-      margin: auto;
-      text-align: center;
-      font-family: "Lato";
-      color: #575757;
-  }
-
-  .forgot_password a {
-      color: #1c5879;
-      font-weight: bold;
-      text-decoration: none;
-  }
+.forgot_password a {
+    color: #1c5879;
+    font-weight: bold;
+    text-decoration: none;
+}
 
 
-  @media only screen and (max-device-width: 765px) {
+@media only screen and (max-device-width: 765px) {
 
-      body {
-          padding-top: 130px;
-          overflow: hidden;
-      }
+    body {
+        padding-top: 130px;
+        overflow: hidden;
+    }
 
-      .back_btn {
-          display: none;
-      }
+    .back_btn {
+        display: none;
+    }
 
-      .bottom_img {
-          position: fixed;
-          width: 280%;
-          object-position: center;
-          left: -118%;
-          z-index: -1;
-      }
+    .bottom_img {
+        position: fixed;
+        width: 280%;
+        object-position: center;
+        left: -118%;
+        z-index: -1;
+    }
 
-      .log_in_form {
-          width: 80%;
-          border-radius: 30px;
-          padding: 60px;
-      }
+    .log_in_form {
+        width: 80%;
+        border-radius: 30px;
+        padding: 60px;
+    }
 
-      .log_in_form .head {
-          font-size: 30pt;
-          margin-bottom: 60px
-      }
+    .log_in_form .head {
+        font-size: 30pt;
+        margin-bottom: 60px
+    }
 
-      .b_input .content {
-          height: 90px;
-          border-width: 3px;
-          margin-bottom: 30px
-      }
+    .b_input .content {
+        height: 90px;
+        border-width: 3px;
+        margin-bottom: 30px
+    }
 
-      .b_input .content p {
-          font-size: 28pt;
-      }
+    .b_input .content p {
+        font-size: 28pt;
+    }
 
-      .b_input .visibility {
-          width: 65px;
-      }
+    .b_input .visibility {
+        width: 65px;
+    }
 
-      .active .content p {
-          font-size: 20pt;
-      }
+    .active .content p {
+        font-size: 20pt;
+    }
 
-      .active .content input {
-          height: 100%;
-          font-size: 24pt;
-      }
+    .active .content input {
+        height: 100%;
+        font-size: 24pt;
+    }
 
-      .log_in_form .login_btn {
-          height: 90px;
-          border-radius: 45px;
-          font-size: 24pt;
-      }
+    .log_in_form .login_btn {
+        height: 90px;
+        border-radius: 45px;
+        font-size: 24pt;
+    }
 
-      .log_in_form  .remember {
-          margin-top: 80px;
-      }
+    .log_in_form  .remember {
+        margin-top: 80px;
+    }
 
-      .log_in_form .remember input {
-          width: 30px;
-          height: 30px;
-          border: none;
-      }
+    .log_in_form .remember input {
+        width: 30px;
+        height: 30px;
+        border: none;
+    }
 
-      .log_in_form .remember span {
-          font-size: 28pt;
-      }
+    .log_in_form .remember span {
+        font-size: 28pt;
+    }
 
-      .forgot_password {
-          width: 80%;
-          font-size: 28pt;
-          margin-top: 100px;
-      }
+    .forgot_password {
+        width: 80%;
+        font-size: 28pt;
+        margin-top: 100px;
+    }
 
-      .close_btn {
-          display: block;
-          position: absolute;
-          right: -20px;
-          top: -20px;
-          background: white;
-          width: 85px;
-          height: 85px;
-      }
+    .close_btn {
+        display: block;
+        position: absolute;
+        right: -20px;
+        top: -20px;
+        background: white;
+        width: 85px;
+        height: 85px;
+    }
 
-      .close_btn img {
-          width: 80px;
-      }
-  }
+    .close_btn img {
+        width: 80px;
+    }
+}
 
-  @supports (-webkit-overflow-scrolling: touch) {
-
-      .forgot_password {
-          margin-top: 40px;
-      }
-
-      .bottom_img {
-          position: fixed;
-          width: 150%;
-          object-position: center;
-          left: -5%;
-          z-index: -1;
-      }
-
-  }
+//@supports (-webkit-overflow-scrolling: touch) {
+//
+//    .forgot_password {
+//        margin-top: 40px;
+//    }
+//
+//    .bottom_img {
+//        position: fixed;
+//        width: 150%;
+//        object-position: center;
+//        left: -5%;
+//        z-index: -1;
+//    }
+//
+//}
