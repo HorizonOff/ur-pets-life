@@ -32,6 +32,7 @@
 .side_menu .additional_active { color: #f8951d; }
 
 @media only screen and (max-device-width: 765px) {
-	.side_menu a { font-size: 30pt; }
-	.side_menu img { width: 60px; }
+    .side_menu { padding-top: 120px; padding-left: 10px; }
+	.side_menu a { font-size: 12pt; padding: 15px 20px; margin-bottom: 10px; }
+	.side_menu img { width: 30px; object-fit: contain; }
 }

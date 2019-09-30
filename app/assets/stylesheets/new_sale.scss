@@ -231,46 +231,51 @@
         }
 
         .sale_item {
-            width: 46%;
+            width: 47%;
+            border-radius: 15px;
+          margin: 4px;
+        }
+
+      .sale_item img {
+        height: 140px;
+      }
+
+        .sale_item .sale {
+            top: 10px;
+            left: 10px;
+            width: 40px;
+            height: 40px;
             border-radius: 30px;
         }
 
-        .sale_item .sale {
-            top: 24px;
-            left: 24px;
-            width: 120px;
-            height: 120px;
-            border-radius: 60px;
-        }
-
         .sale_item .sale .percent {
-            font-size: 30pt;
+            font-size: 10pt;
         }
 
         .sale_item .sale .off {
-            font-size: 24pt;
+            font-size: 8pt;
         }
 
         .sale_item .weight {
-            font-size: 30pt;
-            width: 300px;
-            padding: 20px 0;
-            border-radius: 30pt;
+            font-size: 7pt;
+            width: 80%;
+            padding: 10px 5px;
+            border-radius: 15pt;
         }
 
         .sale_item .name {
-            font-size: 30pt;
-            margin: 40px 0;
+            font-size: 10px;
+            //margin: 40px 0;
         }
 
         .sale_item .old_price {
-            font-size: 28pt;
-            margin-bottom: 40px;
+            font-size: 14px;
+            //margin-bottom: 40px;
         }
 
         .sale_item .new_price {
-            font-size: 30pt;
-            padding: 30px 0;
+            font-size: 12pt;
+            padding: 10px 0;
         }
 
         .sale_filter .buttons {
@@ -285,24 +290,34 @@
             display: block;
         }
 
-        .sale_filter .list .select {
-            height: 100px;
+      .sale_filter .list .select {
+            height: 40px;
             border-radius: 50px;
-            padding: 0 50px
+            padding: 0;
+            margin: 0;
         }
 
         .sale_filter .list .select select {
-            font-size: 25pt;
+            //font-size: 25pt;
         }
 
         .sale_pagination .container {
-            font-size: 24pt;
+            //font-size: 24pt;
         }
 
         .sale_pagination .container span {
             width: 80px;
             height: 80px
         }
+
+      nav .pagination {
+        padding: 0;
+      }
+
+      nav li {
+       width: 30px;
+        height: 30px;
+      }
 
     }
 }

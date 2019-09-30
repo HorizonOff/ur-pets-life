@@ -16,6 +16,7 @@
   }
 
   .container {
+    width: 600px;
     margin-bottom: 100px;
   }
 
@@ -147,110 +148,117 @@
     font-weight: bold;
   }
 
-  #map {
-    width: 100%;
-    height: 400px;
+  .captcha {
+    margin-left: 30px;
   }
+
+
 
   @media only screen and (max-device-width: 765px) {
 
-    @keyframes activeText {
-      from {
-        top: 40%;
-        font-size: 30pt;
-      }
-      to {
-        top: 0;
-        font-size: 24pt;
-      }
-    }
-    @keyframes unActiveText {
-      from {
-        top: 0;
-        font-size: 24pt;
-      }
-      to {
-        top: 40%;
-        font-size: 30pt;
-      }
-    }
+    //@keyframes activeText {
+    //  from {
+    //    top: 40%;
+    //    font-size: 30pt;
+    //  }
+    //  to {
+    //    top: 0;
+    //    font-size: 24pt;
+    //  }
+    //}
+    //@keyframes unActiveText {
+    //  from {
+    //    top: 0;
+    //    font-size: 24pt;
+    //  }
+    //  to {
+    //    top: 40%;
+    //    font-size: 30pt;
+    //  }
+    //}
 
     .contact_header {
       background: image_url('contact_us/contact_us.jpg');
-      background-position: -290px 50px;
+      background-position: -200px 0;
+      background-size: 180%;
     }
     .contact_header span {
-      font-size: 30px;
+      //font-size: 30px;
     }
 
     .contact_header .container {
-      margin-bottom: 170px;
+      margin-bottom: 60px;
       width: 60%;
+    }
+
+    .container {
+      width: 90%;
+      margin-bottom: 0;
+      padding: 0;
     }
 
     .contact_us_item {
       width: 100%;
       margin-bottom: 60px;
-      border-radius: 30px;
+      border-radius: 15px;
     }
     .contact_us_item:first-child {
       margin-right: 0;
     }
 
     .title {
-      font-size: 30pt;
-      margin-bottom: 40px;
-      padding: 50px;
+      //font-size: 30pt;
+      //margin-bottom: 40px;
+      //padding: 50px;
       text-align: center;
     }
     .text_field {
-      padding: 0 30pt;
       margin-bottom: 10pt;
-      height: 80pt;
+      width: 74%;
+      height: 30pt;
     }
     .text_field * {
       width: 100%;
     }
     .text_field .placeholder {
-      font-size: 30pt;
+      //font-size: 30pt;
       font-family: "Lato";
       top: 40%;
     }
     .text_field .text {
-      height: 60px;
-      font-size: 24pt;
+      height: 24px;
+      //font-size: 24pt;
     }
     .text_field .active {
       top: 0;
-      font-size: 24pt;
+      //font-size: 24pt;
     }
 
     .message .placeholder {
-      padding: 0 45px;
-      font-size: 28pt;
-      margin-top: 100px;
+      //padding: 0 45px;
+      //font-size: 28pt;
+      margin-top: 30px;
     }
     .message textarea {
-      width: 88%;
-      height: 500px;
-      margin-left: 50px;
-      font-size: 17pt;
+      width: 80%;
+      height: 80px;
+      //font-size: 17pt;
     }
 
     .submit {
       margin-left: 10%;
       width: 80%;
-      height: 80pt;
+      height: 40pt;
       border-radius: 40pt;
-      font-size: 30pt;
-      margin-bottom: 80px;
+      //font-size: 30pt;
+      margin-bottom: 30px;
     }
     #map {
       height: 1000px;
     }
 
     .contact {
-      font-size: 19px;
+      //font-size: 19px;
       padding: 80px;
     }
     .contact:nth-child(2) {
@@ -258,6 +266,10 @@
     }
     .contact:nth-child(3) {
       padding-top: 30px;
+    }
+
+    .captcha {
+      margin-left: 20px;
     }
   }
 

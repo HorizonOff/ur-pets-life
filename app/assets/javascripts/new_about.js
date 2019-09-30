@@ -34,7 +34,7 @@ $(document).on('turbolinks:load',function() {
 	
 	$('#view_all').click(function() {
 		$('#view_all').text(isCloseContainer ? "View less" : "View all");
-		$('.close').animate({ height: isCloseContainer ? 7415 : 1520 }, 800);
+		$('.close').animate({ height: isCloseContainer ? 3750 : 850 }, 800);
 		isCloseContainer = !isCloseContainer;
 	});
 	

@@ -65,8 +65,8 @@ $(document).on('turbolinks:load', function(){
             {name: 'Return To Top', pos: 0},
             {name: 'What\'s Up', pos: $('#whats_up_section').position().top - 80},
             {name: 'Loyalty Program', pos: $('#loyalty_section').position().top - 90},
-            {name: 'Connects Pets Owner', pos: $('#connect_section').position().top - 120},
-            {name: 'One Time Set Up', pos: $('#start_section').position().top + 400 }
+            {name: 'Connects Pets Owner', pos: $('#connect_section').position().top - 90},
+            {name: 'One Time Set Up', pos: $('#start_section').position().top + 600 }
         ];
         var minShow = pageSections[1].pos;
 
@@ -119,14 +119,13 @@ $(document).on('turbolinks:load', function(){
     }
 
     // ====================================================================================
-	
+
 
 	var isCloseContainer = true;
-	
-	$('#view_all').click(function() {
-		$('#view_all').text(isCloseContainer ? "Hide" : "View all");
-		$('.close').animate({ height: isCloseContainer ? 5000 : 2600 }, 800);
+
+	$('#view_all_home').click(function() {
+		$('#view_all_home').text(isCloseContainer ? "Hide" : "View all");
+		$('.close').animate({ height: isCloseContainer ? 2700 : 1410 }, 800);
 		isCloseContainer = !isCloseContainer;
 	});
-	
 });

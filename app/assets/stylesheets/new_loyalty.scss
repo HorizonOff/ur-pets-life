@@ -149,26 +149,32 @@
 
 
     .loyalty_header {
-      margin-bottom: 120px;
+      margin-bottom: 40px;
       background-image: url('loyalty/loyalty.jpg');
       background-position: -100px -90px;
+      background-size: 180%;
     }
     .loyalty_header h1 {
       margin-left: 60px;
-      font-size: 34pt;
+      //font-size: 34pt;
     }
     .loyalty_header .switcher {
       left: 5%;
       right: 5%;
       width: auto;
     }
+
+    .loyalty_header .switcher .b_width {
+      padding: 0;
+    }
+
     .loyalty_header .switcher a {
       width: 49%;
-      padding: 30px 0;
-      border-radius: 30px 30px 0px 0px;
+      padding: 10px 0;
+      border-radius: 10px 10px 0px 0px;
       text-decoration: none;
       color: white;
-      font-size: 24pt;
+      font-size: 11pt;
     }
     .loyalty_header .switcher a:last-child {
       margin-right: 0;
@@ -186,18 +192,22 @@
       flex-wrap: nowrap;
       overflow: hidden;
       padding: 0 0 40px;
-      height: 1100px;
+      height: 600px;
+    }
+
+    .info_container {
+      width: 84%;
     }
 
     .loyalty_info {
       margin-top: -20px;
       z-index: -3;
-      padding: 100px;
-      border-radius: 60px;
+      padding: 30px;
+      border-radius: 30px;
     }
     .loyalty_info li {
-      margin-bottom: 50px;
-      font-size: 28pt;
+      margin-bottom: 20px;
+      //font-size: 28pt;
     }
 
     .loyalty_item {
@@ -206,24 +216,24 @@
       margin-right: 20px;
     }
     .loyalty_item img {
-      width: auto;
+      width: 50%;
     }
     .loyalty_item p {
-      padding: 30px;
-      font-size: 40pt;
+      padding: 15px;
+      //font-size: 40pt;
       width: auto;
       display: flex;
       align-items: center;
     }
     .loyalty_item p span {
       display: block;
-      width: 100px;
-      height: 100px;
+      width: 40px;
+      height: 40px;
       background: white;
       border-radius: 50px;
       margin-left: 30px;
       color: #f8951d;
-      font-size: 56pt;
+      //font-size: 56pt;
       font-weight: normal;
     }
 
@@ -232,27 +242,27 @@
     }
     .active p ::before {
       top: 70%;
-      width: 60px;
-      height: 60px;
+      width: 30px;
+      height: 30px;
     }
 
     .terms {
-      width: 85%;
+      width: 84%;
       margin: auto;
-      font-size: 12pt;
+      //font-size: 12pt;
       margin-top: 60px;
       margin-bottom: 40px;
     }
     .terms * {
-      margin-bottom: 40px;
+      margin-bottom: 20px;
     }
 
     .control {
       display: block;
       position: absolute;
-      top: 1740px;
-      width: 150px;
-      height: 300px;
+      top: 890px;
+      width: 60px;
+      height: 130px;
       border: none;
       background: none;
       overflow: hidden;
@@ -272,7 +282,7 @@
 
     .control img {
       z-index: 0;
-      width: 50px;
+      width: 20px;
     }
 
     .left::before {
