@@ -228,18 +228,18 @@ body {
     }
 }
 
-//@supports (-webkit-overflow-scrolling: touch) {
-//
-//    .forgot_password {
-//        margin-top: 40px;
-//    }
-//
-//    .bottom_img {
-//        position: fixed;
-//        width: 150%;
-//        object-position: center;
-//        left: -5%;
-//        z-index: -1;
-//    }
-//
-//}
+@supports (-webkit-overflow-scrolling: touch) {
+
+    .forgot_password {
+        margin-top: 40px;
+    }
+
+    .bottom_img {
+        position: fixed;
+        width: 150%;
+        object-position: center;
+        left: -5%;
+        z-index: -1;
+    }
+
+}
