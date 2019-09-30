@@ -95,9 +95,9 @@ hr { height: 100%; width: 1px; background: white; border: none; }
 
 }
 
-@supports (-webkit-overflow-scrolling: touch) {
+//@supports (-webkit-overflow-scrolling: touch) {
 
-	.bottom p { font-size: 24pt; }
-    .bottom .logo { height: 100%; }
+	//.bottom p { font-size: 24pt; }
+    //.bottom .logo { height: 100%; }
 
-}
+//}
