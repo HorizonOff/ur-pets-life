@@ -1,67 +1,6 @@
 <!DOCTYPE html>
 <html>
     <body>
-		
-		<div class="side_menu">
-        <a href="index" class="tab"><img src="<%= asset_path 'navbar/foot.svg' %>">Home</a>
-        <a href="about" class="tab"><img src="<%= asset_path 'navbar/foot.svg' %>">About</a>
-        <a class="tab"><img src="<%= asset_path 'navbar/foot.svg' %>">Loyalty & Referral</a>
-        <a href="loyalty" class="tab additional">Loyalty Programs</a>
-        <a href="pay_it_forward" class="tab additional">Pay it Forward</a>
-        <a href="sale" class="tab active"><img src="<%= asset_path 'navbar/foot.svg' %>">Sale</a>
-        <a href="community" class="tab"><img src="<%= asset_path 'navbar/foot.svg' %>">Stray Cat Community</a>
-        <a href="contact_us" class="tab"><img src="<%= asset_path 'navbar/foot.svg' %>">Contact us</a>
-		</div>
-		                
-        <div class="navbar">
-            
-            <div class="desktop">
-                
-                <img class="logo" src="<%= asset_path 'navbar/logo.svg' %>">
-
-                <a href="index" class="tab"><img src="<%= asset_path 'navbar/foot.svg' %>">Home</a>
-                <a href="about" class="tab"><img src="<%= asset_path 'navbar/foot.svg' %>">About</a>
-                <a href="loyalty" id="loyalty" class="tab"><img src="<%= asset_path 'navbar/foot.svg' %>">Loyalty & Referral</a>
-                <a href="sale" class="tab active"><img src="<%= asset_path 'navbar/foot.svg' %>">Sale</a>
-                <a href="community" class="tab"><img src="<%= asset_path 'navbar/foot.svg' %>">Stray Cat Community</a>
-                <a href="contact_us" class="tab"><img src="<%= asset_path 'navbar/foot.svg' %>">Contact us</a>
-				
-				<div class="context_menu">
-					<a href="loyalty">Loyalty Programs</a>
-					<a href="pay_it_forward">Pay it Forward</a>
-				</div>
-                
-                <a href="<%= admin_panel_root_path %>" class="login"><img src="<%= asset_path 'navbar/key.svg' %>">Log In</a>
-                
-            </div>
-            
-            <div class="device tablet">
-				
-				<button class="hamburger hamburger--squeeze " type="button">
-  					<span class="hamburger-box">
-    					<span class="hamburger-inner"></span>
-  					</span>
-				</button>
-                
-                <img class="logo" src="<%= asset_path 'navbar/logo.svg' %>">
-                <a href="log_in" class="login"><img src="<%= asset_path 'navbar/key.svg' %>">Log In</a>
-                
-            </div>
-            
-            <div class="device mobile">
-				
-				<button class="hamburger hamburger--squeeze " type="button">
-  					<span class="hamburger-box">
-    					<span class="hamburger-inner"></span>
-  					</span>
-				</button>
-                
-                <img class="logo" src="<%= asset_path 'navbar/logo.svg' %>">
-                <a href="log_in"><img class="key" src="<%= asset_path 'navbar/key.svg' %>"></a>
-                
-            </div>
-            
-        </div>
         
         <div class="b_header sale_header"> 
             <h1 class="b_width">Your pets needs<br>at the best prices</h1>
@@ -71,7 +10,7 @@
 			
 			<div class="buttons_list list">
 				<div class="select">
-					<select>
+					<select id="mobile_select_by_pets">
 						<option>View All Products</option>
 						<option>For Dogs</option>
 						<option>For Cats</option>
@@ -114,85 +53,9 @@
                 </div>
             <% end %>
         </div>
-		  <%#binding.pry %>
-		<div class="sale_pagination">
-			  <div class="container">
-            <%= paginate @sorted %>
-			</div>
-		</div>
-		
-		<div class="bottom">
-			<div class="b_width">
-				
-				<div>
-					<img class="logo" src="<%= asset_path 'bottom/logo-white.svg' %>">
-					<p class="hide">Ur Pets Life is the first fully dedicated mobile application in the UAE targeting pet owners and pet businesses.<br><br>We give pet owners the chance to shop or book services for their pets in a click of a button while also accumulating loyalty points along the way.<br><br>We also give the opportunity for pet business owners to showcase and advertise their business to reach a wider network of audience.</p>
-				</div>
-				
-				<div>
-					
-					<p><span>Address</span></p>
-					<p>Iridium building, al barsha first, Dubai<br>UAE, P.O.Box 454742</p>
-					<br>
-					
-					<p><span>Call Us</span></p>
-					<p>04-8849449 between 9 am to 6 pm 7 days a week</p>
-					<br>
-					
-					<p><span>Email Us</span></p>
-					<p><span>shopping@urpetslife.com</span></p>
-					<p>for shopping related questions</p>
-					<br>
-					
-					<p><span>Competitions@urpetslife.com</span></p>
-					<p>for any competition related questions</p>
-					<br>
-					
-					<p class="hide"><span>Info@urpetslife.com</span></p>
-					<p class="hide">for any other question related to other application services</p>
-					
-				</div>
-				
-				<div class="contact_us">
-          <a href='https://itunes.apple.com/us/app/ur-pets-life/id1356559735?ls=1&mt=8' class="hide"><img class="store" src="<%= asset_path 'bottom/app-store-badge-us-black.svg' %>"></a>
-          <a href='https://play.google.com/store/apps/details?id=com.foxtrapp.pets' class="hide"><img class="store" src="<%= asset_path 'bottom/google-play-badge-us.svg' %>"></a>
-					
-					<p class="hide" >Follow Us</p>
-					
-					<div class="links">
-            <a href='https://www.facebook.com/urpetslife'><img src="<%= asset_path 'bottom/facebook.svg' %>"></a>
-						<a href='https://www.instagram.com/urpetslife'><img src="<%= asset_path 'bottom/ig.svg' %>"></a>
-					</div>
-					
-				</div>
-				
-				
-			</div>
-			
-			<div class="b_width">
-				
-				<div class="product">
-					<p>© Ur Pets Life 2019.</p>
-					<img src="<%= asset_path 'bottom/foxtrapp-logo-only-white.png' %>">
-					<p>Powered by Foxtrapp</p>
-				</div>
-				
-				<div class="privacy">
-					<a href="term_conditions">Terms & Condition</a><hr>
-					<a href="privacy_policy">Privacy Policy</a><hr>
-					<a href="cancelation_policy">Cancellation Policy</a>
-				</div>
-				
-				<div class="cash">
-					<img src="<%= asset_path 'bottom/telr.png' %>">
-					<img src="<%= asset_path 'bottom/visa.svg' %>">
-					<img src="<%= asset_path 'bottom/mastercard.svg' %>">
-				</div>
-				
-			</div>
-			
-		</div>
-	
+
+    <%= paginate @sorted%>
+
     </body>
     
 </html>

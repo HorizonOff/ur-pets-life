@@ -226,29 +226,14 @@
     margin-bottom: 40px;
   }
 
-  .whats_up .descption::before {
-    position: absolute;
-    top: -15px;
-    left: -50px;
-    content: image_url('home/quote-big-icon.svg');
-  }
-
-  .whats_up .descption::after {
-    position: absolute;
-    top: -15px;
-    right: -50px;
-    transform: rotate(180deg);
-    content: image_url('home/quote-big-icon.svg');
-  }
-
   .whats_up .container {
     display: flex;
     flex-wrap: wrap;
-    padding: 50px 20px;
     background: white;
     border-radius: 10px 10px 0 0;
     box-shadow: 0 1px 20px 0 rgba(127, 127, 127, 0.5);
     width: 1054px;
+    padding: 50px 20px 20px;
   }
 
   .whats_up .container .item {
@@ -409,10 +394,7 @@
 
   .connect .active_point span {
     background: #1c5879;
-    padding-left: 10px;
-    padding-right: 5px;
-    padding-bottom: 5px;
-    padding-top: 5px;
+    padding: 5px 5px 5px 10px;
     color: white;
     border-radius: 3px;
     margin-left: -10px;
@@ -570,7 +552,7 @@
     align-self: center;
     height: 50px;
     width: 320px;
-    padding: 0px 0px 0 10px;
+    padding: 0 0 0 10px;
     font-weight: bold;
     background: #f8951d;
     border-radius: 10px;
@@ -589,13 +571,49 @@
     margin-bottom: 70px;
   }
 
-  #view_all {
+  #view_all_home {
     display: none;
   }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   @media screen and (max-width: 1200px) {
+    .scroll_section .container {
+      width: 98%;
+    }
     .loyalty {
       width: 90%;
+    }
+    .brands {
+      width: 84%;
     }
     .brands .container {
       width: 98%;
@@ -608,41 +626,42 @@
     }
   }
 
-
   @media only screen and (max-device-width: 765px) {
 
 
     .header::before {
-      left: -100%;
-      right: -100%;
-      top: -112%;
+      left: -80%;
+      right: -80%;
+      top: -51%;
+      height: 128%;
       content: "";
       border-width: 110px;
     }
     .header {
-      height: 1400px;
-      top: 130px;
+      top: 60px;
+      height: 470px;
       background-position: center;
     }
     .header .information {
       margin-bottom: 30px;
-      margin-top: 60px;
+      margin-top: 0;
+      padding: 0;
     }
     .header .container {
+      width: 85%;
       flex-direction: column;
       align-items: center;
       text-align: center;
     }
     .header .container > * {
       width: 100%;
-      margin-bottom: 60px;
+      margin-bottom: 30px;
     }
     .header h1 {
-      font-size: 32pt;
+      font-size: 24px;
     }
     .header p {
-      font-size: 24pt;
-      width: 80%;
+      font-size: 15px;
       align-self: center;
     }
     .header .store_buttons {
@@ -653,17 +672,19 @@
       margin: 0;
     }
 
-
-    .scroll_section .hide_btn img {
-      height: 150px;
+    .scroll_section {
+      margin-top: 60px;
     }
 
     .scroll_section .scroll_btn {
-      width: 100px;
-      height: 100px;
-      border-radius: 50px;
-      margin-top: -70px;
+      margin-top: -30px;
     }
+
+    .scroll_section .hide_btn img {
+      height: 60px;
+      margin-top: 20px;
+    }
+
     .scroll_section .container {
       flex-direction: column;
       width: 100%;
@@ -671,123 +692,114 @@
     }
     .scroll_section .container .item {
       border-top: solid 1px grey;
-      height: 160px;
     }
     .scroll_section .container .item:last-child {
       border-top: solid 1px grey;
       border-bottom: solid 1px grey;
     }
-    .scroll_section .container .item img {
-      width: 150px;
-    }
-    .scroll_section .container .item p {
-      font-size: 28pt;
-    }
 
-
+  //  .scroll_section .container .item p {
+  //    font-size: 28pt;
+  //  }
+  //
+  //
     .check_container {
       flex-direction: column;
-      margin: 60px 0;
       position: relative;
-      margin-left: 40px
     }
     .check_container p {
-      font-size: 28pt;
+      //font-size: 28pt;
       line-height: 1.2;
-      margin-left: 120px;
-      margin-bottom: 60px;
+      margin-left: 100px;
+      margin-bottom: 20px;
     }
     .check_container p img {
-      width: 40px;
       position: absolute;
       left: 0;
     }
 
-
     .brands {
-      width: 86%;
-      padding-bottom: 40px;
+      width: 84%;
     }
-    .brands h1 {
-      font-size: 34pt;
-      margin: 60px 0;
-    }
+  //  .brands h1 {
+  //    font-size: 34pt;
+  //    margin: 60px 0;
+  //  }
     .brands .container .item {
-      margin-right: 20px;
+      margin-right: 16px;
     }
     .brands .container .item img {
-      width: 260px;
-      border-radius: 130px;
+      width: 90px;
+      border-radius: 45px;
     }
-    .brands .container .item p {
-      font-size: 28pt
-    }
-
-    .brands .controller {
-      transform: scale(1.5)
-    }
+  //  .brands .container .item p {
+  //    font-size: 28pt
+  //  }
+  //
+  //  .brands .controller {
+  //    transform: scale(1.5)
+  //  }
     .brands .left {
-      left: -20px;
+      top: 57%;
+      left: -5%;
     }
     .brands .right {
-      right: -20px;
+      top: 57%;
+      right: -5%;
     }
-
+  //
     .whats_up h1 {
       width: 100%;
       text-align: center;
-      margin: 70px 0;
     }
     .whats_up .descption {
       width: 80%;
       text-align: justify;
-      font-size: 14pt;
+      //font-size: 14pt;
       line-height: 1.5;
     }
-    .whats_up .descption::before {
-      transform: scale(1.5);
-    }
-    .whats_up .descption::after {
-      bottom: 15%;
-      transform: scale(1.5) rotate(180deg);
-    }
+  //  .whats_up .descption::before {
+  //    transform: scale(1.5);
+  //  }
+  //  .whats_up .descption::after {
+  //    bottom: 15%;
+  //    transform: scale(1.5) rotate(180deg);
+  //  }
     .whats_up .container {
       width: 80%;
-      border-radius: 30px 30px 0 0;
-      margin-top: 60px;
-      box-shadow: 0 1px 80px 0 rgba(127, 127, 127, 0.5);
+      border-radius: 20px 20px 0 0;
+      margin-top: 20px;
+      box-shadow: 0 1px 30px 0 rgba(127, 127, 127, 0.5);
     }
-    .whats_up .container > :first-child {
-      margin-top: 80px;
-    }
+
     .whats_up .container .item {
       width: 100%;
-      margin-bottom: 80px;
+      margin-bottom: 40px;
     }
     .whats_up .container .item .img {
-      width: 280px;
-      height: 280px;
+      width: 180px;
+      height: 180px;
       border-radius: 450px;
-      margin-bottom: 40px;
+      margin-bottom: 20px;
       border-width: 3px;
     }
     .whats_up .container .item .img img {
       width: 60%;
     }
     .whats_up .container .item h3 {
-      font-size: 28pt;
-      margin-bottom: 50px;
+      //font-size: 28pt;
+      margin-bottom: 20px;
     }
     .whats_up .container .item p {
-      font-size: 24pt;
+      //font-size: 24pt;
       width: 80%;
       line-height: 1.5;
     }
     .whats_up .close {
-      height: 2600px;
+      height: 1410px;
     }
-
     .loyalty {
+      margin-top: 30px;
       width: 80%;
     }
     .loyalty .item {
@@ -797,36 +809,28 @@
       flex-direction: column-reverse;
     }
     .loyalty .item .badge1 {
-      top: 200px;
-      left: 50px;
-      padding: 30px;
+      top: 150px;
+      padding: 20px;
       border-radius: 100px;
     }
     .loyalty .item .badge2 {
-      right: 50px;
-      padding: 30px;
+      right: -20px;
+      padding: 20px;
       border-radius: 100px;
-      top: 270px;
+      top: 180px;
     }
-    .loyalty .item .badge1 img {
-      width: 120px;
-    }
-    .loyalty .item .badge2 img {
-      width: 120px;
-    }
+
     .loyalty .item .img {
-      width: 600px;
       margin-right: 0;
-      margin-top: 200px;
-      margin-bottom: 80px;
+      margin-top: 150px;
+      margin-bottom: 50px;
     }
     .loyalty .item .img2 {
-      width: 600px;
-      margin-top: 250px;
-      margin-bottom: 80px
+      margin-top: 180px;
+      margin-bottom: 50px
     }
     .loyalty .item .info h2 {
-      font-size: 34pt;
+      //font-size: 34pt;
       text-align: center;
       margin-top: 40px;
       position: absolute;
@@ -834,16 +838,12 @@
     }
     .loyalty .item .info p {
       position: relative;
-      font-size: 27pt;
+      //font-size: 27pt;
       width: 70vw;
       line-height: 1.3;
-      margin-bottom: 50px;
     }
     .loyalty .item .info p::before {
       position: absolute;
-      transform: scale(3);
-      top: -20px;
-      left: -30px;
     }
     .loyalty .item .info p br {
       display: none;
@@ -856,9 +856,13 @@
     .connect p {
       width: 80%;
       align-self: center;
-      font-size: 17pt;
+      //font-size: 17pt;
       text-align: center;
     }
+
+    .connect .map { width: 100%; }
+    .connect .logo { width: 60%; top: 70px !important; }
+    .connect .active_point { display: none; }
 
 
     .start {
@@ -867,6 +871,7 @@
       background-size: cover
     }
     .start > * {
+      width: 80%;
       justify-content: center;
     }
     .start .info {
@@ -877,17 +882,18 @@
     }
     .start .info h1 {
       margin-top: 0;
-      font-size: 40pt;
+      //font-size: 40pt;
     }
-    .start .info h1 span:nth-child(1) {
-      margin-right: 20px;
-    }
-    .start .info br {
-      display: none;
-    }
+    //.start .info h1 span:nth-child(1) {
+    //  margin-right: 20px;
+    //}
+    //.start .info br {
+    //  display: none;
+    //}
     .start .info p {
+      text-align: justify;
       margin-bottom: 140px;
-      font-size: 20pt;
+      //font-size: 20pt;
     }
     .start .phone {
       width: 70%;
@@ -900,38 +906,47 @@
 
 
     .access h1 {
-      font-size: 30pt;
+      width: 80%;
+      margin: 40px auto 30px auto;
     }
+
+    .access::before {
+      left: -150%;
+      width: 400%;
+    }
+
     .access p {
-      font-size: 20pt;
+      //font-size: 20pt;
       width: 75%;
       line-height: 1.3
     }
 
     .download {
-      padding: 40px 0;
+      padding: 10px 0;
     }
     .download .b_width {
       width: auto;
       display: flex;
       justify-content: center;
+      align-items: center;
     }
     .download .store {
       flex-grow: 0;
-      margin-right: 30px;
+      margin-right: 10px;
+      height: 50px;
     }
     .download .store img {
-      height: 120px;
+      height: 50px;
     }
     .download .store > :last-child {
       display: none;
     }
     .download .scroll {
-      height: 120px;
+      height: 50px;
+      width: 120px;
       justify-content: center;
     }
     .download .scroll img {
-      width: 40px;
       padding: 0;
     }
     .download .scroll p {
@@ -939,17 +954,17 @@
     }
     .download .scroll .mobile_text {
       display: block;
-      font-size: 30pt;
-      margin-left: 30px
+      //font-size: 30pt;
+      margin-left: 10px
     }
 
 
-    #view_all {
+    #view_all_home {
       color: #f8951d;
       display: flex;
       margin: auto;
-      font-size: 28pt;
-      padding: 24px 180px;
+      font-size: 15pt;
+      padding: 8px 50px;
       border: none;
       border: solid 3px #f8951d;
       border-radius: 60px;
@@ -958,7 +973,7 @@
     }
 
     .bottom {
-      margin-bottom: 200px;
+      margin-bottom: 70px;
     }
 
   }

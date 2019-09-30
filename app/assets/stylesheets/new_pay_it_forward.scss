@@ -84,22 +84,26 @@
     @media only screen and (max-device-width: 765px) {
 
         .loyalty_header {
-            background-position: 1500px 50px;
-            margin-bottom: 120px;
+            background-position: 600px 0px;
+            margin-bottom: 40px;
+            background-size: 380%;
         }
 
         .section_header {
           background: white;
-          margin: 120px auto 90px;
+          margin: 40px auto 40px;
           width: 100%;
-            font-size: 44pt;
+          padding: 0;
+            //font-size: 44pt;
         }
 
         .how_its_work {
             flex-wrap: wrap;
             height: auto;
             background: none;
-            width: 97%;
+            width: 84%;
+          margin: auto;
+          padding: 0;
         }
 
         .how_its_work .item {
@@ -109,10 +113,10 @@
         }
 
         .how_its_work .item .img {
-            width: 600px;
-            height: 600px;
+            width: 300px;
+            height: 300px;
             border-radius: 300px;
-            margin-bottom: 60px;
+            margin-bottom: 25px;
             box-shadow: 0 1px 40px 0 rgba(209, 209, 209, 0.5);
         }
 
@@ -123,7 +127,7 @@
         .how_its_work .item p {
             width: 80%;
             margin: auto;
-            font-size: 24pt;
+            font-size: 11pt;
         }
 
         .how_its_work .item:nth-of-type(1) .img img {
@@ -144,18 +148,20 @@
         }
 
         .how_its_work .item .badge {
-            width: 100px;
-            height: 100px;
+            width: 80px;
+            height: 80px;
             border-radius: 50px;
             font-size: 30pt;
-            top: 5%;
-            left: 15%;
+            top: 2%;
+            left: 5%;
         }
 
         .section_footer {
+          width: 84%;
             border: none;
             box-shadow: none;
-            font-size: 44pt;
+          padding: 0;
+            //font-size: 44pt;
         }
     }
 }

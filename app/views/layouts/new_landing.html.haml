@@ -23,11 +23,11 @@
     = javascript_include_tag 'new_script', 'data-turbolinks-track': 'reload'
 
     %script( src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.2/TweenMax.min.js")
-    %script( defer src="https://maps.googleapis.com/maps/api/js?key=#{ENV['GOOGLE_WEB_API_KEY']}&callback")
 
     = render 'layouts/facebook_pixel' if ENV['SERVER'] == 'production'
 
     %body.d-table.w-100#main{ class: "#{controller_name}_#{action_name}" }
+    = render 'pages/navbar'
     = render 'layouts/analytick_body' if ENV['SERVER'] == 'production'
     - unless flash.empty?
       %script{ type: "text/javascript" }
@@ -35,3 +35,4 @@
           - type = f[0].to_s.gsub('alert', 'error').gsub('notice', 'info')
           toastr["#{ type }"]("#{ f[1] }")
     = yield
+    = render 'pages/bottom'

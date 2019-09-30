@@ -69,30 +69,29 @@ hr { height: 100%; width: 1px; background: white; border: none; }
 	.hide { display: none; }
 
 	.bottom { padding: 30px 30px; }
-	.bottom p { font-size: 13pt; }
-	.bottom > * { flex-direction: column; }
-	.bottom > :first-child {  padding-bottom: 60px; }
+	.bottom .b_width { padding: 0; }
+	//.bottom p { font-size: 13pt; }
+	.bottom > * { flex-direction: column; padding: 0; }
+	.bottom > :first-child {  padding-bottom: 30px; }
 	.bottom > :first-child > * { width: 100%; }
 	.bottom > :first-child > *:first-child { display: flex; justify-content: center; }
 	.bottom > :first-child > *:last-child { min-width: 100%; max-width: 100%; }
 
-	.bottom > :last-child { flex-direction: column-reverse; }
-	.bottom > :last-child * { margin: 10px; }
-
-	.bottom .logo { width: 50%; margin-top: 40px; margin-bottom: 40px; }
+	.bottom > :last-child { flex-direction: column-reverse; padding: 0; width: 100%; }
+	.bottom > :last-child * { margin: 10px 0 10px 0; }
 
 	.bottom .links {
 		display: flex;
 		width: 100%;
 		justify-content: center;
 		border-top: solid 1px white;
-		padding-top: 60px;
+		padding-top: 30px;
 	}
 
-	.bottom .privacy { font-size: 20pt; }
-	.bottom .links a img { height: 80px; margin-right: 30px; }
-	.bottom .product p { font-size: 20pt; }
-	.bottom .cash img { height: 60px; }
+	.bottom .privacy { font-size: 10px; }
+	.bottom .privacy a { margin: 10px; }
+	.bottom .contact_us .links a img { width: 60px; margin-right: 30px; }
+	//.bottom .product p { font-size: 20pt; }
 
 }
 

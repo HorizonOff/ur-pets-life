@@ -57,6 +57,7 @@
 
 .navbar .device .logo {
     flex-grow: 1;
+    object-fit: contain;
 }
 
 /*Desktop*/
@@ -102,7 +103,7 @@
 	padding: 20px 30px;
 	border-radius: 12px;
 	top: 60px;
-	left: 43%;
+	left: 45%;
 	background: white;
 }
 
@@ -140,12 +141,12 @@
 
 @media only screen and (max-device-width: 765px) {
 
-	.navbar { height: 130px; }
-	.navbar .logo   { height: 160px; align-self: flex-start; }
-	.navbar .menu   { height: 50px; }
-	.navbar .mobile .key { height: 50px; }
-	.navbar .device { padding: 0 60px; }
+	.navbar { height: 60px; object-fit: contain}
+	.navbar .logo   { height: 75px; align-self: flex-start; object-fit: contain; }
+	.navbar .menu   { height: 25px; }
+	.navbar .mobile .key { height: 25px; margin-right: 10px; }
+	.navbar .device { padding: 0 10px; }
 
-	.navbar .hamburger { transform: scale(1.8);}
+	.navbar .hamburger { transform: scale(0.8); }
 
 }

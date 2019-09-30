@@ -9,10 +9,13 @@ $(document).on('turbolinks:load',function() {
 
         if (petParam === "1") {
             $('#desktop_by_pets').children()[2].className = "active";
+            $('#mobile_select_by_pets').val("For Cats");
         } else if (petParam === "2") {
             $('#desktop_by_pets').children()[1].className = "active";
+            $('#mobile_select_by_pets').val("For Dogs");
         } else {
             $('#desktop_by_pets').children()[0].className = "active";
+            $('#mobile_select_by_pets').val("View All Products");
         }
 
         if (sortParam === "max_price") {
@@ -39,10 +42,25 @@ $(document).on('turbolinks:load',function() {
             afterChange()
         });
 
+        var mobileSortByPet = $('#mobile_select_by_pets');
+        mobileSortByPet.change(function () {
+            afterChange()
+        });
+
         function afterChange() {
 
+            var android = (/android/i.test(navigator.userAgent.toLowerCase()));
+            var ios = (/iphone|ipod/i.test(navigator.userAgent.toLowerCase()));
+
+            let petIndex;
+
+            if (ios || android) {
+                petIndex = mobileSortByPet.prop('selectedIndex');
+            } else {
+                petIndex = $('#desktop_by_pets .active').index();
+            }
+
             let sortIndex = sortByPrice.prop('selectedIndex');
-            let petIndex = $('#desktop_by_pets .active').index();
 
             let petType = petTypeArray[petIndex];
             let sortType = sortTypeArray[sortIndex];
