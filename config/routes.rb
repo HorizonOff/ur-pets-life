@@ -10,7 +10,7 @@ Rails.application.routes.draw do
   resources :item_brands
   resources :item_categories
   mount Ckeditor::Engine => '/ckeditor'
-  root 'pages#newlanding'
+  root 'pages#index'
   get '/login', to: 'application#login'
   get '/privacy_policy_new', to:'pages#send_message', as:'view_pp'
   post 'send_message', to: 'pages#send_message', as: 'send_message_post'
@@ -138,15 +138,16 @@ Rails.application.routes.draw do
   end
 
   resource :terms_and_conditions, only: :show
-  get 'loyalty_program', to:'pages#loyalty_program'
-  get 'app_loyalty_program', to:'pages#app_loyalty_program'
+  get 'index', to: 'pages#index'
+  get 'about', to: 'pages#about'
+  get 'loyalty', to: 'pages#loyalty'
+  get 'pay_it_forward', to: 'pages#pay_it_forward'
+  get 'sale', to: 'pages#sale'
+  get 'community', to: 'pages#community'
+  get 'contact_us', to: 'pages#contact_us'
   get 'privacy_policy', to: 'pages#privacy_policy'
   get 'cancelation_policy', to: 'pages#cancelation_policy'
-  get 'app_cancelation_policy', to: 'pages#app_cancelation_policy'
   get 'term_conditions', to:'pages#term_conditions'
-  get 'app_term_conditions', to:'pages#app_term_conditions'
-  get 'pets_life_privacy_policy', to: 'pages#new_privacy_policy'
-  get 'app_pets_life_privacy_policy', to: 'pages#app_new_privacy_policy'
   devise_for :admins, path: 'admin_panel/admins', except: :registrations,
                       controllers: { invitations: 'admin_panel/admins/invitations' }
 

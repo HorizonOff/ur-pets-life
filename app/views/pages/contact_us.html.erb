@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <body>
+		
+		<div class="b_header contact_header">
+			<div class="b_width container">
+				<h1>We would love to hear from you</h1>
+				<span>Whether you're a Pet's Owner, an Establishment<br>or just simply a animals enthousiast.</span>
+			</div>
+        </div>
+		
+		<div class="b_width container">
+			
+			<div class="contact_us_item">
+				
+				<p class="title">Send us a message</p>
+
+        <%= form_for @contact_request, remote: true, url: send_message_post_path do |f| %>
+          <div class="text_field">
+            <p class="placeholder">Your Name</p>
+            <%= f.text_field :user_name, class: "text", required: "required" %>
+          </div>
+
+          <div class="text_field">
+            <p class="placeholder">Your Email Address</p>
+            <%= f.email_field :email, class: "text", required: "required" %>
+          </div>
+
+          <div class="message">
+            <p class="placeholder">Write your message</p>
+            <%= f.text_area :message, required: "required" %>
+          </div>
+
+          <%= recaptcha_tags class: 'captcha' %>
+
+          <%= f.submit "Submit", class: 'submit' %>
+        <% end %>
+				
+			</div>
+
+		</div>
+
+    </body>
+    
+</html>

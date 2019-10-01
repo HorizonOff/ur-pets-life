@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        
+        <div class="b_header sale_header"> 
+            <h1 class="b_width">Your pets needs<br>at the best prices</h1>
+        </div>
+		
+		<div class="b_width sale_filter">
+			
+			<div class="buttons_list list">
+				<div class="select">
+					<select id="mobile_select_by_pets">
+						<option>View All Products</option>
+						<option>For Dogs</option>
+						<option>For Cats</option>
+					</select>
+				</div>
+			</div>
+			
+			<div class="buttons" id="desktop_by_pets">
+				<button>View All Products</button>
+				<button>For Dogs</button>
+				<button>For Cats</button>
+			</div>
+			
+			<div class="list">
+				<p>Sort by</p>
+				<div class="select">
+					<select id="sale_sort_by_price">
+						<option>Discount</option>
+						<option>Price: High to low</option>
+						<option>Price: Low to hight</option>
+					</select>
+				</div>
+			</div>
+		
+		</div>
+        
+        <div class="b_width" id="sale_items_container">
+            <% @sorted.each do |item| %>
+                <div class="sale_item">
+                    <div class="sale">
+                        <p class="percent"><%= item.discount&.round.to_s %>%</p>
+                        <p class="off">OFF</p>
+                    </div>
+                    <img src="<%= item.picture_url %>" alt="<%= item.name.truncate(40) %>">
+                    <p class="weight"><%= item.unit %></p>
+                    <p class="name"><%= item.name.truncate(55) %></p>
+                    <p class="old_price">AED <%= item.unit_price %></p>
+                    <p class="new_price">AED <%= item.price %></p>
+
+                </div>
+            <% end %>
+        </div>
+
+    <%= paginate @sorted%>
+
+    </body>
+    
+</html>

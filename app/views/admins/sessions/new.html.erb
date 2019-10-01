@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    
+    <head>
+		
+<!--		<meta charset="UTF-8">-->
+        
+<!--        <link rel="stylesheet" href="style.css">-->
+<!--        <link rel="stylesheet" href="log_in/log_in.css">-->
+		
+<!--		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>-->
+<!--		<script src="log_in/log_in.js"></script>-->
+		        
+    </head>
+    
+    <body>
+		
+		<a class="back_btn" href="<%= index_path %>"><img src="<%= asset_path 'log_in/arrow-left.svg' %>"></a>
+		
+		<div class="log_in_form">
+			<a class="close_btn" href="<%= index_path %>"><img src="<%= asset_path 'log_in/button-close.svg' %>"></a>
+			<img class="logo" src="<%= asset_path 'log_in/group.svg' %>">
+			<p class="head">Establishment Owner Log in</p>
+
+      <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+        <div class="b_input">
+          <div class="content">
+            <p>Your Email Address</p>
+            <%= f.email_field :email, autofocus: true, type: 'email', required: true %>
+          </div>
+          <span class="error">Wrong message</span>
+        </div>
+
+        <div class="b_input">
+          <div class="content">
+            <p>Password</p>
+            <%= f.password_field :password, autocomplete: 'off', type: 'password', required: true %>
+            <img class="visibility" src="<%= asset_path 'log_in/visibility.svg' %>">
+          </div>
+          <span class="error">Wrong message</span>
+        </div>
+
+        <%= f.submit "Log in", class: "login_btn" %>
+
+        <div class="remember">
+            <%= f.check_box :remember_me, type: "checkbox" %>
+            <span>Remember me on this computer</span>
+        </div>
+      <% end %>
+		</div>
+
+		
+		<span class="forgot_password">Forgot your password? <a href="<%=new_password_path(resource_name)%>">Click here.</a></span>
+		
+		<img class="bottom_img" src="<%= asset_path 'log_in/pets.jpg' %>">
+		
+    </body>
+    
+</html>

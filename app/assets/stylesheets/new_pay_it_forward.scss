@@ -1,0 +1,167 @@
+.pages_pay_it_forward {
+    .loyalty_header {
+        position: relative;
+        background: image_url('pay_it_forward/pay-it-forward-edit@3x.png');
+        background-size: cover;
+        background-position: top;
+        margin-bottom: 40px;
+    }
+
+    .section_header {
+        margin-top: 50px;
+        padding: 10px 0;
+        width: 300px;
+        border-radius: 10px 10px 0 0;
+        background: #f9f9f9;
+    }
+
+    .how_its_work {
+        padding-top: 50px;
+        padding-bottom: 80px;
+        height: 350px;
+        width: 100%;
+        background: #f9f9f9;
+    }
+
+    .how_its_work .item {
+        margin-right: 63px;
+    }
+
+    .how_its_work .item:last-child {
+        margin-right: 0;
+    }
+
+    .how_its_work .item .badge {
+        font-family: "Lato";
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        font-weight: bold;
+        font-size: 16pt;
+        width: 50px;
+        height: 50px;
+        border-radius: 25px;
+        background: #1c5879;
+    }
+
+    .how_its_work .item .img {
+        margin: auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: white;
+        width: 230px;
+        height: 230px;
+        border-radius: 115px;
+        box-shadow: 0 1px 10px 0 rgba(209, 209, 209, 0.5);
+    }
+
+    .how_its_work .item p {
+      font-size: 13px;
+      margin: 30px auto auto;
+      width: 200px;
+        text-align: center;
+        font-family: "Lato";
+        color: #575757;
+    }
+
+    .how_its_work .item p span {
+        font-weight: bold;
+    }
+
+    .section_footer {
+      margin: -30px auto auto;
+      background: white;
+        font-size: 20px;
+        font-weight: bold;
+        padding: 20px 30px;
+        border-radius: 20px;
+        box-shadow: 0 1px 5px 0 rgba(232, 232, 232, 0.5);
+    }
+
+    @media only screen and (max-device-width: 765px) {
+
+        .loyalty_header {
+            background-position: 600px 0px;
+            margin-bottom: 40px;
+            background-size: 380%;
+        }
+
+        .section_header {
+          background: white;
+          margin: 40px auto 40px;
+          width: 100%;
+          padding: 0;
+            //font-size: 44pt;
+        }
+
+        .how_its_work {
+            flex-wrap: wrap;
+            height: auto;
+            background: none;
+            width: 84%;
+          margin: auto;
+          padding: 0;
+        }
+
+        .how_its_work .item {
+            width: 100%;
+          margin: 0 0 80px;
+          position: relative;
+        }
+
+        .how_its_work .item .img {
+            width: 300px;
+            height: 300px;
+            border-radius: 300px;
+            margin-bottom: 25px;
+            box-shadow: 0 1px 40px 0 rgba(209, 209, 209, 0.5);
+        }
+
+        .how_its_work .item .img img {
+            width: 40%;
+        }
+
+        .how_its_work .item p {
+            width: 80%;
+            margin: auto;
+            font-size: 11pt;
+        }
+
+        .how_its_work .item:nth-of-type(1) .img img {
+            width: 35%;
+        }
+
+        .how_its_work .item:nth-of-type(2) .img img {
+            width: 60%;
+        }
+
+        .how_its_work .item:nth-of-type(3) .img img {
+            width: 65%;
+            margin-left: 80px;
+        }
+
+        .how_its_work .item:nth-of-type(4) .img img {
+            width: 50%;
+        }
+
+        .how_its_work .item .badge {
+            width: 80px;
+            height: 80px;
+            border-radius: 50px;
+            font-size: 30pt;
+            top: 2%;
+            left: 5%;
+        }
+
+        .section_footer {
+          width: 84%;
+            border: none;
+            box-shadow: none;
+          padding: 0;
+            //font-size: 44pt;
+        }
+    }
+}
