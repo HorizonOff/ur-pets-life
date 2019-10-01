@@ -172,21 +172,20 @@
         padding: 10px 0;
     }
 
-    .sale_pagination {
+    nav {
         display: flex;
         justify-content: center;
         margin-top: 20px;
         margin-bottom: 50px;
+      color: #575757;
+      font-family: "Lato";
+      font-size: 16px;
+      display: flex;
     }
 
-    .sale_pagination .container {
-        color: #575757;
-        font-family: "Lato";
-        font-size: 16px;
-        display: flex;
-    }
 
-    .sale_pagination .container span {
+
+    nav span {
         background: white;
         display: flex;
         justify-content: center;
@@ -199,14 +198,14 @@
         border-right: solid 2px #eceeef;
     }
 
-    .sale_pagination .container .current {
+    nav .current {
         z-index: 5;
         color: white;
         border-color: #f8951d;
         background: #f8951d;
     }
 
-    .sale_pagination .container *:last-child {
+    nav *:last-child {
         display: flex;
         text-decoration: none;
         color: grey;
@@ -306,16 +305,16 @@
             //font-size: 24pt;
         }
 
-        .sale_pagination .container span {
+        nav span {
             width: 80px;
             height: 80px
         }
 
-      nav .pagination {
+      nav  {
         padding: 0;
       }
 
-      nav li {
+      nav span {
        width: 30px;
         height: 30px;
       }
