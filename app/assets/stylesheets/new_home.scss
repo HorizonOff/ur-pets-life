@@ -252,6 +252,10 @@
     border: solid 1px #23b4c9;
     border-radius: 60px;
     margin-bottom: 10px;
+
+    img {
+      object-fit: contain;
+    }
   }
 
   .whats_up .container .item h3 {
