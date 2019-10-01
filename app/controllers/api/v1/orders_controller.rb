@@ -332,6 +332,7 @@ module Api
 
       def update
         @order.update(order_params)
+        binding.pry
         return render json: {
             Message: 'Order was successfully updated.',
             status: :updated,
@@ -424,7 +425,7 @@ module Api
 
       # Never trust parameters from the scary internet, only allow the white list through.
       def order_params
-        params.permit(:TransactionId, :TransactionDate, :IsCash, :Payment_Status)
+        params.permit(:TransactionId, :TransactionDate, :IsCash, :Payment_Status, :order_status_flag)
       end
     end
   end
