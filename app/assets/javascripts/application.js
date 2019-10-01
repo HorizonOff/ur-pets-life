@@ -130,6 +130,8 @@ $.each([ '#items' ], function( index, value ){
     });
 });
 
+$(document).on('cocoon:after-remove', getCalculatedPrice);
+
 $(document).on('cocoon:after-insert', '#service_option_times', function(e, added_element) {
   init_timepicker();
 });
