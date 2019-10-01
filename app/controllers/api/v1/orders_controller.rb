@@ -332,7 +332,6 @@ module Api
 
       def update
         @order.update(order_params)
-        binding.pry
         return render json: {
             Message: 'Order was successfully updated.',
             status: :updated,
