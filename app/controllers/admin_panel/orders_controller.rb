@@ -189,6 +189,7 @@ module AdminPanel
   end
 
   def calculating_price
+    return render json: { subtotal: 0, total: 0 } if params['item']['order_items'].blank?
     @items_price = 0
     @total_price_without_discount = 0
     @discounted_items_amount = 0
