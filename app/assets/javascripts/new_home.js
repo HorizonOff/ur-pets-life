@@ -3,8 +3,8 @@ $(document).on('turbolinks:load', function(){
 	var android = (/android/i.test(navigator.userAgent.toLowerCase()));
 	var ios = (/iphone|ipod/i.test(navigator.userAgent.toLowerCase()));
 	
-	if (android) { $('#android').css({ display : 'block' }); }
-	if (ios) { $('#ios').css({ display : 'block' }); }
+	if (android) { $('#android').css({ display : 'block' }); $('.store .d_android').css({ display : 'block' }); }
+	if (ios) { $('#ios').css({ display : 'block' }); $('.download .store .d_ios').show(); }
 	
 //	=============================================================================
 		

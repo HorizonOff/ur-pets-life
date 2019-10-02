@@ -2,6 +2,7 @@ $(document).on('turbolinks:load',function() {
 	
 	var comments = $('.mobile_view').children().length;
 	var itemWidth = $('.mobile_view').children().first().width();
+	var lol = $('.mobile_view')
 	
 	var startTouch;
 	var startContent;
@@ -16,10 +17,12 @@ $(document).on('turbolinks:load',function() {
 	});
 	
 	$('.mobile_view').on('touchend', function(e) { 
-		
+
+	    console.log(itemWidth)
+
 		var side = touchLenght();
-		if (side >= 200) {autoScroll(startContent + itemWidth + 140)}
-		if (side <= -200) {autoScroll(startContent - itemWidth - 140)}
+		if (side >= 200) {autoScroll(startContent + itemWidth + 77 )}
+		if (side <= -200) {autoScroll(startContent - itemWidth - 77 )}
 		if (side <= 200 && side >= - 200) {autoScroll(startContent)}
 		
 	});

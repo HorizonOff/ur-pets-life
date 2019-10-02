@@ -600,6 +600,61 @@
     }
   }
 
+  @media only screen and (max-device-width: 1000px) {
+
+    .header .information {
+      flex-grow: 0;
+      width: 32%;
+    }
+
+    .header .information h1 {
+      font-size: 20px;
+    }
+
+    .header .information p {
+      font-size: 14px;
+    }
+
+    .header .store_buttons * {
+      height: 40px;
+      margin-right: 3px;
+    }
+
+    .header .phones {
+      width: 40%;
+    }
+
+    .connect .image_container .elements {
+      width: 100%;
+    }
+
+    .check_container {
+      font-size: 12px;
+      flex-grow: 0;
+    }
+
+    .brands .container .item {
+      margin-right: 43px;
+    }
+
+    .brands .container .item img {
+      width: 180px;
+      border-radius: 90px;
+    }
+
+    .scroll_section .container .item {
+      font-size: 10px;
+    }
+
+    .start .phone {
+      width: 300px;
+    }
+
+    .access {
+      margin-top: -330px;
+    }
+  }
+
   @media only screen and (max-device-width: 765px) {
 
 
@@ -912,7 +967,7 @@
     .download .store img {
       height: 50px;
     }
-    .download .store > :last-child {
+    .download .store a  {
       display: none;
     }
     .download .scroll {

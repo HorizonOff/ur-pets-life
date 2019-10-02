@@ -211,12 +211,31 @@
         color: grey;
     }
 
+  @media screen and (max-width: 1200px) {
+    .sale_item {
+      margin: 12px;
+    }
+  }
 
-    @media screen and (max-width: 1200px) {
+    @media screen and (max-width: 1000px) {
         .sale_item {
-            width: 21%;
-            border-radius: 30px;
+            width: 30%;
+          margin: 10px;
         }
+
+      .sale_filter .buttons {
+        display: none;
+      }
+
+      .sale_filter .buttons_list {
+        display: block;
+      }
+
+      .sale_filter .list .select {
+        height: 40px;
+        border-radius: 50px;
+        margin: 0;
+      }
     }
 
     @media only screen and (max-device-width: 765px) {
@@ -231,7 +250,8 @@
         }
 
         .sale_item {
-            width: 47%;
+            max-width: 47%;
+            min-width: 46%;
             border-radius: 15px;
           margin: 4px;
         }
