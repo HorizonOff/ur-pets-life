@@ -66,6 +66,9 @@ module Api
           :location => {
             :only => [:id, :latitude, :longitude, :city, :area, :street, :building_name, :unit_number, :villa_number]
           },
+          :user => {
+            :only => [:id, :first_name, :last_name, :mobile_number]
+          },
           :order_items => {
             :only => [:id, :Quantity, :IsRecurring, :IsReviewed, :status],
             :include => {
