@@ -7,6 +7,7 @@
             Order #
             = @admin_panel_order.id
             Details
+            = link_to 'Download Order', download_order_admin_panel_order_path(:format => :pdf), class: 'btn btn-info btn-xs' if @admin_panel_order.order_status_flag != "cancelled"
           .clearfix
         .x_content
 
