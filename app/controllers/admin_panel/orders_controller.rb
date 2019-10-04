@@ -265,6 +265,20 @@ module AdminPanel
     end
   end
 
+  def download_order
+    @order = Order.where(:id => params[:id]).first
+    respond_to do |format|
+      format.pdf do
+        pdf = render_to_string  pdf: "Order-#{@order.id}.pdf",
+                                layout: "pdf.html.erb",
+                                show_as_html: false,
+                                encoding: "UTF-8",
+                                template: "admin_panel/orders/order.html.erb"
+        send_data pdf, filename: "Order-#{@order.id}.pdf", type: "application/pdf", disposition: "attachment"
+      end
+    end
+  end
+
   def cancel
     orderitem = OrderItem.where(:id => params[:id]).first
     orderitem.update_attributes(status: :cancelled)

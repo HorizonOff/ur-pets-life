@@ -167,6 +167,7 @@ Rails.application.routes.draw do
     end
     resources :orders do
       member { get :invoice }
+      member { get :download_order }
       member { delete :cancel }
       member { get :ordercomments }
       resources :comments, only: %i[index create]
