@@ -77,7 +77,7 @@ class ChatMessage < ApplicationRecord
   def send_to_channel
     redis_key = "chat-#{support_chat_id}"
     @session_ids = JSON.parse($redis.get(redis_key) || '[]').uniq
-    user_ids_from_session = Session.where(id: @session_ids).pluck(:user_id)
+    user_ids_from_session = Session.where(id: @session_ids).pluck(:client_id)
     @user_ids = user_ids_from_session
     decorated_message = ::Api::V1::ChatMessageDecorator.decorate(self)
 
