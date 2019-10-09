@@ -3,7 +3,7 @@ module Api
     class AdminsController < Api::BaseController
 
       def index
-        @admin = Order.where(role: params[:role])
+        @admin = Admin.where(role: params[:role])
         render json: @admin.as_json(only: [:id, :name])
       end
     end
