@@ -20,7 +20,7 @@ module Api
             @orders = @orders.limit(size).offset(page * size)
           end
           render json: @orders.as_json(
-            :only => [:id, :Subtotal, :shipmenttime, :Delivery_Charges, :Vat_Charges, :Total, :Delivery_Date, :Order_Notes, :IsCash, :RedeemPoints, :earned_points],
+            :only => [:id, :Subtotal, :shipmenttime, :Delivery_Charges, :Vat_Charges, :Total, :Delivery_Date, :Order_Notes, :IsCash, :RedeemPoints, :earned_points, :driver_id],
             :include => {
               :location => {
                 :only => [:id, :latitude, :longitude, :city, :area, :street, :building_name, :unit_number, :villa_number]
@@ -61,7 +61,7 @@ module Api
       # GET /orders/1.json
       def show
         render json: @order.as_json(
-        :only => [:id, :Subtotal, :shipmenttime, :Delivery_Charges, :Vat_Charges, :Total, :Delivery_Date, :Order_Notes, :IsCash, :RedeemPoints, :earned_points, :order_status_flag],
+        :only => [:id, :Subtotal, :shipmenttime, :Delivery_Charges, :Vat_Charges, :Total, :Delivery_Date, :Order_Notes, :IsCash, :RedeemPoints, :earned_points, :order_status_flag, :driver_id],
         :include => {
           :location => {
             :only => [:id, :latitude, :longitude, :city, :area, :street, :building_name, :unit_number, :villa_number]
@@ -341,7 +341,7 @@ module Api
             VatPercentage: "5",
             #EarnedPoints: discount_per_transaction,
             OrderDetails: @order.as_json(
-              :only => [:id, :Subtotal, :Delivery_Charges, :Vat_Charges, :Total, :Delivery_Date, :Order_Notes, :IsCash, :shipmenttime, :RedeemPoints, :earned_points, :company_discount, :is_user_from_company, :code_discount],
+              :only => [:id, :Subtotal, :Delivery_Charges, :Vat_Charges, :Total, :Delivery_Date, :Order_Notes, :IsCash, :shipmenttime, :RedeemPoints, :earned_points, :company_discount, :is_user_from_company, :code_discount, :driver_id],
               :include => {
                 :location => {
                   :only => [:id, :latitude, :longitude, :city, :area, :street, :building_name, :unit_number, :villa_number]
