@@ -24,6 +24,7 @@ Rails.application.routes.draw do
       resources :support_chats
       resources :chat_messages
       resources :apidocs, only: :index
+      resources :admins, only: :index
       resources :contact_requests, only: [:create]
       resources :users, only: :create do
         collection { get :profile }
