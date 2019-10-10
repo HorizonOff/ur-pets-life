@@ -3,6 +3,6 @@ class OrderSerializer < ActiveModel::Serializer
              :Order_Status, :Payment_Status, :order_status_flag, :driver_name
   
   def driver_name
-    self.driver.name
+    @object.driver&.name
   end
 end
