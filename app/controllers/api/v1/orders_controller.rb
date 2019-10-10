@@ -61,7 +61,7 @@ module Api
       # GET /orders/1.json
       def show
         render json: @order.as_json(
-        :only => [:id, :Subtotal, :shipmenttime, :Delivery_Charges, :Vat_Charges, :Total, :Delivery_Date, :Order_Notes, :IsCash, :RedeemPoints, :earned_points, :order_status_flag, :driver_id],
+        :only => [:id, :Subtotal, :shipmenttime, :Delivery_Charges, :Vat_Charges, :Total, :Delivery_Date, :Order_Notes, :IsCash, :RedeemPoints, :earned_points, :order_status_flag],
         :include => {
           :location => {
             :only => [:id, :latitude, :longitude, :city, :area, :street, :building_name, :unit_number, :villa_number]
@@ -82,6 +82,9 @@ module Api
                 :only => [:id, :user_id, :item_id, :rating, :comment]
               }
             }
+          },
+          driver: {
+            only: [:id, :name]
           }
         }
       )
