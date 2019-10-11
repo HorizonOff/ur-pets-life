@@ -51,7 +51,6 @@ function getOrderQuantity(e){
 function removeInputValue() {
     if ($('#select_tag').select2('val')) {
         $('.user_filed').each(function () {
-            debugger
             $(this).find('input').val('');
         });
     }

@@ -19,7 +19,9 @@
       <div class="customer-info" style="float:left">
         <% if @order.user&.email != 'development@urpetslife.com' %>
           <h4>Invoiced To </h4>
-          <p><%= @order.unregistered_user&.name || @order.user.first_name + ' ' + @order.user.last_name %></p>
+          <% if @order.user.last_name.present? ? (name = @order.user&.last_name) : (name = '') %>
+          <% end %>
+          <p><%= @order.user.first_name + ' ' + name %></p>
           <p><%= @order.unregistered_user&.number || @order.user.mobile_number %></p>
           <p><%= @userAddress %></p>
         <% end %>

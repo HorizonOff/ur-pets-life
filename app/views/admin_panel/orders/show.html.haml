@@ -21,7 +21,8 @@
                 = @admin_panel_order.Order_Notes
               %li
                 Customer Name:
-                = @admin_panel_order.unregistered_user&.name || @admin_panel_order.user.first_name + ' ' + @admin_panel_order.user.last_name
+                - if @admin_panel_order.user.last_name.present? ? (name = @admin_panel_order.user.last_name) : (name = '')
+                  = @admin_panel_order.user.first_name + ' ' + name
               %li
                 Member type:
                 = @admin_panel_order.user&.member_type
@@ -30,7 +31,7 @@
                 = @admin_panel_order.user&.email
               %li
                 Mobile:
-                = @admin_panel_order.user&.mobile_number || @admin_panel_order.unregistered_user.number
+                = @admin_panel_order.user&.mobile_number
               %li
                 Cash On Delivery:
                 = @admin_panel_order.IsCash? ? 'Yes': 'No'
@@ -74,7 +75,7 @@
                 Pre order:
                 = @admin_panel_order.is_pre_recurring?
 
-              - if @admin_panel_order.user.present?
+              - if @admin_panel_order.user.registered_user == true
                 %p.title
                   %b Comments:
                   = @admin_panel_order.comments_count

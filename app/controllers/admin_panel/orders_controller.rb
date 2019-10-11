@@ -61,12 +61,15 @@ module AdminPanel
     @items_price = 0
     @total_price_without_discount = 0
     @discounted_items_amount = 0
-    @user = User.find_by_id(params['user_id'])
-    @unregistered_user = UnregisteredUser.find_by_id(params['unregistered_user_id']) if @user.blank?
+    @user = User.find_by_id(params['user_id'])|| User.find_by_id(params['unregistered_user_id'])
     permitted_redeem_points = 0
     admin_discount = 0
-    discount = @user.present? ? ::Api::V1::DiscountDomainService.new(@user.email.dup).dicount_on_email : 0
+    discount = params['user_id'].present? ? ::Api::V1::DiscountDomainService.new(@user.email.dup).dicount_on_email : 0
     @is_user_from_company = discount.positive?
+
+    location_id = @user&.location.present? ? @user.location.id : new_location_id
+    check_for_unregistered_user if @user.blank?
+    return redirect_to new_admin_panel_order_path, flash: { error: "User must exist!" } if @user.blank?
 
     params['order']['order_items_attributes'].each do |hash_key, hash_value|
       @item = Item.find_by_id(hash_value['item_id'])
@@ -88,7 +91,7 @@ module AdminPanel
     return redirect_to new_admin_panel_order_path, flash: { error: "Item must exist!" } if @item == nil
 
     subTotal = @items_price.to_f.round(2)
-    if @user.blank? || @user.email != 'development@urpetslife.com'
+    if @user.email != 'development@urpetslife.com'
       deliveryCharges = (subTotal < 100 ? 20 : 0)
     else
       deliveryCharges = 5.75
@@ -101,7 +104,7 @@ module AdminPanel
     admin_discount = total if admin_discount > total
     total -= admin_discount
 
-    if @user.present?
+    if params['user_id'].present?
       user_redeem_points = 0
       requested_redeem_points = params['order'][:RedeemPoints].to_i
       paymentStatus = 0
@@ -126,13 +129,8 @@ module AdminPanel
         permitted_redeem_points = subTotal
       end
     end
-    check_for_unregistered_user if @unregistered_user.blank?
-    unregistered_user_id = @unregistered_user&.id
-    return redirect_to new_admin_panel_order_path, flash: { error: "User must exist!" } if unregistered_user_id.blank? && @user.blank?
-    location_id = @user.present? ? @user.location.id : new_location_id
 
-    @order = Order.new(user_id: params['user_id'], unregistered_user_id: unregistered_user_id,
-                       RedeemPoints: permitted_redeem_points, Subtotal: @total_price_without_discount,
+    @order = Order.new(user_id: @user.id, RedeemPoints: permitted_redeem_points, Subtotal: @total_price_without_discount,
                        Delivery_Charges: deliveryCharges, shipmenttime: 'with in 7 days', Vat_Charges: vatCharges,
                        Total: total, Order_Status: 1, Payment_Status: paymentStatus,
                        Delivery_Date: params[:Delivery_Date], Order_Notes: params[:Order_Notes],
@@ -437,8 +435,15 @@ module AdminPanel
     def check_for_unregistered_user
       return if params['order']['unregistered_user'].blank?
 
-      @unregistered_user = UnregisteredUser.find_or_create_by(name: params['order']['unregistered_user']['name'],
-                                                              number: params['order']['unregistered_user']['number'])
+      @user = User.find_by(mobile_number: params['order']['unregistered_user']['name'])
+
+      if @user.blank?
+        @user = User.new(first_name: params['order']['unregistered_user']['name'],
+                         mobile_number: params['order']['unregistered_user']['number'],
+                         location: Location.find_by(order_params[:location_attributes]), registered_user: false)
+        @user.skip_user_validation = true
+        @user.save
+      end
     end
 
     def send_inventory_alerts(itemid)

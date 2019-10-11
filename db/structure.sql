@@ -1283,7 +1283,6 @@ CREATE TABLE public.orders (
     admin_discount integer DEFAULT 0,
     code_discount integer DEFAULT 0,
     driver_id integer
-    unregistered_user_id integer
 );
 
 
@@ -2000,8 +1999,8 @@ CREATE TABLE public.support_chats (
     updated_at timestamp without time zone NOT NULL,
     unread_message_count_by_user integer DEFAULT 0,
     unread_message_count_by_admin integer DEFAULT 0,
-    user_last_visit_at timestamp without time zone DEFAULT now(),
-    admin_last_visit_at timestamp without time zone DEFAULT now()
+    user_last_visit_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    admin_last_visit_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP
 );
 
 
@@ -2090,38 +2089,6 @@ CREATE SEQUENCE public.trainers_id_seq
 --
 
 ALTER SEQUENCE public.trainers_id_seq OWNED BY public.trainers.id;
-
-
---
--- Name: unregistered_users; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.unregistered_users (
-    id bigint NOT NULL,
-    name character varying,
-    number character varying,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: unregistered_users_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.unregistered_users_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: unregistered_users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.unregistered_users_id_seq OWNED BY public.unregistered_users.id;
 
 
 --
@@ -2228,7 +2195,8 @@ CREATE TABLE public.users (
     unconfirmed_email character varying,
     member_type integer DEFAULT 0,
     last_action_at timestamp without time zone,
-    pay_code character varying
+    pay_code character varying,
+    registered_user boolean DEFAULT true
 );
 
 
@@ -2506,13 +2474,6 @@ ALTER TABLE ONLY public.chat_messages ALTER COLUMN id SET DEFAULT nextval('publi
 -- Name: ckeditor_assets id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.chat_messages ALTER COLUMN id SET DEFAULT nextval('public.chat_messages_id_seq'::regclass);
-
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
---
-
 ALTER TABLE ONLY public.ckeditor_assets ALTER COLUMN id SET DEFAULT nextval('public.ckeditor_assets_id_seq'::regclass);
 
 
@@ -2772,13 +2733,6 @@ ALTER TABLE ONLY public.support_chats ALTER COLUMN id SET DEFAULT nextval('publi
 -- Name: terms_and_conditions id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.support_chats ALTER COLUMN id SET DEFAULT nextval('public.support_chats_id_seq'::regclass);
-
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
---
-
 ALTER TABLE ONLY public.terms_and_conditions ALTER COLUMN id SET DEFAULT nextval('public.terms_and_conditions_id_seq'::regclass);
 
 
@@ -2790,13 +2744,6 @@ ALTER TABLE ONLY public.trainers ALTER COLUMN id SET DEFAULT nextval('public.tra
 
 
 --
--- Name: unregistered_users id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.unregistered_users ALTER COLUMN id SET DEFAULT nextval('public.unregistered_users_id_seq'::regclass);
-
-
---
 -- Name: used_pay_codes id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -2805,13 +2752,6 @@ ALTER TABLE ONLY public.used_pay_codes ALTER COLUMN id SET DEFAULT nextval('publ
 
 --
 -- Name: user_posts id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.used_pay_codes ALTER COLUMN id SET DEFAULT nextval('public.used_pay_codes_id_seq'::regclass);
-
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.user_posts ALTER COLUMN id SET DEFAULT nextval('public.user_posts_id_seq'::regclass);
@@ -2948,7 +2888,7 @@ ALTER TABLE ONLY public.cart_items
 
 
 --
--- Name: chat_messages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: chat_messages chat_messages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.chat_messages
@@ -2956,7 +2896,7 @@ ALTER TABLE ONLY public.chat_messages
 
 
 --
--- Name: ckeditor_assets_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: ckeditor_assets ckeditor_assets_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.ckeditor_assets
@@ -3252,7 +3192,7 @@ ALTER TABLE ONLY public.specializations
 
 
 --
--- Name: support_chats_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: support_chats support_chats_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.support_chats
@@ -3260,7 +3200,7 @@ ALTER TABLE ONLY public.support_chats
 
 
 --
--- Name: terms_and_conditions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: terms_and_conditions terms_and_conditions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.terms_and_conditions
@@ -3276,15 +3216,7 @@ ALTER TABLE ONLY public.trainers
 
 
 --
--- Name: unregistered_users unregistered_users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.unregistered_users
-    ADD CONSTRAINT unregistered_users_pkey PRIMARY KEY (id);
-
-
---
--- Name: used_pay_codes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: used_pay_codes used_pay_codes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.used_pay_codes
@@ -3292,7 +3224,7 @@ ALTER TABLE ONLY public.used_pay_codes
 
 
 --
--- Name: user_posts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: user_posts user_posts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.user_posts
@@ -4741,7 +4673,7 @@ ALTER TABLE ONLY public.user_posts
 
 
 --
--- Name: fk_rails_741753181e; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: used_pay_codes fk_rails_741753181e; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.used_pay_codes
@@ -4757,23 +4689,7 @@ ALTER TABLE ONLY public.used_pay_codes
 
 
 --
--- Name: used_pay_codes fk_rails_780afa10b5; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.used_pay_codes
-    ADD CONSTRAINT fk_rails_780afa10b5 FOREIGN KEY (user_id) REFERENCES public.users(id);
-
-
---
--- Name: fk_rails_780afa10b5; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.used_pay_codes
-    ADD CONSTRAINT fk_rails_780afa10b5 FOREIGN KEY (user_id) REFERENCES public.users(id);
-
-
---
--- Name: fk_rails_79d7faf1bd; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: grooming_centres fk_rails_79d7faf1bd; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.grooming_centres
@@ -5196,4 +5112,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190916085330'),
 ('20190916154332'),
 ('20190919100321'),
-('20190920134238');
+('20190920134238'),
+('20191009151906');
+
+

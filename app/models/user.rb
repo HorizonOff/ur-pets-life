@@ -9,10 +9,11 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :confirmable, :trackable, :omniauthable, omniauth_providers: %i[facebook google_oauth2]
 
+  validates :email, presence: { message: 'Email adress is required' }, if: :user_registered?
+
   validates :email, uniqueness: { case_sensitive: false, message: 'Email address is already registered' },
                     format: { with: Devise.email_regexp, message: 'Email address is invalid' },
-                    length: { maximum: 50, message: 'Email address should contain not more than 50 symbols' },
-                    presence: { message: 'Email adress is required' }
+                    length: { maximum: 50, message: 'Email address should contain not more than 50 symbols' }, if: :user_registered?
 
   validates_length_of :password, within: Devise.password_length,
                                  too_short: 'Password should contain at least 6 symbols',
@@ -24,9 +25,11 @@ class User < ApplicationRecord
                         length: { within: 2..64,
                                   too_short: 'Last name should contain at least 2 symbols',
                                   too_long: 'Last name should contain not more than 64 symbols' },
-                        presence: { message: 'Last name is required' }
-  validates :first_name, format: { with: /\A[a-z\-A-Z\s,']+\z/, message: 'First name is invalid' },
-                         length: { within: 2..64,
+                        presence: { message: 'Last name is required' }, if: :user_registered?
+
+  validates :first_name, format: { with: /\A[a-z\-A-Z\s,']+\z/, message: 'First name is invalid' }, if: :user_registered?
+
+  validates :first_name, length: { within: 2..64,
                                    too_short: 'First name should contain at least 2 symbols',
                                    too_long: 'First name should contain not more than 64 symbols' },
                          presence: { message: 'First name is required' }
@@ -40,9 +43,10 @@ class User < ApplicationRecord
 
   validates :facebook_id, :google_id, uniqueness: true, allow_blank: true
 
-  validate :gender_should_be_valid
+  validate :gender_should_be_valid, if: :user_registered?
 
   attr_accessor :skip_password_validation
+  attr_accessor :skip_user_validation
 
   acts_as_paranoid
 
@@ -110,7 +114,9 @@ class User < ApplicationRecord
   end
 
   def name
-    first_name + ' ' + last_name
+    if registered_user == false ? (last_unregistered_name = '') : (last_unregistered_name = last_name)
+    first_name + ' ' + last_unregistered_name
+    end
   end
 
   def gender=(value)
@@ -182,8 +188,12 @@ class User < ApplicationRecord
   end
 
   def password_required?
-    return false if skip_password_validation
+    return false if skip_password_validation || skip_user_validation
     !persisted? || !password.nil? || !password_confirmation.nil?
+  end
+
+  def user_registered?
+    false if skip_user_validation
   end
 
   def gender_should_be_valid

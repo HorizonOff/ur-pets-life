@@ -29,7 +29,7 @@
             .form-group
               = label_tag :user_id, 'User Name', class: 'control-label col-md-2 col-sm-2 col-xs-6'
               .col-md-3.col-sm-3.col-xs-6
-                = select_tag :user_id, options_from_collection_for_select((User.includes(:orders).where("orders.user_id = users.id").references(:orders).all + UnregisteredUser.all), :id, :name),
+                = select_tag :user_id, options_from_collection_for_select((User.includes(:orders).where("orders.user_id = users.id").references(:orders).all), :id, :name),
                   class: 'form-control select2 additional_parameter', include_blank: true
 
           %table.table.datatable.orders

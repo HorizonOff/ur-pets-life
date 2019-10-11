@@ -21,7 +21,7 @@
             = f.fields_for :unregistered_user, f.object.unregistered_user do |t|
               .form-group.registered_user.select
                 = label_tag 'Unregistered users'
-                = select_tag :unregistered_user_id, options_from_collection_for_select(UnregisteredUser.all, :id, :name),
+                = select_tag :unregistered_user_id, options_from_collection_for_select(User.where(registered_user: false), :id, :name),
                 class: 'form-control select2', id: 'select_tag', include_blank: true
               .form-group.registered_user.user_filed
                 = label_tag 'User name'
@@ -31,7 +31,7 @@
                 = t.number_field :number, class: 'form-control'
           .form-group.new_user.hiden
             = label_tag 'User name'
-            = select_tag :user_id, options_from_collection_for_select(User.all, :id, :name),
+            = select_tag :user_id, options_from_collection_for_select(User.where(registered_user: true), :id, :name),
                 class: 'form-control select2 changed_subtotal', include_blank: true
           #items.form-group
             = label_tag 'Add Item'
