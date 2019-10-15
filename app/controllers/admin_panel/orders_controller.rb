@@ -61,7 +61,7 @@ module AdminPanel
     @items_price = 0
     @total_price_without_discount = 0
     @discounted_items_amount = 0
-    @user = User.find_by_id(params['user_id'])|| User.find_by_id(params['unregistered_user_id'])
+    @user = User.find_by_id(params['user_id'])
     permitted_redeem_points = 0
     admin_discount = 0
     discount = params['user_id'].present? ? ::Api::V1::DiscountDomainService.new(@user.email.dup).dicount_on_email : 0
@@ -435,12 +435,12 @@ module AdminPanel
     def check_for_unregistered_user
       return if params['order']['unregistered_user'].blank?
 
-      @user = User.find_by(mobile_number: params['order']['unregistered_user']['name'])
+      @user = User.find_by(first_name: params['order']['unregistered_user']['name'])
 
       if @user.blank?
         @user = User.new(first_name: params['order']['unregistered_user']['name'],
                          mobile_number: params['order']['unregistered_user']['number'],
-                         location: Location.find_by(order_params[:location_attributes]), registered_user: false)
+                         location: Location.find_by(order_params[:location_attributes]), is_registered: false)
         @user.skip_user_validation = true
         @user.save
       end

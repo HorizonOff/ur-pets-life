@@ -47,15 +47,3 @@ function getOrderQuantity(e){
         console.log('server not responding...');
     });
 }
-
-function removeInputValue() {
-    if ($('#select_tag').select2('val')) {
-        $('.user_filed').each(function () {
-            $(this).find('input').val('');
-        });
-    }
-}
-
-function removeSelectValue() {
-    $('#select_tag').val(null).trigger('change');
-}

@@ -114,7 +114,7 @@ class User < ApplicationRecord
   end
 
   def name
-    if registered_user == false ? (last_unregistered_name = '') : (last_unregistered_name = last_name)
+    if is_registered == false ? (last_unregistered_name = '') : (last_unregistered_name = last_name)
     first_name + ' ' + last_unregistered_name
     end
   end

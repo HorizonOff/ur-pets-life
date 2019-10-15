@@ -2196,7 +2196,7 @@ CREATE TABLE public.users (
     member_type integer DEFAULT 0,
     last_action_at timestamp without time zone,
     pay_code character varying,
-    registered_user boolean DEFAULT true
+    is_registered boolean DEFAULT true
 );
 
 

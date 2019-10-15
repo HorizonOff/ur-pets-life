@@ -22,7 +22,7 @@
           <% if @order.user.last_name.present? ? (name = @order.user&.last_name) : (name = '') %>
           <% end %>
           <p><%= @order.user.first_name + ' ' + name %></p>
-          <p><%= @order.unregistered_user&.number || @order.user.mobile_number %></p>
+          <p><%= @order.user.mobile_number %></p>
           <p><%= @userAddress %></p>
         <% end %>
       </div>

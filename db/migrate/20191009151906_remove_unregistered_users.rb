@@ -1,6 +1,6 @@
 class RemoveUnregisteredUsers < ActiveRecord::Migration[5.1]
   def up
-    add_column :users, :registered_user, :boolean, default: true
+    add_column :users, :is_registered, :boolean, default: true
 
     orders = Order.joins(:unregistered_user)
 
@@ -8,9 +8,9 @@ class RemoveUnregisteredUsers < ActiveRecord::Migration[5.1]
       unreg_user = order.unregistered_user
       user = User.find_by(mobile_number: unreg_user.number)
 
-      next if user.blank? == false
+      next if user.blank?
 
-      user = User.new(registered_user: false, first_name: unreg_user.name, mobile_number: unreg_user.number)
+      user = User.new(is_registered: false, first_name: unreg_user.name, mobile_number: unreg_user.number)
       user.skip_user_validation = true
       user.save!
       order.update_columns(user_id: user.id)
@@ -30,7 +30,7 @@ class RemoveUnregisteredUsers < ActiveRecord::Migration[5.1]
 
     add_column :orders, :unregistered_user_id, :integer
 
-    orders = Order.joins(:user).where(users: { registered_user: false })
+    orders = Order.joins(:user).where(users: { is_registered: false })
     orders.each do |order|
       user = order.user
       unreg_user = UnregisteredUser.find_or_create_by(name: user.first_name, number: user.mobile_number)
@@ -38,6 +38,6 @@ class RemoveUnregisteredUsers < ActiveRecord::Migration[5.1]
       order.update_columns(unregistered_user_id: unreg_user.id)
     end
 
-    remove_column :users, :registered_user
+    remove_column :users, :is_registered
   end
 end
