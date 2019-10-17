@@ -145,6 +145,12 @@
     margin-bottom: 5px;
   }
 
+  @media only screen and (max-device-width: 1000px) {
+    .loyalty_item {
+      margin-right: 2%;
+    }
+  }
+
   @media only screen and (max-device-width: 765px) {
 
 

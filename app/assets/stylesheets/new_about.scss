@@ -29,7 +29,7 @@
 
   .about_header {
     background-size: cover;
-    background-image: url('about/shutterstock-633334241@3x.jpg');
+    background-image: image_url('about/shutterstock-633334241@3x.jpg');
     background-position: top;
     margin-bottom: 40px;
   }
@@ -190,7 +190,6 @@
       display: none;
     }
     .mobile_view {
-      width: 84%;
       display: flex;
       flex-wrap: nowrap;
       overflow-x: hidden;
@@ -202,8 +201,9 @@
       box-shadow: 0 1px 10px 0 rgba(177, 177, 177, 0.5);
       background-color: white;
       padding: 30px;
-      margin-right: 40px;
-      min-width: 80%;
+      margin-right: 10px;
+      margin-left: 10px;
+      min-width: 74%;
     }
 
     .r_item .item_header {

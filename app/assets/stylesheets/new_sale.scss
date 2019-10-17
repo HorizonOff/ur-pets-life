@@ -177,9 +177,13 @@
         justify-content: center;
         margin-top: 20px;
         margin-bottom: 50px;
+      color: #575757;
+      font-family: "Lato";
+      font-size: 16px;
+      display: flex;
     }
 
-    nav li {
+    nav span {
         background: white;
         display: flex;
         justify-content: center;
@@ -193,6 +197,13 @@
         color: #575757;
         font-family: "Lato";
         font-size: 16px;
+    }
+
+    nav .current {
+        z-index: 5;
+        color: white;
+        border-color: #f8951d;
+        background: #f8951d;
     }
 
     nav *:last-child {
@@ -211,12 +222,31 @@
       }
     }
 
-
     @media screen and (max-width: 1200px) {
+      .sale_item {
+        margin: 12px;
+      }
+    }
+
+    @media screen and (max-width: 1000px) {
         .sale_item {
-            width: 21%;
-            border-radius: 30px;
+            width: 30%;
+          margin: 10px;
         }
+
+      .sale_filter .buttons {
+        display: none;
+      }
+
+      .sale_filter .buttons_list {
+        display: block;
+      }
+
+      .sale_filter .list .select {
+        height: 40px;
+        border-radius: 50px;
+        margin: 0;
+      }
     }
 
     @media only screen and (max-device-width: 765px) {
@@ -231,7 +261,8 @@
         }
 
         .sale_item {
-            width: 47%;
+            max-width: 47%;
+            min-width: 46%;
             border-radius: 15px;
           margin: 4px;
         }
@@ -305,16 +336,16 @@
             //font-size: 24pt;
         }
 
-        .sale_pagination .container span {
+        nav span {
             width: 80px;
             height: 80px
         }
 
-      nav .pagination {
+      nav  {
         padding: 0;
       }
 
-      nav li {
+      nav span {
        width: 30px;
         height: 30px;
       }
