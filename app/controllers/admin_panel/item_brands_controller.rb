@@ -62,7 +62,7 @@ module AdminPanel
       updateddiscount = params[:item_brand][:brand_discount].to_f
     end
 
-    if (updateddiscount != @discountonbrand)
+    if updateddiscount != @discountonbrand
       branditems = Item.where(:item_brand_id => @admin_panel_item_brand.id)
       branditems.each do |item|
         updateditemprice = 0.0
@@ -72,6 +72,17 @@ module AdminPanel
           updateditemprice = item.unit_price - ((updateddiscount * item.unit_price) / 100)
         end
         item.update(:price => updateditemprice, :discount => updateddiscount)
+      end
+    end
+
+    if params[:item_brand][:brand_discount] != @admin_panel_item_brand.brand_discount
+      Item.includes(:item_brand).each do |item|
+        item.item_brand_ids.select do |id|
+          if id == @admin_panel_item_brand.id && item.item_brand_ids.count > 1
+            flash[:error] = "Can't change discount of current brand! Edit Items with this brand!"
+            return redirect_to admin_panel_item_brands_path
+          end
+        end
       end
     end
 

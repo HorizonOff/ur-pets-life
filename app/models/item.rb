@@ -1,10 +1,11 @@
 class Item < ApplicationRecord
   mount_uploader :picture, PhotoUploader
-  belongs_to :item_brand, optional: true
+  # belongs_to :item_brand, optional: true
   has_many :wishlists
   has_many :shopping_cart_items, dependent: :destroy
   has_many :order_items
   has_many :item_reviews
+  has_and_belongs_to_many :item_brand
   has_and_belongs_to_many :item_categories
   has_and_belongs_to_many :pet_types
 
