@@ -906,6 +906,16 @@ ALTER SEQUENCE public.item_brands_id_seq OWNED BY public.item_brands.id;
 
 
 --
+-- Name: item_brands_items; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.item_brands_items (
+    item_id bigint NOT NULL,
+    item_brand_id bigint NOT NULL
+);
+
+
+--
 -- Name: item_categories; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -3840,6 +3850,13 @@ CREATE INDEX index_grooming_centres_on_name ON public.grooming_centres USING btr
 
 
 --
+-- Name: index_item_brands_items_on_item_id_and_item_brand_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_item_brands_items_on_item_id_and_item_brand_id ON public.item_brands_items USING btree (item_id, item_brand_id);
+
+
+--
 -- Name: index_item_categories_items_on_item_id_and_item_category_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -5113,6 +5130,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190916154332'),
 ('20190919100321'),
 ('20190920134238'),
-('20191009151906');
+('20191009151906'),
+('20191016142932');
 
 

@@ -8,11 +8,12 @@ class RemoveUnregisteredUsers < ActiveRecord::Migration[5.1]
       unreg_user = order.unregistered_user
       user = User.find_by(mobile_number: unreg_user.number)
 
-      next if user.blank?
-
-      user = User.new(is_registered: false, first_name: unreg_user.name, mobile_number: unreg_user.number)
-      user.skip_user_validation = true
-      user.save!
+      if user.blank?
+        user = User.new(is_registered: false, first_name: unreg_user.name, mobile_number: unreg_user.number)
+        user.skip_user_validation = true
+        user.save!
+      end
+      
       order.update_columns(user_id: user.id)
     end
 
