@@ -1,6 +1,5 @@
 class Item < ApplicationRecord
   mount_uploader :picture, PhotoUploader
-  # belongs_to :item_brand, optional: true
   has_many :wishlists
   has_many :shopping_cart_items, dependent: :destroy
   has_many :order_items

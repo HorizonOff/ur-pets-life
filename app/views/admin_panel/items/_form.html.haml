@@ -78,7 +78,6 @@
           %span.required *
         .col-md-9.col-sm-9.col-xs-12
           = f.select :item_brand_ids, options_from_collection_for_select(ItemBrand.all, 'id', 'name', @item.item_brand.ids), {}, { class: 'select2 clinics_select', multiple: true, required: true }
-          -#= f.collection_select :item_brand_ids, ItemBrand.all, :id, :name, {}, { class: 'select2 clinics_select', multiple: true, required: true, id: 'item_brand_id'}
       .form-group
         = f.label :short_description, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
           Short Description
