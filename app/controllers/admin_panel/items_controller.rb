@@ -21,16 +21,24 @@ module AdminPanel
 
     def create
       @item = Item.new(item_params.merge({ expiry_at: params[:item][:expiry_at].to_date}))
-      if (!@item.discount.nil? and @item.discount > 0)
+      if !@item.discount.nil? && @item.discount > 0
         @item.price = @item.unit_price.to_f - (@item.unit_price.to_f / 100 * @item.discount.to_f).to_f
       else
-        item_brand = ItemBrand.where(:id => @item.item_brand_id).first
-        if (!item_brand.brand_discount.nil? and item_brand.brand_discount > 0)
-          @item.price = @item.unit_price.to_f - ((@item.unit_price.to_f / 100) * item_brand.brand_discount).to_f
-          @item.discount = item_brand.brand_discount
+        check_brands_discount
+
+        if @discounts.uniq.count == 1
+          item_brand = ItemBrand.where(id: @item.item_brand_ids).first
+
+          if !item_brand.brand_discount.nil? && item_brand.brand_discount > 0
+            @item.price = @item.unit_price.to_f - ((@item.unit_price.to_f / 100) * item_brand.brand_discount).to_f
+            @item.discount = item_brand.brand_discount
+          else
+            @item.price = @item.unit_price
+            @item.discount = 0
+          end
         else
-          @item.price = @item.unit_price
-          @item.discount = 0
+          flash[:error] = 'Brands incompatible'
+          return render :new
         end
       end
       @item.avg_rating = 0
@@ -45,12 +53,21 @@ module AdminPanel
     end
 
     def update
-      if (!params[:item][:discount].nil? and params[:item][:discount].to_i > 0)
-        params[:item][:price] = params[:item][:unit_price].to_f - ((params[:item][:unit_price].to_f / 100) * params[:item][:discount].to_f)
+      check_brands_discount
+
+      if @discounts.uniq.count == 1
+
+        if !params[:item][:discount].nil? && params[:item][:discount].to_i > 0
+          params[:item][:price] = params[:item][:unit_price].to_f - ((params[:item][:unit_price].to_f / 100) * params[:item][:discount].to_f)
+        else
+          params[:item][:discount] = 0
+          params[:item][:price] = params[:item][:unit_price]
+        end
       else
-        params[:item][:discount] = 0
-        params[:item][:price] = params[:item][:unit_price]
+        flash[:error] = 'Brands incompatible'
+        return render :edit
       end
+
       if @item.update(item_params.merge({ expiry_at: params[:item][:expiry_at].to_date}))
         flash[:success] = 'Item was successfully updated'
         redirect_to admin_panel_item_path(@item)
@@ -86,10 +103,9 @@ module AdminPanel
     # Never trust parameters from the scary internet, only allow the white list through.
     def item_params
       params.require(:item).permit(:name, :buying_price, :unit_price, :discount, :weight, :unit, :quantity,
-                                   :supplier, :supplier_code,
-                                   :price, :item_brand_id, :short_description,
+                                   :supplier, :supplier_code, :price, :short_description,
                                    :description, :picture, :avatar_cache, :expiry_at,
-                                   item_category_ids: [], pet_type_ids: [])
+                                   item_category_ids: [], pet_type_ids: [],  item_brand_ids: [])
     end
 
     def filter_items
@@ -102,6 +118,16 @@ module AdminPanel
 
       render json: { draw: params[:draw], recordsTotal: filtered_items.count,
                      recordsFiltered: filtered_items.total_count, data: serialized_data }
+    end
+
+    def check_brands_discount
+      @discounts = []
+
+      params['item']['item_brand_ids'].each do |brand_id|
+        next if brand_id == ''
+        brand = ItemBrand.find_by_id(brand_id.to_i).brand_discount.to_f
+        @discounts.push(brand)
+      end
     end
 
     def filter_and_pagination_query

@@ -35,20 +35,21 @@
               %li
                 %label
                   Pet Types:
-                -if @item.pet_types.present?
-                  -@item.pet_types.each do |type|
-                    =type.name
+                - if @item.pet_types.present?
+                  - @item.pet_types.each do |type|
+                    = type.name
               %li
                 %label
                   Categories:
-                = @item.item_categories.first.name if @item.item_category_ids.present?
-                -if @item.item_category_ids.present?
-                  -@item.item_categories.each do |category|
-                    =category.name
+                - if @item.item_category_ids.present?
+                  - @item.item_categories.each do |category|
+                    = category.name
               %li
                 %label
                   Brand:
-                = @item.item_brand.name if @item.item_brand.present?
+                - if @item.item_brand_ids.present?
+                  - @item.item_brand.each do |brand|
+                    = brand.name
               %li
                 %label
                   Buying Price:
