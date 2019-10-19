@@ -27,14 +27,21 @@ class PagesController < ApplicationController
   def community; end
   def contact_us; end
   def loyalty_program; end
+
   def privacy_policy; end
+
   def term_conditions; end
+
   def new_privacy_policy; end
+
   def cancelation_policy; end
 
   def app_loyalty_program; end
+
   def app_new_privacy_policy; end
+
   def app_cancelation_policy; end
+
   def app_term_conditions; end
 
   def sale

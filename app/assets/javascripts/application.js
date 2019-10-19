@@ -32,7 +32,9 @@
 //= require datatable.js
 //= require order_create.js
 //= require new_log_in.js
+//= require new_contact_us.js
 //= require toastr
+//= require cable
 
 //= require_self
 
@@ -228,7 +230,7 @@ $(document).on('ifChanged', 'input.service_option_switch', function() {
   if(selector.hasClass('hiden')) {
     selector.removeClass('hiden');
     times_selector.removeClass('hiden');
-    show_and_enable_inputs(selector)
+    show_and_enable_inputs(selector);
     service_option_id_field.prop('disabled', false);
   } else {
     selector.addClass('hiden');
@@ -243,3 +245,22 @@ $(document).on('click', '.photo_preview', function() {
   $('.modal-body').html(html_text)
   $('#photo_preview').modal('show');
 });
+
+$(document).on('click', '.close-chat-js', function() {
+  var chat_id = $('#messages').data('support-chat-id');
+  $.ajax({
+    type: 'get',
+    url: '/admin_panel/support_chats/' + chat_id + '/close',
+    success: function(response){
+      $('#chat-form').addClass('display-none');
+    }
+  });
+});
+
+// $( document ).on('turbolinks:load', function() {
+//   $('#new_chat_message').ajaxSend(function() {
+//     debugger
+//     $(this).find('input[type="text"]').val('');
+//     $(this).find('input[type="file"]').val('');
+//   });
+// });

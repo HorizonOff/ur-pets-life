@@ -118,7 +118,6 @@
                     %td
                       = link_to 'Cancel', cancel_admin_panel_order_path(q), data: { confirm: 'Are you sure?' }, method: :delete, remote: true, class: 'btn btn-danger btn-xs check_response' if q.status != 'cancelled'
 
-
 - if @admin_panel_order.order_status_flag != 'cancelled' && !@admin_panel_order.is_pre_recurring?
   %div
     .row

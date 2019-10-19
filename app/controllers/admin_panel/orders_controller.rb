@@ -383,20 +383,20 @@ module AdminPanel
           @admin_panel_order.update_attributes(Payment_Status: 1)
           if @admin_panel_order.used_pay_code.present?
             @admin_panel_order.used_pay_code.notifications
-                .create(message: '30 points have been added to your account since your friend used your Pay It Forward code',
-                        user_id: @admin_panel_order.used_pay_code.user.id)
+              .create(message: '30 points have been added to your account since your friend used your Pay It Forward code',
+                      user_id: @admin_panel_order.used_pay_code.user.id)
             if @admin_panel_order.user.pay_code.blank?
               @admin_panel_order.used_pay_code.notifications
-                  .create(message: 'A Pay It Forward code is now available for you so you can share it with 3 of your friends and receive 30 points from each of them. You can find the code under “ My Codes “ in the main Menu',
-                          user_id: @admin_panel_order.used_pay_code.code_user.id)
+                .create(message: 'A Pay It Forward code is now available for you so you can share it with 3 of your friends and receive 30 points from each of them. You can find the code under “ My Codes “ in the main Menu',
+                        user_id: @admin_panel_order.used_pay_code.code_user.id)
               @admin_panel_order.used_pay_code.create_new_pay_code
             end
             @admin_panel_order.used_pay_code.add_redeem_points
           elsif @admin_panel_order.user.pay_code.blank?
             @admin_panel_order.user.generate_pay_code
             @admin_panel_order.user.notifications
-                .create(message: 'A Pay It Forward code is now available for you so you can share it with 3 of your friends and receive 30 points from each of them. You can find the code under “ My Codes “ in the main Menu',
-                        user_id: @admin_panel_order.user_id)
+              .create(message: 'A Pay It Forward code is now available for you so you can share it with 3 of your friends and receive 30 points from each of them. You can find the code under “ My Codes “ in the main Menu',
+                      user_id: @admin_panel_order.user_id)
           end
 
           if statustoupdate == 'confirmed'
@@ -421,6 +421,7 @@ module AdminPanel
       render :show
     end
   end
+
   # DELETE /admin_panel/orders/1
   # DELETE /admin_panel/orders/1.json
   def destroy
@@ -519,10 +520,10 @@ module AdminPanel
 
     def export_data
       is_user_present = @@filtered_user_id > 0 ? false : true
-      @orders = Order.visible.order(:id).includes(:location, {user: [:location]}, {order_items: [item: :item_brand]})
-                      .where("(users.id = (?) OR #{is_user_present}) AND order_status_flag IN (?)",
-                             @@filtered_user_id, ['delivered', 'delivered_by_card', 'delivered_by_cash'])
-                      .references(:user)
+      @orders = Order.visible.order(:id).includes(:location, { user: [:location] }, { order_items: [item: :item_brand] })
+                     .where("(users.id = (?) OR #{is_user_present}) AND order_status_flag IN (?)",
+                            @@filtered_user_id, ['delivered', 'delivered_by_card', 'delivered_by_cash'])
+                     .references(:user)
       if params[:from_date].present? && params[:to_date].present?
         @orders = @orders.created_in_range(params[:from_date].to_date.beginning_of_day,
                                            params[:to_date].to_date.end_of_day)

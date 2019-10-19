@@ -4232,6 +4232,20 @@ CREATE INDEX index_service_types_on_serviceable_type_and_serviceable_id ON publi
 --
 
 CREATE INDEX index_sessions_on_client_id ON public.sessions USING btree (client_id);
+<<<<<<< HEAD
+
+
+--
+-- Name: index_sessions_on_client_type; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_sessions_on_client_type ON public.sessions USING btree (client_type);
+
+
+--
+-- Name: index_sessions_on_token; Type: INDEX; Schema: public; Owner: -
+--
+
 
 
 --

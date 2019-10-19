@@ -1,0 +1,15 @@
+<h1>Support chats</h1>
+<div class="row">
+  <div class="col-md-6 col-sm-6 col-xs-6">
+    <h2>Active chats</h1>
+    <ul>
+      <%= render @support_chats.without_closed %>
+    </ul>
+  </div>
+  <div class="col-md-6 col-sm-6 col-xs-6">
+    <h2>Closed chats</h1>
+    <ul>
+      <%= render @support_chats.closed %>
+    </ul>
+  </div>
+</div>

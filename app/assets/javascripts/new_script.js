@@ -1,5 +1,4 @@
 //= require jquery
-//= require jquery_ujs
 //= require turbolinks
 //= require rails-ujs
 // = require new_home.js
@@ -76,7 +75,7 @@ $(document).on('turbolinks:load',function(){
 //=============================================================================
 	
 	var isShowDownload = false;
-	
+
 	$(window).scroll(function() {
 
 	    var wLoc = window.location.pathname;
@@ -86,17 +85,17 @@ $(document).on('turbolinks:load',function(){
 		var bottom = $('.bottom').position().top - 800;
 
 		var topPos = $(window).scrollTop();
-		
+
 		if (topPos > header && topPos < bottom ) {
 			showingBadge(true)
 		} else {
 			showingBadge(false);
 		}
-		
+
 	});
-	
+
 	function showingBadge(isShow) {
-		
+
 		if (!isShowDownload && isShow) {
 			$('.b_donwnload').animate({ bottom: 0 }, 200);
 			isShowDownload = !isShowDownload;

@@ -19,39 +19,55 @@ module Api
             page = params[:pageno].to_i
             @orders = @orders.limit(size).offset(page * size)
           end
-        render json: @orders.as_json(
-          :only => [:id, :Subtotal, :shipmenttime, :Delivery_Charges, :Vat_Charges, :Total, :Delivery_Date, :Order_Notes, :IsCash, :RedeemPoints, :earned_points],
-          :include => {
-            :location => {
-              :only => [:id, :latitude, :longitude, :city, :area, :street, :building_name, :unit_number, :villa_number]
-            },
-            :order_items => {
-              :only => [:id, :Quantity, :IsRecurring, :IsReviewed, :status],
-              :include => {
-                :item => {
-                  :only => [:id, :picture, :name, :price, :discount, :description, :weight, :unit, :short_description]
-                },
-                :recurssion_interval =>  {
-                  :only => [:id, :days, :weeks, :label]
-                },
-                :item_reviews => {
-                  :only => [:id, :user_id, :item_id, :rating, :comment]
+          render json: @orders.as_json(
+            :only => [:id, :Subtotal, :shipmenttime, :Delivery_Charges, :Vat_Charges, :Total, :Delivery_Date, :Order_Notes, :IsCash, :RedeemPoints, :earned_points, :driver_id],
+            :include => {
+              :location => {
+                :only => [:id, :latitude, :longitude, :city, :area, :street, :building_name, :unit_number, :villa_number]
+              },
+              :order_items => {
+                :only => [:id, :Quantity, :IsRecurring, :IsReviewed, :status],
+                :include => {
+                  :item => {
+                    :only => [:id, :picture, :name, :price, :discount, :description, :weight, :unit, :short_description]
+                  },
+                  :recurssion_interval =>  {
+                    :only => [:id, :days, :weeks, :label]
+                  },
+                  :item_reviews => {
+                    :only => [:id, :user_id, :item_id, :rating, :comment]
+                  }
                 }
               }
             }
-          }
-        )
+          )
+        end
       end
+
+      def admin_orders
+        @orders = @user.orders.visible
+        @orders = Order.visible if @user.try(:role) == 'super_admin'
+        orders_count = @orders.count
+        @orders = @orders.order(created_at: :desc).page(params[:page]).per(params[:per_page])
+        return render json: { Message: 'No Orders found' } if @orders.blank?
+
+        serialized_orders = ActiveModel::Serializer::CollectionSerializer.new(
+          @orders, serializer: OrderSerializer
+        )
+        render json: { orders: serialized_orders, total_count: orders_count }
       end
 
       # GET /orders/1
       # GET /orders/1.json
       def show
         render json: @order.as_json(
-        :only => [:id, :Subtotal, :shipmenttime, :Delivery_Charges, :Vat_Charges, :Total, :Delivery_Date, :Order_Notes, :IsCash, :RedeemPoints, :earned_points],
+        :only => [:id, :Subtotal, :shipmenttime, :Delivery_Charges, :Vat_Charges, :Total, :Delivery_Date, :Order_Notes, :IsCash, :RedeemPoints, :earned_points, :order_status_flag],
         :include => {
           :location => {
             :only => [:id, :latitude, :longitude, :city, :area, :street, :building_name, :unit_number, :villa_number]
+          },
+          :user => {
+            :only => [:id, :first_name, :last_name, :mobile_number]
           },
           :order_items => {
             :only => [:id, :Quantity, :IsRecurring, :IsReviewed, :status],
@@ -66,6 +82,9 @@ module Api
                 :only => [:id, :user_id, :item_id, :rating, :comment]
               }
             }
+          },
+          driver: {
+            only: [:id, :name]
           }
         }
       )
@@ -325,7 +344,7 @@ module Api
             VatPercentage: "5",
             #EarnedPoints: discount_per_transaction,
             OrderDetails: @order.as_json(
-              :only => [:id, :Subtotal, :Delivery_Charges, :Vat_Charges, :Total, :Delivery_Date, :Order_Notes, :IsCash, :shipmenttime, :RedeemPoints, :earned_points, :company_discount, :is_user_from_company, :code_discount],
+              :only => [:id, :Subtotal, :Delivery_Charges, :Vat_Charges, :Total, :Delivery_Date, :Order_Notes, :IsCash, :shipmenttime, :RedeemPoints, :earned_points, :company_discount, :is_user_from_company, :code_discount, :driver_id],
               :include => {
                 :location => {
                   :only => [:id, :latitude, :longitude, :city, :area, :street, :building_name, :unit_number, :villa_number]
@@ -411,7 +430,7 @@ module Api
 
       # Never trust parameters from the scary internet, only allow the white list through.
       def order_params
-        params.permit(:TransactionId, :TransactionDate, :IsCash, :Payment_Status)
+        params.permit(:TransactionId, :TransactionDate, :IsCash, :Payment_Status, :order_status_flag, :driver_id)
       end
     end
   end

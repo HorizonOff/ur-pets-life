@@ -1,0 +1,140 @@
+
+.room-nav-link {
+  border: 1px solid lighten(#4285F4, 40%);
+  background: lighten(#4285F4, 45%);
+
+  & + .room-nav-link {
+    border-top: 0 none;
+  }
+}
+
+.chat {
+  border: 1px solid lighten(#aa66cc, 40%);
+  background: lighten(#aa66cc, 50%);
+  height: 70vh;
+  width: 50%;
+  border-radius: 5px 5px 0 0;
+  overflow-x: none;
+  overflow-y: auto;
+
+  .chat-message-container {
+    padding: 5px;
+
+    .avatar {
+      margin: 5px;
+    }
+
+    .message-content {
+      padding: 5px;
+      border-radius: 5px;
+    }
+
+    & + .chat-message-container {
+      margin-top: 10px;
+    }
+  }
+}
+
+.chat-input {
+  border-top: 0 none;
+  border-radius: 0 0 5px 5px;
+}
+
+.chat-message-container {
+  width:95%;
+  margin: 10px;
+}
+
+.admin {
+  border: 1px solid #F5F5F5;
+  background:  #F5F5F5;
+  color: black;
+  float:right;
+}
+
+.user {
+  border: 1px solid #87CEEB;
+  background: lighten(#87CEEB, 10%);
+  color: black ;
+  float:left;
+}
+
+.system {
+  color: black ;
+  float: left;
+  position: relative;
+  left: 40%;
+  .text-right {
+    display:none;
+  }
+}
+
+.image-upload > input
+{
+   display: none;
+}
+
+.image-upload > label{
+  cursor:pointer;
+}
+
+.image-upload {
+  position: absolute;
+  bottom: 0;
+  right: 75px;
+}
+.video-upload > input
+{
+   display: none;
+}
+
+.video-upload > label{
+  cursor:pointer;
+}
+.video-upload {
+  position: absolute;
+  bottom: 0;
+  right: 53px;
+}
+#chat-form{
+  position: -webkit-sticky;
+  position: -moz-sticky;
+  position: -ms-sticky;
+  position: -o-sticky;
+  position: sticky;
+  height: 3%;
+  bottom: 0;
+  width:100%;
+}
+
+#chat_message_text {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width:100%;
+}
+
+.chat-send-btn {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding: 5px;
+  margin: 1px;
+}
+
+#messages-pool {
+  min-height: 95%;
+}
+
+.chat-image {
+  max-width: 300px;
+}
+
+.chat-video {
+  max-width: 400px;
+  min-height: 225px;
+}
+
+.display-none {
+  display: none;
+}

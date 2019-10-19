@@ -103,3 +103,7 @@
   = link_to admin_panel_ads_path do
     %i.fa.fa-table
     Ads
+%li{ class: "#{'current-page' if current_page?(admin_panel_support_chats_path)}" }
+  = link_to admin_panel_support_chats_path do
+    %i.fa.fa-table
+    SupportChat

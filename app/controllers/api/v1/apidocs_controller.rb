@@ -58,6 +58,8 @@ module Api
         Api::V1::OrderItems,
         Api::V1::Ads,
         Api::V1::Sales,
+        Api::V1::SupportChats,
+        Api::V1::ChatMessages,
         Api::V1::UsedPayCodes,
         self
       ].freeze

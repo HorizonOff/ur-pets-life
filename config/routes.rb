@@ -21,7 +21,10 @@ Rails.application.routes.draw do
                                     omniauth_callbacks: 'omniauth_callbacks' }
   namespace :api do
     namespace :v1 do
+      resources :support_chats
+      resources :chat_messages
       resources :apidocs, only: :index
+      resources :admins, only: :index
       resources :contact_requests, only: [:create]
       resources :users, only: :create do
         collection { get :profile }
@@ -68,8 +71,11 @@ Rails.application.routes.draw do
       get 'found_pets', to: 'pets#found_pets'
       get 'get_current_ad', to: 'ads#current'
       get 'sale_categories', to: 'sales#categories'
+      get 'current_user_support_chat', to: 'support_chats#current_user_support_chat'
+      get 'close_support_chat', to: 'support_chats#close'
       get 'pay_code', to: 'used_pay_codes#pay_code'
       get 'check_pay_code', to: 'used_pay_codes#check_pay_code'
+      get 'admin_orders', to: 'orders#admin_orders'
       resources :pets, except: %i[new edit] do
         collection { post :found }
         collection { get :can_be_lost }
@@ -161,6 +167,10 @@ Rails.application.routes.draw do
     get 'calculating_price', to: 'orders#calculating_price'
     get 'max_quantity', to: 'orders#max_quantity'
 
+    resources :support_chats do
+      member { get :close }
+    end
+    resources :chat_messages
     resources :admins, only: %w[index destroy] do
       member { put :change_status }
       member { put :restore }
