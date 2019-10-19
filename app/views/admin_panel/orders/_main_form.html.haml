@@ -19,10 +19,10 @@
 
           .value_block
             = f.fields_for :unregistered_user, f.object.unregistered_user do |t|
-              .form-group.registered_user.user_filed
+              .form-group.registered_user
                 = label_tag 'User name'
                 = t.text_field :name, class: 'form-control'
-              .form-group.registered_user.user_field
+              .form-group.registered_user
                 = label_tag 'User number'
                 = t.number_field :number, class: 'form-control'
           .form-group.new_user.hiden

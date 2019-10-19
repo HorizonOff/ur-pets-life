@@ -1,7 +1,5 @@
 $(document).on("change", ".changed_subtotal", _.debounce(getCalculatedPrice, 500));
 $(document).on("change", '.item_change', getOrderQuantity);
-$(document).on("change", '#select_tag', removeInputValue);
-$(document).on("change", '.user_filed', removeSelectValue);
 
 function getCalculatedPrice(){
     var admin_discount = $('#order_admin_discount').val();
