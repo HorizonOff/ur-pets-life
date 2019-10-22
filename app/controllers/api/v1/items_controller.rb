@@ -28,8 +28,6 @@ class ItemsController < Api::BaseController
   end
 
   def search_items_by_keywords
-    binding.pry
-
     if params[:lowerprice].nil? || params[:upperprice].nil? || params[:minrating].nil? || params[:maxrating].nil?
       return render json: {
         Message: 'Parameters not found',
