@@ -74,8 +74,7 @@
               %li
                 Pre order:
                 = @admin_panel_order.is_pre_recurring?
-
-              - if @admin_panel_order.user.is_registered == true
+              - if @admin_panel_order.user.is_registered?
                 %p.title
                   %b Comments:
                   = @admin_panel_order.comments_count

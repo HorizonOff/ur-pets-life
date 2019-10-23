@@ -34,33 +34,27 @@ class ItemsController < Api::BaseController
         status: :unprocessable_entity
       }
     elsif params[:keyword].nil?
-      pet_filter = params[:pet_type_id].nil?
-      cat_filter = params[:category_id].nil?
-      brand_filter = params[:brand_id].nil?
-
-      if (!params[:pageno].nil? and !params[:size].nil?)
+      if !params[:pageno].nil? && !params[:size].nil?
         size = params[:size].to_i
         page = params[:pageno].to_i
 
-        @items = Item.where("price BETWEEN (?) AND  (?) AND avg_rating BETWEEN (?) AND (?) AND (#{brand_filter} OR item_brand_id = (?))", params[:lowerprice], params[:upperprice], params[:minrating], params[:maxrating], params[:brand_id]).limit(size).offset(page * size)
+        @items = Item.where("price BETWEEN (?) AND  (?) AND avg_rating BETWEEN (?) AND (?)", params[:lowerprice], params[:upperprice], params[:minrating], params[:maxrating]).limit(size).offset(page * size)
       else
-        @items = Item.where("price BETWEEN (?) AND  (?) AND avg_rating BETWEEN (?) AND (?) AND (#{brand_filter} OR item_brand_id = (?))", params[:lowerprice], params[:upperprice], params[:minrating], params[:maxrating], params[:brand_id])
+        @items = Item.where("price BETWEEN (?) AND  (?) AND avg_rating BETWEEN (?) AND (?)", params[:lowerprice], params[:upperprice], params[:minrating], params[:maxrating])
       end
     else
       key = "%#{params[:keyword]}%"
-      pet_filter = params[:pet_type_id].nil?
-      cat_filter = params[:category_id].nil?
-      brand_filter = params[:brand_id].nil?
-      if (!params[:pageno].nil? and !params[:size].nil?)
+      if !params[:pageno].nil? && !params[:size].nil?
         size = params[:size].to_i
         page = params[:pageno].to_i
 
-        @items = Item.includes(:item_brand).where("(lower(item_brands.name) LIKE (?) OR lower(items.name) LIKE (?)) AND price BETWEEN (?) AND  (?) AND avg_rating BETWEEN (?) AND (?) AND (#{brand_filter} OR item_brand_id = (?))", key.downcase, key.downcase, params[:lowerprice], params[:upperprice], params[:minrating], params[:maxrating], params[:brand_id]).references(:item_brand).limit(size).offset(page * size)
+        @items = Item.where("(lower(items.name) LIKE (?)) AND price BETWEEN (?) AND  (?) AND avg_rating BETWEEN (?) AND (?)", key.downcase, params[:lowerprice], params[:upperprice], params[:minrating], params[:maxrating]).limit(size).offset(page * size)
       else
-        @items = Item.includes(:item_brand).where("(lower(item_brands.name) LIKE (?) OR lower(items.name) LIKE (?)) AND price BETWEEN (?) AND  (?) AND avg_rating BETWEEN (?) AND (?) AND (#{brand_filter} OR item_brand_id = (?))", key.downcase, key.downcase, params[:lowerprice], params[:upperprice], params[:minrating], params[:maxrating], params[:brand_id]).references(:item_brand)
+        @items = Item.where("(lower(items.name) LIKE (?)) AND price BETWEEN (?) AND  (?) AND avg_rating BETWEEN (?) AND (?)", key.downcase, params[:lowerprice], params[:upperprice], params[:minrating], params[:maxrating])
       end
     end
     @items = @items.left_outer_joins(:item_categories).where(item_categories: { id: params[:category_id] }).distinct if params[:category_id].present?
+    @items = @items.left_outer_joins(:item_brands).where(item_brands: { id: params[:brand_id] }).distinct if params[:brand_id].present?
     @items = @items.left_outer_joins(:pet_types).where(pet_types: { id: params[:pet_type_id] }).distinct if params[:pet_type_id].present?
     sort_filter = params[:sortby].blank? ? 1 : params[:sortby].to_i
     if sort_filter == 1
@@ -76,7 +70,7 @@ class ItemsController < Api::BaseController
     @items = @items.active.includes(:wishlists)
     @items = @items.sale if params[:sale_only].in?([true, 'true'])
     @items = @items.send(params[:category]) if params[:category].present?
-    if @items.nil? or @items.empty?
+    if @items.nil? || @items.empty?
       render json: {
         Message: 'No Items found'
       }

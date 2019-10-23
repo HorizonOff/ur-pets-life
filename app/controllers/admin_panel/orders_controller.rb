@@ -64,7 +64,7 @@ module AdminPanel
     @user = User.find_by_id(params['user_id'])
     permitted_redeem_points = 0
     admin_discount = 0
-    discount = params['user_id'].present? ? ::Api::V1::DiscountDomainService.new(@user.email.dup).dicount_on_email : 0
+    discount = @user&.is_registered? ? ::Api::V1::DiscountDomainService.new(@user.email.dup).dicount_on_email : 0
     @is_user_from_company = discount.positive?
 
     location_id = @user&.location.present? ? @user.location.id : new_location_id
@@ -193,7 +193,7 @@ module AdminPanel
     @discounted_items_amount = 0
     @user = User.find_by_id(params['item']['user_id'])
     admin_discount = 0
-    discount = @user.present? ? ::Api::V1::DiscountDomainService.new(@user.email.dup).dicount_on_email : 0
+    discount = @user&.is_registered? ? ::Api::V1::DiscountDomainService.new(@user.email.dup).dicount_on_email : 0
 
     params['item']['order_items']['0'].each do |item, hash_value|
       @item = Item.find_by_id(hash_value['item_id'])
