@@ -9,7 +9,6 @@ module Api
 
       def live_location
         @admin = current_user
-        binding.pry
         if @admin.update(location_params)
           render json: { Message: 'Location updated' }
         else
