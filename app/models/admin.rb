@@ -27,6 +27,8 @@ class Admin < ApplicationRecord
 
   validates_uniqueness_of :email, conditions: -> { with_deleted }
 
+  after_update :send_location_to_channel
+
   scope :simple, -> { where(is_super_admin: false) }
   scope :super, -> { where(is_super_admin: true) }
   scope :active, -> { where.not(invitation_accepted_at: nil).or(where(invitation_sent_at: nil)) }
@@ -57,5 +59,19 @@ class Admin < ApplicationRecord
 
   def confirmed?
     true
+  end
+
+  private
+
+  def send_location_to_channel
+    return unless saved_change_to_attribute?(lat) || saved_change_to_attribute?(lng)
+
+    return if orders.order_status_flag_on_the_way.count.zero?
+
+    redis_key = "admin_location:#{id}"
+    all_ids = JSON.parse($redis.get(redis_key) || '[]')
+    return if all_ids.blank?
+
+    ActionCable.server.broadcast("driver-#{id}:location", lat: lat, lng: lng)
   end
 end

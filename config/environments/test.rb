@@ -43,6 +43,4 @@ Rails.application.configure do
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
   config.action_mailer.default_url_options = { host: 'test.yourhost.com' }
-  config.aws_access_key_id = ENV['AKIAJHFXEDXOUI5IDPEA']
-  config.aws_secret_access_key = ENV['AwJVEylpz2bwankx2/YWi+ucS7SzyVQroVuoZA0j']
 end

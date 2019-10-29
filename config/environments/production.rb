@@ -103,7 +103,4 @@ Rails.application.configure do
     authentication: :plain,
     enable_starttls_auto: true
   }
-
-  config.aws_access_key_id = ENV['AKIAJHFXEDXOUI5IDPEA']
-  config.aws_secret_access_key = ENV['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']
 end
