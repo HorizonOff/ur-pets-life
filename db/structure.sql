@@ -117,7 +117,9 @@ CREATE TABLE public.admins (
     is_cataloger boolean DEFAULT false,
     is_msh_admin boolean DEFAULT false,
     last_action_at timestamp without time zone,
-    role integer
+    role integer,
+    lng double precision,
+    lat double precision
 );
 
 
@@ -1023,7 +1025,7 @@ CREATE TABLE public.items (
     review_count integer,
     item_categories_id bigint,
     pet_type_id bigint,
-    avg_rating integer,
+    avg_rating integer DEFAULT 0,
     quantity integer,
     short_description character varying,
     unit_price double precision,
@@ -4232,20 +4234,6 @@ CREATE INDEX index_service_types_on_serviceable_type_and_serviceable_id ON publi
 --
 
 CREATE INDEX index_sessions_on_client_id ON public.sessions USING btree (client_id);
-<<<<<<< HEAD
-
-
---
--- Name: index_sessions_on_client_type; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_sessions_on_client_type ON public.sessions USING btree (client_type);
-
-
---
--- Name: index_sessions_on_token; Type: INDEX; Schema: public; Owner: -
---
-
 
 
 --
@@ -5145,6 +5133,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190919100321'),
 ('20190920134238'),
 ('20191009151906'),
-('20191016142932');
+('20191016142932'),
+('20191028141115'),
+('20191030135243');
 
 
