@@ -44,3 +44,8 @@
     Contact requests
     - if @new_contact_requests_count.present? && !@new_contact_requests_count.zero?
       %span.badge.bg-green= @new_contact_requests_count
+
+%li{ class: "#{'current-page' if current_page?(admin_panel_support_chats_path)}" }
+  = link_to admin_panel_support_chats_path do
+    %i.fa.fa-table
+    Support Chats
