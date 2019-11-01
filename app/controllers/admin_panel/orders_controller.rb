@@ -100,7 +100,7 @@ module AdminPanel
     admin_discount = params['order'][:admin_discount].to_i if params['order'][:admin_discount].present?
     company_discount = (@items_price - @total_price_without_discount).round(2)
     vatCharges = ((@total_price_without_discount/100).to_f * 5).round(2)
-    total = subTotal + deliveryCharges + vatCharges
+    total = subTotal + deliveryCharges + vatCharges - company_discount
     admin_discount = total if admin_discount > total
     total -= admin_discount
 
@@ -219,10 +219,11 @@ module AdminPanel
     else
       deliveryCharges = 5.75
     end
+    company_discount = (@total_price_without_discount - @items_price).round(2)
     admin_discount = params['item'][:admin_discount].to_i
     redeem_points = params['item'][:RedeemPoints].to_i
     vatCharges = ((@total_price_without_discount/100).to_f * 5).round(2)
-    total = subTotal + deliveryCharges + vatCharges
+    total = subTotal + deliveryCharges + vatCharges + company_discount
     if admin_discount > total && redeem_points > 0
       admin_discount = total
       redeem_points = 0

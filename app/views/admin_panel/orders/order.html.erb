@@ -121,7 +121,7 @@
         <% end %>
         <tr style="border-bottom: 2px solid #d8d8d7;">
           <td>Discount </td>
-          <td><%= (@order.RedeemPoints? ? @order.RedeemPoints : 0).to_i + @order.admin_discount%></td>
+          <td><%= (@order.RedeemPoints? ? @order.RedeemPoints : 0).to_i + @order.admin_discount - @order.company_discount%></td>
         </tr>
         <tr style="border-bottom: 2px solid #d8d8d7;">
           <td><strong>Total</strong></td>
