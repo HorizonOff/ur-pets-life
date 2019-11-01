@@ -54,7 +54,7 @@ class ItemsController < Api::BaseController
       end
     end
     @items = @items.left_outer_joins(:item_categories).where(item_categories: { id: params[:category_id] }).distinct if params[:category_id].present?
-    @items = @items.left_outer_joins(:item_brands).where(item_brands: { id: params[:brand_id] }).distinct if params[:brand_id].present?
+    @items = @items.left_outer_joins(:item_brand).where(item_brands: { id: params[:brand_id] }).distinct if params[:brand_id].present?
     @items = @items.left_outer_joins(:pet_types).where(pet_types: { id: params[:pet_type_id] }).distinct if params[:pet_type_id].present?
     sort_filter = params[:sortby].blank? ? 1 : params[:sortby].to_i
     if sort_filter == 1
