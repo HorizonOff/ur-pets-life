@@ -48,5 +48,5 @@
             .clearfix
           .x_content
             - @pet.pictures.each do |picture|
-              =image_tag(picture.attachment, class: 'big-avatar')
+              =image_tag(picture.attachment.url, class: 'big-avatar')
 

@@ -196,7 +196,8 @@ class User < ApplicationRecord
   end
 
   def user_registered?
-    false if skip_user_validation
+    return false if skip_user_validation
+    true
   end
 
   def gender_should_be_valid

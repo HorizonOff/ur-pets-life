@@ -54,7 +54,7 @@ class ItemsController < Api::BaseController
       end
     end
     @items = @items.left_outer_joins(:item_categories).where(item_categories: { id: params[:category_id] }).distinct if params[:category_id].present?
-    @items = @items.left_outer_joins(:item_brands).where(item_brands: { id: params[:brand_id] }).distinct if params[:brand_id].present?
+    @items = @items.left_outer_joins(:item_brand).where(item_brands: { id: params[:brand_id] }).distinct if params[:brand_id].present?
     @items = @items.left_outer_joins(:pet_types).where(pet_types: { id: params[:pet_type_id] }).distinct if params[:pet_type_id].present?
     sort_filter = params[:sortby].blank? ? 1 : params[:sortby].to_i
     if sort_filter == 1
@@ -210,46 +210,48 @@ end
 
   def item_by_brand_id
     respond_to do |format|
-    if (!params[:pet_type_id].nil? and !params[:category_id].nil? and !params[:id].nil?)
-    json_to_render = []
+      if params[:pet_type_id].present? && params[:category_id].present? && params[:id].present?
+        json_to_render = []
 
-    if (!params[:pageno].nil? and !params[:size].nil?)
-      size = params[:size].to_i
-      page = params[:pageno].to_i
-      @items = Item.left_outer_joins(:item_categories, :pet_types).where(item_categories: { id: params[:category_id] }).where(pet_types: { id: params[:pet_type_id] }).where(:item_brand_id => params[:id]).limit(size).offset(page * size)
-    else
-      @items = Item.left_outer_joins(:item_categories, :pet_types).where(item_categories: { id: params[:category_id] }).where(pet_types: { id: params[:pet_type_id] }).where(:item_brand_id => params[:id])
-    end
-    @items = @items.where(:is_active => true)
-    if @items.nil? or @items.empty?
-      format.json do
-        render json: {
-          Message: 'No Items found'
-        }
+        if params[:pageno].present? && params[:size].present?
+          size = params[:size].to_i
+          page = params[:pageno].to_i
+          @items = Item.left_outer_joins(:item_categories, :pet_types, :item_brand).where(item_categories: { id: params[:category_id] }).where(pet_types: { id: params[:pet_type_id] }).where(item_brands: { id: params[:id] }).limit(size).offset(page * size)
+        else
+          @items = Item.left_outer_joins(:item_categories, :pet_types, :item_brand).where(item_categories: { id: params[:category_id] }).where(pet_types: { id: params[:pet_type_id] }).where(item_brands: { id: params[:id] })
+        end
+
+        @items = @items.where(is_active: true)
+        if @items.blank?
+          format.json do
+            render json: {
+              Message: 'No Items found'
+            }
+          end
+        else
+          @items.each do |items|
+            json_to_render << ({
+              item: items.as_json(only: [:id, :picture, :name, :price, :unit_price, :discount, :description, :weight, :unit, :rating, :review_count, :avg_rating, :quantity, :short_description]),
+              IsFavorite: get_wish_list_flag(items),
+              WishlistId: get_wish_list_id(items)
+              }
+            )
+          end
+          format.json do
+            render json: json_to_render
+          end
+        end
+      else
+        format.json do
+          render json: {
+            Message: 'Invalid Request. Brand not found',
+            status: :unprocessable_entity
+          }
+        end
       end
-    else
-    @items.each do |myitem|
-      json_to_render << ({
-        :item => myitem.as_json(:only => [:id, :picture, :name, :price, :unit_price, :discount, :description, :weight, :unit, :rating, :review_count, :avg_rating, :quantity, :short_description]),
-        :IsFavorite => get_wish_list_flag(myitem),
-        :WishlistId => get_wish_list_id(myitem)
-        }
-      )
-      end
-      format.json do
-    render :json => json_to_render
-  end
-end
-  else
-    format.json do
-      render json: {
-        Message: 'Invalid Request. Brand not found',
-        status: :unprocessable_entity
-      }
     end
   end
-end
-  end
+
   # GET /items/new
   def new
     @item = Item.new

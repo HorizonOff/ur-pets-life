@@ -200,7 +200,7 @@ module Api
         company_discount = (@itemsprice - @total_price_without_discount).round(2)
         code_discount = ::Api::V1::DiscountCodeService.new(params[:pay_code], @user, subTotal).discount_from_code
         vatCharges = ((@total_price_without_discount/100).to_f * 5).round(2)
-        total = subTotal + deliveryCharges + vatCharges + code_discount
+        total = subTotal + deliveryCharges + vatCharges + code_discount - company_discount
         user_redeem_points = 0
         requested_redeem_points = params[:RedeemPoints].to_i
         permitted_redeem_points = 0

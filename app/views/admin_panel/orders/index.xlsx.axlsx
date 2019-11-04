@@ -21,7 +21,7 @@ wb.add_worksheet(name: "Orders") do |sheet|
         amount_selling = orderitem.Total_Price
         total_buying = amount_buying + vat_buying
         if redeem_points > amount_selling
-          total_selling = 0 + vat_selling
+          total_selling = vat_selling
           redeem_points = redeem_points - amount_selling
         else
           total_selling = amount_selling - redeem_points + vat_selling

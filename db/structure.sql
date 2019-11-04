@@ -1025,7 +1025,7 @@ CREATE TABLE public.items (
     review_count integer,
     item_categories_id bigint,
     pet_type_id bigint,
-    avg_rating integer,
+    avg_rating integer DEFAULT 0,
     quantity integer,
     short_description character varying,
     unit_price double precision,
@@ -5134,6 +5134,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190920134238'),
 ('20191009151906'),
 ('20191016142932'),
-('20191028141115');
+('20191028141115'),
+('20191030135243');
 
 
