@@ -64,8 +64,6 @@ class Admin < ApplicationRecord
   private
 
   def send_location_to_channel
-    return unless saved_change_to_attribute?(lat) || saved_change_to_attribute?(lng)
-
     return if orders.order_status_flag_on_the_way.count.zero?
 
     redis_key = "admin_location:#{id}"
