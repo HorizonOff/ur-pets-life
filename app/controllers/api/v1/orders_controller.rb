@@ -338,7 +338,7 @@ module Api
 
       def update
         @order.update(order_params)
-        @user.notifications.create(order: @order, message: "Your Order status for Order #" + @order.id.to_s + " has been updated to 'On The Way'")
+        @user.notifications.create(order: @order, message: "Your Order status for Order #" + @order.id.to_s + " has been updated to 'On The Way'") if @order.order_status_flag_on_the_way?
         return render json: {
             Message: 'Order was successfully updated.',
             status: :updated,
