@@ -10,7 +10,7 @@ class Order < ApplicationRecord
   accepts_nested_attributes_for :location
   enum order_status_flag: { pending: "pending", confirmed: "confirmed", on_the_way: "on_the_way",
                             delivered: "delivered", delivered_by_card: "delivered_by_card",
-                            delivered_by_cash: "delivered_by_cash",
+                            delivered_by_cash: "delivered_by_cash", delivered_online: "delivered_online",
                             cancelled: "cancelled" }, _prefix: :order_status_flag
 
   acts_as_paranoid without_default_scope: true
@@ -52,7 +52,8 @@ class Order < ApplicationRecord
   def set_delivery_at
     return unless saved_change_to_attribute?(:order_status_flag, to: 'delivered') ||
                   saved_change_to_attribute?(:order_status_flag, to: 'delivered_by_card') ||
-                  saved_change_to_attribute?(:order_status_flag, to: 'delivered_by_cash')
+                  saved_change_to_attribute?(:order_status_flag, to: 'delivered_by_cash') ||
+                  saved_change_to_attribute?(:order_status_flag, to: 'delivered_online')
 
     update_column(:delivery_at, Time.current)
   end

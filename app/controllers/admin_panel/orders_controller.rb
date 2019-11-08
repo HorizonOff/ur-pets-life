@@ -24,14 +24,14 @@ module AdminPanel
     if @admin_panel_order.order_status_flag == 'pending' && !@admin_panel_order.IsCash?
       @statusoption = [['Confirm', 'confirmed'], ['Delivered', 'delivered'], ['Cancel', 'cancelled']]
     elsif @admin_panel_order.order_status_flag == 'pending'
-      @statusoption = [['Confirm', 'confirmed'], ['Delivered by card', 'delivered_by_card'], ['Delivered by cash', 'delivered_by_cash'], ['Cancel', 'cancelled']]
+      @statusoption = [['Confirm', 'confirmed'], ['Delivered by card', 'delivered_by_card'], ['Delivered by cash', 'delivered_by_cash'], ['Delivered Online', 'delivered_online'], ['Cancel', 'cancelled']]
     elsif @admin_panel_order.order_status_flag == 'confirmed'
       @statusoption = [['On The Way', 'on_the_way'], ['Cancel', 'cancelled']]
     elsif @admin_panel_order.order_status_flag == 'on_the_way' && !@admin_panel_order.IsCash?
       @statusoption = [['Delivered', 'delivered'], ['Cancel', 'cancelled']]
     elsif @admin_panel_order.order_status_flag == 'on_the_way'
-      @statusoption = [['Delivered by card', 'delivered_by_card'], ['Delivered by cash', 'delivered_by_cash'], ['Cancel', 'cancelled']]
-    elsif @admin_panel_order.order_status_flag.in?(['delivered', 'delivered_by_card', 'delivered_by_cash'])
+      @statusoption = [['Delivered by card', 'delivered_by_card'], ['Delivered by cash', 'delivered_by_cash'], ['Delivered Online', 'delivered_online'], ['Cancel', 'cancelled']]
+    elsif @admin_panel_order.order_status_flag.in?(%w(delivered delivered_by_card delivered_by_cash delivered_online))
       @statusoption = [['Cancel', 'cancelled']]
     end
   end
@@ -379,7 +379,7 @@ module AdminPanel
         orderuser = User.where(:id => @admin_panel_order.user_id).first
         orderuser.notifications.create(order: @admin_panel_order, message: 'Your Order status for Order # ' + @admin_panel_order.id.to_s + ' has been ' + (statustoupdate == 'cancelled' ? 'Cancelled' : 'updated to ' + (statustoupdate == 'on_the_way' ? 'on the way' : statustoupdate)))
 
-        if statustoupdate.in?(%w(delivered delivered_by_card delivered_by_cash))
+        if statustoupdate.in?(%w(delivered delivered_by_card delivered_by_cash delivered_online))
           set_order_delivery_invoice(@admin_panel_order.id, orderuser.email)
           @admin_panel_order.update_attributes(Payment_Status: 1)
           if @admin_panel_order.used_pay_code.present?
@@ -523,7 +523,7 @@ module AdminPanel
       is_user_present = @@filtered_user_id > 0 ? false : true
       @orders = Order.visible.order(:id).includes(:location, { user: [:location] }, { order_items: [item: :item_brand] })
                      .where("(users.id = (?) OR #{is_user_present}) AND order_status_flag IN (?)",
-                            @@filtered_user_id, ['delivered', 'delivered_by_card', 'delivered_by_cash'])
+                            @@filtered_user_id, %w(delivered delivered_by_card delivered_by_cash delivered_online))
                      .references(:user)
       if params[:from_date].present? && params[:to_date].present?
         @orders = @orders.created_in_range(params[:from_date].to_date.beginning_of_day,

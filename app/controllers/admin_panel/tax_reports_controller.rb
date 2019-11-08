@@ -13,7 +13,7 @@ module AdminPanel
 
     def export_data
       @tax_reports = Order.includes(:location, :user)
-                          .where(order_status_flag: ['delivered', 'delivered_by_card', 'delivered_by_cash'])
+                          .where(order_status_flag: %w(delivered delivered_by_card delivered_by_cash delivered_online))
                           .order(:delivery_at, :id)
       date_string = Time.now.strftime('%d-%M-%Y')
       if params[:from_date].present? && params[:to_date].present?
