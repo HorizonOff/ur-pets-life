@@ -62,7 +62,7 @@
                 %th
                   = select_tag :is_viewed, options_for_select([[], %w(New false), %w(Older true)]), class: 'form-control select2'
                 %th
-                  = select_tag :order_status_flag, options_for_select([[], %w(Pending pending), %w(Confirmed confirmed), %w(On The Way on_the_way'), %w(Delivered delivered), %w(Delivered by card delivered_by_card), %w(Delivered by cash delivered_by_cash), %w(Delivered Online delivered_online), %w(Cancelled cancelled)]), class: 'form-control select2'
+                  = select_tag :order_status_flag, options_for_select([[], %w(Pending pending), %w(Confirmed confirmed), ['On The Way', 'on_the_way'], %w(Delivered delivered), ['Delivered by card', 'delivered_by_card'], ['Delivered by cash', 'delivered_by_cash'], ["Delivered Online", "delivered_online"], %w(Cancelled cancelled)]), class: 'form-control select2'
                 %th
                 %th
                 %th
