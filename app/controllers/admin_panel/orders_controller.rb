@@ -400,19 +400,17 @@ module AdminPanel
                       user_id: @admin_panel_order.user_id)
           end
 
-          if statustoupdate == 'confirmed'
-            user_redeem_points_record = RedeemPoint.where(:user_id => @admin_panel_order.user_id).first
-            user_redeem_points_record.update(:net_worth => user_redeem_points_record.net_worth + @admin_panel_order.earned_points, :last_net_worth => user_redeem_points_record.net_worth, :last_reward_type => "Discount Per Transaction", :last_reward_worth => @admin_panel_order.earned_points, :last_reward_update => Time.now, :totalearnedpoints => (user_redeem_points_record.totalearnedpoints + @admin_panel_order.earned_points))
-            send_order_confirmation_email_to_customer(@admin_panel_order.id)
-          end
+        elsif statustoupdate == 'confirmed'
+          user_redeem_points_record = RedeemPoint.where(user_id: @admin_panel_order.user_id).first
+          user_redeem_points_record.update_attributes(net_worth: user_redeem_points_record.net_worth + @admin_panel_order.earned_points, last_net_worth: user_redeem_points_record.net_worth, last_reward_type: "Discount Per Transaction", last_reward_worth: @admin_panel_order.earned_points, last_reward_update: Time.now, totalearnedpoints: (user_redeem_points_record.totalearnedpoints + @admin_panel_order.earned_points))
+          send_order_confirmation_email_to_customer(@admin_panel_order.id)
 
-          if statustoupdate == 'cancelled'
-            user_redeem_point_reimburse = RedeemPoint.where(:user_id => @admin_panel_order.user_id).first
-            user_redeem_point_reimburse.update(:net_worth => user_redeem_point_reimburse.net_worth + @admin_panel_order.RedeemPoints, :totalavailedpoints => user_redeem_point_reimburse.totalavailedpoints - @admin_panel_order.RedeemPoints)
-            @admin_panel_order.update(:Subtotal => 0, :Delivery_Charges => 0, :Vat_Charges => 0, :Total => 0, :order_status_flag => 'cancelled', :earned_points => 0, :RedeemPoints => 0)
+        elsif statustoupdate == 'cancelled'
+          user_redeem_point_reimburse = RedeemPoint.where(user_id: @admin_panel_order.user_id).first
+          user_redeem_point_reimburse.update_attributes(net_worth: user_redeem_point_reimburse.net_worth + @admin_panel_order.RedeemPoints, totalavailedpoints: user_redeem_point_reimburse.totalavailedpoints - @admin_panel_order.RedeemPoints)
+          @admin_panel_order.update_attributes(Subtotal: 0, Delivery_Charges: 0, Vat_Charges: 0, Total: 0, order_status_flag: 'cancelled', earned_points: 0, RedeemPoints: 0)
 
-            OrderMailer.send_complete_cancel_order_email_to_customer(@admin_panel_order.id, @admin_panel_order.user.email).deliver
-          end
+          OrderMailer.send_complete_cancel_order_email_to_customer(@admin_panel_order.id, @admin_panel_order.user.email).deliver
         end
       end
 
