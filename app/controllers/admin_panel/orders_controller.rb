@@ -1,5 +1,6 @@
 module AdminPanel
   class OrdersController < AdminPanelController
+    include AdminPanel::OrderUpdateHelper
     before_action :authorize_super_admin_employee, only: :index
     before_action :set_admin_panel_order, only: [:show, :edit, :update, :destroy]
     before_action :view_new_order, only: :show
@@ -360,59 +361,8 @@ module AdminPanel
   # PATCH/PUT /admin_panel/orders/1
   # PATCH/PUT /admin_panel/orders/1.json
   def update
-    statustoupdate = params["order"]["order_status_flag"].to_s
-
-    if @admin_panel_order.update(:order_status_flag => statustoupdate)
-      @admin_panel_order.order_items.each do |orderitem|
-        if orderitem.status != 'cancelled'
-          if statustoupdate == 'cancelled'
-            item = Item.where(:id => orderitem.item_id).first
-            if !item.nil?
-              item.increment!(:quantity, orderitem.Quantity)
-            end
-          end
-          orderitem.update(:status => statustoupdate)
-        end
-      end
-
-      if @admin_panel_order.user_id.present?
-        orderuser = User.where(:id => @admin_panel_order.user_id).first
-        orderuser.notifications.create(order: @admin_panel_order, message: 'Your Order status for Order # ' + @admin_panel_order.id.to_s + ' has been ' + (statustoupdate == 'cancelled' ? 'Cancelled' : 'updated to ' + (statustoupdate == 'on_the_way' ? 'on the way' : statustoupdate)))
-
-        if statustoupdate.in?(%w(delivered delivered_by_card delivered_by_cash delivered_online))
-          set_order_delivery_invoice(@admin_panel_order.id, orderuser.email)
-          @admin_panel_order.update_attributes(Payment_Status: 1)
-          if @admin_panel_order.used_pay_code.present?
-            @admin_panel_order.used_pay_code.notifications
-              .create(message: '30 points have been added to your account since your friend used your Pay It Forward code',
-                      user_id: @admin_panel_order.used_pay_code.user.id)
-            if @admin_panel_order.user.pay_code.blank?
-              @admin_panel_order.used_pay_code.notifications
-                .create(message: 'A Pay It Forward code is now available for you so you can share it with 3 of your friends and receive 30 points from each of them. You can find the code under “ My Codes “ in the main Menu',
-                        user_id: @admin_panel_order.used_pay_code.code_user.id)
-              @admin_panel_order.used_pay_code.create_new_pay_code
-            end
-            @admin_panel_order.used_pay_code.add_redeem_points
-          elsif @admin_panel_order.user.pay_code.blank?
-            @admin_panel_order.user.generate_pay_code
-            @admin_panel_order.user.notifications
-              .create(message: 'A Pay It Forward code is now available for you so you can share it with 3 of your friends and receive 30 points from each of them. You can find the code under “ My Codes “ in the main Menu',
-                      user_id: @admin_panel_order.user_id)
-          end
-
-        elsif statustoupdate == 'confirmed'
-          user_redeem_points_record = RedeemPoint.where(user_id: @admin_panel_order.user_id).first
-          user_redeem_points_record.update_attributes(net_worth: user_redeem_points_record.net_worth + @admin_panel_order.earned_points, last_net_worth: user_redeem_points_record.net_worth, last_reward_type: "Discount Per Transaction", last_reward_worth: @admin_panel_order.earned_points, last_reward_update: Time.now, totalearnedpoints: (user_redeem_points_record.totalearnedpoints + @admin_panel_order.earned_points))
-          send_order_confirmation_email_to_customer(@admin_panel_order.id)
-
-        elsif statustoupdate == 'cancelled'
-          user_redeem_point_reimburse = RedeemPoint.where(user_id: @admin_panel_order.user_id).first
-          user_redeem_point_reimburse.update_attributes(net_worth: user_redeem_point_reimburse.net_worth + @admin_panel_order.RedeemPoints, totalavailedpoints: user_redeem_point_reimburse.totalavailedpoints - @admin_panel_order.RedeemPoints)
-          @admin_panel_order.update_attributes(Subtotal: 0, Delivery_Charges: 0, Vat_Charges: 0, Total: 0, order_status_flag: 'cancelled', earned_points: 0, RedeemPoints: 0)
-
-          OrderMailer.send_complete_cancel_order_email_to_customer(@admin_panel_order.id, @admin_panel_order.user.email).deliver
-        end
-      end
+    if @admin_panel_order.update(order_status_flag: params["order"]["order_status_flag"])
+      update_status(@admin_panel_order)
 
       flash[:success] = 'Order Item was successfully updated'
       redirect_to controller: 'orders', action: 'show', id: @admin_panel_order.id
@@ -470,10 +420,6 @@ module AdminPanel
     def set_order_delivery_invoice(orderid, userEmail)
       OrderMailer.send_order_delivery_invoice(orderid, ENV['ADMIN']).deliver
       OrderMailer.send_order_delivery_invoice(orderid, userEmail).deliver
-    end
-
-    def send_order_confirmation_email_to_customer(orderid)
-      OrderMailer.send_order_confimation_notification_to_customer(orderid).deliver
     end
 
     def send_order_cancellation_email(orderitemid)

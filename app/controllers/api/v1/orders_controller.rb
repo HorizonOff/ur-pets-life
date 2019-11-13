@@ -1,6 +1,7 @@
 module Api
   module V1
     class OrdersController < Api::BaseController
+      include AdminPanel::OrderUpdateHelper
       before_action :set_order, only: [:show, :edit, :update, :destroy]
       before_action :set_usercartitems, only: [:create]
       # before_action :check_empty_transactions, only: [:create]
@@ -340,42 +341,7 @@ module Api
         @order.update(order_params)
 
         if params['driver_id'].blank?
-          @order.user.notifications.create(order: @order, message: "Your Order status for Order #" + @order.id.to_s + " has been updated to 'On The Way'") if @order.order_status_flag_on_the_way?
-
-          if @order.order_status_flag.in?(%w(delivered delivered_by_card delivered_by_cash delivered_online))
-            @order.update_attributes(Payment_Status: 1)
-
-            if @order.used_pay_code.present?
-              @order.used_pay_code.notifications
-                  .create(message: '30 points have been added to your account since your friend used your Pay It Forward code',
-                          user_id: @order.used_pay_code.user.id)
-
-              if @order.user.pay_code.blank?
-                @order.used_pay_code.notifications
-                    .create(message: 'A Pay It Forward code is now available for you so you can share it with 3 of your friends and receive 30 points from each of them. You can find the code under “ My Codes “ in the main Menu',
-                            user_id: @order.used_pay_code.code_user.id)
-                @order.used_pay_code.create_new_pay_code
-              end
-              @order.used_pay_code.add_redeem_points
-
-            elsif @order.user.pay_code.blank?
-              @order.user.generate_pay_code
-              @order.user.notifications
-                  .create(message: 'A Pay It Forward code is now available for you so you can share it with 3 of your friends and receive 30 points from each of them. You can find the code under “ My Codes “ in the main Menu',
-                          user_id: @order.user_id)
-            end
-
-          elsif @order.order_status_flag == 'confirmed'
-            user_redeem_points_record = RedeemPoint.where(user_id: @order.user_id).first
-            user_redeem_points_record.update_attributes(net_worth: user_redeem_points_record.net_worth + @order.earned_points, last_net_worth: user_redeem_points_record.net_worth, last_reward_type: "Discount Per Transaction", last_reward_worth: @order.earned_points, last_reward_update: Time.now, totalearnedpoints: (user_redeem_points_record.totalearnedpoints + @order.earned_points))
-            send_order_confirmation_email_to_customer(@order.id)
-
-          elsif @order.order_status_flag == 'cancelled'
-            user_redeem_point_reimburse = RedeemPoint.where(user_id: @order.user_id).first
-            user_redeem_point_reimburse.update_attributes(net_worth: user_redeem_point_reimburse.net_worth + @order.RedeemPoints, totalavailedpoints: user_redeem_point_reimburse.totalavailedpoints - @order.RedeemPoints)
-            @order.update_attributes(Subtotal: 0, Delivery_Charges: 0, Vat_Charges: 0, Total: 0, earned_points: 0, RedeemPoints: 0)
-            send_complete_cancel_order_email_to_customer(@order.id)
-          end
+          update_status(@order)
         end
 
         render json: {
@@ -456,14 +422,6 @@ module Api
 
       def send_inventory_alerts(itemid)
         OrderMailer.send_low_inventory_alert(itemid).deliver_later
-      end
-
-      def send_order_confirmation_email_to_customer(orderid)
-        OrderMailer.send_order_confimation_notification_to_customer(orderid).deliver
-      end
-
-      def send_complete_cancel_order_email_to_customer(orderid)
-        OrderMailer.send_complete_cancel_order_email_to_customer(orderid, @order.user.email).deliver
       end
 
       def set_order_notifcation_email(order, is_any_recurring_item)
