@@ -374,8 +374,7 @@ module Api
             user_redeem_point_reimburse = RedeemPoint.where(user_id: @order.user_id).first
             user_redeem_point_reimburse.update_attributes(net_worth: user_redeem_point_reimburse.net_worth + @order.RedeemPoints, totalavailedpoints: user_redeem_point_reimburse.totalavailedpoints - @order.RedeemPoints)
             @order.update_attributes(Subtotal: 0, Delivery_Charges: 0, Vat_Charges: 0, Total: 0, earned_points: 0, RedeemPoints: 0)
-
-            OrderMailer.send_complete_cancel_order_email_to_customer(@order.id, @order.user.email).deliver
+            send_complete_cancel_order_email_to_customer(@order.id)
           end
         end
 
@@ -457,6 +456,14 @@ module Api
 
       def send_inventory_alerts(itemid)
         OrderMailer.send_low_inventory_alert(itemid).deliver_later
+      end
+
+      def send_order_confirmation_email_to_customer(orderid)
+        OrderMailer.send_order_confimation_notification_to_customer(orderid).deliver
+      end
+
+      def send_complete_cancel_order_email_to_customer(orderid)
+        OrderMailer.send_complete_cancel_order_email_to_customer(orderid, @order.user.email).deliver
       end
 
       def set_order_notifcation_email(order, is_any_recurring_item)
