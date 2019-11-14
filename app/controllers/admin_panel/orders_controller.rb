@@ -417,11 +417,6 @@ module AdminPanel
       @admin_panel_order = Order.find(params[:id])
     end
 
-    def set_order_delivery_invoice(orderid, userEmail)
-      OrderMailer.send_order_delivery_invoice(orderid, ENV['ADMIN']).deliver
-      OrderMailer.send_order_delivery_invoice(orderid, userEmail).deliver
-    end
-
     def send_order_cancellation_email(orderitemid)
       OrderMailer.send_order_cancellation_notification_to_customer(orderitemid).deliver
       OrderMailer.send_order_cancellation_notification_to_admin(orderitemid).deliver

@@ -12,9 +12,10 @@ module AdminPanel
         end
       end
 
-      order.user.notifications.create(order: order, message: "Your Order status for Order #" + order.id.to_s + " has been updated to 'On The Way'") if order.order_status_flag_on_the_way?
+      order.user.notifications.create(order: order, message: "Your Order status for Order #" + order.id.to_s + " has been " + order.order_status_flag_cancelled? ? "Cancelled" : "updated to " + order.order_status_flag)
 
       if order.order_status_flag.in?(%w(delivered delivered_by_card delivered_by_cash delivered_online))
+        set_order_delivery_invoice(order.id, order.user.email)
         order.update_attributes(Payment_Status: 1)
 
         if order.used_pay_code.present?
@@ -51,6 +52,11 @@ module AdminPanel
     end
 
     private
+
+    def set_order_delivery_invoice(orderid, userEmail)
+      OrderMailer.send_order_delivery_invoice(orderid, ENV['ADMIN']).deliver
+      OrderMailer.send_order_delivery_invoice(orderid, userEmail).deliver
+    end
 
     def send_order_confirmation_email_to_customer(orderid)
       OrderMailer.send_order_confimation_notification_to_customer(orderid).deliver
