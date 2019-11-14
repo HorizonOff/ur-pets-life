@@ -12,7 +12,9 @@ module AdminPanel
         end
       end
 
-      order.user.notifications.create(order: order, message: "Your Order status for Order #" + order.id.to_s + " has been " + (order.order_status_flag_cancelled? ? "Cancelled" : "updated to " + order.order_status_flag))
+      order.user.notifications.create(order: order,
+                                      message: "Your Order status for Order #" + order.id.to_s + " has been " +
+                                          (order.order_status_flag_cancelled? ? "Cancelled" : "updated to " + order.order_status_flag))
 
       if order.order_status_flag.in?(%w(delivered delivered_by_card delivered_by_cash delivered_online))
         set_order_delivery_invoice(order.id, order.user.email)
@@ -40,12 +42,18 @@ module AdminPanel
 
       elsif order.order_status_flag == 'confirmed'
         user_redeem_points_record = RedeemPoint.where(user_id: order.user_id).first
-        user_redeem_points_record.update_attributes(net_worth: user_redeem_points_record.net_worth + order.earned_points, last_net_worth: user_redeem_points_record.net_worth, last_reward_type: "Discount Per Transaction", last_reward_worth: order.earned_points, last_reward_update: Time.now, totalearnedpoints: (user_redeem_points_record.totalearnedpoints + order.earned_points))
+        user_redeem_points_record.update_attributes(net_worth: user_redeem_points_record.net_worth + order.earned_points,
+                                                    last_net_worth: user_redeem_points_record.net_worth,
+                                                    last_reward_type: "Discount Per Transaction",
+                                                    last_reward_worth: order.earned_points,
+                                                    last_reward_update: Time.now,
+                                                    totalearnedpoints: (user_redeem_points_record.totalearnedpoints + order.earned_points))
         send_order_confirmation_email_to_customer(order.id)
 
       elsif order.order_status_flag == 'cancelled'
         user_redeem_point_reimburse = RedeemPoint.where(user_id: order.user_id).first
-        user_redeem_point_reimburse.update_attributes(net_worth: user_redeem_point_reimburse.net_worth + order.RedeemPoints, totalavailedpoints: user_redeem_point_reimburse.totalavailedpoints - order.RedeemPoints)
+        user_redeem_point_reimburse.update_attributes(net_worth: user_redeem_point_reimburse.net_worth + order.RedeemPoints,
+                                                      totalavailedpoints: user_redeem_point_reimburse.totalavailedpoints - order.RedeemPoints)
         order.update_attributes(Subtotal: 0, Delivery_Charges: 0, Vat_Charges: 0, Total: 0, earned_points: 0, RedeemPoints: 0)
         send_complete_cancel_order_email_to_customer(order.id, order.user.email)
       end
