@@ -12,6 +12,7 @@ module PushSending
     def ios_options
       { alert: notification.message,
         sound: 'default',
+        source_type: on_the_way_order,
         badge: ios_badge,
         unread_commented_appointments_count: unread_commented_appointments_count,
         unread_notifications_count: unread_notifications_count,
@@ -24,6 +25,7 @@ module PushSending
         data: { body: notification.message,
                 title: 'UrPetsLife',
                 badge: android_badge,
+                source_type: on_the_way_order,
                 unread_commented_appointments_count: unread_commented_appointments_count,
                 unread_notifications_count: unread_notifications_count,
                 unread_post_comments_count: unread_post_comments_count }
