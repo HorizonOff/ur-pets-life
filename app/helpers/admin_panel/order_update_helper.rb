@@ -12,7 +12,7 @@ module AdminPanel
         end
       end
 
-      order.user.notifications.create(order: order, message: "Your Order status for Order #" + order.id.to_s + " has been " + order.order_status_flag_cancelled? ? "Cancelled" : "updated to " + order.order_status_flag)
+      order.user.notifications.create(order: order, message: "Your Order status for Order #" + order.id.to_s + " has been " + (order.order_status_flag_cancelled? ? "Cancelled" : "updated to " + order.order_status_flag))
 
       if order.order_status_flag.in?(%w(delivered delivered_by_card delivered_by_cash delivered_online))
         set_order_delivery_invoice(order.id, order.user.email)
