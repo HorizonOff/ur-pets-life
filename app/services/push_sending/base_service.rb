@@ -48,7 +48,7 @@ module PushSending
                                                 user.unread_commented_orders_count)
     end
 
-    def on_the_way_order
+    def on_the_way_order(order)
       'OpenMap' if order.order_status_flag_on_the_way?
     end
 
