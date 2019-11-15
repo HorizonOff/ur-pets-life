@@ -1,6 +1,7 @@
 module Api
   module V1
     class OrdersController < Api::BaseController
+      include AdminPanel::OrderUpdateHelper
       before_action :set_order, only: [:show, :edit, :update, :destroy]
       before_action :set_usercartitems, only: [:create]
       # before_action :check_empty_transactions, only: [:create]
@@ -338,35 +339,35 @@ module Api
 
       def update
         @order.update(order_params)
-        @order.user.notifications.create(order: @order, message: "Your Order status for Order #" + @order.id.to_s + " has been updated to 'On The Way'") if @order.order_status_flag_on_the_way?
-        return render json: {
-            Message: 'Order was successfully updated.',
-            status: :updated,
-            VatPercentage: "5",
-            #EarnedPoints: discount_per_transaction,
-            OrderDetails: @order.as_json(
-              :only => [:id, :Subtotal, :Delivery_Charges, :Vat_Charges, :Total, :Delivery_Date, :Order_Notes, :IsCash, :shipmenttime, :RedeemPoints, :earned_points, :company_discount, :is_user_from_company, :code_discount, :driver_id],
-              :include => {
-                :location => {
-                  :only => [:id, :latitude, :longitude, :city, :area, :street, :building_name, :unit_number, :villa_number]
-                },
-                :order_items => {
-                  :only => [:id, :Quantity, :IsRecurring, :IsReviewed, :status],
-                  :include => {
-                    :item => {
-                      :only => [:id, :picture, :name, :price, :discount, :description, :weight, :unit, :quantity, :short_description]
-                    },
-                    :recurssion_interval =>  {
-                      :only => [:id, :days, :weeks, :label]
-                    },
-                    :item_reviews => {
-                      :only => [:id, :user_id, :item_id, :rating, :comment]
-                    }
+        update_status(@order) if params['driver_id'].blank?
+
+        render json: {
+          Message: 'Order was successfully updated.',
+          status: :updated,
+          VatPercentage: "5",
+          OrderDetails: @order.as_json(
+            only: [:id, :Subtotal, :Delivery_Charges, :Vat_Charges, :Total, :Delivery_Date, :Order_Notes, :IsCash, :shipmenttime, :RedeemPoints, :earned_points, :company_discount, :is_user_from_company, :code_discount, :driver_id],
+            include: {
+              location: {
+                only: [:id, :latitude, :longitude, :city, :area, :street, :building_name, :unit_number, :villa_number]
+              },
+              order_items: {
+                only: [:id, :Quantity, :IsRecurring, :IsReviewed, :status],
+                include: {
+                  item: {
+                    only: [:id, :picture, :name, :price, :discount, :description, :weight, :unit, :quantity, :short_description]
+                  },
+                  recurssion_interval: {
+                    only: [:id, :days, :weeks, :label]
+                  },
+                  item_reviews: {
+                    only: [:id, :user_id, :item_id, :rating, :comment]
                   }
                 }
               }
-            )
-          }
+            }
+          )
+        }
       end
 
       # DELETE /orders/1

@@ -11,7 +11,7 @@ module API
         def place_recurring_orders
           User.joins(:orders).includes(orders: :order_items).find_each do |user|
             order_items = user.order_items.where(IsRecurring: true)
-              .where("status IN (?)", ['delivered', 'delivered_by_cash', 'delivered_by_card'])
+              .where("status IN (?)", %w(delivered delivered_by_cash delivered_by_card delivered_online))
               .where(next_recurring_due_date: Date.tomorrow.beginning_of_day..Date.tomorrow.end_of_day)
             next if order_items.blank?
 

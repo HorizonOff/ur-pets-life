@@ -14,7 +14,7 @@ module AdminPanel
                                    sql: '(vets.name ILIKE :value)' }] }.freeze
 
     PET_SCOPES = %w[for_adoption lost found].freeze
-    ORDER_STATUS = %w[pending confirmed on_the_way delivered delivered_by_card delivered_by_cash cancelled].freeze
+    ORDER_STATUS = %w[pending confirmed on_the_way delivered delivered_by_card delivered_by_cash delivered_online cancelled].freeze
 
     def initialize(model, params, admin = nil)
       @model = model
