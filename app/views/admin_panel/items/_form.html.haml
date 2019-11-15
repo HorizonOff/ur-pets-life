@@ -20,13 +20,13 @@
           Selling Price (per Item)
           %span.required *
         .col-md-9.col-sm-9.col-xs-12
-          = f.number_field :unit_price, class: 'form-control', required: true, step: ".01", min: 1
+          = f.number_field :unit_price, class: 'form-control', required: true, step: ".01", min: 0.1
       .form-group
         = f.label :buying_price, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
           Buying Price (per Item)
           %span.required *
         .col-md-9.col-sm-9.col-xs-12
-          = f.number_field :buying_price, class: 'form-control', required: true, step: ".01", min: 1
+          = f.number_field :buying_price, class: 'form-control', required: true, step: ".01", min: 0.1
       .form-group
         = f.label :discount, class: 'control-label col-md-3 col-sm-3 col-xs-12' do
           Discount (%)
