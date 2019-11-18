@@ -27,7 +27,7 @@ class Admin < ApplicationRecord
 
   validates_uniqueness_of :email, conditions: -> { with_deleted }
 
-  after_touch :send_location_to_channel
+  after_update :send_location_to_channel
 
   scope :simple, -> { where(is_super_admin: false) }
   scope :super, -> { where(is_super_admin: true) }
