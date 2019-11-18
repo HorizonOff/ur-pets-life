@@ -7,6 +7,11 @@ module Api
         render json: @admin.as_json(only: [:id, :name])
       end
 
+      def last_location
+        @admin = Admin.find_by_id(params[:id])
+        render json: @admin.as_json(only: [:lat, :lng])
+      end
+
       def live_location
         @admin = current_user
         if @admin.update(location_params)

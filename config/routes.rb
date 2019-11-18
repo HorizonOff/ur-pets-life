@@ -25,6 +25,7 @@ Rails.application.routes.draw do
       resources :chat_messages
       resources :apidocs, only: :index
       resources :admins, only: :index do
+        collection { get :last_location }
         collection { put :live_location }
       end
       resources :contact_requests, only: [:create]
