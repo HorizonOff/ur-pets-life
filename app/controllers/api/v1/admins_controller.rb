@@ -13,8 +13,9 @@ module Api
       end
 
       def live_location
-        @admin = current_user
-        if @admin.update(location_params)
+        return if !current_user.driver? || current_user.orders.order_status_flag_on_the_way.count.zero?
+
+        if current_user.update(location_params)
           render json: { Message: 'Location updated' }
         else
           render_422(message: 'Incorrect location params. Please try again.')

@@ -17,8 +17,7 @@ module Api
                scope: serializable_params.merge(pets_services: pets_services,
                                                 pets_diagnoses: pets_diagnoses,
                                                 service_option_times: @appointment.service_option_times),
-               include: 'vet,service_option_details,service_option_details.service_option_times,
-                         pets,pets.service_details,pets.diagnosis,medications'
+               include: 'vet,service_option_details,service_option_details.service_option_times,pets,pets.service_details,pets.diagnosis,medications'
       end
 
       def create
