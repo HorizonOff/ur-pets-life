@@ -14,7 +14,7 @@ module PushSending
       { alert: notification.message,
         sound: 'default',
         source_type: on_the_way_order(@order),
-        source_id: @order.driver_id,
+        source_id: @order&.driver_id,
         badge: ios_badge,
         unread_commented_appointments_count: unread_commented_appointments_count,
         unread_notifications_count: unread_notifications_count,
@@ -28,7 +28,7 @@ module PushSending
                 title: 'UrPetsLife',
                 badge: android_badge,
                 source_type: on_the_way_order(@order),
-                source_id: @order.driver_id,
+                source_id: @order&.driver_id,
                 unread_commented_appointments_count: unread_commented_appointments_count,
                 unread_notifications_count: unread_notifications_count,
                 unread_post_comments_count: unread_post_comments_count }
