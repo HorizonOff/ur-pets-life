@@ -108,7 +108,7 @@ module AdminPanel
     if params['user_id'].present?
       user_redeem_points = 0
       requested_redeem_points = params['order'][:RedeemPoints].to_i
-      paymentStatus = 0
+      paymentStatus = 1
       if @user.redeem_point.present?
         @user_redeem_point_record = @user.redeem_point
       else

@@ -205,7 +205,6 @@ module Api
         user_redeem_points = 0
         requested_redeem_points = params[:RedeemPoints].to_i
         permitted_redeem_points = 0
-        paymentStatus = 0
         if @user.redeem_point.present?
           @user_redeem_point_record = @user.redeem_point
         else
@@ -302,8 +301,12 @@ module Api
             is_any_recurring_item = true if cartitem.IsRecurring
           end
           @user.shopping_cart_items.destroy_all
-          set_order_notifcation_email(@order, is_any_recurring_item)
-          @user.notifications.create(order: @order, message: 'Your Order has been placed successfully')
+
+          if @order.IsCash
+            set_order_notifcation_email(@order, is_any_recurring_item)
+            @user.notifications.create(order: @order, message: 'Your Order has been placed successfully')
+          end
+
           return render json: {
             Message: 'Order was successfully created.',
             status: :created,

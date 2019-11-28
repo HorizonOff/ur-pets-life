@@ -50,6 +50,13 @@ class OrderMailer < ApplicationMailer
     mail(to: ENV['ADMIN'], subject: 'Inventory Alert')
   end
 
+  def send_telr_error(order, type, error)
+    @order = order
+    @type = type
+    @error = error
+    mail(to: ENV['ADMIN'], subject: 'Telr Error')
+  end
+
   def send_empty_inventory_alert(order_id)
     @order_id = order_id
     mail(to: ENV['ADMIN'], subject: 'Inventory Alert')
