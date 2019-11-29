@@ -227,12 +227,6 @@ module Api
           permitted_redeem_points = subTotal
         end
 
-        if params[:IsCash] == 'false' && params[:TransactionId].present?
-          @user.update_attributes(last_transaction_ref: params[:TransactionId],
-                                  last_transaction_date: params[:TransactionDate])
-          paymentStatus = 1
-        end
-
         # if permitted_redeem_points > 0
         #   deliveryCharges = (subTotal - permitted_redeem_points) > 100 ? 0 : 20
         #   total = subTotal + deliveryCharges + vatCharges
@@ -242,9 +236,9 @@ module Api
                            TransactionId: params[:TransactionId],
                            TransactionDate: params[:TransactionDate], Subtotal: @total_price_without_discount,
                            Delivery_Charges: deliveryCharges, shipmenttime: 'with in 7 days', Vat_Charges: vatCharges,
-                           Total: total, Order_Status: 1, Payment_Status: paymentStatus,
-                           Delivery_Date: params[:Delivery_Date], Order_Notes: params[:Order_Notes],
-                           IsCash: params[:IsCash], location_id: params[:location_id], is_viewed: false,
+                           Total: total, Order_Status: 1, Delivery_Date: params[:Delivery_Date],
+                           Order_Notes: params[:Order_Notes], IsCash: params[:IsCash],
+                           location_id: params[:location_id], is_viewed: false,
                            order_status_flag: 'pending', code_discount: code_discount,
                            company_discount: company_discount, is_user_from_company: @is_user_from_company)
         if @order.save
