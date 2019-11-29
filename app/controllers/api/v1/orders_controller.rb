@@ -196,7 +196,7 @@ module Api
         if @user.email != 'development@urpetslife.com'
           deliveryCharges = (subTotal < 100 ? 20 : 0)
         else
-          deliveryCharges = 5.75
+          deliveryCharges = 7
         end
         company_discount = (@itemsprice - @total_price_without_discount).round(2)
         code_discount = ::Api::V1::DiscountCodeService.new(params[:pay_code], @user, subTotal).discount_from_code

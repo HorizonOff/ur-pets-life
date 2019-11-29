@@ -95,7 +95,7 @@ module AdminPanel
     if @user.email != 'development@urpetslife.com'
       deliveryCharges = (subTotal < 100 ? 20 : 0)
     else
-      deliveryCharges = 5.75
+      deliveryCharges = 7
     end
 
     admin_discount = params['order'][:admin_discount].to_i if params['order'][:admin_discount].present?
@@ -218,7 +218,7 @@ module AdminPanel
     if @user.blank? || @user.email != 'development@urpetslife.com'
       deliveryCharges = (subTotal < 100 ? 20 : 0)
     else
-      deliveryCharges = 5.75
+      deliveryCharges = 7
     end
     company_discount = (@total_price_without_discount - @items_price).round(2)
     admin_discount = params['item'][:admin_discount].to_i
