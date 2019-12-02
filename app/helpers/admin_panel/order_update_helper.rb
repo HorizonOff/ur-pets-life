@@ -47,7 +47,7 @@ module AdminPanel
 
       elsif order.order_status_flag == 'confirmed'
         user_redeem_points_record = RedeemPoint.where(user_id: order.user_id).first
-        TelrGetWorker.perform_async('capture', order.Total, order.id) if order.TransactionId.present? #TODO remove delivered button before confirmation
+        TelrGetWorker.perform_async('capture', order.Total, order.id) if order.TransactionId.present?
         user_redeem_points_record.update_attributes(net_worth: user_redeem_points_record.net_worth + order.earned_points,
                                                     last_net_worth: user_redeem_points_record.net_worth,
                                                     last_reward_type: "Discount Per Transaction",

@@ -18,7 +18,7 @@ module Api
               xml.currency_ "AED"
               xml.amount_ amount
               xml.ref_ order.TransactionId
-              xml.test_ "1" #TODO 0 - live, 1 - test
+              xml.test_ "0"
             }
           }
         end
