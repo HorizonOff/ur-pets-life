@@ -23,7 +23,7 @@ module AdminPanel
     @orderitems = OrderItem.includes(:item).where(:order_id => @admin_panel_order.id)
 
     if @admin_panel_order.order_status_flag == 'pending' && !@admin_panel_order.IsCash?
-      @statusoption = [['Confirm', 'confirmed'], ['Delivered', 'delivered'], ['Cancel', 'cancelled']]
+      @statusoption = [['Confirm', 'confirmed'], ['Cancel', 'cancelled']]
     elsif @admin_panel_order.order_status_flag == 'pending'
       @statusoption = [['Confirm', 'confirmed'], ['Delivered by card', 'delivered_by_card'], ['Delivered by cash', 'delivered_by_cash'], ['Delivered Online', 'delivered_online'], ['Cancel', 'cancelled']]
     elsif @admin_panel_order.order_status_flag == 'confirmed'
