@@ -49,7 +49,7 @@ module Api
         @orders = @user.orders.visible
         @orders = Order.visible if @user.try(:role) == 'super_admin'
         orders_count = @orders.count
-        @orders = @orders.order(created_at: :desc).page(params[:page]).per(params[:per_page])
+        @orders = @orders.where(Payment_Status: 1).order(created_at: :desc).page(params[:page]).per(params[:per_page])
         return render json: { Message: 'No Orders found' } if @orders.blank?
 
         serialized_orders = ActiveModel::Serializer::CollectionSerializer.new(
