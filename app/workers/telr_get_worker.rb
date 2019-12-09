@@ -17,7 +17,7 @@ class TelrGetWorker
     end
     body = MultiXml.parse(req.body)
 
-    return send_telr_error(order, type, body['remote']['auth']['message']).deliver if body['remote']['auth']['status'] == 'E'
+    return send_telr_error(order, type, body['remote']['auth']['message']).deliver if body['remote']['auth']['status'] != 'A'
 
     get_request if type == 'capture' && order.order_items.where(status: "cancelled").present?
   end
