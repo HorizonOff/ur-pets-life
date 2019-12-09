@@ -11,7 +11,7 @@ class TelrGetWorker
   private
 
   def post_request(type, amount, order)
-    req = Faraday.post('https://secure.telr.com/gateway/remote.xml') do |request|
+    req = Faraday.post('https://secure.telr.com/gateway/remote.xml', proxy: ENV["FIXIE_URL"]) do |request|
       request.body = ::Api::V1::TelrXmlService.new(type, amount, order).build_xml.to_xml
       request.headers['Content-Type'] = 'application/xml'
     end
@@ -23,7 +23,7 @@ class TelrGetWorker
   end
 
   def get_request
-    req = Faraday.get("https://secure.telr.com/tools/api/xml/transaction/#{@order.TransactionId}") do |request|
+    req = Faraday.get("https://secure.telr.com/tools/api/xml/transaction/#{@order.TransactionId}", proxy: ENV["FIXIE_URL"]) do |request|
       request.headers['Authorization'] = ENV['TELR_BASIC_KEY']
     end
 
