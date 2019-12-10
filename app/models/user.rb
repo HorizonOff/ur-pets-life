@@ -51,7 +51,7 @@ class User < ApplicationRecord
   acts_as_paranoid
 
   has_many :item_reviews
-  has_one :location, as: :place, inverse_of: :place
+  has_many :location, as: :place, inverse_of: :place
 
   has_many :support_chats
   has_many :chat_messages

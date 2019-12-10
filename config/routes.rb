@@ -32,6 +32,7 @@ Rails.application.routes.draw do
       resources :users, only: :create do
         collection { get :profile }
         collection { put :set_push_token }
+        collection { get :user_locations }
       end
       resources :redeem_points
       resources :recurssion_intervals

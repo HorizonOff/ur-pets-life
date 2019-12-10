@@ -46,6 +46,10 @@ module Api
         end
       end
 
+      def user_locations
+        render json: @user.locations
+      end
+
       private
 
       def user_params
