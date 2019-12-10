@@ -79,7 +79,7 @@ Rails.application.routes.draw do
       get 'pay_code', to: 'used_pay_codes#pay_code'
       get 'check_pay_code', to: 'used_pay_codes#check_pay_code'
       get 'admin_orders', to: 'orders#admin_orders'
-      get 'user_location', to: 'users#user_location'
+      get 'user_locations', to: 'users#user_locations'
       resources :pets, except: %i[new edit] do
         collection { post :found }
         collection { get :can_be_lost }
