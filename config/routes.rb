@@ -32,7 +32,6 @@ Rails.application.routes.draw do
       resources :users, only: :create do
         collection { get :profile }
         collection { put :set_push_token }
-        collection { get :user_locations }
       end
       resources :redeem_points
       resources :recurssion_intervals
@@ -80,6 +79,7 @@ Rails.application.routes.draw do
       get 'pay_code', to: 'used_pay_codes#pay_code'
       get 'check_pay_code', to: 'used_pay_codes#check_pay_code'
       get 'admin_orders', to: 'orders#admin_orders'
+      get 'user_location', to: 'users#user_location'
       resources :pets, except: %i[new edit] do
         collection { post :found }
         collection { get :can_be_lost }
