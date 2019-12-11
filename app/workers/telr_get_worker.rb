@@ -5,6 +5,8 @@ class TelrGetWorker
   def perform(type, amount, order_id)
     @order = Order.find_by_id(order_id)
 
+    return get_request if type == 'capture' && @order.order_items.where(status: "cancelled").present?
+
     post_request(type, amount, @order)
   end
 
@@ -17,9 +19,7 @@ class TelrGetWorker
     end
     body = MultiXml.parse(req.body)
 
-    return send_telr_error(order, type, body['remote']['auth']['message']).deliver if body['remote']['auth']['status'] != 'A'
-
-    get_request if type == 'capture' && order.order_items.where(status: "cancelled").present?
+    send_telr_error(order, type, body['remote']['auth']['message']).deliver if body['remote']['auth']['status'] != 'A'
   end
 
   def get_request
@@ -28,15 +28,19 @@ class TelrGetWorker
     end
 
     if req.success?
-      amount = MultiXml.parse(req.body)['transaction']['amount'].to_f - @order.Total
+      amount = MultiXml.parse(req.body)['transaction']['amount'].to_f
+      post_request('capture', amount, @order)
+
+      amount -= @order.Total
+      post_request('refund', amount, @order) #TODO Change @order to ID of capture transaction
     else
       amount = 0
       @order.order_items.where(status: "cancelled").each do |item|
         amount += item.Total_Price
       end
-    end
 
-    post_request('release', amount, @order)
+      send_manual_capture_request(@order, amount)
+    end
   end
 
   def conn
@@ -45,5 +49,9 @@ class TelrGetWorker
 
   def send_telr_error(order, type, error)
     OrderMailer.send_telr_error(order, type, error)
+  end
+
+  def send_manual_capture_request(order, refund)
+    OrderMailer.send_manual_capture_request(order, refund)
   end
 end

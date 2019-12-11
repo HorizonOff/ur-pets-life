@@ -57,6 +57,12 @@ class OrderMailer < ApplicationMailer
     mail(to: ENV['ADMIN'], subject: 'Telr Error')
   end
 
+  def send_manual_capture_request(order, refund)
+    @order = order
+    @refund = refund
+    mail(to: ENV['ADMIN'], subject: 'Manual Capture Request')
+  end
+
   def send_empty_inventory_alert(order_id)
     @order_id = order_id
     mail(to: ENV['ADMIN'], subject: 'Inventory Alert')
