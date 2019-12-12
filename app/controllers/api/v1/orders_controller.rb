@@ -198,6 +198,7 @@ module Api
         else
           deliveryCharges = 5.75
         end
+        payment_status = params[:IsCash] ? 1 : 0
         company_discount = (@itemsprice - @total_price_without_discount).round(2)
         code_discount = ::Api::V1::DiscountCodeService.new(params[:pay_code], @user, subTotal).discount_from_code
         vatCharges = ((@total_price_without_discount/100).to_f * 5).round(2)
@@ -238,8 +239,8 @@ module Api
                            Delivery_Charges: deliveryCharges, shipmenttime: 'with in 7 days', Vat_Charges: vatCharges,
                            Total: total, Order_Status: 1, Delivery_Date: params[:Delivery_Date],
                            Order_Notes: params[:Order_Notes], IsCash: params[:IsCash],
-                           location_id: params[:location_id], is_viewed: false,
-                           order_status_flag: 'pending', code_discount: code_discount,
+                           Payment_Status: payment_status, location_id: params[:location_id],
+                           is_viewed: false, order_status_flag: 'pending', code_discount: code_discount,
                            company_discount: company_discount, is_user_from_company: @is_user_from_company)
         if @order.save
           if @order.code_discount != 0
@@ -432,7 +433,7 @@ module Api
 
       # Never trust parameters from the scary internet, only allow the white list through.
       def order_params
-        params.permit(:TransactionId, :TransactionDate, :IsCash, :Payment_Status, :order_status_flag, :driver_id)
+        params.permit(:TransactionId, :TransactionDate, :IsCash, :order_status_flag, :driver_id)
       end
     end
   end
