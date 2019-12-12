@@ -5,34 +5,36 @@ class TelrGetWorker
   def perform(type, amount, order_id)
     @order = Order.find_by_id(order_id)
 
-    return get_request if type == 'capture' && @order.order_items.where(status: "cancelled").present?
+    return refund if type == 'capture' && @order.order_items.where(status: "cancelled").present?
 
-    post_request(type, amount, @order)
+    post_request(type, amount, @order.TransactionId)
   end
 
   private
 
-  def post_request(type, amount, order)
+  def post_request(type, amount, transaction)
     req = conn.post('/gateway/remote.xml') do |request|
-      request.body = ::Api::V1::TelrXmlService.new(type, amount, order).build_xml.to_xml
+      request.body = ::Api::V1::TelrXmlService.new(type, amount, transaction).build_xml.to_xml
       request.headers['Content-Type'] = 'application/xml'
     end
     body = MultiXml.parse(req.body)
 
-    send_telr_error(order, type, body['remote']['auth']['message']).deliver if body['remote']['auth']['status'] != 'A'
+    send_telr_error(@order, type, body['remote']['auth']['message']).deliver if body['remote']['auth']['status'] != 'A'
   end
 
   def get_request
-    req = conn.get("/tools/api/xml/transaction/#{@order.TransactionId}") do |request|
+    conn.get("/tools/api/xml/transaction/#{@order.TransactionId}") do |request|
       request.headers['Authorization'] = ENV['TELR_BASIC_KEY']
     end
+  end
 
-    if req.success?
-      amount = MultiXml.parse(req.body)['transaction']['amount'].to_f
-      post_request('capture', amount, @order)
+  def refund
+    if get_request.success?
+      amount = MultiXml.parse(get_request.body)['transaction']['amount'].to_f
+      post_request('capture', amount, @order.TransactionId)
 
       amount -= @order.Total
-      post_request('refund', amount, @order) #TODO Change @order to ID of capture transaction
+      post_request('refund', amount, MultiXml.parse(get_request.body)['transaction']['notes']['note']['ref'])
     else
       amount = 0
       @order.order_items.where(status: "cancelled").each do |item|

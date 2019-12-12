@@ -1,10 +1,10 @@
 module Api
   module V1
     class TelrXmlService
-      def initialize(type, amount, order)
+      def initialize(type, amount, transaction)
         @type = type
-        @order = order
         @amount = amount
+        @transaction = transaction
       end
 
       def build_xml
@@ -17,7 +17,7 @@ module Api
               xml.class_ "ecom"
               xml.currency_ "AED"
               xml.amount_ amount
-              xml.ref_ order.TransactionId
+              xml.ref_ transaction
               xml.test_ "1"
             }
           }
@@ -26,7 +26,7 @@ module Api
 
       private
 
-      attr_reader :type, :amount, :order
+      attr_reader :type, :amount, :transaction
 
     end
   end
