@@ -99,7 +99,7 @@ module AdminPanel
     end
 
     admin_discount = params['order'][:admin_discount].to_i if params['order'][:admin_discount].present?
-    company_discount = (@items_price - @total_price_without_discount).round(2)
+    company_discount = (@total_price_without_discount - @items_price).round(2)
     vatCharges = ((@total_price_without_discount/100).to_f * 5).round(2)
     total = subTotal + deliveryCharges + vatCharges - company_discount
     admin_discount = total if admin_discount > total
