@@ -199,9 +199,6 @@ module Api
           deliveryCharges = 7
         end
         company_discount = (@total_price_without_discount - @itemsprice).round(2)
-        def location
-          Location.find_by_id(params['id'])
-        end
         code_discount = ::Api::V1::DiscountCodeService.new(params[:pay_code], @user, subTotal).discount_from_code
         vatCharges = ((@total_price_without_discount/100).to_f * 5).round(2)
         total = subTotal + deliveryCharges + vatCharges + code_discount - company_discount
