@@ -50,13 +50,23 @@ module Api
         render json: @user.location
       end
 
+      def create_location
+        if @user.location.create(location_params)
+          render json: { message: 'Location create successfully' }
+        else
+          render_422(parse_errors_messages(@user))
+        end
+      end
+
       private
 
       def user_params
         params.require(:user).permit(:first_name, :last_name, :email, :mobile_number, :password, :password_confirmation,
-                                     :google_id, :facebook_id, :birthday, :gender,
-                                     location_attributes: %i[latitude longitude city area street building_type
-                                                             building_name unit_number villa_number comment])
+                                     :google_id, :facebook_id, :birthday, :gender)
+      end
+
+      def location_params
+        %i[latitude longitude city area street building_type building_name unit_number villa_number comment name]
       end
     end
   end

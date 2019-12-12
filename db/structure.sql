@@ -1088,7 +1088,8 @@ CREATE TABLE public.locations (
     comment character varying,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    deleted_at timestamp without time zone
+    deleted_at timestamp without time zone,
+    name character varying
 );
 
 
@@ -1276,7 +1277,7 @@ CREATE TABLE public.orders (
     "Total" double precision,
     "IsCash" boolean,
     "Order_Status" integer,
-    "Payment_Status" integer,
+    "Payment_Status" integer DEFAULT 0,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     shipmenttime character varying,
@@ -5137,6 +5138,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20191016142932'),
 ('20191028141115'),
 ('20191030135243'),
-('20191108130248');
+('20191108130248'),
+('20191128171732'),
+('20191211153531');
 
 
