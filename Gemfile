@@ -49,6 +49,7 @@ gem 'devise'
 gem 'devise_invitable'
 gem 'haml-rails', '~> 1.0'
 gem 'active_model_serializers'
+gem 'faraday'
 
 gem 'carrierwave', '~> 1.0'
 gem "mini_magick"
@@ -66,6 +67,8 @@ gem "font-awesome-rails"
 gem 'kaminari'
 gem 'file_validators'
 gem 'ckeditor'
+gem 'nokogiri'
+gem 'multi_xml'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 

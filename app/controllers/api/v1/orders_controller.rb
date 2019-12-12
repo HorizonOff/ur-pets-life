@@ -49,7 +49,7 @@ module Api
         @orders = @user.orders.visible
         @orders = Order.visible if @user.try(:role) == 'super_admin'
         orders_count = @orders.count
-        @orders = @orders.order(created_at: :desc).page(params[:page]).per(params[:per_page])
+        @orders = @orders.where(Payment_Status: 1).order(created_at: :desc).page(params[:page]).per(params[:per_page])
         return render json: { Message: 'No Orders found' } if @orders.blank?
 
         serialized_orders = ActiveModel::Serializer::CollectionSerializer.new(
@@ -205,7 +205,6 @@ module Api
         user_redeem_points = 0
         requested_redeem_points = params[:RedeemPoints].to_i
         permitted_redeem_points = 0
-        paymentStatus = 0
         if @user.redeem_point.present?
           @user_redeem_point_record = @user.redeem_point
         else
@@ -228,12 +227,6 @@ module Api
           permitted_redeem_points = subTotal
         end
 
-        if params[:IsCash] == 'false' && params[:TransactionId].present?
-          @user.update_attributes(last_transaction_ref: params[:TransactionId],
-                                  last_transaction_date: params[:TransactionDate])
-          paymentStatus = 1
-        end
-
         # if permitted_redeem_points > 0
         #   deliveryCharges = (subTotal - permitted_redeem_points) > 100 ? 0 : 20
         #   total = subTotal + deliveryCharges + vatCharges
@@ -243,9 +236,9 @@ module Api
                            TransactionId: params[:TransactionId],
                            TransactionDate: params[:TransactionDate], Subtotal: @total_price_without_discount,
                            Delivery_Charges: deliveryCharges, shipmenttime: 'with in 7 days', Vat_Charges: vatCharges,
-                           Total: total, Order_Status: 1, Payment_Status: paymentStatus,
-                           Delivery_Date: params[:Delivery_Date], Order_Notes: params[:Order_Notes],
-                           IsCash: params[:IsCash], location_id: params[:location_id], is_viewed: false,
+                           Total: total, Order_Status: 1, Delivery_Date: params[:Delivery_Date],
+                           Order_Notes: params[:Order_Notes], IsCash: params[:IsCash],
+                           location_id: params[:location_id], is_viewed: false,
                            order_status_flag: 'pending', code_discount: code_discount,
                            company_discount: company_discount, is_user_from_company: @is_user_from_company)
         if @order.save
@@ -302,8 +295,12 @@ module Api
             is_any_recurring_item = true if cartitem.IsRecurring
           end
           @user.shopping_cart_items.destroy_all
-          set_order_notifcation_email(@order, is_any_recurring_item)
-          @user.notifications.create(order: @order, message: 'Your Order has been placed successfully')
+
+          if @order.IsCash
+            set_order_notifcation_email(@order, is_any_recurring_item)
+            @user.notifications.create(order: @order, message: 'Your Order has been placed successfully')
+          end
+
           return render json: {
             Message: 'Order was successfully created.',
             status: :created,

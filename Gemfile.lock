@@ -558,6 +558,7 @@ DEPENDENCIES
   draper
   factory_bot_rails
   faker
+  faraday
   fb_graph2
   fcm
   file_validators
@@ -573,7 +574,9 @@ DEPENDENCIES
   letter_opener
   listen (>= 3.0.5, < 3.2)
   mini_magick
+  multi_xml
   newrelic_rpm
+  nokogiri
   omniauth
   omniauth-facebook
   omniauth-google-oauth2
