@@ -283,19 +283,26 @@ module AdminPanel
     orderitem = OrderItem.where(:id => params[:id]).first
     orderitem.update_attributes(status: :cancelled)
 
+    order = Order.find_by_id(orderitem.order_id)
+    discount = ::Api::V1::DiscountDomainService.new(order.user.email.dup).dicount_on_email
+
     updateordertocancel = true
     discountedproductsprice = 0
+    discounted_price = 0
     allorderitems = OrderItem.where(:order_id => orderitem.order_id)
     allorderitems.each do |items|
       if items.status != 'cancelled'
         if items.isdiscounted == true
           discountedproductsprice += items.Total_Price
         end
+
+        if discount.positive?
+          discounted_price += (items.Total_Price * ((100 - discount).to_f / 100).round(2)) - items.Total_Price
+        end
+
         updateordertocancel = false
       end
     end
-
-    order = Order.where(:id => orderitem.order_id).first
 
     order_amount_remaining = order.Subtotal - orderitem.Total_Price
     redeem_points_consumed = order.RedeemPoints
@@ -313,7 +320,7 @@ module AdminPanel
       subTotal = (order.Subtotal - orderitem.Total_Price).to_f.round(2)
       deliveryCharges = subTotal > 100 ? 0 : 20
       vatCharges = ((subTotal/100).to_f * 5).round(2)
-      total = subTotal + deliveryCharges + vatCharges
+      total = subTotal + deliveryCharges + vatCharges + discounted_price + order.code_discount
 
       discount_per_transaction = 0
       if orderitem.isdiscounted == false
@@ -338,7 +345,13 @@ module AdminPanel
       #   total = subTotal + deliveryCharges + vatCharges
       # end
 
-      order.update(:Subtotal => subTotal, :Delivery_Charges => deliveryCharges, :Vat_Charges => vatCharges, :Total => total, :RedeemPoints => order.RedeemPoints - points_to_be_reverted, :earned_points => discount_per_transaction)
+      order.update(Subtotal: subTotal,
+                   Delivery_Charges: deliveryCharges,
+                   Vat_Charges: vatCharges,
+                   Total: total,
+                   RedeemPoints: order.RedeemPoints - points_to_be_reverted,
+                   earned_points: discount_per_transaction,
+                   company_discount: discounted_price)
     end
 
     user_redeem_point_record = RedeemPoint.where(:user_id => order.user_id).first
