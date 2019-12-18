@@ -39,10 +39,10 @@
                 %span.fa.fa-shopping-basket{"aria-hidden" => "true"}
               .form-discount
                 = label_tag 'Discount'
-                = f.number_field :admin_discount, min: 0, class: 'border-discount changed_subtotal', value: 0
+                = f.number_field :admin_discount, min: 0, step: ".01", class: 'border-discount changed_subtotal'
                 .new_user.hiden
                   = label_tag 'Redeem Points'
-                  = f.number_field :RedeemPoints, min: 0, class: 'border-discount changed_subtotal', value: 0
+                  = f.number_field :RedeemPoints, min: 0, value: 0, class: 'border-discount changed_subtotal'
           .form-group
             = label_tag 'Subtotal'
             %p.subtotal_price.pre_price
