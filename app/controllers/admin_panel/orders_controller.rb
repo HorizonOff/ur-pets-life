@@ -221,7 +221,7 @@ module AdminPanel
       deliveryCharges = 7
     end
     company_discount = (@total_price_without_discount - @items_price).round(2)
-    admin_discount = params['item'][:admin_discount].to_i
+    admin_discount = params['item'][:admin_discount].to_f
     redeem_points = params['item'][:RedeemPoints].to_i
     vatCharges = ((@total_price_without_discount/100).to_f * 5).round(2)
     total = subTotal + deliveryCharges + vatCharges + company_discount
@@ -242,7 +242,7 @@ module AdminPanel
     admin_discount = total if admin_discount > total
 
     total -= admin_discount + redeem_points
-    render json: { subtotal: subTotal, total: total.round(2) }
+    render json: { subtotal: subTotal, total: total }
   end
 
   def max_quantity
