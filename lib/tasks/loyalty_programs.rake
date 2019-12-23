@@ -1,7 +1,7 @@
 namespace :loyalty_programs do
   desc 'Loyalty program cash back'
   task second: :environment do
-    exit! if Time.now.strftime('%d-%m') == '01-01'
+    exit! if Time.now.strftime('%d-%m') != '01-01'
     users = User.joins(:orders).where('orders.created_at >= ?', 1.year.ago).uniq
 
     users.to_a.each do |user|
