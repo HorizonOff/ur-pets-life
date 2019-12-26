@@ -15,6 +15,7 @@ module AdminPanel
       if params['TransactionId'].present?
         set_order_notifcation_email(order, order.order_items.where(IsRecurring: true).present?)
         order.user.notifications.create(order: order, message: 'Your Order has been placed successfully')
+        order.update_columns(Payment_Status: params[:Payment_Status])
       end
 
       order.user.notifications.create(order: order,
@@ -58,7 +59,10 @@ module AdminPanel
 
       elsif order.order_status_flag == 'cancelled'
         user_redeem_point_reimburse = RedeemPoint.where(user_id: order.user_id).first
-        TelrGetWorker.perform_async('release', order.Total, order.id) if order.TransactionId.present?
+        if order.TransactionId.present?
+          order_price = order.Total - order.RedeemPoints
+          TelrGetWorker.perform_async('release', order_price, order.id)
+        end
         user_redeem_point_reimburse.update_attributes(net_worth: user_redeem_point_reimburse.net_worth + order.RedeemPoints,
                                                       totalavailedpoints: user_redeem_point_reimburse.totalavailedpoints - order.RedeemPoints)
         order.update_attributes(Subtotal: 0, Delivery_Charges: 0, Vat_Charges: 0, Total: 0, earned_points: 0, RedeemPoints: 0)
