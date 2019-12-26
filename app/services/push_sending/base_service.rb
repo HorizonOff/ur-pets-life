@@ -59,9 +59,10 @@ module PushSending
 
     def certificate_path
       if ENV['APPLE_PUSH_ENV'] == 'sandbox'
-        "#{Rails.root}/app/certificates/aps_development.pem"
-      else
-        "#{Rails.root}/app/certificates/aps_production.pem"
+        #"#{Rails.root}/app/certificates/aps_development.pem"
+      #else
+      #  "#{Rails.root}/app/certificates/aps_production.pem"
+        "#{Rails.root}/app/certificates/certificate.pem"
       end
     end
   end
