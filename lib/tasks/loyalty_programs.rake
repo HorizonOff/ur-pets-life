@@ -12,14 +12,25 @@ namespace :loyalty_programs do
       end
 
       if total > 10000
-        loyalty_redeems = total * 0.05
-        user.redeem_point.update_columns(net_worth: user.redeem_point.net_worth + loyalty_redeems)
+        add_redeems(total, user)
       elsif total > 5000
-        loyalty_redeems = total * 0.03
-        user.redeem_point.update_columns(net_worth: user.redeem_point.net_worth + loyalty_redeems)
+        add_redeems(total, user)
       end
 
       user.update_columns(spends_eligble: 0, spends_not_eligble: 0)
     end
+  end
+
+  private
+
+  def create_user_redeems(user)
+    RedeemPoint.create(user_id: user.id, net_worth: 0)
+  end
+
+  def add_redeems(total, user)
+    loyalty_redeems = total * 0.05
+    create_user_redeems(user) if user.redeem_point.blank?
+
+    user.redeem_point.update_columns(net_worth: user.redeem_point.net_worth.to_i + loyalty_redeems.round)
   end
 end
