@@ -16,7 +16,7 @@ module PushSending
 
       notification = RubyPushNotifications::APNS::APNSNotification.new(tokens, aps: ios_options)
       pusher = RubyPushNotifications::APNS::APNSPusher.new(
-        File.read(certificate_path),
+        File.read("#{Rails.root}/app/certificates/certificate.pem"),
         ENV['APPLE_PUSH_ENV'] == 'sandbox',
         password
       )
@@ -55,14 +55,6 @@ module PushSending
 
     def unread_post_comments_count
       @unread_post_comments_count ||= user.unread_post_comments_count
-    end
-
-    def certificate_path
-      if ENV['APPLE_PUSH_ENV'] == 'sandbox'
-        "#{Rails.root}/app/certificates/aps_development.pem"
-      else
-        "#{Rails.root}/app/certificates/aps_production.pem"
-      end
     end
   end
 end
