@@ -6,6 +6,7 @@ class Order < ApplicationRecord
   has_one :used_pay_code
   has_many :order_items, dependent: :destroy
   has_many :notifications
+  before_create :set_payment_status
   accepts_nested_attributes_for :order_items, allow_destroy: true
   accepts_nested_attributes_for :location
   enum order_status_flag: { pending: "pending", confirmed: "confirmed", on_the_way: "on_the_way",
@@ -56,6 +57,10 @@ class Order < ApplicationRecord
                   saved_change_to_attribute?(:order_status_flag, to: 'delivered_online')
 
     update_column(:delivery_at, Time.current)
+  end
+
+  def set_payment_status
+    self.Payment_Status = IsCash? ? 1 : 0
   end
 
   def update_user_spends

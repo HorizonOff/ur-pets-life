@@ -59,7 +59,7 @@ module AdminPanel
       elsif model == 'Admin'
         @scope = scope.with_deleted
       elsif model == 'Order'
-        @scope = scope.includes(:user, :location).where(Payment_Status: 1)
+        @scope = scope.includes(:user, :location)
       end
     end
 

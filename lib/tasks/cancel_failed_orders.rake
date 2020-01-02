@@ -2,7 +2,7 @@ namespace :cancel_failed_orders do
   desc 'Update orders with failed payment'
 
   task update: :environment do
-    Order.where(Payment_Status: 0, order_status_flag: 'pending').each do |order|
+    Order.where('created_at <= ?', 1.hour.ago).where(Payment_Status: 0, order_status_flag: 'pending').each do |order|
       order.update_columns(Subtotal: 0, Delivery_Charges: 0, Vat_Charges: 0, Total: 0,
                            earned_points: 0, RedeemPoints: 0, order_status_flag: 'cancelled', is_viewed: true)
 

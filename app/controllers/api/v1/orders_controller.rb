@@ -199,7 +199,6 @@ module Api
           deliveryCharges = 7
         end
 
-        payment_status = params[:IsCash] == 'true' ? 1 : 0
         company_discount = (@total_price_without_discount - @itemsprice).round(2)
         code_discount = ::Api::V1::DiscountCodeService.new(params[:pay_code], @user, subTotal).discount_from_code
         vatCharges = ((@total_price_without_discount/100).to_f * 5).round(2)
