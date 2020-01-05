@@ -239,9 +239,9 @@ module Api
                            Delivery_Charges: deliveryCharges, shipmenttime: 'with in 7 days', Vat_Charges: vatCharges,
                            Total: total, Order_Status: 1, Delivery_Date: params[:Delivery_Date],
                            Order_Notes: params[:Order_Notes], IsCash: params[:IsCash],
-                           Payment_Status: payment_status, location_id: params[:location_id],
-                           is_viewed: false, order_status_flag: 'pending', code_discount: code_discount,
-                           company_discount: company_discount, is_user_from_company: @is_user_from_company)
+                           location_id: params[:location_id], is_viewed: false, order_status_flag: 'pending',
+                           code_discount: code_discount, company_discount: company_discount,
+                           is_user_from_company: @is_user_from_company)
         if @order.save
           if @order.code_discount != 0
             pay_code_owner = User.find_by(pay_code: params[:pay_code])

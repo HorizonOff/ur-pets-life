@@ -12,7 +12,7 @@ module AdminPanel
         end
       end
 
-      if params['TransactionId'].present?
+      if params['TransactionId'].present? && order.order_status_flag_pending?
         set_order_notifcation_email(order, order.order_items.where(IsRecurring: true).present?)
         order.user.notifications.create(order: order, message: 'Your Order has been placed successfully')
         order.update_columns(Payment_Status: params[:Payment_Status])
@@ -47,8 +47,13 @@ module AdminPanel
         end
 
       elsif order.order_status_flag == 'confirmed'
-        user_redeem_points_record = RedeemPoint.where(user_id: order.user_id).first
-        TelrGetWorker.perform_async('capture', order.Total, order.id) if order.TransactionId.present?
+        user_redeem_points_record = order.user&.redeem_point
+
+        if order.TransactionId.present?
+          order_price = order.Total - order.RedeemPoints
+          TelrGetWorker.perform_async('capture', order_price, order.id)
+        end
+
         user_redeem_points_record.update_attributes(net_worth: user_redeem_points_record.net_worth + order.earned_points,
                                                     last_net_worth: user_redeem_points_record.net_worth,
                                                     last_reward_type: "Discount Per Transaction",
@@ -59,10 +64,12 @@ module AdminPanel
 
       elsif order.order_status_flag == 'cancelled'
         user_redeem_point_reimburse = RedeemPoint.where(user_id: order.user_id).first
-        if order.TransactionId.present?
+
+        if order.TransactionId.present? && order.order_status_flag_cancelled?
           order_price = order.Total - order.RedeemPoints
           TelrGetWorker.perform_async('release', order_price, order.id)
         end
+
         user_redeem_point_reimburse.update_attributes(net_worth: user_redeem_point_reimburse.net_worth + order.RedeemPoints,
                                                       totalavailedpoints: user_redeem_point_reimburse.totalavailedpoints - order.RedeemPoints)
         order.update_attributes(Subtotal: 0, Delivery_Charges: 0, Vat_Charges: 0, Total: 0, earned_points: 0, RedeemPoints: 0)

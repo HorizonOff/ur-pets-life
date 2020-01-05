@@ -5,7 +5,7 @@ class TelrGetWorker
   def perform(type, amount, order_id)
     @order = Order.find_by_id(order_id)
 
-    return refund if type == 'capture' && @order.order_items.where(status: "cancelled").present?
+    return capture_with_cancelled_items if type == 'capture' && @order.order_items.where(status: "cancelled").present?
 
     post_request(type, amount, @order.TransactionId)
   end
@@ -28,7 +28,7 @@ class TelrGetWorker
     end
   end
 
-  def refund
+  def capture_with_cancelled_items
     if get_request.success?
       amount = MultiXml.parse(get_request.body)['transaction']['amount'].to_f
       post_request('capture', amount, @order.TransactionId)
