@@ -58,7 +58,9 @@ module AdminPanel
   end
 
   def Payment_Status
-    content_tag(:span, 'confirmed', class: "label #{'label-success'}")
+    text = model.Payment_Status == 1 ? 'confirmed' : 'pending'
+    span_class = model.Payment_Status == 1 ? 'label-success' : 'label-warning'
+    content_tag(:span, text, class: "label #{span_class}")
   end
 
   def Order_Notes
