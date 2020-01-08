@@ -46,13 +46,10 @@ module AdminPanel
                       user_id: order.user_id)
         end
 
-      elsif order.order_status_flag == 'confirmed'
+      elsif order.order_status_flag_confirmed?
         user_redeem_points_record = order.user&.redeem_point
 
-        if order.TransactionId.present?
-          order_price = order.Total - order.RedeemPoints
-          TelrGetWorker.perform_async('capture', order_price, order.id)
-        end
+        telr_worker(order, 'capture')if order.TransactionId.present?
 
         user_redeem_points_record.update_attributes(net_worth: user_redeem_points_record.net_worth + order.earned_points,
                                                     last_net_worth: user_redeem_points_record.net_worth,
@@ -62,13 +59,10 @@ module AdminPanel
                                                     totalearnedpoints: (user_redeem_points_record.totalearnedpoints + order.earned_points))
         send_order_confirmation_email_to_customer(order.id)
 
-      elsif order.order_status_flag == 'cancelled'
+      elsif order.order_status_flag_cancelled?
         user_redeem_point_reimburse = RedeemPoint.where(user_id: order.user_id).first
 
-        if order.TransactionId.present? && order.order_status_flag_cancelled?
-          order_price = order.Total - order.RedeemPoints
-          TelrGetWorker.perform_async('release', order_price, order.id)
-        end
+        telr_worker(order, 'release') if order.TransactionId.present?
 
         user_redeem_point_reimburse.update_attributes(net_worth: user_redeem_point_reimburse.net_worth + order.RedeemPoints,
                                                       totalavailedpoints: user_redeem_point_reimburse.totalavailedpoints - order.RedeemPoints)
@@ -99,6 +93,11 @@ module AdminPanel
 
       OrderMailer.send_recurring_order_notification_email_to_admin(order.id).deliver_later
       OrderMailer.send_recurring_order_placement_notification_to_customer(order.user.email, order.id).deliver_later
+    end
+
+    def telr_worker(order, method)
+      order_price = order.Total - order.RedeemPoints
+      TelrGetWorker.perform_async(method, order_price, order.id)
     end
   end
 end
