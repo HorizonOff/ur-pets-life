@@ -14,7 +14,10 @@ module AdminPanel
 
   def order_status_flag
     text = model.order_status_flag
-    if model.order_status_flag == "pending"
+    if model.order_status_flag == "pending" && model.Payment_Status == 0 && model.TransactionId.blank?
+      span_class = 'label-warning'
+      text = "Telr Pending"
+    elsif model.order_status_flag == "pending"
       span_class = 'label-warning'
       text = "Pending"
     elsif model.order_status_flag == "on_the_way"

@@ -49,7 +49,7 @@ module Api
         @orders = @user.orders.visible
         @orders = Order.visible if @user.try(:role) == 'super_admin'
         orders_count = @orders.count
-        @orders = @orders.order(created_at: :desc).page(params[:page]).per(params[:per_page])
+        @orders = @orders.where(Payment_Status: 1).order(created_at: :desc).page(params[:page]).per(params[:per_page])
         return render json: { Message: 'No Orders found' } if @orders.blank?
 
         serialized_orders = ActiveModel::Serializer::CollectionSerializer.new(
@@ -198,14 +198,14 @@ module Api
         else
           deliveryCharges = 7
         end
-        company_discount = (@itemsprice - @total_price_without_discount).round(2)
+
+        company_discount = (@total_price_without_discount - @itemsprice).round(2)
         code_discount = ::Api::V1::DiscountCodeService.new(params[:pay_code], @user, subTotal).discount_from_code
         vatCharges = ((@total_price_without_discount/100).to_f * 5).round(2)
         total = subTotal + deliveryCharges + vatCharges + code_discount - company_discount
         user_redeem_points = 0
         requested_redeem_points = params[:RedeemPoints].to_i
         permitted_redeem_points = 0
-        paymentStatus = 0
         if @user.redeem_point.present?
           @user_redeem_point_record = @user.redeem_point
         else
@@ -228,12 +228,6 @@ module Api
           permitted_redeem_points = subTotal
         end
 
-        if params[:IsCash] == 'false' && params[:TransactionId].present?
-          @user.update_attributes(last_transaction_ref: params[:TransactionId],
-                                  last_transaction_date: params[:TransactionDate])
-          paymentStatus = 1
-        end
-
         # if permitted_redeem_points > 0
         #   deliveryCharges = (subTotal - permitted_redeem_points) > 100 ? 0 : 20
         #   total = subTotal + deliveryCharges + vatCharges
@@ -243,11 +237,11 @@ module Api
                            TransactionId: params[:TransactionId],
                            TransactionDate: params[:TransactionDate], Subtotal: @total_price_without_discount,
                            Delivery_Charges: deliveryCharges, shipmenttime: 'with in 7 days', Vat_Charges: vatCharges,
-                           Total: total, Order_Status: 1, Payment_Status: paymentStatus,
-                           Delivery_Date: params[:Delivery_Date], Order_Notes: params[:Order_Notes],
-                           IsCash: params[:IsCash], location_id: params[:location_id], is_viewed: false,
-                           order_status_flag: 'pending', code_discount: code_discount,
-                           company_discount: company_discount, is_user_from_company: @is_user_from_company)
+                           Total: total, Order_Status: 1, Delivery_Date: params[:Delivery_Date],
+                           Order_Notes: params[:Order_Notes], IsCash: params[:IsCash],
+                           location_id: params[:location_id], is_viewed: false, order_status_flag: 'pending',
+                           code_discount: code_discount, company_discount: company_discount,
+                           is_user_from_company: @is_user_from_company)
         if @order.save
           if @order.code_discount != 0
             pay_code_owner = User.find_by(pay_code: params[:pay_code])
@@ -302,8 +296,12 @@ module Api
             is_any_recurring_item = true if cartitem.IsRecurring
           end
           @user.shopping_cart_items.destroy_all
-          set_order_notifcation_email(@order, is_any_recurring_item)
-          @user.notifications.create(order: @order, message: 'Your Order has been placed successfully')
+
+          if @order.IsCash
+            set_order_notifcation_email(@order, is_any_recurring_item)
+            @user.notifications.create(order: @order, message: 'Your Order has been placed successfully')
+          end
+
           return render json: {
             Message: 'Order was successfully created.',
             status: :created,
@@ -432,7 +430,7 @@ module Api
 
       # Never trust parameters from the scary internet, only allow the white list through.
       def order_params
-        params.permit(:TransactionId, :TransactionDate, :IsCash, :Payment_Status, :order_status_flag, :driver_id)
+        params.permit(:TransactionId, :TransactionDate, :IsCash, :order_status_flag, :driver_id)
       end
     end
   end

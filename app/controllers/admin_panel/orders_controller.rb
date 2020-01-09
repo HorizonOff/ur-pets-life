@@ -23,7 +23,7 @@ module AdminPanel
     @orderitems = OrderItem.includes(:item).where(:order_id => @admin_panel_order.id)
 
     if @admin_panel_order.order_status_flag == 'pending' && !@admin_panel_order.IsCash?
-      @statusoption = [['Confirm', 'confirmed'], ['Delivered', 'delivered'], ['Cancel', 'cancelled']]
+      @statusoption = [['Confirm', 'confirmed'], ['Cancel', 'cancelled']]
     elsif @admin_panel_order.order_status_flag == 'pending'
       @statusoption = [['Confirm', 'confirmed'], ['Delivered by card', 'delivered_by_card'], ['Delivered by cash', 'delivered_by_cash'], ['Delivered Online', 'delivered_online'], ['Cancel', 'cancelled']]
     elsif @admin_panel_order.order_status_flag == 'confirmed'
@@ -99,7 +99,7 @@ module AdminPanel
     end
 
     admin_discount = params['order'][:admin_discount].to_i if params['order'][:admin_discount].present?
-    company_discount = (@items_price - @total_price_without_discount).round(2)
+    company_discount = (@total_price_without_discount - @items_price).round(2)
     vatCharges = ((@total_price_without_discount/100).to_f * 5).round(2)
     total = subTotal + deliveryCharges + vatCharges - company_discount
     admin_discount = total if admin_discount > total
@@ -108,7 +108,7 @@ module AdminPanel
     if params['user_id'].present?
       user_redeem_points = 0
       requested_redeem_points = params['order'][:RedeemPoints].to_i
-      paymentStatus = 0
+      paymentStatus = 1
       if @user.redeem_point.present?
         @user_redeem_point_record = @user.redeem_point
       else
@@ -221,7 +221,7 @@ module AdminPanel
       deliveryCharges = 7
     end
     company_discount = (@total_price_without_discount - @items_price).round(2)
-    admin_discount = params['item'][:admin_discount].to_i
+    admin_discount = params['item'][:admin_discount].to_f
     redeem_points = params['item'][:RedeemPoints].to_i
     vatCharges = ((@total_price_without_discount/100).to_f * 5).round(2)
     total = subTotal + deliveryCharges + vatCharges + company_discount
@@ -242,7 +242,7 @@ module AdminPanel
     admin_discount = total if admin_discount > total
 
     total -= admin_discount + redeem_points
-    render json: { subtotal: subTotal, total: total.round(2) }
+    render json: { subtotal: subTotal, total: total }
   end
 
   def max_quantity
@@ -283,19 +283,26 @@ module AdminPanel
     orderitem = OrderItem.where(:id => params[:id]).first
     orderitem.update_attributes(status: :cancelled)
 
+    order = Order.find_by_id(orderitem.order_id)
+    discount = ::Api::V1::DiscountDomainService.new(order.user.email.dup).dicount_on_email
+
     updateordertocancel = true
     discountedproductsprice = 0
+    discounted_price = 0
     allorderitems = OrderItem.where(:order_id => orderitem.order_id)
     allorderitems.each do |items|
       if items.status != 'cancelled'
         if items.isdiscounted == true
           discountedproductsprice += items.Total_Price
         end
+
+        if discount.positive?
+          discounted_price += (items.Total_Price * ((100 - discount).to_f / 100).round(2)) - items.Total_Price
+        end
+
         updateordertocancel = false
       end
     end
-
-    order = Order.where(:id => orderitem.order_id).first
 
     order_amount_remaining = order.Subtotal - orderitem.Total_Price
     redeem_points_consumed = order.RedeemPoints
@@ -313,7 +320,7 @@ module AdminPanel
       subTotal = (order.Subtotal - orderitem.Total_Price).to_f.round(2)
       deliveryCharges = subTotal > 100 ? 0 : 20
       vatCharges = ((subTotal/100).to_f * 5).round(2)
-      total = subTotal + deliveryCharges + vatCharges
+      total = subTotal + deliveryCharges + vatCharges + discounted_price + order.code_discount
 
       discount_per_transaction = 0
       if orderitem.isdiscounted == false
@@ -338,7 +345,13 @@ module AdminPanel
       #   total = subTotal + deliveryCharges + vatCharges
       # end
 
-      order.update(:Subtotal => subTotal, :Delivery_Charges => deliveryCharges, :Vat_Charges => vatCharges, :Total => total, :RedeemPoints => order.RedeemPoints - points_to_be_reverted, :earned_points => discount_per_transaction)
+      order.update(Subtotal: subTotal,
+                   Delivery_Charges: deliveryCharges,
+                   Vat_Charges: vatCharges,
+                   Total: total,
+                   RedeemPoints: order.RedeemPoints - points_to_be_reverted,
+                   earned_points: discount_per_transaction,
+                   company_discount: discounted_price)
     end
 
     user_redeem_point_record = RedeemPoint.where(:user_id => order.user_id).first
