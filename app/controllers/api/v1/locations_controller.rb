@@ -12,7 +12,7 @@ module Api
       end
 
       def update
-        @location = @user.location.find_by_id(params['id'])
+        find_user_location
 
         if @location.update(location_params)
           render json: { message: 'Location update successfully' }, status: 200
@@ -22,6 +22,8 @@ module Api
       end
 
       def destroy
+        find_user_location
+
         if @location.destroy
           render json: { message: 'Deleted successfully' }, status: 200
         else
@@ -30,6 +32,10 @@ module Api
       end
 
       private
+
+      def find_user_location
+        @location = @user.location.find_by_id(params['id'])
+      end
 
       def location_params
         params.permit(:latitude, :longitude, :city, :area, :street, :building_type, :building_name, :unit_number, :villa_number, :comment, :name)
