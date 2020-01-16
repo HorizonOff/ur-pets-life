@@ -5,7 +5,7 @@ module Api
         @location = @user.location.find_or_initialize_by(location_params)
 
         if @location.save
-          render json: { message: 'Location create successfully' }, status: 200
+          render json: { message: 'Location create successfully', location: @location }, status: 200
         else
           render_422(parse_errors_messages(@location))
         end
@@ -34,7 +34,7 @@ module Api
       private
 
       def find_user_location
-        @location = @user.location.find_by_id(params['id'])
+        @location = current_user.location.find_by_id(params['id'])
       end
 
       def location_params

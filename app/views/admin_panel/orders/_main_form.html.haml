@@ -28,7 +28,11 @@
           .form-group.new_user.hiden
             = label_tag 'User name'
             = select_tag :user_id, options_from_collection_for_select(User.all, :id, :name),
-                class: 'form-control select2 changed_subtotal', include_blank: true
+                class: 'form-control select2 changed_subtotal user', include_blank: true
+            #location.hiden
+              - map = []
+              = select_tag :location_id, options_from_collection_for_select(map, :id, :name),
+                  class: 'select2', include_blank: true
           #items.form-group
             = label_tag 'Add Item'
             = f.fields_for :order_items do |f|

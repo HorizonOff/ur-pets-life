@@ -1,5 +1,6 @@
 $(document).on("change", ".changed_subtotal", _.debounce(getCalculatedPrice, 500));
 $(document).on("change", '.item_change', getOrderQuantity);
+$(document).on("change", '.user', getUserLocations);
 
 function getCalculatedPrice(){
     var admin_discount = $('#order_admin_discount').val();
@@ -41,6 +42,48 @@ function getOrderQuantity(e){
             "max" : data['quantity']
         });
         curNumField.removeAttr("disabled");
+    }).fail(function (jqXHR, ajaxOptions, thrownError) {
+        console.log('server not responding...');
+    });
+}
+
+function getUserLocations(e){
+    var $self = $(e.target);
+    var user_id = $self.context.value;
+    var userLocations = $('#location_id');
+    var locationClass = $('#location');
+    var formLocaton = $('#form_location');
+
+    locationClass.attr('disabled', 'disabled').addClass('hiden');
+
+    formLocaton.addClass('hiden').attr('disabled', 'disabled');
+    disable_inputs(formLocaton);
+
+    $.ajax({
+        type: 'get',
+        url: '/admin_panel/user_locations',
+        data: { user_id: user_id }
+    }).done(function (data) {
+        var locations = data['locations'];
+
+        if (locations.length === 0) {
+            formLocaton.removeClass('hiden');
+            enable_inputs(formLocaton);
+        } else {
+            locationClass.removeClass('hiden');
+            var map = locations.map(function (loc) {
+                return {id: loc.id, name: loc.name || 'Unnamed location'};
+            });
+
+            userLocations.empty();
+
+            map.forEach(function (loc) {
+                var option = new Option(loc.name, loc.id, true, true);
+                userLocations.append(option);
+            });
+
+            locationClass.removeAttr('disabled');
+        }
     }).fail(function (jqXHR, ajaxOptions, thrownError) {
         console.log('server not responding...');
     });

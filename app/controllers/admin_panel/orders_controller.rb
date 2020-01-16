@@ -68,7 +68,7 @@ module AdminPanel
     discount = @user&.is_registered? ? ::Api::V1::DiscountDomainService.new(@user.email.dup).dicount_on_email : 0
     @is_user_from_company = discount.positive?
 
-    location_id = @user&.location.present? ? @user.location.id : new_location_id
+    location_id = params['location_id'].present? ? params['location_id'] : new_location_id
     check_for_unregistered_user if @user.blank?
     return redirect_to new_admin_panel_order_path, flash: { error: "User must exist!" } if @user.blank?
 
@@ -249,6 +249,12 @@ module AdminPanel
     quantity = Item.find_by(id: params['item']['item_id'])&.quantity
 
     render json: { quantity: quantity || 1}
+  end
+
+  def user_locations
+    locations = Location.where(place_id: params['user_id'], place_type: 'User')
+
+    render json: { locations: locations }
   end
 
   def invoice

@@ -2221,6 +2221,11 @@ legend {
 .form-group {
     margin-bottom: 10px
 }
+.location {
+    margin-top: 10px;
+    width: 30%;
+    display: flex;
+}
 .validate {
     margin-top: 10px
 }
