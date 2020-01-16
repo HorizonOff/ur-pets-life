@@ -176,6 +176,8 @@ module Api
         @discounted_items_amount = 0
         discount = ::Api::V1::DiscountDomainService.new(@user.email.dup).dicount_on_email
         @is_user_from_company = discount.positive?
+
+        location_id = params['location_id'].present? ? params['location_id'] : new_location_id
         @usercartitems.each do |cartitem|
           if discount.positive? && cartitem.item.discount.zero? &&
             !(@user.member_type.in?(['silver', 'gold']) && cartitem.item.supplier.in?(["MARS", "NESTLE"])) &&
@@ -239,7 +241,7 @@ module Api
                            Delivery_Charges: deliveryCharges, shipmenttime: 'with in 7 days', Vat_Charges: vatCharges,
                            Total: total, Order_Status: 1, Delivery_Date: params[:Delivery_Date],
                            Order_Notes: params[:Order_Notes], IsCash: params[:IsCash],
-                           location_id: params[:location_id], is_viewed: false, order_status_flag: 'pending',
+                           location_id: location_id, is_viewed: false, order_status_flag: 'pending',
                            code_discount: code_discount, company_discount: company_discount,
                            is_user_from_company: @is_user_from_company)
         if @order.save
