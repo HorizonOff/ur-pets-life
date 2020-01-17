@@ -186,7 +186,8 @@ CREATE TABLE public.app_versions (
     android_version character varying,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    ios_version character varying
+    ios_version character varying,
+    force_update boolean DEFAULT false NOT NULL
 );
 
 
@@ -1088,7 +1089,8 @@ CREATE TABLE public.locations (
     comment character varying,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    deleted_at timestamp without time zone
+    deleted_at timestamp without time zone,
+    name character varying
 );
 
 
@@ -5138,6 +5140,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20191028141115'),
 ('20191030135243'),
 ('20191108130248'),
-('20191128171732');
+('20191128171732'),
+('20191211153531'),
+('20200117135930');
 
 

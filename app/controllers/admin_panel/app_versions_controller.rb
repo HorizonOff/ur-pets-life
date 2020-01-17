@@ -20,7 +20,7 @@ module AdminPanel
     end
 
     def app_version_params
-      params.require(:app_version).permit(:android_version, :ios_version)
+      params.require(:app_version).permit(:android_version, :ios_version, :force_update)
     end
   end
 end
