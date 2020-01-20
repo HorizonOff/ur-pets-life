@@ -177,7 +177,7 @@ module Api
         discount = ::Api::V1::DiscountDomainService.new(@user.email.dup).dicount_on_email
         @is_user_from_company = discount.positive?
 
-        location_id = params['location_id'].present? ? params['location_id'] : new_location_id
+        location_id = params['location_attributes'].present? ? new_location_id : params['location_id']
         @usercartitems.each do |cartitem|
           if discount.positive? && cartitem.item.discount.zero? &&
             !(@user.member_type.in?(['silver', 'gold']) && cartitem.item.supplier.in?(["MARS", "NESTLE"])) &&
@@ -417,6 +417,10 @@ module Api
         end
       end
 
+      def new_location_id
+        Location.create(order_params[:location_attributes]).id
+      end
+
       def send_inventory_alerts(itemid)
         OrderMailer.send_low_inventory_alert(itemid).deliver_later
       end
@@ -432,7 +436,12 @@ module Api
 
       # Never trust parameters from the scary internet, only allow the white list through.
       def order_params
-        params.permit(:TransactionId, :TransactionDate, :IsCash, :order_status_flag, :driver_id)
+        params.permit(:TransactionId, :TransactionDate, :IsCash, :order_status_flag,
+                      :driver_id, location_attributes: location_params)
+      end
+
+      def location_params
+        %i[latitude longitude city area street building_type building_name unit_number villa_number comment]
       end
     end
   end

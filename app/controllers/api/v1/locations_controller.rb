@@ -24,7 +24,7 @@ module Api
       def destroy
         find_user_location
 
-        if @location.destroy
+        if @location.update(pace_id: nil)
           render json: { message: 'Deleted successfully' }, status: 200
         else
           render_422(parse_errors_messages(@location))
