@@ -4,8 +4,10 @@ module Api
       def create
         @location = @user.location.find_or_initialize_by(location_params)
 
+        serialized_location = ActiveModel::Serializer::LocationSerializer.new(@location)
+
         if @location.save
-          render json: { message: 'Location create successfully', location: @location }, status: 200
+          render json: { message: 'Location create successfully', location: serialized_location }, status: 200
         else
           render_422(parse_errors_messages(@location))
         end
@@ -24,7 +26,7 @@ module Api
       def destroy
         find_user_location
 
-        if @location.update(pace_id: nil)
+        if @location.update(place_id: nil)
           render json: { message: 'Deleted successfully' }, status: 200
         else
           render_422(parse_errors_messages(@location))
