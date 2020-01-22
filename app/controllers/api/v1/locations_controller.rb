@@ -4,7 +4,7 @@ module Api
       def create
         @location = @user.location.find_or_initialize_by(location_params)
 
-        serialized_location = ActiveModel::Serializer::LocationSerializer.new(@location)
+        serialized_location = LocationSerializer.new(@location)
 
         if @location.save
           render json: { message: 'Location create successfully', location: serialized_location }, status: 200
