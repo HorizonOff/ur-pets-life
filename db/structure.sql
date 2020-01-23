@@ -186,7 +186,8 @@ CREATE TABLE public.app_versions (
     android_version character varying,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    ios_version character varying
+    ios_version character varying,
+    force_update boolean DEFAULT false NOT NULL
 );
 
 
@@ -5140,6 +5141,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20191030135243'),
 ('20191108130248'),
 ('20191128171732'),
-('20191211153531');
+('20191211153531'),
+('20200117135930');
 
 
