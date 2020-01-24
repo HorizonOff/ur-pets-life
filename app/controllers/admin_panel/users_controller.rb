@@ -1,5 +1,7 @@
 module AdminPanel
   class UsersController < AdminPanelController
+    include StaticMapHelper
+
     before_action :authorize_super_admin_employee_msh_admin
     before_action :set_user, except: %i[index new create]
     before_action :set_location, only: %i[edit]
@@ -64,6 +66,13 @@ module AdminPanel
           format.js { render json: { errors: @user.errors.full_messages }, status: 422 }
         end
       end
+    end
+
+    def location
+      location = Location.find_by_id(params['location_id'])
+      img_url = generate_static_map_url(location)
+
+      render json: { img_url: img_url}
     end
 
     private

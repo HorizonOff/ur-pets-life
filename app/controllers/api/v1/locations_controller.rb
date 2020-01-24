@@ -1,6 +1,8 @@
 module Api
   module V1
     class LocationsController < Api::BaseController
+      before_action :find_user_location, only: %i[update destroy]
+
       def create
         @location = @user.location.find_or_initialize_by(location_params)
 
@@ -14,8 +16,6 @@ module Api
       end
 
       def update
-        find_user_location
-
         if @location.update(location_params)
           render json: { message: 'Location update successfully' }, status: 200
         else
@@ -24,8 +24,6 @@ module Api
       end
 
       def destroy
-        find_user_location
-
         if @location.update(place_id: nil)
           render json: { message: 'Deleted successfully' }, status: 200
         else

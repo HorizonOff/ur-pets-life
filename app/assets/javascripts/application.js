@@ -31,6 +31,7 @@
 //= require location.js
 //= require datatable.js
 //= require order_create.js
+//= require user_locations.js
 //= require new_log_in.js
 //= require new_contact_us.js
 //= require toastr

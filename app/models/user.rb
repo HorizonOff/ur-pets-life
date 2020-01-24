@@ -85,8 +85,6 @@ class User < ApplicationRecord
   delegate :avatar, to: :pet_avatar, allow_nil: true
 
   # before_validation :check_location
-
-  delegate :address, to: :location, allow_nil: true
   reverse_geocoded_by 'locations.latitude', 'locations.longitude'
 
   scope :msh_members, (lambda do

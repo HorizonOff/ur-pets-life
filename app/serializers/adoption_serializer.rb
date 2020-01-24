@@ -20,7 +20,7 @@ class AdoptionSerializer < BaseMethodsSerializer
   end
 
   def distance
-    object.user.location.distance_to([scope[:latitude], scope[:longitude]], :km).try(:round, 2) if show_user_distance?
+    object.user.location.first.distance_to([scope[:latitude], scope[:longitude]], :km).try(:round, 2) if show_user_distance?
   end
 
   def sex

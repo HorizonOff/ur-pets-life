@@ -171,6 +171,7 @@ Rails.application.routes.draw do
     get 'calculating_price', to: 'orders#calculating_price'
     get 'max_quantity', to: 'orders#max_quantity'
     get 'user_locations', to: 'orders#user_locations'
+    get 'location', to: 'users#location'
 
     resources :support_chats do
       member { get :close }

@@ -21,9 +21,6 @@
                 %i.fa.fa-phone.user-profile-icon
                 = @user.mobile_number
               %li
-                %i.fa.fa-map-marker.user-profile-icon
-                = @user.address
-              %li
                 Redeem Points Available:
                 = @user.redeem_point.net_worth
               %li
@@ -45,9 +42,13 @@
             %br
 
           .col-md-9.col-sm-9.col-xs-12
-            -if @user.location&.longitude && @user.location&.latitude
+            - user_location = @user.location&.first
+            - if user_location.longitude && user_location.latitude
               %div{ style: 'width: 100%; height: 300px; position: relative;' }
-                %img{ src: generate_static_map_url(@user.location), style: 'max-widrth: 100%; display: block; margin: 0 auto;'}
+                %img{ src: generate_static_map_url(user_location),
+                      style: 'max-widrth: 100%; display: block; margin: 0 auto;', class: 'location_img'}
+              = select_tag :location_id, options_from_collection_for_select(@user.location, :id, :name),
+                  class: 'select2 location_select', include_blank: true
             .profile_title
               .col-md-6.col-sm-6.col-xs-6
                 %h2 Total count of pets #{@user.pets.size}
