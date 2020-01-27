@@ -69,7 +69,7 @@ module AdminPanel
     @is_user_from_company = discount.positive?
 
     location_id = params['location_id'].present? ? params['location_id'] : new_location_id
-    check_for_unregistered_user if @user.blank?
+    check_for_unregistered_user(location_id) if @user.blank?
     return redirect_to new_admin_panel_order_path, flash: { error: "User must exist!" } if @user.blank?
 
     params['order']['order_items_attributes'].each do |hash_key, hash_value|
@@ -401,7 +401,7 @@ module AdminPanel
   end
 
   private
-    def check_for_unregistered_user
+    def check_for_unregistered_user(location_id)
       return if params['order']['unregistered_user'].blank?
 
       @user = User.find_by(first_name: params['order']['unregistered_user']['name'])
@@ -409,7 +409,9 @@ module AdminPanel
       if @user.blank?
         @user = User.new(first_name: params['order']['unregistered_user']['name'],
                          mobile_number: params['order']['unregistered_user']['number'],
-                         location: Location.find_by(order_params[:location_attributes]), is_registered: false)
+                         location_ids: location_id,
+                         is_registered: false)
+
         @user.skip_user_validation = true
         @user.save
       end
