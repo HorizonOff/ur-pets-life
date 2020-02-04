@@ -194,7 +194,7 @@ module Api
         end
         return render json: { Message: 'Out of Stock', status: :out_of_stock } if isoutofstock == true
 
-        subTotal = @itemsprice.to_f.round(2)
+        subTotal = @total_price_without_discount.to_f.round(2)
         if @user.email != 'development@urpetslife.com'
           deliveryCharges = (subTotal < 100 ? 20 : 0)
         else
