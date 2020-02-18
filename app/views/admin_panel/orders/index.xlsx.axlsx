@@ -6,7 +6,7 @@ wb.add_worksheet(name: "Orders") do |sheet|
   sheet.add_row %w(Date Invoice\ Number Customer\ Name Jurisdiction Item\ Name Brand\ Name Qty Buying\ Rate VAT-% VAT-AED Selling\ Rate VAT-% VAT-AED Amount\ Buying Amount\ Selling Total\ Buying Total\ Selling Supplier Supplier\ code)
 
   @orders.each do |orderinfo|
-    order_date = orderinfo.created_at.to_date.to_s
+    order_date = orderinfo.delivery_at.to_date.to_s
     invoice_no = 'INV-' + orderinfo.id.to_s
     redeem_points = orderinfo.RedeemPoints? ? orderinfo.RedeemPoints : 0
     admin_discount = orderinfo.admin_discount || 0

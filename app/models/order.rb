@@ -31,8 +31,8 @@ class Order < ApplicationRecord
                    unread_comments_count_by_admin: unread_comments_count_by_admin)
   end
 
-  scope :created_in_range, (lambda do |from_date, to_date|
-    where('orders.created_at > ? AND orders.created_at < ?', from_date, to_date)
+  scope :delivery_in_range, (lambda do |from_date, to_date|
+    where('orders.delivery_at > ? AND orders.delivery_at < ?', from_date, to_date)
   end)
 
   scope :deliver_or_created_in_range, (lambda do |from_date, to_date|

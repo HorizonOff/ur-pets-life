@@ -486,7 +486,7 @@ module AdminPanel
                             @@filtered_user_id, %w(delivered delivered_by_card delivered_by_cash delivered_online))
                      .references(:user)
       if params[:from_date].present? && params[:to_date].present?
-        @orders = @orders.created_in_range(params[:from_date].to_date.beginning_of_day,
+        @orders = @orders.delivery_in_range(params[:from_date].to_date.beginning_of_day,
                                            params[:to_date].to_date.end_of_day)
       end
       user_name = @@filtered_user_id > 0 ? User.where(:id => @@filtered_user_id).first.first_name + '_' : 'all_'
