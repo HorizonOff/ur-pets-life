@@ -265,3 +265,18 @@ $(document).on('click', '.close-chat-js', function() {
 //     $(this).find('input[type="file"]').val('');
 //   });
 // });
+
+$(document).on('click', '.export_buttons', function (e) {
+    var buttonName = (e.target.textContent);
+    var formatField = $('#format');
+    var form = $('form');
+
+    if (buttonName === 'Orders' && form.attr('method') !== 'get') {
+        form.attr('action', '/admin_panel/orders').attr('method', 'get');
+        formatField.val('xlsx');
+
+    } else if (buttonName === 'Invoices' && form.attr('method') === 'get') {
+        form.attr('action', '/admin_panel/invoices/1/download_invoices').attr('method', 'post');
+        formatField.val('pdf');
+    }
+});

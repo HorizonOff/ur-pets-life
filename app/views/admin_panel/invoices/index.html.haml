@@ -5,7 +5,7 @@
 
   .clearfix
 
-  = form_for :anything, url: download_invoices_admin_panel_invoice_path(id: 1, format: :pdf),
+  = form_with url: download_invoices_admin_panel_invoice_path(id: 1, format: :pdf),
   html: { multipart: true, method: :post, id: :invoicesform, :onsubmit => 'ResetForm()', :format => 'pdf', class: 'form-horizontal form-label-left with_location', autocomplete: 'off'} do |f|
 
     .row

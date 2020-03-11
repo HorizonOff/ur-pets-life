@@ -6,19 +6,23 @@
       %h3 Orders
       = link_to 'Create order', new_admin_panel_order_path, class: 'btn btn-info btn-round pull-left'
     .title_right
-      = form_tag admin_panel_orders_path, method: :get do
-        = hidden_field_tag :format, :xlsx
+      = form_tag download_invoices_admin_panel_invoice_path(1), method: :post do
+        = hidden_field_tag :format, :pdf
         = hidden_field_tag 'request_type', 'excel'
         .form-group.col-md-3.pull-right
-          = button_tag 'Export in xlsx', class: 'btn btn-primary btn-round form-btn'
+          = label_tag :from_date, class: 'control-label' do
+            Export:
+          .form-group.export_buttons
+            = button_tag 'Orders', class: 'btn btn-primary btn-round form-btn'
+            = button_tag 'Invoices', class: 'btn btn-primary btn-round form-btn'
         .form-group.col-md-3.pull-right
           = label_tag :to_date, class: 'control-label' do
-            To Date
-          = text_field_tag :to_date, '', autocomplete: :off, class: 'form-control single_cal2'
+            To Date *
+          = text_field_tag :to_date, '', required: true, autocomplete: :off, class: 'form-control single_cal2'
         .form-group.col-md-3.pull-right
           = label_tag :from_date, class: 'control-label' do
-            From Date
-          = text_field_tag :from_date, '', autocomplete: :off, class: 'form-control single_cal2'
+            From Date *
+          = text_field_tag :from_date, '', required: true, autocomplete: :off, class: 'form-control single_cal2'
   .clearfix
 
   .row
