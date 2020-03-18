@@ -24,9 +24,11 @@ class DownloadInvoicesWorker
           formatted_from, formatted_to, %w(delivered delivered_by_card delivered_by_cash delivered_online)).each do |order|
       i+= 1
 
-      view = ActionView::Base.new(ActionController::Base.view_paths,
-                                  { order: order, user_address: Location.find_by_id(order.location_id).address })
-      pdf = WickedPdf.new.pdf_from_string(view.render("/admin_panel/invoices/show.html.erb", layout: "pdf.html.erb"))
+      view = ActionController::Base.new()
+      pdf = WickedPdf.new.pdf_from_string(
+          view.render_to_string("/admin_panel/invoices/_show.html.erb", layout: "pdf.html.erb",
+                                locals: { order: order, user_address: Location.find_by_id(order.location_id).address }))
+
       pdf_path = Rails.root.join('tmp', 'INV-' + order.id.to_s + '.pdf')
 
       File.open(pdf_path, 'wb') do |file|
