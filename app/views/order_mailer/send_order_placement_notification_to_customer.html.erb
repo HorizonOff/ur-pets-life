@@ -20,7 +20,7 @@
                     <% if @order.user.email != 'development@urpetslife.com' %>
                         <p><%= @order.user.first_name + ' ' + @order.user.last_name %></p>
                         <p><%= @order.user.mobile_number %></p>
-                        <p><%= @userAddress %></p>
+                        <p><%= @user_address %></p>
                     <% end %>
                     <% if @order.IsCash == false %>
                       <div class="paid">Paid</div>

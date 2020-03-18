@@ -265,7 +265,7 @@ module AdminPanel
                                 layout: "pdf.html.erb",
                                 show_as_html: false,
                                 encoding: "UTF-8",
-                                template: "admin_panel/invoices/show.html.erb"
+                                template: "admin_panel/invoices/_show.html.erb"
       send_data pdf, filename: "INV-#{@order.id}.pdf", type: "application/pdf", disposition: "attachment"
       end
     end
