@@ -135,6 +135,7 @@ module AdminPanel
     end
 
     def export_data
+      @order_items = OrderItem.where.not(status: 'cancelled')
       @items = Item.order(:id).includes(:item_brand)
       name = "Catalog #{Time.now.utc.strftime('%d-%M-%Y')}.xlsx"
       response.headers['Content-Disposition'] = "attachment; filename*=UTF-8''#{name}"
