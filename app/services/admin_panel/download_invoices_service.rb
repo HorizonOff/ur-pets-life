@@ -18,7 +18,7 @@ module AdminPanel
       formatted_from = Date.strptime(from_date, '%d/%m/%Y')
       i = 0
 
-      Order.includes(user: :location, order_items: :item).where("created_at BETWEEN (?) AND (?) AND order_status_flag IN (?)",
+      Order.includes(user: :location, order_items: :item).where("delivery_at BETWEEN (?) AND (?) AND order_status_flag IN (?)",
                      formatted_from, formatted_to, %w(delivered delivered_by_card delivered_by_cash delivered_online)).each do |order|
         i+= 1
 
