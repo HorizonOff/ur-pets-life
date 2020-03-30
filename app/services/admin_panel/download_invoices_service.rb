@@ -72,7 +72,6 @@ module AdminPanel
     def send_invoices(zip_data, zip_file_name)
       InvoiceMailer.send_invoices(zip_data, zip_file_name)
     end
-
   end
 end
 

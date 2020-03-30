@@ -73,17 +73,17 @@ module AdminPanel
 
     private
 
-    def set_order_delivery_invoice(orderid, userEmail)
-      OrderMailer.send_order_delivery_invoice(orderid, ENV['ADMIN']).deliver
-      OrderMailer.send_order_delivery_invoice(orderid, userEmail).deliver
+    def set_order_delivery_invoice(order_id, user_email)
+      OrderMailer.send_order_delivery_invoice(order_id, ENV['ADMIN']).deliver
+      OrderMailer.send_order_delivery_invoice(order_id, user_email).deliver
     end
 
-    def send_order_confirmation_email_to_customer(orderid)
-      OrderMailer.send_order_confimation_notification_to_customer(orderid).deliver
+    def send_order_confirmation_email_to_customer(order_id)
+      OrderMailer.send_order_confimation_notification_to_customer(order_id).deliver
     end
 
-    def send_complete_cancel_order_email_to_customer(orderid, user_email)
-      OrderMailer.send_complete_cancel_order_email_to_customer(orderid, user_email).deliver
+    def send_complete_cancel_order_email_to_customer(order_id, user_email)
+      OrderMailer.send_complete_cancel_order_email_to_customer(order_id, user_email).deliver
     end
 
     def set_order_notifcation_email(order, is_any_recurring_item)

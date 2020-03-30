@@ -15,7 +15,7 @@
             %ul.list-unstyled.user_data
               %li
                 Shipping Address:
-                = @shippingaddress
+                = @shipping_address
               %li
                 Order Notes:
                 = @admin_panel_order.Order_Notes
@@ -102,7 +102,7 @@
                   %th Status
                   %th Actions
               %tbody
-                - @orderitems.each do |q|
+                - @order_items.each do |q|
                   %tr
                     %td{ scope: 'row' } #{q.id}
                     %td
@@ -135,5 +135,5 @@
                     Select Status
                     %span.required *
                   .col-md-9.col-sm-9.col-xs-12
-                    = f.select :order_status_flag, options_for_select(@statusoption), {}, { class: 'select2', required: true }
+                    = f.select :order_status_flag, options_for_select(@option_status), {}, { class: 'select2', required: true }
                 = f.submit 'Update Status', class: 'btn btn-success col-md-offset-5'
