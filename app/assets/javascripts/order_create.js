@@ -41,6 +41,7 @@ function getOrderQuantity(e){
         curNumField.attr({
             "max" : data['quantity']
         });
+        curNumField.val('1');
         curNumField.removeAttr("disabled");
     }).fail(function (jqXHR, ajaxOptions, thrownError) {
         console.log('server not responding...');

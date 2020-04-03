@@ -75,18 +75,18 @@ module AdminPanel
     params['order']['order_items_attributes'].each do |hash_key, hash_value|
       @item = Item.find_by_id(hash_value['item_id'])
       next if @item == nil
-      hash_value['quantity'] = @item.quantity if @item.quantity < hash_value['quantity'].to_i
+      hash_value['Quantity'] = @item.quantity if @item.quantity < hash_value['Quantity'].to_i
 
       if discount.positive? && @item.discount.zero? &&
           !(@user.member_type.in?(%w(silver gold)) && @item.supplier.in?(%w(MARS NESTLE))) &&
           @user.email != 'development@urpetslife.com'
-        @items_price += @item.price * ((100 - discount).to_f / 100) * hash_value['quantity'].to_i
+        @items_price += @item.price * ((100 - discount).to_f / 100) * hash_value['Quantity'].to_i
       else
-        @items_price += (@item.price * hash_value['quantity'].to_i)
+        @items_price += (@item.price * hash_value['Quantity'].to_i)
       end
-      @total_price_without_discount += (@item.price * hash_value['quantity'].to_i)
+      @total_price_without_discount += (@item.price * hash_value['Quantity'].to_i)
       if @item.discount > 0
-        @discounted_items_amount += (@item.price * hash_value['quantity'].to_i)
+        @discounted_items_amount += (@item.price * hash_value['Quantity'].to_i)
       end
     end
     return redirect_to new_admin_panel_order_path, flash: { error: "Item must exist!" } if @item == nil
@@ -168,15 +168,15 @@ module AdminPanel
         item = Item.find_by_id(hash_value['item_id'])
 
           @new_order_item_create = OrderItem.new(IsRecurring: false, order_id: @order.id,
-                                              item_id: item.id, Quantity: hash_value['quantity'].to_i,
+                                              item_id: item.id, Quantity: hash_value['Quantity'].to_i,
                                               Unit_Price: item.price,
-                                              Total_Price: (item.price * hash_value['quantity'].to_i),
+                                              Total_Price: (item.price * hash_value['Quantity'].to_i),
                                               IsReviewed: false, status: :pending,
                                               isdiscounted: (item.discount > 0 ? true : false),
                                               next_recurring_due_date: DateTime.now)
           @new_order_item_create.save
 
-          item.decrement!(:quantity, hash_value['quantity'].to_i)
+          item.decrement!(:quantity, hash_value['Quantity'].to_i)
           if item.quantity < 3
             send_inventory_alerts(item.id)
           end
@@ -199,18 +199,18 @@ module AdminPanel
     params['item']['order_items']['0'].each do |item, hash_value|
       @item = Item.find_by_id(hash_value['item_id'])
       next if @item == nil
-      hash_value['quantity'] = @item.quantity if @item.quantity < hash_value['quantity'].to_i
+      hash_value['Quantity'] = @item.quantity if @item.quantity < hash_value['Quantity'].to_i
 
       if discount.positive? && @item.discount.zero? &&
           !(@user.member_type.in?(%w(silver gold)) && @item.supplier.in?(%w(MARS NESTLE))) &&
           @user.email != 'development@urpetslife.com'
-        @items_price += @item.price * ((100 - discount).to_f / 100) * hash_value['quantity'].to_i
+        @items_price += @item.price * ((100 - discount).to_f / 100) * hash_value['Quantity'].to_i
       else
-        @items_price += (@item.price * hash_value['quantity'].to_i)
+        @items_price += (@item.price * hash_value['Quantity'].to_i)
       end
-      @total_price_without_discount += (@item.price * hash_value['quantity'].to_i)
+      @total_price_without_discount += (@item.price * hash_value['Quantity'].to_i)
       if @item.discount > 0
-        @discounted_items_amount += (@item.price * hash_value['quantity'].to_i)
+        @discounted_items_amount += (@item.price * hash_value['Quantity'].to_i)
       end
     end
 
@@ -381,9 +381,15 @@ module AdminPanel
 
     redirect_to action: 'show', id: orderitem.order_id
   end
-  # PATCH/PUT /admin_panel/orders/1
-  # PATCH/PUT /admin_panel/orders/1.json
+
   def update
+    if params[:commit] == 'Edit order'
+      AdminPanel::EditOrderService.new(@admin_panel_order, params).update
+
+      flash[:success] = 'Order was successfully updated'
+      return redirect_to controller: 'orders', action: 'show'
+    end
+
     if @admin_panel_order.update(order_status_flag: params["order"]["order_status_flag"])
       update_status(@admin_panel_order)
 
