@@ -1295,7 +1295,7 @@ CREATE TABLE public.orders (
     is_user_from_company boolean DEFAULT false,
     delivery_at timestamp without time zone,
     is_pre_recurring boolean DEFAULT false,
-    admin_discount integer DEFAULT 0,
+    admin_discount double precision DEFAULT 0,
     code_discount integer DEFAULT 0,
     driver_id integer
 );
@@ -5143,6 +5143,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20191128171732'),
 ('20191211153531'),
 ('20200117135930'),
-('20200401141645');
+('20200401141645'),
+('20200407124103');
 
 

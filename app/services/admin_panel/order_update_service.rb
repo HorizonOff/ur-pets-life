@@ -61,7 +61,8 @@ module AdminPanel
     def update_order
       delivery_charges = sub_total_price > 100 ? 0 : 20
       vat_charges = ((sub_total_price/100) * 5).round(2)
-      total = sub_total_price + delivery_charges + vat_charges + discounted_price + order.code_discount
+      total = sub_total_price + delivery_charges + vat_charges + discounted_price + order.code_discount - order.admin_discount - order.RedeemPoints
+      total = 0 if total.negative?
 
       if undiscounted_order_items.positive?
         sub_total = order.Subtotal - undiscounted_order_items
@@ -73,7 +74,7 @@ module AdminPanel
 
       order.update(Subtotal: sub_total_price, Delivery_Charges: delivery_charges, Vat_Charges: vat_charges,
                    Total: total, RedeemPoints: order.RedeemPoints - points_to_be_reverted,
-                   earned_points: discount_per_transaction, company_discount: discounted_price)
+                   earned_points: @discount_per_transaction, company_discount: discounted_price)
     end
 
     def order_discount(order_price)
@@ -86,7 +87,7 @@ module AdminPanel
       elsif order_price > 2000
         @discount_per_transaction =+ (10*order_price)/100
       end
-      discount_per_transaction.to_f.ceil
+      @discount_per_transaction.to_f.ceil
     end
 
     def rollback_user_redeem_points

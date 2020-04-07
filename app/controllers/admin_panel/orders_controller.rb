@@ -98,13 +98,6 @@ module AdminPanel
       deliveryCharges = 7
     end
 
-    admin_discount = params['order'][:admin_discount].to_i if params['order'][:admin_discount].present?
-    company_discount = (@total_price_without_discount - @items_price).round(2)
-    vatCharges = ((@total_price_without_discount/100).to_f * 5).round(2)
-    total = subTotal + deliveryCharges + vatCharges - company_discount
-    admin_discount = total if admin_discount > total
-    total -= admin_discount
-
     if params['user_id'].present?
       user_redeem_points = 0
       requested_redeem_points = params['order'][:RedeemPoints].to_i
@@ -130,6 +123,13 @@ module AdminPanel
         permitted_redeem_points = subTotal
       end
     end
+
+    admin_discount = params['order'][:admin_discount].to_f if params['order'][:admin_discount].present?
+    company_discount = (@total_price_without_discount - @items_price).round(2)
+    vatCharges = ((@total_price_without_discount/100).to_f * 5).round(2)
+    total = subTotal + deliveryCharges + vatCharges - company_discount - permitted_redeem_points
+    admin_discount = total if admin_discount > total
+    total -= admin_discount
 
     @order = Order.new(user_id: @user.id, RedeemPoints: permitted_redeem_points, Subtotal: @total_price_without_discount,
                        Delivery_Charges: deliveryCharges, shipmenttime: 'with in 7 days', Vat_Charges: vatCharges,
@@ -199,18 +199,18 @@ module AdminPanel
     params['item']['order_items']['0'].each do |item, hash_value|
       @item = Item.find_by_id(hash_value['item_id'])
       next if @item == nil
-      hash_value['Quantity'] = @item.quantity if @item.quantity < hash_value['Quantity'].to_i
+      hash_value['quantity'] = @item.quantity if @item.quantity < hash_value['quantity'].to_i
 
       if discount.positive? && @item.discount.zero? &&
           !(@user.member_type.in?(%w(silver gold)) && @item.supplier.in?(%w(MARS NESTLE))) &&
           @user.email != 'development@urpetslife.com'
-        @items_price += @item.price * ((100 - discount).to_f / 100) * hash_value['Quantity'].to_i
+        @items_price += @item.price * ((100 - discount).to_f / 100) * hash_value['quantity'].to_i
       else
-        @items_price += (@item.price * hash_value['Quantity'].to_i)
+        @items_price += (@item.price * hash_value['quantity'].to_i)
       end
-      @total_price_without_discount += (@item.price * hash_value['Quantity'].to_i)
+      @total_price_without_discount += (@item.price * hash_value['quantity'].to_i)
       if @item.discount > 0
-        @discounted_items_amount += (@item.price * hash_value['Quantity'].to_i)
+        @discounted_items_amount += (@item.price * hash_value['quantity'].to_i)
       end
     end
 
@@ -246,9 +246,19 @@ module AdminPanel
   end
 
   def max_quantity
-    quantity = Item.find_by(id: params['item']['item_id'])&.quantity
+    quantity = Item.find_by_id(params['item']['item_id'])&.quantity
 
     render json: { quantity: quantity || 1}
+  end
+
+  def get_items_quantities
+    quantities_array = []
+    params[:ids_array].each do |item_id|
+      item = Item.find_by_id(item_id)
+      quantities_array.push(item.quantity)
+    end
+
+    render json: { quantities_array: quantities_array }
   end
 
   def user_locations

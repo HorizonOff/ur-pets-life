@@ -18,6 +18,8 @@ module AdminPanel
         else
           update_order_item(oi)
         end
+
+        @undiscounted_order_items += oi.Total_Price unless oi.isdiscounted
       end
 
       update_order
@@ -39,7 +41,6 @@ module AdminPanel
     def cancel_order_item(order_item)
       order_item.update_columns(status: :cancelled)
       calculate_items_count(order_item)
-      @undiscounted_order_items += order_item.Total_Price unless order_item.isdiscounted
 
       send_order_cancellation_email(order_item.id)
     end
