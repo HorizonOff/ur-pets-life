@@ -61,13 +61,6 @@ module AdminPanel
         deliveryCharges = 7
       end
 
-      admin_discount = admin_discount.to_i if admin_discount.present?
-      company_discount = (@total_price_without_discount - @items_price).round(2)
-      vatCharges = ((@total_price_without_discount/100).to_f * 5).round(2)
-      total = subTotal + deliveryCharges + vatCharges - company_discount
-      admin_discount = total if admin_discount > total
-      total -= admin_discount
-
       user_redeem_points = 0
       requested_redeem_points = redeem_points.to_i
       paymentStatus = 1
@@ -92,6 +85,12 @@ module AdminPanel
         permitted_redeem_points = subTotal
       end
 
+      admin_discount = admin_discount.to_i if admin_discount.present?
+      company_discount = (@total_price_without_discount - @items_price).round(2)
+      vatCharges = ((@total_price_without_discount/100).to_f * 5).round(2)
+      total = subTotal + deliveryCharges + vatCharges - company_discount - permitted_redeem_points
+      admin_discount = total if admin_discount > total
+      total -= admin_discount
 
       @order = Order.new(user_id: @user.id, RedeemPoints: permitted_redeem_points, Subtotal: @total_price_without_discount,
                          Delivery_Charges: deliveryCharges, shipmenttime: 'with in 7 days', Vat_Charges: vatCharges,

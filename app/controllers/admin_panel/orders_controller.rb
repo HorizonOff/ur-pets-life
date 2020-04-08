@@ -134,9 +134,19 @@ module AdminPanel
   end
 
   def max_quantity
-    quantity = Item.find_by(id: params['item']['item_id'])&.quantity
+    quantity = Item.find_by_id(params['item']['item_id'])&.quantity
 
     render json: { quantity: quantity || 1}
+  end
+
+  def get_items_quantities
+    quantities_array = []
+    params[:ids_array].each do |item_id|
+      item = Item.find_by_id(item_id)
+      quantities_array.push(item.quantity)
+    end
+
+    render json: { quantities_array: quantities_array }
   end
 
   def user_locations
@@ -269,9 +279,15 @@ module AdminPanel
 
     redirect_to action: 'show', id: orderitem.order_id
   end
-  # PATCH/PUT /admin_panel/orders/1
-  # PATCH/PUT /admin_panel/orders/1.json
+
   def update
+    if params[:commit] == 'Edit order'
+      AdminPanel::EditOrderService.new(@admin_panel_order, params).update
+
+      flash[:success] = 'Order was successfully updated'
+      return redirect_to controller: 'orders', action: 'show'
+    end
+
     if @admin_panel_order.update(order_status_flag: params["order"]["order_status_flag"])
       update_status(@admin_panel_order)
 

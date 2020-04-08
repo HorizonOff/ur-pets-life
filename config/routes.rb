@@ -172,6 +172,7 @@ Rails.application.routes.draw do
     get 'max_quantity', to: 'orders#max_quantity'
     get 'user_locations', to: 'orders#user_locations'
     get 'location', to: 'users#location'
+    get 'get_items_quantities', to: 'orders#get_items_quantities'
 
     resources :support_chats do
       member { get :close }

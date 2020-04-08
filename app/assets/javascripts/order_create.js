@@ -1,5 +1,6 @@
 $(document).on("change", ".changed_subtotal", _.debounce(getCalculatedPrice, 500));
 $(document).on("change", '.item_change', getOrderQuantity);
+$(document).ready(initQuantities);
 $(document).on("change", '.user', getUserLocations);
 
 function getCalculatedPrice(){
@@ -21,7 +22,7 @@ function getCalculatedPrice(){
     }).done(function (data) {
         $('.subtotal_price')[0].innerHTML = data['subtotal'];
         $('.total_price')[0].innerHTML = data['total'];
-    }).fail(function (jqXHR, ajaxOptions, thrownError) {
+    }).fail(function () {
         console.log('server not responding...');
     });
 }
@@ -30,19 +31,20 @@ function getOrderQuantity(e){
     var $self = $(e.target);
     var parent = $self.closest('.order_item');
     var curNumField = parent.find('.max_quantity');
-    var item_id = $self.context.value;
+    var itemId = $self.context.value;
     curNumField.attr("disabled", "disabled");
 
     $.ajax({
         type: 'get',
         url: '/admin_panel/max_quantity',
-        data: { item: { item_id: item_id } }
+        data: { item: { item_id: itemId } }
     }).done(function (data) {
         curNumField.attr({
             "max" : data['quantity']
         });
+        curNumField.val('1');
         curNumField.removeAttr("disabled");
-    }).fail(function (jqXHR, ajaxOptions, thrownError) {
+    }).fail(function () {
         console.log('server not responding...');
     });
 }
@@ -84,7 +86,32 @@ function getUserLocations(e){
 
             locationClass.removeAttr('disabled');
         }
-    }).fail(function (jqXHR, ajaxOptions, thrownError) {
+    }).fail(function () {
+        console.log('server not responding...');
+    });
+}
+
+function initQuantities() {
+    var items = $('.item_change');
+    var idsArray = $.map(items, function (val) {
+        $(val).closest('.order_item').find('.max_quantity').attr("disabled", "disabled");
+        return $(val).context.value;
+    });
+
+    $.ajax({
+        type: 'get',
+        url: '/admin_panel/get_items_quantities',
+        data: { ids_array: idsArray }
+    }).done(function (data) {
+        $.map(items, function (val, i) {
+            var curField = $(val).closest('.order_item').find('.max_quantity');
+
+            curField.attr({
+                "max" : data.quantities_array[i] + parseInt(curField.val())
+            });
+            curField.removeAttr("disabled");
+        });
+    }).fail(function () {
         console.log('server not responding...');
     });
 }
