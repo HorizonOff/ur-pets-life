@@ -92,26 +92,28 @@ function getUserLocations(e){
 }
 
 function initQuantities() {
-    var items = $('.item_change');
-    var idsArray = $.map(items, function (val) {
-        $(val).closest('.order_item').find('.max_quantity').attr("disabled", "disabled");
-        return $(val).context.value;
-    });
-
-    $.ajax({
-        type: 'get',
-        url: '/admin_panel/get_items_quantities',
-        data: { ids_array: idsArray }
-    }).done(function (data) {
-        $.map(items, function (val, i) {
-            var curField = $(val).closest('.order_item').find('.max_quantity');
-
-            curField.attr({
-                "max" : data.quantities_array[i] + parseInt(curField.val())
-            });
-            curField.removeAttr("disabled");
+    if (window.location.pathname !== '/admin_panel/orders/new') {
+        var items = $('.item_change');
+        var idsArray = $.map(items, function (val) {
+            $(val).closest('.order_item').find('.max_quantity').attr("disabled", "disabled");
+            return $(val).context.value;
         });
-    }).fail(function () {
-        console.log('server not responding...');
-    });
+
+        $.ajax({
+            type: 'get',
+            url: '/admin_panel/get_items_quantities',
+            data: {ids_array: idsArray}
+        }).done(function (data) {
+            $.map(items, function (val, i) {
+                var curField = $(val).closest('.order_item').find('.max_quantity');
+
+                curField.attr({
+                    "max": data.quantities_array[i] + parseInt(curField.val())
+                });
+                curField.removeAttr("disabled");
+            });
+        }).fail(function () {
+            console.log('server not responding...');
+        });
+    }
 }

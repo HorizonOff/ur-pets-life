@@ -1233,11 +1233,11 @@ CREATE TABLE public.order_items (
     "Total_Price" double precision,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    "IsRecurring" boolean,
+    "IsRecurring" boolean DEFAULT false,
     "Interval" integer,
     recurssion_interval_id bigint,
-    "IsReviewed" boolean,
-    status public.order_item_status,
+    "IsReviewed" boolean DEFAULT false,
+    status public.order_item_status DEFAULT 'pending'::public.order_item_status,
     isdiscounted boolean,
     next_recurring_due_date timestamp without time zone
 );
@@ -5142,6 +5142,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20191108130248'),
 ('20191128171732'),
 ('20191211153531'),
-('20200117135930');
+('20200117135930'),
+('20200401141645');
 
 
