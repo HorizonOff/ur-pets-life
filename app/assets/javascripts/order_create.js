@@ -1,7 +1,8 @@
 $(document).on("change", ".changed_subtotal", _.debounce(getCalculatedPrice, 500));
+$(document).on("click", ".manage_order_button", _.debounce(initQuantities, 500));
 $(document).on("change", '.item_change', getOrderQuantity);
-$(document).ready(initQuantities);
 $(document).on("change", '.user', getUserLocations);
+$(document).ready(initQuantities);
 
 function getCalculatedPrice(){
     var admin_discount = $('#order_admin_discount').val();
@@ -92,7 +93,10 @@ function getUserLocations(e){
 }
 
 function initQuantities() {
-    if (window.location.pathname !== '/admin_panel/orders/new') {
+    var pathname = window.location.pathname;
+    var regExp = new RegExp("admin_panel\/orders\/[0-9]*\/edit");
+
+    if (regExp.test(pathname)) {
         var items = $('.item_change');
         var idsArray = $.map(items, function (val) {
             $(val).closest('.order_item').find('.max_quantity').attr("disabled", "disabled");
