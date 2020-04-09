@@ -1233,11 +1233,11 @@ CREATE TABLE public.order_items (
     "Total_Price" double precision,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    "IsRecurring" boolean DEFAULT false,
+    "IsRecurring" boolean,
     "Interval" integer,
     recurssion_interval_id bigint,
-    "IsReviewed" boolean DEFAULT false,
-    status public.order_item_status DEFAULT 'pending'::public.order_item_status,
+    "IsReviewed" boolean,
+    status public.order_item_status,
     isdiscounted boolean,
     next_recurring_due_date timestamp without time zone
 );
@@ -1286,8 +1286,8 @@ CREATE TABLE public.orders (
     "TransactionId" character varying,
     "TransactionDate" timestamp without time zone,
     earned_points integer,
-    is_viewed boolean,
-    order_status_flag public.order_item_status,
+    is_viewed boolean DEFAULT false,
+    order_status_flag public.order_item_status DEFAULT 'pending'::public.order_item_status,
     unread_comments_count_by_user integer DEFAULT 0 NOT NULL,
     unread_comments_count_by_admin integer DEFAULT 0 NOT NULL,
     comments_count integer DEFAULT 0 NOT NULL,
@@ -5142,8 +5142,6 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20191108130248'),
 ('20191128171732'),
 ('20191211153531'),
-('20200117135930'),
-('20200401141645'),
-('20200407124103');
+('20200117135930');
 
 
