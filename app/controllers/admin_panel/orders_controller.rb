@@ -75,18 +75,18 @@ module AdminPanel
     params['order']['order_items_attributes'].each do |hash_key, hash_value|
       @item = Item.find_by_id(hash_value['item_id'])
       next if @item == nil
-      hash_value['quantity'] = @item.quantity if @item.quantity < hash_value['quantity'].to_i
+      hash_value['Quantity'] = @item.quantity if @item.quantity < hash_value['Quantity'].to_i
 
       if discount.positive? && @item.discount.zero? &&
           !(@user.member_type.in?(%w(silver gold)) && @item.supplier.in?(%w(MARS NESTLE))) &&
           @user.email != 'development@urpetslife.com'
-        @items_price += @item.price * ((100 - discount).to_f / 100) * hash_value['quantity'].to_i
+        @items_price += @item.price * ((100 - discount).to_f / 100) * hash_value['Quantity'].to_i
       else
-        @items_price += (@item.price * hash_value['quantity'].to_i)
+        @items_price += (@item.price * hash_value['Quantity'].to_i)
       end
-      @total_price_without_discount += (@item.price * hash_value['quantity'].to_i)
+      @total_price_without_discount += (@item.price * hash_value['Quantity'].to_i)
       if @item.discount > 0
-        @discounted_items_amount += (@item.price * hash_value['quantity'].to_i)
+        @discounted_items_amount += (@item.price * hash_value['Quantity'].to_i)
       end
     end
     return redirect_to new_admin_panel_order_path, flash: { error: "Item must exist!" } if @item == nil
@@ -97,13 +97,6 @@ module AdminPanel
     else
       deliveryCharges = 7
     end
-
-    admin_discount = params['order'][:admin_discount].to_i if params['order'][:admin_discount].present?
-    company_discount = (@total_price_without_discount - @items_price).round(2)
-    vatCharges = ((@total_price_without_discount/100).to_f * 5).round(2)
-    total = subTotal + deliveryCharges + vatCharges - company_discount
-    admin_discount = total if admin_discount > total
-    total -= admin_discount
 
     if params['user_id'].present?
       user_redeem_points = 0
@@ -130,6 +123,13 @@ module AdminPanel
         permitted_redeem_points = subTotal
       end
     end
+
+    admin_discount = params['order'][:admin_discount].to_f if params['order'][:admin_discount].present?
+    company_discount = (@total_price_without_discount - @items_price).round(2)
+    vatCharges = ((@total_price_without_discount/100).to_f * 5).round(2)
+    total = subTotal + deliveryCharges + vatCharges - company_discount - permitted_redeem_points
+    admin_discount = total if admin_discount > total
+    total -= admin_discount
 
     @order = Order.new(user_id: @user.id, RedeemPoints: permitted_redeem_points, Subtotal: @total_price_without_discount,
                        Delivery_Charges: deliveryCharges, shipmenttime: 'with in 7 days', Vat_Charges: vatCharges,
@@ -168,15 +168,15 @@ module AdminPanel
         item = Item.find_by_id(hash_value['item_id'])
 
           @new_order_item_create = OrderItem.new(IsRecurring: false, order_id: @order.id,
-                                              item_id: item.id, Quantity: hash_value['quantity'].to_i,
+                                              item_id: item.id, Quantity: hash_value['Quantity'].to_i,
                                               Unit_Price: item.price,
-                                              Total_Price: (item.price * hash_value['quantity'].to_i),
+                                              Total_Price: (item.price * hash_value['Quantity'].to_i),
                                               IsReviewed: false, status: :pending,
                                               isdiscounted: (item.discount > 0 ? true : false),
                                               next_recurring_due_date: DateTime.now)
           @new_order_item_create.save
 
-          item.decrement!(:quantity, hash_value['quantity'].to_i)
+          item.decrement!(:quantity, hash_value['Quantity'].to_i)
           if item.quantity < 3
             send_inventory_alerts(item.id)
           end
@@ -246,9 +246,19 @@ module AdminPanel
   end
 
   def max_quantity
-    quantity = Item.find_by(id: params['item']['item_id'])&.quantity
+    quantity = Item.find_by_id(params['item']['item_id'])&.quantity
 
     render json: { quantity: quantity || 1}
+  end
+
+  def get_items_quantities
+    quantities_array = []
+    params[:ids_array].each do |item_id|
+      item = Item.find_by_id(item_id)
+      quantities_array.push(item.quantity)
+    end
+
+    render json: { quantities_array: quantities_array }
   end
 
   def user_locations
@@ -381,9 +391,15 @@ module AdminPanel
 
     redirect_to action: 'show', id: orderitem.order_id
   end
-  # PATCH/PUT /admin_panel/orders/1
-  # PATCH/PUT /admin_panel/orders/1.json
+
   def update
+    if params[:commit] == 'Edit order'
+      AdminPanel::EditOrderService.new(@admin_panel_order, params).update
+
+      flash[:success] = 'Order was successfully updated'
+      return redirect_to controller: 'orders', action: 'show'
+    end
+
     if @admin_panel_order.update(order_status_flag: params["order"]["order_status_flag"])
       update_status(@admin_panel_order)
 

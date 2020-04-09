@@ -4,11 +4,13 @@
   - else
   .row.order_item
     .col-md-7.col-3
-      = f.select :item_id, options_from_collection_for_select(Item.all.where('quantity > 0'), :id, :name),
-                 {include_blank: true}, { class: 'form-control select2 changed_subtotal item_id item_change' }
+      - items_array = Item.where('quantity > 0').pluck(:name, :id).push(f.object.persisted? ? [f.object.item.name, f.object.item.id] : nil)
+
+      = f.select :item_id, items_array.compact.uniq , { include_blank: true },
+                  { class: 'form-control select2 changed_subtotal item_id item_change' }
 
     .col-md-3.col-3
-      = f.number_field :quantity, min: 1, class: 'form-control changed_subtotal quantity max_quantity', value: 1
+      = f.number_field :Quantity, min: 1, class: 'form-control changed_subtotal quantity max_quantity'
 
     .col-md-2.col-3
       = link_to_remove_association f, class: 'btn btn-danger full-width' do

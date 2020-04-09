@@ -7,7 +7,9 @@
             Order #
             = @admin_panel_order.id
             Details
-            = link_to 'Download Order', download_order_admin_panel_order_path(:format => :pdf), class: 'btn btn-info btn-xs' if @admin_panel_order.order_status_flag != "cancelled"
+            - if !@admin_panel_order.order_status_flag_cancelled?
+              = link_to 'Download Order', download_order_admin_panel_order_path(format: :pdf), class: 'btn btn-info btn-xs'
+              = link_to 'Manage Order', edit_admin_panel_order_path, class: 'btn btn-info btn-xs'
           .clearfix
         .x_content
 
@@ -102,7 +104,7 @@
                   %th Status
                   %th Actions
               %tbody
-                - @orderitems.each do |q|
+                - @admin_panel_order.order_items.each do |q|
                   %tr
                     %td{ scope: 'row' } #{q.id}
                     %td

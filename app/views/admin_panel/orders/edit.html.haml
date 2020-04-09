@@ -4,3 +4,19 @@
       %h3 Edit Order
 
   .clearfix
+    = form_for @admin_panel_order, url: admin_panel_order_path,
+               html: { method: :put, class: 'form-horizontal form-label-left with_location',
+                       autocomplete: 'off' } do |f|
+
+      .form-group
+        .col-12
+          #items.form-group
+            - order_items = OrderItem.where('order_id = (?) AND NOT status = (?)', @admin_panel_order.id, 'cancelled')
+            = f.fields_for :order_items, order_items do |oi|
+              = render partial: 'admin_panel/orders/order_fields', locals: { f: oi }
+            .links
+              = link_to_add_association f, :order_items, class: 'btn btn-primary', partial: 'admin_panel/orders/order_fields' do
+                = '+ '
+                %span.fa.fa-shopping-basket{"aria-hidden" => "true"}
+
+      = f.submit 'Edit order', class: 'btn btn-success pull-right'
