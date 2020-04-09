@@ -1286,8 +1286,8 @@ CREATE TABLE public.orders (
     "TransactionId" character varying,
     "TransactionDate" timestamp without time zone,
     earned_points integer,
-    is_viewed boolean,
-    order_status_flag public.order_item_status,
+    is_viewed boolean DEFAULT false,
+    order_status_flag public.order_item_status DEFAULT 'pending'::public.order_item_status,
     unread_comments_count_by_user integer DEFAULT 0 NOT NULL,
     unread_comments_count_by_admin integer DEFAULT 0 NOT NULL,
     comments_count integer DEFAULT 0 NOT NULL,
@@ -5143,7 +5143,6 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20191128171732'),
 ('20191211153531'),
 ('20200117135930'),
-('20200401141645'),
-('20200407124103');
+('20200401141645');
 
 

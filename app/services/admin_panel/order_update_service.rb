@@ -21,7 +21,7 @@ module AdminPanel
 
     private
 
-    attr_reader :order, :sub_total_price, :points_to_be_reverted, :undiscounted_order_items,
+    attr_reader :order, :sub_total_price, :points_to_be_reverted, :undiscounted_order_items, :total,
                 :discounted_products_price, :discounted_price, :update_to_cancelled, :discount_per_transaction
 
     def calculate_discounts
@@ -61,8 +61,9 @@ module AdminPanel
     def update_order
       delivery_charges = sub_total_price > 100 ? 0 : 20
       vat_charges = ((sub_total_price/100) * 5).round(2)
-      total = sub_total_price + delivery_charges + vat_charges + discounted_price + order.code_discount - order.admin_discount - order.RedeemPoints
-      total = 0 if total.negative?
+      @total = sub_total_price + delivery_charges + vat_charges + discounted_price + order.code_discount
+      calculate_with_discounts if order.admin_discount.positive? || order.RedeemPoints.positive?
+      @total = 0 if @total.negative?
 
       if undiscounted_order_items.positive?
         sub_total = order.Subtotal - undiscounted_order_items
@@ -77,15 +78,33 @@ module AdminPanel
                    earned_points: @discount_per_transaction, company_discount: discounted_price)
     end
 
-    def order_discount(order_price)
-      if order_price <= 500
-        @discount_per_transaction =+ (3*order_price)/100
-      elsif order_price > 500 and order_price <= 1000
-        @discount_per_transaction =+ (5*order_price)/100
-      elsif order_price > 1000 and order_price <= 2000
-        @discount_per_transaction =+ (7.5*order_price)/100
-      elsif order_price > 2000
-        @discount_per_transaction =+ (10*order_price)/100
+    def calculate_with_discounts
+      if order.admin_discount > @total && order.RedeemPoints > 0
+        @total = 0
+      elsif order.RedeemPoints + order.admin_discount > @total && order.RedeemPoints != 0
+        with_discount = @total - order.admin_discount
+        if order.RedeemPoints > with_discount
+          with_discount = 0
+        else
+          with_discount -= order.RedeemPoints
+        end
+        @total = with_discount
+      else
+        order.admin_discount = @total if order.admin_discount > @total
+        @total -= order.admin_discount + order.RedeemPoints
+      end
+      @total
+    end
+
+    def order_discount(price_for_award)
+      if price_for_award <= 500
+        @discount_per_transaction =+ (3*price_for_award)/100
+      elsif price_for_award > 500 && price_for_award <= 1000
+        @discount_per_transaction =+ (5*price_for_award)/100
+      elsif price_for_award > 1000 && price_for_award <= 2000
+        @discount_per_transaction =+ (7.5*price_for_award)/100
+      elsif price_for_award > 2000
+        @discount_per_transaction =+ (10*price_for_award)/100
       end
       @discount_per_transaction.to_f.ceil
     end

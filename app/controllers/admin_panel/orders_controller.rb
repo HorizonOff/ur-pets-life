@@ -4,10 +4,10 @@ module AdminPanel
     before_action :authorize_super_admin_employee, only: :index
     before_action :set_admin_panel_order, only: [:show, :edit, :update, :destroy]
     before_action :view_new_order, only: :show
+    before_action :check_for_unregistered_user, only: :create
 
     @@filtered_user_id = 0
-  # GET /admin_panel/orders
-  # GET /admin_panel/orders.json
+
   def index
     set_filtered_user
     respond_to do |format|
@@ -19,7 +19,6 @@ module AdminPanel
 
   def show
     @shipping_address = Location.find_by_id(@admin_panel_order.location_id).address
-    @order_items = OrderItem.joins(:item).where(order_id: @admin_panel_order.id)
 
     if @admin_panel_order.order_status_flag == 'pending' && !@admin_panel_order.IsCash?
       @option_status = [%w(Confirm confirmed), %w(Cancel cancelled)]
@@ -44,16 +43,13 @@ module AdminPanel
     end
   end
 
-  # GET /admin_panel/orders/new
   def new
     @order = Order.new
     @order.build_location
     @order.order_items.build
   end
 
-  # GET /admin_panel/orders/1/edit
   def edit
-
   end
 
   def ordercomments
@@ -62,14 +58,17 @@ module AdminPanel
     @comments = @parent_object.comments.includes(:writable).order(id: :desc).page(params[:page])
     @comment = @parent_object.comments.new
   end
-  # POST /admin_panel/orders
-  # POST /admin_panel/orders.json
+
   def create
     user = User.find_by_id(params['user_id'])
-    order = AdminPanel::OrderCreationService.new(user, params)
+    return redirect_to new_admin_panel_order_path, flash: { error: "User must exist!" } if user.blank?
 
-    if order.get_created_order.persisted?
-      redirect_to admin_panel_order_path(order.get_created_order)
+    order = AdminPanel::OrderCreateService.new(user, @location_id, params).order_create
+
+    return redirect_to new_admin_panel_order_path, flash: { error: "Item must exist!" } if order == "Items blank!"
+
+    if order.persisted?
+      redirect_to admin_panel_order_path(order)
     else
       render :new
     end
@@ -108,28 +107,28 @@ module AdminPanel
     else
       deliveryCharges = 7
     end
+
     company_discount = (@total_price_without_discount - @items_price).round(2)
     admin_discount = params['item'][:admin_discount].to_f
     redeem_points = params['item'][:RedeemPoints].to_i
     vatCharges = ((@total_price_without_discount/100).to_f * 5).round(2)
     total = subTotal + deliveryCharges + vatCharges + company_discount
+
     if admin_discount > total && redeem_points > 0
-      admin_discount = total
-      redeem_points = 0
+      total = 0
     elsif redeem_points + admin_discount > total && redeem_points != 0
       with_discount = total - admin_discount
-      admin_discount = 0
       if redeem_points > with_discount
-        redeem_points = with_discount
+        with_discount = 0
       else
         with_discount -= redeem_points
-        redeem_points = 0
       end
       total = with_discount
+    else
+      admin_discount = total if admin_discount > total
+      total -= admin_discount + redeem_points
     end
-    admin_discount = total if admin_discount > total
 
-    total -= admin_discount + redeem_points
     render json: { subtotal: subTotal, total: total }
   end
 
@@ -156,33 +155,30 @@ module AdminPanel
   end
 
   def invoice
-    order = Order.find_by_id(params[:id])
-    user_address = Location.find_by_id(order.location_id).address
+    user_address = Location.find_by_id(@admin_panel_order.location_id).address
 
     respond_to do |format|
       format.pdf do
-        pdf = render_to_string  pdf: "INV-#{order.id}.pdf",
+        pdf = render_to_string  pdf: "INV-#{@admin_panel_order.id}.pdf",
                                 layout: "pdf.html.erb",
                                 show_as_html: false,
                                 encoding: "UTF-8",
                                 template: "admin_panel/invoices/_show.html.erb",
-                                locals: { order: order, user_address: user_address }
-      send_data pdf, filename: "INV-#{order.id}.pdf", type: "application/pdf", disposition: "attachment"
+                                locals: { order: @admin_panel_order, user_address: user_address }
+      send_data(pdf, filename: "INV-#{@admin_panel_order.id}.pdf", type: "application/pdf", disposition: "attachment")
       end
     end
   end
 
   def download_order
-    @order = Order.find_by_id(params[:id])
-
     respond_to do |format|
       format.pdf do
-        pdf = render_to_string  pdf: "Order-#{@order.id}.pdf",
+        pdf = render_to_string  pdf: "Order-#{@admin_panel_order.id}.pdf",
                                 layout: "pdf.html.erb",
                                 show_as_html: false,
                                 encoding: "UTF-8",
                                 template: "admin_panel/orders/order.html.erb"
-        send_data(pdf, filename: "Order-#{@order.id}.pdf", type: "application/pdf", disposition: "attachment")
+        send_data(pdf, filename: "Order-#{@admin_panel_order.id}.pdf", type: "application/pdf", disposition: "attachment")
       end
     end
   end
@@ -282,7 +278,7 @@ module AdminPanel
 
   def update
     if params[:commit] == 'Edit order'
-      AdminPanel::EditOrderService.new(@admin_panel_order, params).update
+      AdminPanel::EditOrderItemService.new(@admin_panel_order, params).update
 
       flash[:success] = 'Order was successfully updated'
       return redirect_to controller: 'orders', action: 'show'
@@ -309,21 +305,24 @@ module AdminPanel
   end
 
   private
-    def check_for_unregistered_user(location_id)
-      return if params['order']['unregistered_user'].blank?
 
-      @user = User.find_by(first_name: params['order']['unregistered_user']['name'])
+  def check_for_unregistered_user
+    @location_id = params[:location_id].present? ? params[:location_id] : new_location_id
 
-      if @user.blank?
-        @user = User.new(first_name: params['order']['unregistered_user']['name'],
-                         mobile_number: params['order']['unregistered_user']['number'],
-                         location_ids: location_id,
-                         is_registered: false)
+    return if params['order']['unregistered_user'].blank?
 
-        @user.skip_user_validation = true
-        @user.save
-      end
+    @user = User.find_by(first_name: params['order']['unregistered_user']['name'])
+
+    if @user.new_record?
+      @user = User.new(first_name: params['order']['unregistered_user']['name'],
+                       mobile_number: params['order']['unregistered_user']['number'],
+                       location_ids: @location_id,
+                       is_registered: false)
+
+      @user.skip_user_validation = true
+      @user.save
     end
+  end
 
     def send_inventory_alerts(itemid)
       OrderMailer.send_low_inventory_alert(itemid).deliver_later
