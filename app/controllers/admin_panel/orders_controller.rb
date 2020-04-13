@@ -254,6 +254,8 @@ module AdminPanel
   def get_items_quantities
     quantities_array = []
     params[:ids_array].each do |item_id|
+      next if item_id.blank?
+
       item = Item.find_by_id(item_id)
       quantities_array.push(item.quantity)
     end

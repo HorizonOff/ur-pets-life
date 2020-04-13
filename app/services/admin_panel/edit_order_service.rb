@@ -12,6 +12,7 @@ module AdminPanel
       @order_items_params.each do |order_item_params|
         get_item_and_quantity(order_item_params)
         oi = get_order_item(order_item_params)
+        next if oi.blank?
 
         if cancel?(order_item_params[1]['_destroy'])
           cancel_order_item(oi)
@@ -64,9 +65,10 @@ module AdminPanel
     end
 
     def get_order_item(order_item_params)
-      return OrderItem.find_by_id(order_item_params[1]['id']) if order_item_params[1]['id'].present?
+      params = order_item_params[1]
+      return OrderItem.find_by_id(params['id']) if params['id'].present?
 
-      create_order_item
+      create_order_item if params['item_id'].present?
     end
 
     def calculate_items_count(order_item)
