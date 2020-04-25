@@ -45,6 +45,22 @@ module Api
         end
       end
 
+      def apple
+        full_name = params[:full_name]
+        social_user = social_auth_service.apple_auth
+
+        return render_422(message: social_auth_service.error[:message]) if social_auth_service.error.present?
+
+        if social_user.is_a?(User)
+          @user = social_user
+          sign_in_user
+        else
+          render json: { errors: {},
+                         user: { email: social_user['email'], first_name: full_name.split.first,
+                                 last_name: full_name.split.last, apple_id: social_user['sub'] } }, status: 426
+        end
+      end
+
       def destroy
         sign_out
         render json: { nothing: true }, status: 204

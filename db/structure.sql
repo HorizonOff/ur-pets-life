@@ -2211,7 +2211,8 @@ CREATE TABLE public.users (
     member_type integer DEFAULT 0,
     last_action_at timestamp without time zone,
     pay_code character varying,
-    is_registered boolean DEFAULT true
+    is_registered boolean DEFAULT true,
+    apple_id character varying
 );
 
 
@@ -5143,6 +5144,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20191128171732'),
 ('20191211153531'),
 ('20200117135930'),
-('20200401141645');
+('20200401141645'),
+('20200424161220');
 
 
