@@ -68,6 +68,9 @@ GEM
     after_commit_action (1.1.0)
       activerecord (>= 3.0.0)
       activesupport (>= 3.0.0)
+    apnotic (1.6.0)
+      connection_pool (~> 2)
+      net-http2 (>= 0.18, < 2)
     arel (9.0.0)
     ast (2.4.0)
     attr_required (1.0.1)
@@ -240,6 +243,7 @@ GEM
       nokogiri (>= 1.6.0)
       ruby_parser (~> 3.5)
     htmlentities (4.3.4)
+    http-2 (0.10.1)
     http-accept (1.7.0)
     http-cookie (1.0.3)
       domain_name (~> 0.5)
@@ -304,6 +308,8 @@ GEM
     multi_json (1.13.1)
     multi_xml (0.6.0)
     multipart-post (2.1.1)
+    net-http2 (0.18.2)
+      http-2 (~> 0.10.1)
     netrc (0.11.0)
     newrelic_rpm (6.7.0.359)
     nio4r (2.5.2)
@@ -449,8 +455,6 @@ GEM
       ruby-progressbar (~> 1.7)
       unicode-display_width (~> 1.0, >= 1.0.1)
     ruby-progressbar (1.10.1)
-    ruby-push-notifications (1.3.0)
-      builder (~> 3.0)
     ruby_dep (1.5.0)
     ruby_parser (3.14.0)
       sexp_processor (~> 4.9)
@@ -540,6 +544,7 @@ PLATFORMS
 
 DEPENDENCIES
   active_model_serializers
+  apnotic
   aws-sdk-rails
   aws-sdk-s3
   axlsx!
@@ -599,7 +604,6 @@ DEPENDENCIES
   roo (~> 2.8.0)
   rspec-rails (~> 3.6)
   rubocop (~> 0.51.0)
-  ruby-push-notifications
   rubyzip (>= 1.2.1)
   sass-rails (~> 5.0)
   scout_apm
