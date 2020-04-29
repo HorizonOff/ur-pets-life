@@ -3,7 +3,6 @@ module Api
     module UserServices
       class SocialAuthService
         attr_reader :error
-        # APPLE_PUBLIC_KEY_URL = 'https://appleid.apple.com/auth/keys'.freeze
 
         def initialize(access_token)
           @access_token = access_token
