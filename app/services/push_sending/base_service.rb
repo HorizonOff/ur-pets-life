@@ -25,7 +25,8 @@ module PushSending
         push.on(:response) { |response|
           if response.status == '410' ||
               (response.status == '400' && response.body['reason'] == 'BadDeviceToken')
-            return Device.find_by(token: token).destroy
+            Session.find_by_push_token(token).destroy
+            next
           end
         }
 
