@@ -78,7 +78,7 @@ gem 'draper'
 gem 'pundit'
 gem "paranoia", "~> 2.2"
 
-gem 'ruby-push-notifications'
+gem 'apnotic'
 gem 'fcm'
 # For write xlsx
 gem 'rubyzip', '>= 1.2.1'
