@@ -12,8 +12,11 @@ module PushSending
 
     def send_push_to_ios(tokens)
       return if tokens.blank?
-
-      connection = Apnotic::Connection.new(cert_path: "#{Rails.root}/app/certificates/certificate.pem")
+      if ENV['APPLE_PUSH_ENV'] == 'sandbox'
+        connection = Apnotic::Connection.development(cert_path: "#{Rails.root}/app/certificates/certificate.pem")
+      else
+        connection = Apnotic::Connection.new(cert_path: "#{Rails.root}/app/certificates/certificate.pem")
+      end
       connection.on(:error) { |exception| puts "Exception has been raised: #{exception}" }
 
       tokens.each do |token|
@@ -25,7 +28,7 @@ module PushSending
         push.on(:response) { |response|
           if response.status == '410' ||
               (response.status == '400' && response.body['reason'] == 'BadDeviceToken')
-            # Session.find_by_push_token(token).destroy
+            Session.find_by_push_token(token).destroy
             next
           end
         }
