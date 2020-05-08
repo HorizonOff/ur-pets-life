@@ -106,7 +106,14 @@ module AdminPanel
         item_categories = []
         @ic_names = []
 
-        ItemCategory.all.each { |ic| @data_hash[key]["#{ic.id}"] ||= 0; @ic_names.push(ic.name) }
+        ItemCategory.includes(:pet_types).all.each do |ic|
+          @data_hash[key]["#{ic.id}"] ||= 0
+
+          pet_names = ''
+          ic.pet_types.each { |pet_type| pet_names += pet_type.name + ' / '}
+
+          @ic_names.push(ic.name + ' (' + pet_names + ')')
+        end
 
         value.each do |oi|
           oi.item.item_category_ids.each { |ic_id| item_categories.push(ic_id) }
