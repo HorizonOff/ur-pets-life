@@ -8,6 +8,7 @@ module AdminPanel
     def index
       respond_to do |format|
         format.html {}
+        format.xlsx { export_data }
         format.json { filter_categories }
       end
     end
@@ -85,6 +86,42 @@ module AdminPanel
 
     def filter_and_pagination_query
       @filter_and_pagination_query ||= ::AdminPanel::FilterAndPaginationQuery.new('ItemCategory', params)
+    end
+
+    def export_data
+      return if (params[:from_date] || params[:to_date]).blank?
+
+      @order_items = OrderItem.includes(:item, { item: :item_categories }).where("status IN (:states) AND
+                        (updated_at IS NOT NULL AND updated_at > :from_date AND updated_at < :to_date) OR
+                        (updated_at IS NULL AND updated_at > :from_date AND updated_at < :to_date)",
+                          states: %w(delivered delivered_by_card delivered_by_cash delivered_online),
+                          from_date: params[:from_date].to_date.beginning_of_day,
+                          to_date: params[:to_date].to_date.end_of_day)
+
+      grouped_by_date = @order_items.group_by { |oi| oi.updated_at.strftime('%m/%Y') }
+      @data_hash = {}
+
+      grouped_by_date.each do |key, value|
+        @data_hash[key] = {}
+        item_categories = []
+        @ic_names = []
+
+        ItemCategory.all.each { |ic| @data_hash[key]["#{ic.id}"] ||= 0; @ic_names.push(ic.name) }
+
+        value.each do |oi|
+          oi.item.item_category_ids.each { |ic_id| item_categories.push(ic_id) }
+          item_categories.push(oi.item.item_categories_id)
+
+          item_categories.uniq.each do |ic|
+            next if ic.blank?
+
+            @data_hash[key]["#{ic}"] += oi.Total_Price
+          end
+        end
+      end
+
+      name = "The spends extract from #{ params[:from_date] } to #{ params[:to_date] }.xlsx"
+      response.headers['Content-Disposition'] = "attachment; filename*=UTF-8''#{name}"
     end
   end
 end

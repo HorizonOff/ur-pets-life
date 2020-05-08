@@ -4,8 +4,24 @@
   .page-title
     .title_left
       %h3 Item Categories
+      = link_to 'Add New', new_admin_panel_item_category_path, class: 'btn btn-info btn-round form-btn'
     .title_right
-      = link_to 'Add New', new_admin_panel_item_category_path, class: 'btn btn-info btn-round pull-right'
+      = form_tag admin_panel_item_categories_path, method: :get do
+        = hidden_field_tag :format, :xlsx
+        = hidden_field_tag 'request_type', 'excel'
+        .form-group.col-md-3.pull-right
+          = label_tag :from_date, class: 'control-label' do
+            Export:
+          .form-group
+            = button_tag 'Orders', class: 'btn btn-primary btn-round form-btn'
+        .form-group.col-md-3.pull-right
+          = label_tag :to_date, class: 'control-label' do
+            To Date *
+          = text_field_tag :to_date, '', required: true, autocomplete: :off, class: 'form-control single_cal2'
+        .form-group.col-md-3.pull-right
+          = label_tag :from_date, class: 'control-label' do
+            From Date *
+          = text_field_tag :from_date, '', required: true, autocomplete: :off, class: 'form-control single_cal2'
 
 
   .clearfix

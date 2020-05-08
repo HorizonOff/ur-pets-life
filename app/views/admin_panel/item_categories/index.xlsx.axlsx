@@ -1,0 +1,6 @@
+wb = xlsx_package.workbook
+
+wb.add_worksheet(name: "Orders") do |sheet|
+  sheet.add_row [''] + @ic_names
+  @data_hash.each { |key, data| sheet.add_row [key] + data.values }
+end
