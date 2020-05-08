@@ -12,16 +12,32 @@ module PushSending
 
     def send_push_to_ios(tokens)
       return if tokens.blank?
-      password = nil
+      if ENV['APPLE_PUSH_ENV'] == 'sandbox'
+        connection = Apnotic::Connection.development(cert_path: "#{Rails.root}/app/certificates/certificate.pem")
+      else
+        connection = Apnotic::Connection.new(cert_path: "#{Rails.root}/app/certificates/certificate.pem")
+      end
+      connection.on(:error) { |exception| puts "Exception has been raised: #{exception}" }
 
-      notification = RubyPushNotifications::APNS::APNSNotification.new(tokens, aps: ios_options)
-      pusher = RubyPushNotifications::APNS::APNSPusher.new(
-        File.read("#{Rails.root}/app/certificates/certificate.pem"),
-        ENV['APPLE_PUSH_ENV'] == 'sandbox',
-        password
-      )
+      tokens.each do |token|
+        notification       = Apnotic::Notification.new(token)
+        notification.topic = ENV['APPLE_BUNDLE_ID']
+        notification.custom_payload = { aps: ios_options }
 
-      pusher.push [notification]
+        push = connection.prepare_push(notification)
+        push.on(:response) { |response|
+          if response.status == '410' ||
+              (response.status == '400' && response.body['reason'] == 'BadDeviceToken')
+            Session.find_by_push_token(token).destroy
+            next
+          end
+        }
+
+        connection.push_async(push)
+      end
+
+      connection.join
+      connection.close
     end
 
     def send_push_to_android(tokens)
