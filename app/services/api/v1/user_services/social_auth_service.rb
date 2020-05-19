@@ -56,6 +56,35 @@ module Api
           response unless user.present?
         end
 
+        def apple_auth
+          begin
+            jwks = HTTParty.get ENV['APPLE_PUBLIC_KEY_URL']
+            alg = jwks['keys'].first['alg']
+            apple_info = JWT.decode(access_token, nil, true,
+                                    { algorithms: [alg], jwks: jwks.deep_symbolize_keys })[0]
+          rescue StandardError => e
+            add_error(e.message)
+            return
+          end
+
+          apple_id = apple_info['sub']
+          if apple_id.blank?
+            add_error('Invalid apple_token')
+            return @error
+          end
+
+          user = User.find_by_apple_id(apple_id)
+          return user if user.present?
+
+          user = User.find_by_email(apple_info['email'])
+          if user.present?
+            user.update_attributes(apple_id: apple_info['sub'])
+            return user
+          end
+
+          apple_info unless user.present?
+        end
+
         private
 
         attr_reader :access_token

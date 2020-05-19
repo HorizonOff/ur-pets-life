@@ -130,6 +130,7 @@ Rails.application.routes.draw do
       resources :sessions, only: :create do
         collection { post :facebook }
         collection { post :google }
+        collection { post :apple }
       end
       delete 'sessions', to: 'sessions#destroy'
       resources :passwords, only: [] do

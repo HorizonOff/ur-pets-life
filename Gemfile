@@ -50,6 +50,7 @@ gem 'devise_invitable'
 gem 'haml-rails', '~> 1.0'
 gem 'active_model_serializers'
 gem 'faraday'
+gem 'httparty'
 
 gem 'carrierwave', '~> 1.0'
 gem "mini_magick"
@@ -77,12 +78,12 @@ gem 'draper'
 gem 'pundit'
 gem "paranoia", "~> 2.2"
 
-gem 'ruby-push-notifications'
+gem 'apnotic'
 gem 'fcm'
 # For write xlsx
 gem 'rubyzip', '>= 1.2.1'
-gem 'axlsx', git: 'https://github.com/randym/axlsx.git', ref: 'c8ac844'
-gem 'axlsx_rails'
+gem 'caxlsx'
+gem 'caxlsx_rails'
 # worker
 gem 'sidekiq'
 # For read xlsx

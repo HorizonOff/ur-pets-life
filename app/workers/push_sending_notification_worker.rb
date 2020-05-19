@@ -1,3 +1,5 @@
+require 'apnotic'
+
 class PushSendingNotificationWorker
   include Sidekiq::Worker
 
