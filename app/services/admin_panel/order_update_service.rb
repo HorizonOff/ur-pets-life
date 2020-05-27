@@ -1,6 +1,5 @@
 module AdminPanel
   class OrderUpdateService
-
     def initialize(order, sub_total_price, undiscounted_order_items)
       @order = order
       @sub_total_price = sub_total_price
@@ -68,7 +67,7 @@ module AdminPanel
       if undiscounted_order_items.positive?
         sub_total = order.Subtotal - undiscounted_order_items
         order_price_for_award = sub_total - (order.RedeemPoints - points_to_be_reverted) - discounted_products_price
-        order_discount(order_price_for_award)
+        @discount_per_transaction = OrdersServices::OrderMathService.new(order_price_for_award).calculate_discount
       else
         @discount_per_transaction = order.earned_points
       end
@@ -94,19 +93,6 @@ module AdminPanel
         @total -= order.admin_discount + order.RedeemPoints
       end
       @total
-    end
-
-    def order_discount(price_for_award)
-      if price_for_award <= 500
-        @discount_per_transaction =+ (3*price_for_award)/100
-      elsif price_for_award > 500 && price_for_award <= 1000
-        @discount_per_transaction =+ (5*price_for_award)/100
-      elsif price_for_award > 1000 && price_for_award <= 2000
-        @discount_per_transaction =+ (7.5*price_for_award)/100
-      elsif price_for_award > 2000
-        @discount_per_transaction =+ (10*price_for_award)/100
-      end
-      @discount_per_transaction.to_f.ceil
     end
 
     def rollback_user_redeem_points

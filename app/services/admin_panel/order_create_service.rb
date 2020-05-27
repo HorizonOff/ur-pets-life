@@ -1,14 +1,19 @@
 module AdminPanel
   class OrderCreateService
-
-    def initialize(user, location_id, params)
+    def initialize(user, location_id, params, is_calculating)
       @user = user
       @location_id = location_id
-      @order_items_attributes = params[:order][:order_items_attributes]
-      @admin_discount = params[:order][:admin_discount].to_f
-      @redeem_points = params[:order][:RedeemPoints]
-      @delivery_date = params[:Delivery_Date]
-      @order_notes = params[:Order_Notes]
+      @is_calculating = is_calculating
+
+      if is_calculating
+        @order_items_attributes = is_calculating ? params[:item][:order_items]['0'] : params[:order][:order_items_attributes]
+        @admin_discount = is_calculating ? params[:item][:admin_discount].to_f : params[:order][:admin_discount].to_f
+        @redeem_points = is_calculating ? params[:item][:RedeemPoints] : params[:order][:RedeemPoints]
+      else is_calculating
+        @delivery_date = params[:Delivery_Date]
+        @order_notes = params[:Order_Notes]
+      end
+
       @quantity = 0
       @items_price = 0
       @total_price_without_discount = 0
@@ -21,17 +26,22 @@ module AdminPanel
       calculate_discount
       return 'Items blank!' if @item.blank?
       create_order
-      order
+      if is_calculating
+        @calculating_output
+      else
+        order
+      end
     end
 
     private
 
-    attr_reader :user, :location_id, :order_items_attributes, :admin_discount, :redeem_points, :delivery_date,
-                :order_notes, :quantity, :items_price, :total_price_without_discount, :discounted_items_amount,
-                :permitted_redeem_points, :discount_per_transaction, :discount, :sub_total, :order
+    attr_reader :user, :location_id, :is_calculating, :order_items_attributes, :admin_discount, :redeem_points,
+                :delivery_date, :order_notes, :quantity, :items_price, :total_price_without_discount,
+                :discounted_items_amount, :permitted_redeem_points, :discount_per_transaction, :discount, :sub_total,
+                :order
 
     def calculate_discount
-      @discount = user.is_registered? ? ::Api::V1::DiscountDomainService.new(user.email.dup).dicount_on_email : 0
+      @discount = user&.is_registered? ? ::Api::V1::DiscountDomainService.new(user.email.dup).dicount_on_email : 0
 
       order_items_attributes.each do |hash_key, hash_value|
         @item = Item.find_by_id(hash_value['item_id'])
@@ -40,8 +50,8 @@ module AdminPanel
         @quantity = hash_value['Quantity'].to_i
         @quantity = @item.quantity if @item.quantity < @quantity
 
-        if discount.positive? && @item.discount.zero? && !(user.member_type.in?(%w(silver gold)) &&
-            @item.supplier.in?(%w(MARS NESTLE))) && user.email != 'development@urpetslife.com'
+        if discount.positive? && @item.discount.zero? && !(user&.member_type.in?(%w(silver gold)) &&
+            @item.supplier.in?(%w(MARS NESTLE))) && user&.email != 'development@urpetslife.com'
           @items_price += @item.price * ((100 - discount).to_f / 100) * @quantity
         else
           @items_price += (@item.price * @quantity)
@@ -53,8 +63,8 @@ module AdminPanel
     end
 
     def create_order
-      sub_total = @items_price.to_f.round(2)
-      if user.email != 'development@urpetslife.com'
+      sub_total = @total_price_without_discount.to_f.round(2)
+      if user&.email != 'development@urpetslife.com'
         delivery_charges = (sub_total < 100 ? 20 : 0)
       else
         delivery_charges = 7
@@ -62,12 +72,16 @@ module AdminPanel
 
       company_discount = (@total_price_without_discount - @items_price).round(2)
       vat_charges = ((@total_price_without_discount/100).to_f * 5).round(2)
-      calculate_redeem_points(sub_total)
+      calculate_redeem_points(sub_total) unless is_calculating
       amount_to_be_awarded = sub_total - @permitted_redeem_points - @discounted_items_amount
-      transaction_discount(amount_to_be_awarded) if amount_to_be_awarded > 0 && discount.zero? && user.email != 'development@urpetslife.com'
+      if amount_to_be_awarded > 0 && discount.zero? && user&.email != 'development@urpetslife.com'
+        @discount_per_transaction = OrdersServices::OrderMathService.new(amount_to_be_awarded).calculate_discount
+      end
       total = sub_total + delivery_charges + vat_charges - company_discount - @permitted_redeem_points
       @admin_discount = total if @admin_discount > total
       total -= @admin_discount
+
+      return @calculating_output = [sub_total, total] if is_calculating
 
       @order = Order.new(user_id: user.id, RedeemPoints: @permitted_redeem_points, Subtotal: @total_price_without_discount,
                          Delivery_Charges: delivery_charges, shipmenttime: 'with in 7 days', Vat_Charges: vat_charges,
@@ -84,7 +98,6 @@ module AdminPanel
                                            totalavailedpoints: (@user_redeem_point_record.totalavailedpoints
                                            + @permitted_redeem_points))
         end
-
 
         order_items_attributes.each do |hash_key, hash_value|
           item = Item.find_by_id(hash_value['item_id'])
@@ -120,20 +133,6 @@ module AdminPanel
       end
 
       @permitted_redeem_points = sub_total if @permitted_redeem_points > sub_total
-    end
-
-    def transaction_discount(price_for_award)
-      if price_for_award <= 500
-        @discount_per_transaction =+ (3*price_for_award)/100
-      elsif price_for_award > 500 && price_for_award <= 1000
-        @discount_per_transaction =+ (5*price_for_award)/100
-      elsif price_for_award > 1000 && price_for_award <= 2000
-        @discount_per_transaction =+ (7.5*price_for_award)/100
-      elsif price_for_award > 2000
-        @discount_per_transaction =+ (10*price_for_award)/100
-      end
-
-      @discount_per_transaction.to_f.ceil
     end
 
     def send_inventory_alerts(item_id)

@@ -81,7 +81,7 @@
                   %b Comments:
                   = @admin_panel_order.comments_count
                 %p= @admin_panel_order.last_comment.nil? ? '' : @admin_panel_order.last_comment.message
-                = link_to ordercomments_admin_panel_order_path(@admin_panel_order), class: 'btn btn-info btn-xs' do
+                = link_to order_comments_admin_panel_order_path(@admin_panel_order), class: 'btn btn-info btn-xs' do
                   View history
                   - if @admin_panel_order.unread_comments_count_by_admin.present? && !@admin_panel_order.unread_comments_count_by_admin.zero?
                     %span.badge= @admin_panel_order.unread_comments_count_by_admin

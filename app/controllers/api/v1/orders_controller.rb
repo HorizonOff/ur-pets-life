@@ -2,23 +2,16 @@ module Api
   module V1
     class OrdersController < Api::BaseController
       include AdminPanel::OrderUpdateHelper
-      before_action :set_order, only: [:show, :edit, :update, :destroy]
-      before_action :set_usercartitems, only: [:create]
-      # before_action :check_empty_transactions, only: [:create]
+      before_action :set_order, only: [:show, :re_oder_on_order_id, :edit, :update, :destroy]
+      before_action :set_user_cart_items, only: [:create]
 
-      # GET /orders
-      # GET /orders.json
       def index
         @orders = @user.orders.visible
-        if @orders.nil? or @orders.empty?
-          render :json => {
-            Message: 'No Orders found'
-          }
+        if @orders.blank?
+          render json: { Message: 'No Orders found' }
         else
-          if (!params[:pageno].nil? and !params[:size].nil?)
-            size = params[:size].to_i
-            page = params[:pageno].to_i
-            @orders = @orders.limit(size).offset(page * size)
+          if (params[:pageno] && params[:size]).present?
+            @orders = @orders.limit(params[:size].to_i).offset(params[:pageno].to_i * params[:size].to_i)
           end
           render json: @orders.as_json(
             :only => [:id, :Subtotal, :shipmenttime, :Delivery_Charges, :Vat_Charges, :Total, :Delivery_Date, :Order_Notes, :IsCash, :RedeemPoints, :earned_points, :driver_id],
@@ -58,8 +51,6 @@ module Api
         render json: { orders: serialized_orders, total_count: orders_count }
       end
 
-      # GET /orders/1
-      # GET /orders/1.json
       def show
         render json: @order.as_json(
         :only => [:id, :Subtotal, :shipmenttime, :Delivery_Charges, :Vat_Charges, :Total, :Delivery_Date, :Order_Notes, :IsCash, :RedeemPoints, :earned_points, :order_status_flag],
@@ -89,43 +80,35 @@ module Api
           }
         }
       )
-      #  render json: {
-      #    VatPercentage: "5",
-      #    OrderDetails:
-      #}
       end
 
       def re_oder_on_order_id
         respond_to do |format|
-        if Order.where(:id => params[:id]).exists?
-          @order = Order.where(:id => params[:id]).first
-          @neworder = Order.new(:user_id => @user.id, :RedeemPoints => 0, :TransactionId => params[:TransactionId], :TransactionDate => params[:TransactionDate], :shipmenttime => @order.shipmenttime, :Subtotal => @order.Subtotal, :Delivery_Charges => @order.Delivery_Charges, :Vat_Charges => @order.Vat_Charges, :Total => @order.Total, :Order_Status => 1, :Payment_Status => 1, :Delivery_Date => @order.Delivery_Date, :Order_Notes => @order.Order_Notes, :IsCash => params[:IsCash],  :location_id => @order.location_id)
-          if @neworder.save
-            discount_per_transaction = 0
-            subTotal = @order.Subtotal
-            user_redeem_points = RedeemPoint.where(:user_id => @user.id).first.net_worth
-            if subTotal <= 500
-              discount_per_transaction =+ (3*subTotal)/100
-            elsif subTotal > 500 and subTotal <= 1000
-              discount_per_transaction =+ (5*subTotal)/100
-            elsif subTotal > 1000 and subTotal <= 2000
-              discount_per_transaction =+ (7.5*subTotal)/100
-            elsif subTotal > 2000
-              discount_per_transaction =+ (10*subTotal)/100
-            end
-            RedeemPoint.where(:user_id => @user.id).update(:net_worth => (user_redeem_points +  discount_per_transaction), :last_net_worth => user_redeem_points, :last_reward_type => "Discount Per Transaction", :last_reward_worth => discount_per_transaction, :last_reward_update => Time.now)
-            @order.order_items.each do |orderitem|
-              @neworderitem = OrderItem.new(:IsRecurring => false, :order_id => @neworder.id, :item_id => orderitem.item_id, :Quantity => orderitem.Quantity, :Unit_Price => orderitem.Unit_Price, :Total_Price => orderitem.Total_Price, :IsReviewed => false, :status => :pending)
-              @neworderitem.save
-              #if !orderitem.recurssion_interval_id.nil?
-              #  @neworderitem.update(:recurssion_interval_id => orderitem.recurssion_interval_id)
-              #end
+          @new_order = Order.new(user_id: @user.id, RedeemPoints: 0, TransactionId: params[:TransactionId],
+                                 TransactionDate: params[:TransactionDate], shipmenttime: @order.shipmenttime,
+                                 Subtotal: @order.Subtotal, Delivery_Charges: @order.Delivery_Charges,
+                                 Vat_Charges: @order.Vat_Charges, Total: @order.Total, Order_Status: 1,
+                                 Payment_Status: 1, Delivery_Date: @order.Delivery_Date,
+                                 Order_Notes: @order.Order_Notes, IsCash: params[:IsCash],
+                                 location_id: @order.location_id)
+          if @new_order.save
+            user_redeem_points = RedeemPoint.find_by_user_id(@user.id)
+            discount_per_transaction = OrdersServices::OrderMathService.new(@order.Subtotal).calculate_discount
+            user_redeem_points.update(net_worth: (user_redeem_points +  discount_per_transaction),
+                                      last_net_worth: user_redeem_points, last_reward_type: "Discount Per Transaction",
+                                      last_reward_worth: discount_per_transaction, last_reward_update: Time.now)
+            binding.pry
+            @order.order_items.each do |order_item|
+              @new_order_item = OrderItem.create(IsRecurring: false, order_id: @new_order.id,
+                                                 item_id: order_item.item_id, Quantity: order_item.Quantity,
+                                                 Unit_Price: order_item.Unit_Price, Total_Price: order_item.Total_Price,
+                                                 IsReviewed: false, status: :pending)
             end
               format.json do
                 render json: {
                   Message: 'New Order placed successfully',
                   status: :created,
-                  OrderDetails: @neworder.as_json(
+                  OrderDetails: @new_order.as_json(
                     :only => [:id, :Subtotal, :Delivery_Charges, :Vat_Charges, :Total, :Delivery_Date, :Order_Notes, :IsCash, :shipmenttime],
                     :include => {
                       :location => {
@@ -154,22 +137,16 @@ module Api
               render json: {
                 Message: 'Error placing new order.',
                 status: :unprocessable_entity,
-                errors: @neworder.errors
+                errors: @new_order.errors
               }
             end
           end
-        else
-          format.json do
-            render json: {
-              Message: 'Invalid Request. Order not found.',
-              status: :unprocessable_entity
-            }
-          end
         end
       end
-    end
 
       def create
+        # order = AdminPanel::OrderCreateService.new(@user, @location_id, params, false).order_create
+
         isoutofstock = false
         @itemsprice = 0
         @total_price_without_discount = 0
@@ -178,7 +155,7 @@ module Api
         @is_user_from_company = discount.positive?
 
         location_id = params['location_attributes'].present? ? new_location_id : params['location_id']
-        @usercartitems.each do |cartitem|
+        @user_cart_items.each do |cartitem|
           if discount.positive? && cartitem.item.discount.zero? &&
             !(@user.member_type.in?(['silver', 'gold']) && cartitem.item.supplier.in?(["MARS", "NESTLE"])) &&
             @user.email != 'development@urpetslife.com'
@@ -193,6 +170,7 @@ module Api
           isoutofstock = true if cartitem.item.quantity < cartitem.quantity
         end
         return render json: { Message: 'Out of Stock', status: :out_of_stock } if isoutofstock == true
+        # return render json: { Message: 'Out of Stock', status: :out_of_stock } if order
 
         subTotal = @total_price_without_discount.to_f.round(2)
         if @user.email != 'development@urpetslife.com'
@@ -230,11 +208,6 @@ module Api
           permitted_redeem_points = subTotal
         end
 
-        # if permitted_redeem_points > 0
-        #   deliveryCharges = (subTotal - permitted_redeem_points) > 100 ? 0 : 20
-        #   total = subTotal + deliveryCharges + vatCharges
-        # end
-
         @order = Order.new(user_id: @user.id, RedeemPoints: permitted_redeem_points,
                            TransactionId: params[:TransactionId],
                            TransactionDate: params[:TransactionDate], Subtotal: @total_price_without_discount,
@@ -260,22 +233,12 @@ module Api
           discount_per_transaction = 0
           amount_to_be_awarded = subTotal - permitted_redeem_points - @discounted_items_amount
           if amount_to_be_awarded > 0 && (discount.blank? || discount.zero?) && @user.email != 'development@urpetslife.com'
-            if amount_to_be_awarded <= 500
-              discount_per_transaction =+ (3*amount_to_be_awarded)/100
-            elsif amount_to_be_awarded > 500 and amount_to_be_awarded <= 1000
-              discount_per_transaction =+ (5*amount_to_be_awarded)/100
-            elsif amount_to_be_awarded > 1000 and amount_to_be_awarded <= 2000
-              discount_per_transaction =+ (7.5*amount_to_be_awarded)/100
-            elsif amount_to_be_awarded > 2000
-              discount_per_transaction =+ (10*amount_to_be_awarded)/100
-            end
-            discount_per_transaction.to_f.ceil
+            discount_per_transaction = OrdersServices::OrderMathService.new(amount_to_be_awarded).calculate_discount
           end
 
-          #@user_redeem_point_record.update(:net_worth => (user_redeem_points - permitted_redeem_points +  discount_per_transaction), :last_net_worth => (user_redeem_points - permitted_redeem_points), :last_reward_type => "Discount Per Transaction", :last_reward_worth => discount_per_transaction, :last_reward_update => Time.now, :totalearnedpoints => (@user_redeem_point_record.totalearnedpoints + discount_per_transaction))
           @order.update(earned_points: discount_per_transaction)
           is_any_recurring_item = false
-          @usercartitems.each do |cartitem|
+          @user_cart_items.each do |cartitem|
             @neworderitemcreate = OrderItem.new(IsRecurring: cartitem.IsRecurring, order_id: @order.id,
                                                 item_id: cartitem.item_id, Quantity: cartitem.quantity,
                                                 Unit_Price: cartitem.item.price,
@@ -289,6 +252,8 @@ module Api
             if item.quantity < 3
               send_inventory_alerts(item.id)
             end
+
+            # TODO check what do this code
             if !cartitem.recurssion_interval_id.nil?
               recurrion_interval = cartitem.recurssion_interval
               next_due_date = Time.current + recurrion_interval.days.days
@@ -339,6 +304,8 @@ module Api
 
       def update
         @order.update(order_params)
+        binding.pry
+        # OrdersServices::OrderStatusUpdateService.new(@admin_panel_order, params["order"]["order_status_flag"], params['TransactionId']).update_order_status
         update_status(@order) if params['driver_id'].blank?
 
         render json: {
@@ -385,18 +352,18 @@ module Api
         end
       end
 
-      def test_email
-        begin
-          set_order_notifcation_email
-          render json: {
-            Messgae: :sent
-          }
-        rescue => ex
-          render json: {
-            :Messgae => ex.message
-          }
-        end
-      end
+      # def test_email
+      #   begin
+      #     set_order_notifcation_email
+      #     render json: {
+      #       Messgae: :sent
+      #     }
+      #   rescue => ex
+      #     render json: {
+      #       :Messgae => ex.message
+      #     }
+      #   end
+      # end
 
       private
         # Use callbacks to share common setup or constraints between actions.
@@ -405,9 +372,9 @@ module Api
         return render_404 unless @order
       end
 
-      def set_usercartitems
-        @usercartitems = @user.shopping_cart_items
-        return render json: { Message: 'Cart Empty', status: :unprocessable_entity } if @usercartitems.blank?
+      def set_user_cart_items
+        @user_cart_items = @user.shopping_cart_items
+        return render json: { Message: 'Cart Empty', status: :unprocessable_entity } if @user_cart_items.blank?
       end
 
 

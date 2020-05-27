@@ -1,9 +1,9 @@
 module AdminPanel
   class EditOrderItemService
-
-    def initialize(order, params)
+    def initialize(order, params, order_item)
       @order = order
-      @order_items_params = params[:order][:order_items_attributes]
+      @order_items_params = params[:order][:order_items_attributes] if params.present?
+      @order_item = order_item if order_item.present?
       @sub_total_price = 0
       @undiscounted_order_items = 0
     end
@@ -20,15 +20,23 @@ module AdminPanel
           update_order_item(oi)
         end
 
-        @undiscounted_order_items += oi.Total_Price unless oi.isdiscounted
+        calculate_undiscounted_price(oi)
       end
 
       update_order
     end
 
+    def cancel
+      @item = order_item.item
+      cancel_order_item(order_item)
+      calculate_undiscounted_price(order_item)
+      @sub_total_price = order.Subtotal - order_item.Total_Price
+      update_order
+    end
+
     private
 
-    attr_reader :order, :order_items_params, :item, :quantity, :sub_total_price, :undiscounted_order_items
+    attr_reader :order, :order_items_params, :order_item, :item, :quantity, :sub_total_price, :undiscounted_order_items
 
     def create_order_item
       order_item = OrderItem.new(temporary_order_item_params)
@@ -55,6 +63,10 @@ module AdminPanel
       @sub_total_price += order_item.Total_Price
     end
 
+    def calculate_undiscounted_price(order_item)
+      @undiscounted_order_items += order_item.Total_Price unless order_item.isdiscounted
+    end
+
     def update_order
       AdminPanel::OrderUpdateService.new(order, sub_total_price, undiscounted_order_items).update
     end
@@ -72,10 +84,10 @@ module AdminPanel
     end
 
     def calculate_items_count(order_item)
-      if item.id == order_item.item_id && quantity < order_item.Quantity
-        item.increment!(:quantity, order_item.Quantity - quantity)
-      elsif order_item.status_cancelled?
+      if order_item.status_cancelled?
         order_item.item.increment!(:quantity, order_item.Quantity)
+      elsif item.id == order_item.item_id && quantity < order_item.Quantity
+        item.increment!(:quantity, order_item.Quantity - quantity)
       else
         order_item.item.increment!(:quantity, order_item.Quantity) if item.id != order_item.item_id
         item.decrement!(:quantity, quantity)

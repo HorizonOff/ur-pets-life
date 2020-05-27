@@ -11,13 +11,14 @@ function getCalculatedPrice(){
     $('.order_item').each(function () {
         var item_id = $(this).find('.item_id').val();
         var quantity = $(this).find('.quantity').val();
-        order_items.push({item_id: item_id, quantity: quantity});
+        order_items.push({ item_id: item_id, Quantity: quantity });
     });
 
     $.ajax({
         type: 'get',
         url: '/admin_panel/calculating_price',
-        data: { item: { admin_discount: admin_discount, RedeemPoints: redeem_points, user_id: user_id, order_items: [ order_items ] }}
+        data: { user_id: user_id, item: { admin_discount: admin_discount,
+                                          RedeemPoints: redeem_points, order_items: [order_items] }}
     }).done(function (data) {
         $('.subtotal_price')[0].innerHTML = data['subtotal'];
         $('.total_price')[0].innerHTML = data['total'];

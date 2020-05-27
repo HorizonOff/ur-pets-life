@@ -46,7 +46,6 @@ Rails.application.routes.draw do
       resources :item_categories
       resources :item_brands
       resources :shopping_cart_items
-      get 'test_email_notifications', to:'orders#test_email'
       get 'get_app_base_path_url', to:'order_items#app_base_end_point'
       post 'order_item_change_status', to:'order_items#changer_order_status'
       get 'recurring_item/:id/cancel', to:'order_items#order_item_cancel_recurring'
@@ -187,7 +186,7 @@ Rails.application.routes.draw do
       member { get :invoice }
       member { get :download_order }
       member { delete :cancel }
-      member { get :ordercomments }
+      member { get :order_comments }
       resources :comments, only: %i[index create]
     end
     resources :invoices do
