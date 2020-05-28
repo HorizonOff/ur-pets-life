@@ -3,26 +3,7 @@
 %div
   .page-title
     .title_left
-      %h3 Orders
-      = link_to 'Create order', new_admin_panel_order_path, class: 'btn btn-info btn-round pull-left'
-    .title_right
-      = form_tag download_invoices_admin_panel_invoice_path(1), method: :post do
-        = hidden_field_tag :format, :pdf
-        = hidden_field_tag 'request_type', 'excel'
-        .form-group.col-md-3.pull-right
-          = label_tag :from_date, class: 'control-label' do
-            Export:
-          .form-group.export_buttons
-            = button_tag 'Orders', class: 'btn btn-primary btn-round form-btn'
-            = button_tag 'Invoices', class: 'btn btn-primary btn-round form-btn'
-        .form-group.col-md-3.pull-right
-          = label_tag :to_date, class: 'control-label' do
-            To Date *
-          = text_field_tag :to_date, '', required: true, autocomplete: :off, class: 'form-control single_cal2'
-        .form-group.col-md-3.pull-right
-          = label_tag :from_date, class: 'control-label' do
-            From Date *
-          = text_field_tag :from_date, '', required: true, autocomplete: :off, class: 'form-control single_cal2'
+      %h3 Cancelled Orders
   .clearfix
 
   .row
@@ -36,7 +17,7 @@
                 = select_tag :user_id, options_from_collection_for_select((User.includes(:orders).where("orders.user_id = users.id").references(:orders).all), :id, :name),
                   class: 'form-control select2 additional_parameter', include_blank: true
 
-          %table.table.datatable.orders
+          %table.table.datatable.cancelled_orders
             %thead
               %tr
                 %th{style: 'width:30px'}  #
@@ -66,7 +47,6 @@
                 %th
                   = select_tag :is_viewed, options_for_select([[], %w(New false), %w(Older true)]), class: 'form-control select2'
                 %th
-                  = select_tag :order_status_flag, options_for_select([[], %w(Pending pending), %w(Confirmed confirmed), ['On The Way', 'on_the_way'], %w(Delivered delivered), ['Delivered by card', 'delivered_by_card'], ['Delivered by cash', 'delivered_by_cash'], ["Delivered Online", "delivered_online"]]), class: 'form-control select2'
                 %th
                 %th
                 %th

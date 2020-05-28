@@ -23,6 +23,8 @@ module AdminPanel
 
       self.scope = if admin
                      (model + 'Policy::Scope').constantize.new(admin, model.constantize).resolve
+                   elsif model == 'CancelledOrder'
+                     Order.all
                    else
                      model.constantize.all
                    end
@@ -59,7 +61,9 @@ module AdminPanel
       elsif model == 'Admin'
         @scope = scope.with_deleted
       elsif model == 'Order'
-        @scope = scope.includes(:user, :location)
+        @scope = scope.includes(:user, :location).where.not(order_status_flag: 'cancelled')
+      elsif model == 'CancelledOrder'
+        @scope = scope.includes(:user, :location).where(order_status_flag: 'cancelled')
       end
     end
 

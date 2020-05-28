@@ -174,6 +174,7 @@ Rails.application.routes.draw do
     get 'user_locations', to: 'orders#user_locations'
     get 'location', to: 'users#location'
     get 'get_items_quantities', to: 'orders#get_items_quantities'
+    get 'cancelled_orders_index', to: 'orders#cancelled_orders_index'
 
     resources :support_chats do
       member { get :close }

@@ -26,6 +26,11 @@
   = link_to admin_panel_items_path do
     %i.fa.fa-table
     Catalog
+%li{ class: "#{'current-page' if current_page?(admin_panel_cancelled_orders_index_path)}" }
+  = link_to admin_panel_cancelled_orders_index_path do
+    %i.fa.fa-table
+    Cancelled Orders
+
 %li{ class: "#{'current-page' if current_page?(admin_panel_orders_path)}" }
   = link_to admin_panel_orders_path do
     %i.fa.fa-table
