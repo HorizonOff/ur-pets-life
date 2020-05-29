@@ -64,6 +64,7 @@ module AdminPanel
         @scope = scope.includes(:user, :location).where.not(order_status_flag: 'cancelled')
       elsif model == 'CancelledOrder'
         @scope = scope.includes(:user, :location).where(order_status_flag: 'cancelled')
+        @model = 'Order'
       end
     end
 
