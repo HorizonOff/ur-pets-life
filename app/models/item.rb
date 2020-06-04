@@ -15,7 +15,7 @@ class Item < ApplicationRecord
   end)
 
   scope :active, -> { where(is_active: true) }
-  scope :sale, -> { where('items.discount > 0') }
+  scope :sale, -> { where('items.discount > 0 AND items.quantity > 0') }
   scope :first_month, (lambda do
     where('items.expiry_at BETWEEN (?) AND (?)',
           (Time.current + 1.month).beginning_of_month, (Time.current + 1.month).end_of_month)

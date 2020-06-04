@@ -177,13 +177,12 @@
         justify-content: center;
         margin-top: 20px;
         margin-bottom: 50px;
-      color: #575757;
-      font-family: "Lato";
-      font-size: 16px;
-      display: flex;
+        color: grey;
+        font-family: "Lato";
+        font-size: 16px;
     }
 
-    nav span {
+    nav li {
         background: white;
         display: flex;
         justify-content: center;
@@ -194,32 +193,32 @@
         border-top: solid 2px #eceeef;
         border-bottom: solid 2px #eceeef;
         border-right: solid 2px #eceeef;
-        color: #575757;
+        color: grey;
         font-family: "Lato";
         font-size: 16px;
     }
 
-    nav .current {
+    nav :hover {
         z-index: 5;
         color: white;
         border-color: #f8951d;
-        background: #f8951d;
     }
 
     nav *:last-child {
         display: flex;
-        text-decoration: none;
         color: grey;
+        float: left;
+        text-decoration: none;
     }
 
     nav .active {
-      z-index: 5;
-      border-color: #f8951d;
-      background: #f8951d;
+        z-index: 5;
+        border-color: #f8951d;
+        background: #f8951d;
 
-      a {
-        color: white;
-      }
+        a {
+          color: white;
+        }
     }
 
     @media screen and (max-width: 1200px) {
