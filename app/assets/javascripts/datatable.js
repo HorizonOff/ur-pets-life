@@ -157,6 +157,8 @@ function init_datatables(){
                              { 'searchable': true, 'orderable': true, 'data': 'avg_rating', 'targets': 9 },
                              { 'searchable': false, 'orderable': false, 'data': 'actions', 'targets': 10 } ] },
 
+      'cancelled_orders': { 'url': '/admin_panel/cancelled_orders_index' },
+
       'orders': { 'url': '/admin_panel/orders',
                 'columns': [ { 'searchable': true, 'orderable': true, 'data': 'id', 'targets': 0 },
                              { 'searchable': false, 'orderable': false, 'data': 'user_id', 'targets': 1 },
@@ -238,6 +240,8 @@ function init_datatables(){
       init_datatable(table_rules['itembrands']['url'], table_rules['itembrands']['columns'])
     } else if (datatable.hasClass('items')){
       init_datatable(table_rules['items']['url'], table_rules['items']['columns'])
+    } else if (datatable.hasClass('cancelled_orders')){
+      init_datatable(table_rules['cancelled_orders']['url'], table_rules['orders']['columns'], 0, 'desc')
     } else if (datatable.hasClass('orders')){
       init_datatable(table_rules['orders']['url'], table_rules['orders']['columns'], 0, 'desc')
     } else if (datatable.hasClass('discount_domains')){

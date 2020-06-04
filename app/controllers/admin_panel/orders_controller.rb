@@ -1,6 +1,6 @@
 module AdminPanel
   class OrdersController < AdminPanelController
-    before_action :authorize_super_admin_employee, only: :index
+    before_action :authorize_super_admin_employee, only: %w[index cancelled_orders_index]
     before_action :set_admin_panel_order, only: [:show, :order_comments, :edit, :update, :destroy]
     before_action :view_new_order, only: :show
     before_action :check_for_unregistered_user, only: :create
@@ -10,7 +10,14 @@ module AdminPanel
     respond_to do |format|
       format.html {}
       format.xlsx { export_data }
-      format.json { filter_orders }
+      format.json { filter_orders('Order') }
+    end
+  end
+
+  def cancelled_orders_index
+    respond_to do |format|
+      format.html {}
+      format.json { filter_orders('CancelledOrder') }
     end
   end
 
@@ -209,8 +216,8 @@ module AdminPanel
       @admin_panel_order.update_attribute(:is_viewed, true)
     end
 
-    def filter_orders
-      filtered_orders = filter_and_pagination_query.filter
+    def filter_orders(model)
+      filtered_orders = filter_and_pagination_query(model).filter
       filtered_orders = filtered_orders
       decorated_data = ::AdminPanel::OrderDecorator.decorate_collection(filtered_orders)
       serialized_data = ActiveModel::Serializer::CollectionSerializer.new(
@@ -221,8 +228,8 @@ module AdminPanel
                      recordsFiltered: filtered_orders.total_count, data: serialized_data }
     end
 
-    def filter_and_pagination_query
-      @filter_and_pagination_query ||= ::AdminPanel::FilterAndPaginationQuery.new('Order', params)
+    def filter_and_pagination_query(model)
+      @filter_and_pagination_query ||= ::AdminPanel::FilterAndPaginationQuery.new(model, params)
     end
 
     def export_data

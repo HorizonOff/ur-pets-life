@@ -93,11 +93,11 @@ module Api
                                  location_id: @order.location_id)
           if @new_order.save
             user_redeem_points = RedeemPoint.find_by_user_id(@user.id)
-            discount_per_transaction = OrdersServices::OrderMathService.new(@order.Subtotal).calculate_discount
+            discount_per_transaction = OrdersServices::OrderMathService.new(@order.Subtotal, nil, nil).calculate_discount
             user_redeem_points.update(net_worth: (user_redeem_points +  discount_per_transaction),
                                       last_net_worth: user_redeem_points, last_reward_type: "Discount Per Transaction",
                                       last_reward_worth: discount_per_transaction, last_reward_update: Time.now)
-            binding.pry
+
             @order.order_items.each do |order_item|
               @new_order_item = OrderItem.create(IsRecurring: false, order_id: @new_order.id,
                                                  item_id: order_item.item_id, Quantity: order_item.Quantity,
@@ -145,166 +145,168 @@ module Api
       end
 
       def create
-        # order = AdminPanel::OrderCreateService.new(@user, @location_id, params, false).order_create
+        #TODO check for working creating of order
+        @order = Api::V1::OrderServices::OrderCreateService.new(@user, @location_id, @user_cart_items, params).order_create
 
-        isoutofstock = false
-        @itemsprice = 0
-        @total_price_without_discount = 0
-        @discounted_items_amount = 0
-        discount = ::Api::V1::DiscountDomainService.new(@user.email.dup).dicount_on_email
-        @is_user_from_company = discount.positive?
-
-        location_id = params['location_attributes'].present? ? new_location_id : params['location_id']
-        @user_cart_items.each do |cartitem|
-          if discount.positive? && cartitem.item.discount.zero? &&
-            !(@user.member_type.in?(['silver', 'gold']) && cartitem.item.supplier.in?(["MARS", "NESTLE"])) &&
-            @user.email != 'development@urpetslife.com'
-            @itemsprice += cartitem.item.price * ((100 - discount).to_f / 100) * cartitem.quantity
-          else
-            @itemsprice += (cartitem.item.price * cartitem.quantity)
-          end
-          @total_price_without_discount += (cartitem.item.price * cartitem.quantity)
-          if cartitem.item.discount > 0
-            @discounted_items_amount += (cartitem.item.price * cartitem.quantity)
-          end
-          isoutofstock = true if cartitem.item.quantity < cartitem.quantity
-        end
-        return render json: { Message: 'Out of Stock', status: :out_of_stock } if isoutofstock == true
-        # return render json: { Message: 'Out of Stock', status: :out_of_stock } if order
-
-        subTotal = @total_price_without_discount.to_f.round(2)
-        if @user.email != 'development@urpetslife.com'
-          deliveryCharges = (subTotal < 100 ? 20 : 0)
-        else
-          deliveryCharges = 7
-        end
-
-        company_discount = (@total_price_without_discount - @itemsprice).round(2)
-        code_discount = ::Api::V1::DiscountCodeService.new(params[:pay_code], @user, subTotal).discount_from_code
-        vatCharges = ((@total_price_without_discount/100).to_f * 5).round(2)
-        total = subTotal + deliveryCharges + vatCharges + code_discount - company_discount
-        user_redeem_points = 0
-        requested_redeem_points = params[:RedeemPoints].to_i
-        permitted_redeem_points = 0
-        if @user.redeem_point.present?
-          @user_redeem_point_record = @user.redeem_point
-        else
-          @user_redeem_point_record = RedeemPoint.new(user_id: @user.id, net_worth: 0, last_net_worth: 0,
-                                                      totalearnedpoints: 0, totalavailedpoints: 0)
-          @user_redeem_point_record.save
-        end
-        user_redeem_points = @user_redeem_point_record.net_worth
-
-        if requested_redeem_points > 0
-          if requested_redeem_points <= user_redeem_points
-            permitted_redeem_points = requested_redeem_points
-          else
-            permitted_redeem_points = user_redeem_points
-          end
-        end
-
-
-        if permitted_redeem_points > subTotal
-          permitted_redeem_points = subTotal
-        end
-
-        @order = Order.new(user_id: @user.id, RedeemPoints: permitted_redeem_points,
-                           TransactionId: params[:TransactionId],
-                           TransactionDate: params[:TransactionDate], Subtotal: @total_price_without_discount,
-                           Delivery_Charges: deliveryCharges, shipmenttime: 'with in 7 days', Vat_Charges: vatCharges,
-                           Total: total, Order_Status: 1, Delivery_Date: params[:Delivery_Date],
-                           Order_Notes: params[:Order_Notes], IsCash: params[:IsCash],
-                           location_id: location_id, is_viewed: false, order_status_flag: 'pending',
-                           code_discount: code_discount, company_discount: company_discount,
-                           is_user_from_company: @is_user_from_company)
-        if @order.save
-          if @order.code_discount != 0
-            pay_code_owner = User.find_by(pay_code: params[:pay_code])
-            UsedPayCode.create(user_id: pay_code_owner.id, order_id: @order.id, code_user_id: @user.id)
-          end
-
-          if permitted_redeem_points > 0
-            @user_redeem_point_record.update(net_worth: (user_redeem_points - permitted_redeem_points),
-                                             last_net_worth: user_redeem_points, last_reward_type: 'Order Deduction',
-                                             last_reward_worth: permitted_redeem_points, last_reward_update: Time.now,
-                                             totalavailedpoints: (@user_redeem_point_record.totalavailedpoints
-                                                                  + permitted_redeem_points))
-          end
-          discount_per_transaction = 0
-          amount_to_be_awarded = subTotal - permitted_redeem_points - @discounted_items_amount
-          if amount_to_be_awarded > 0 && (discount.blank? || discount.zero?) && @user.email != 'development@urpetslife.com'
-            discount_per_transaction = OrdersServices::OrderMathService.new(amount_to_be_awarded).calculate_discount
-          end
-
-          @order.update(earned_points: discount_per_transaction)
-          is_any_recurring_item = false
-          @user_cart_items.each do |cartitem|
-            @neworderitemcreate = OrderItem.new(IsRecurring: cartitem.IsRecurring, order_id: @order.id,
-                                                item_id: cartitem.item_id, Quantity: cartitem.quantity,
-                                                Unit_Price: cartitem.item.price,
-                                                Total_Price: (cartitem.item.price * cartitem.quantity),
-                                                IsReviewed: false, status: :pending,
-                                                isdiscounted: (cartitem.item.discount > 0 ? true : false),
-                                                next_recurring_due_date: DateTime.now)
-            @neworderitemcreate.save
-            item = Item.where(id: cartitem.item_id).first
-            item.decrement!(:quantity, cartitem.quantity)
-            if item.quantity < 3
-              send_inventory_alerts(item.id)
-            end
-
-            # TODO check what do this code
-            if !cartitem.recurssion_interval_id.nil?
-              recurrion_interval = cartitem.recurssion_interval
-              next_due_date = Time.current + recurrion_interval.days.days
-              @neworderitemcreate.update_attributes(next_recurring_due_date: next_due_date,
-                                                    recurssion_interval_id: cartitem.recurssion_interval_id)
-            end
-            is_any_recurring_item = true if cartitem.IsRecurring
-          end
-          @user.shopping_cart_items.destroy_all
-
-          if @order.IsCash
-            set_order_notifcation_email(@order, is_any_recurring_item)
-            @user.notifications.create(order: @order, message: 'Your Order has been placed successfully')
-          end
-
-          return render json: {
-            Message: 'Order was successfully created.',
-            status: :created,
-            VatPercentage: "5",
-            #EarnedPoints: discount_per_transaction,
-            OrderDetails: @order.as_json(
-              :only => [:id, :Subtotal, :Delivery_Charges, :Vat_Charges, :Total, :Delivery_Date, :Order_Notes, :IsCash, :shipmenttime, :RedeemPoints, :earned_points, :company_discount, :is_user_from_company, :code_discount],
-              :include => {
-                :location => {
-                  :only => [:id, :latitude, :longitude, :city, :area, :street, :building_name, :unit_number, :villa_number]
-                },
-                :order_items => {
-                  :only => [:id, :Quantity, :IsRecurring, :IsReviewed, :status],
-                  :include => {
-                    :item => {
-                      :only => [:id, :picture, :name, :price, :discount, :description, :weight, :unit, :quantity, :short_description]
-                    },
-                    :recurssion_interval =>  {
-                      :only => [:id, :days, :weeks, :label]
-                    },
-                    :item_reviews => {
-                      :only => [:id, :user_id, :item_id, :rating, :comment]
-                    }
+        # isoutofstock = false
+        # @itemsprice = 0
+        # @total_price_without_discount = 0
+        # @discounted_items_amount = 0
+        # discount = ::Api::V1::DiscountDomainService.new(@user.email.dup).dicount_on_email
+        # @is_user_from_company = discount.positive?
+        #
+        # location_id = params['location_attributes'].present? ? new_location_id : params['location_id']
+        # @user_cart_items.each do |cartitem|
+        #   if discount.positive? && cartitem.item.discount.zero? &&
+        #     !(@user.member_type.in?(['silver', 'gold']) && cartitem.item.supplier.in?(["MARS", "NESTLE"])) &&
+        #     @user.email != 'development@urpetslife.com'
+        #     @itemsprice += cartitem.item.price * ((100 - discount).to_f / 100) * cartitem.quantity
+        #   else
+        #     @itemsprice += (cartitem.item.price * cartitem.quantity)
+        #   end
+        #   @total_price_without_discount += (cartitem.item.price * cartitem.quantity)
+        #   if cartitem.item.discount > 0
+        #     @discounted_items_amount += (cartitem.item.price * cartitem.quantity)
+        #   end
+        #   isoutofstock = true if cartitem.item.quantity < cartitem.quantity
+        # end
+        # return render json: { Message: 'Out of Stock', status: :out_of_stock } if isoutofstock == true
+        # # return render json: { Message: 'Out of Stock', status: :out_of_stock } if order
+        #
+        # subTotal = @total_price_without_discount.to_f.round(2)
+        # if @user.email != 'development@urpetslife.com'
+        #   deliveryCharges = (subTotal < 100 ? 20 : 0)
+        # else
+        #   deliveryCharges = 7
+        # end
+        #
+        # company_discount = (@total_price_without_discount - @itemsprice).round(2)
+        # code_discount = ::Api::V1::DiscountCodeService.new(params[:pay_code], @user, subTotal).discount_from_code
+        # vatCharges = ((@total_price_without_discount/100).to_f * 5).round(2)
+        # total = subTotal + deliveryCharges + vatCharges + code_discount - company_discount
+        # user_redeem_points = 0
+        # requested_redeem_points = params[:RedeemPoints].to_i
+        # permitted_redeem_points = 0
+        # if @user.redeem_point.present?
+        #   @user_redeem_point_record = @user.redeem_point
+        # else
+        #   @user_redeem_point_record = RedeemPoint.new(user_id: @user.id, net_worth: 0, last_net_worth: 0,
+        #                                               totalearnedpoints: 0, totalavailedpoints: 0)
+        #   @user_redeem_point_record.save
+        # end
+        # user_redeem_points = @user_redeem_point_record.net_worth
+        #
+        # if requested_redeem_points > 0
+        #   if requested_redeem_points <= user_redeem_points
+        #     permitted_redeem_points = requested_redeem_points
+        #   else
+        #     permitted_redeem_points = user_redeem_points
+        #   end
+        # end
+        #
+        #
+        # if permitted_redeem_points > subTotal
+        #   permitted_redeem_points = subTotal
+        # end
+        #
+        # @order = Order.new(user_id: @user.id, RedeemPoints: permitted_redeem_points,
+        #                    TransactionId: params[:TransactionId],
+        #                    TransactionDate: params[:TransactionDate], Subtotal: @total_price_without_discount,
+        #                    Delivery_Charges: deliveryCharges, shipmenttime: 'with in 7 days', Vat_Charges: vatCharges,
+        #                    Total: total, Order_Status: 1, Delivery_Date: params[:Delivery_Date],
+        #                    Order_Notes: params[:Order_Notes], IsCash: params[:IsCash],
+        #                    location_id: location_id, is_viewed: false, order_status_flag: 'pending',
+        #                    code_discount: code_discount, company_discount: company_discount,
+        #                    is_user_from_company: @is_user_from_company)
+        # if @order.save
+        #   if @order.code_discount != 0
+        #     pay_code_owner = User.find_by(pay_code: params[:pay_code])
+        #     UsedPayCode.create(user_id: pay_code_owner.id, order_id: @order.id, code_user_id: @user.id)
+        #   end
+        #
+        #   if permitted_redeem_points > 0
+        #     @user_redeem_point_record.update(net_worth: (user_redeem_points - permitted_redeem_points),
+        #                                      last_net_worth: user_redeem_points, last_reward_type: 'Order Deduction',
+        #                                      last_reward_worth: permitted_redeem_points, last_reward_update: Time.now,
+        #                                      totalavailedpoints: (@user_redeem_point_record.totalavailedpoints
+        #                                                           + permitted_redeem_points))
+        #   end
+        #   discount_per_transaction = 0
+        #   amount_to_be_awarded = subTotal - permitted_redeem_points - @discounted_items_amount
+        #   if amount_to_be_awarded > 0 && (discount.blank? || discount.zero?) && @user.email != 'development@urpetslife.com'
+        #     discount_per_transaction = OrdersServices::OrderMathService.new(amount_to_be_awarded, nil, nil).calculate_discount
+        #   end
+        #
+        #   @order.update(earned_points: discount_per_transaction)
+        #   is_any_recurring_item = false
+        #   @user_cart_items.each do |cartitem|
+        #     @neworderitemcreate = OrderItem.new(IsRecurring: cartitem.IsRecurring, order_id: @order.id,
+        #                                         item_id: cartitem.item_id, Quantity: cartitem.quantity,
+        #                                         Unit_Price: cartitem.item.price,
+        #                                         Total_Price: (cartitem.item.price * cartitem.quantity),
+        #                                         IsReviewed: false, status: :pending,
+        #                                         isdiscounted: (cartitem.item.discount > 0 ? true : false),
+        #                                         next_recurring_due_date: DateTime.now)
+        #     @neworderitemcreate.save
+        #     item = Item.where(id: cartitem.item_id).first
+        #     item.decrement!(:quantity, cartitem.quantity)
+        #     if item.quantity < 3
+        #       send_inventory_alerts(item.id)
+        #     end
+        #
+        #     if !cartitem.recurssion_interval_id.nil?
+        #       recurrion_interval = cartitem.recurssion_interval
+        #       next_due_date = Time.current + recurrion_interval.days.days
+        #       @neworderitemcreate.update_attributes(next_recurring_due_date: next_due_date,
+        #                                             recurssion_interval_id: cartitem.recurssion_interval_id)
+        #     end
+        #     is_any_recurring_item = true if cartitem.IsRecurring
+        #   end
+        #   @user.shopping_cart_items.destroy_all
+        #
+        #   if @order.IsCash
+        #     set_order_notifcation_email(@order, is_any_recurring_item)
+        #     @user.notifications.create(order: @order, message: 'Your Order has been placed successfully')
+        #   end
+        if @order.persisted?
+          render json: {
+          Message: 'Order was successfully created.',
+          status: :created,
+          VatPercentage: "5",
+          #EarnedPoints: discount_per_transaction,
+          OrderDetails: @order.as_json(
+            :only => [:id, :Subtotal, :Delivery_Charges, :Vat_Charges, :Total, :Delivery_Date, :Order_Notes, :IsCash, :shipmenttime, :RedeemPoints, :earned_points, :company_discount, :is_user_from_company, :code_discount],
+            :include => {
+              :location => {
+                :only => [:id, :latitude, :longitude, :city, :area, :street, :building_name, :unit_number, :villa_number]
+              },
+              :order_items => {
+                :only => [:id, :Quantity, :IsRecurring, :IsReviewed, :status],
+                :include => {
+                  :item => {
+                    :only => [:id, :picture, :name, :price, :discount, :description, :weight, :unit, :quantity, :short_description]
+                  },
+                  :recurssion_interval =>  {
+                    :only => [:id, :days, :weeks, :label]
+                  },
+                  :item_reviews => {
+                    :only => [:id, :user_id, :item_id, :rating, :comment]
                   }
                 }
               }
-            )
-          }
+            }
+          )}
         else
-          return render json: { Message: 'Error creating order', status: :unprocessable_entity, errors: @order.errors }
+          render json: { Message: 'Error creating order', status: :unprocessable_entity, errors: @order.errors }
         end
       end
 
       def update
         @order.update(order_params)
-        binding.pry
+        # binding.pry
+        #TODO set params for correct updating of order
+        #TODO change all json responses to decorator files
+
         # OrdersServices::OrderStatusUpdateService.new(@admin_panel_order, params["order"]["order_status_flag"], params['TransactionId']).update_order_status
         update_status(@order) if params['driver_id'].blank?
 
@@ -337,8 +339,6 @@ module Api
         }
       end
 
-      # DELETE /orders/1
-      # DELETE /orders/1.json
       def destroy
         @order.order_items.destroy_all
         @order.destroy
@@ -366,7 +366,9 @@ module Api
       # end
 
       private
-        # Use callbacks to share common setup or constraints between actions.
+
+      #TODO remove unused methods
+
       def set_order
         @order = Order.find_by_id(params[:id])
         return render_404 unless @order
@@ -401,7 +403,6 @@ module Api
         OrderMailer.send_recurring_order_placement_notification_to_customer(@user.email, order.id).deliver_later
       end
 
-      # Never trust parameters from the scary internet, only allow the white list through.
       def order_params
         params.permit(:TransactionId, :TransactionDate, :IsCash, :order_status_flag,
                       :driver_id, location_attributes: location_params)

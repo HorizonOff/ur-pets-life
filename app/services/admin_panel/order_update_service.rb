@@ -67,7 +67,7 @@ module AdminPanel
       if undiscounted_order_items.positive?
         sub_total = order.Subtotal - undiscounted_order_items
         order_price_for_award = sub_total - (order.RedeemPoints - points_to_be_reverted) - discounted_products_price
-        @discount_per_transaction = OrdersServices::OrderMathService.new(order_price_for_award).calculate_discount
+        @discount_per_transaction = OrdersServices::OrderMathService.new(order_price_for_award, nil, nil).calculate_discount
       else
         @discount_per_transaction = order.earned_points
       end

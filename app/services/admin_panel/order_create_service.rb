@@ -4,12 +4,11 @@ module AdminPanel
       @user = user
       @location_id = location_id
       @is_calculating = is_calculating
+      @order_items_attributes = is_calculating ? params[:item][:order_items]['0'] : params[:order][:order_items_attributes]
+      @admin_discount = is_calculating ? params[:item][:admin_discount].to_f : params[:order][:admin_discount].to_f
+      @redeem_points = is_calculating ? params[:item][:RedeemPoints] : params[:order][:RedeemPoints]
 
       if is_calculating
-        @order_items_attributes = is_calculating ? params[:item][:order_items]['0'] : params[:order][:order_items_attributes]
-        @admin_discount = is_calculating ? params[:item][:admin_discount].to_f : params[:order][:admin_discount].to_f
-        @redeem_points = is_calculating ? params[:item][:RedeemPoints] : params[:order][:RedeemPoints]
-      else is_calculating
         @delivery_date = params[:Delivery_Date]
         @order_notes = params[:Order_Notes]
       end
@@ -72,10 +71,10 @@ module AdminPanel
 
       company_discount = (@total_price_without_discount - @items_price).round(2)
       vat_charges = ((@total_price_without_discount/100).to_f * 5).round(2)
-      calculate_redeem_points(sub_total) unless is_calculating
+      @user_redeem_point_record = OrdersServices::OrderMathService.new(sub_total, redeem_points, user).calculate_redeem_points unless is_calculating
       amount_to_be_awarded = sub_total - @permitted_redeem_points - @discounted_items_amount
       if amount_to_be_awarded > 0 && discount.zero? && user&.email != 'development@urpetslife.com'
-        @discount_per_transaction = OrdersServices::OrderMathService.new(amount_to_be_awarded).calculate_discount
+        @discount_per_transaction = OrdersServices::OrderMathService.new(amount_to_be_awarded, nil, nil).calculate_discount
       end
       total = sub_total + delivery_charges + vat_charges - company_discount - @permitted_redeem_points
       @admin_discount = total if @admin_discount > total
@@ -111,28 +110,6 @@ module AdminPanel
           send_inventory_alerts(item.id) if item.quantity < 3
         end
       end
-    end
-
-    def calculate_redeem_points(sub_total)
-      requested_redeem_points = redeem_points.to_i
-
-      if user.redeem_point.present?
-        @user_redeem_point_record = user.redeem_point
-      else
-        @user_redeem_point_record = RedeemPoint.create(user_id: user.id, net_worth: 0, last_net_worth: 0,
-                                                       totalearnedpoints: 0, totalavailedpoints: 0)
-      end
-      user_redeem_points = @user_redeem_point_record.net_worth
-
-      if requested_redeem_points > 0
-        if requested_redeem_points <= user_redeem_points
-          @permitted_redeem_points = requested_redeem_points
-        else
-          @permitted_redeem_points = user_redeem_points
-        end
-      end
-
-      @permitted_redeem_points = sub_total if @permitted_redeem_points > sub_total
     end
 
     def send_inventory_alerts(item_id)
