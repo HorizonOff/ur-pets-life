@@ -1,41 +1,19 @@
 module Api
   module V1
     class OrdersController < Api::BaseController
-      include AdminPanel::OrderUpdateHelper
-      before_action :set_order, only: [:show, :re_oder_on_order_id, :edit, :update, :destroy]
+      before_action :set_order, only: %w[show re_oder_on_order_id edit update destroy]
       before_action :set_user_cart_items, only: [:create]
 
       def index
-        @orders = @user.orders.visible
-        if @orders.blank?
-          render json: { Message: 'No Orders found' }
-        else
-          if (params[:pageno] && params[:size]).present?
-            @orders = @orders.limit(params[:size].to_i).offset(params[:pageno].to_i * params[:size].to_i)
-          end
-          render json: @orders.as_json(
-            :only => [:id, :Subtotal, :shipmenttime, :Delivery_Charges, :Vat_Charges, :Total, :Delivery_Date, :Order_Notes, :IsCash, :RedeemPoints, :earned_points, :driver_id],
-            :include => {
-              :location => {
-                :only => [:id, :latitude, :longitude, :city, :area, :street, :building_name, :unit_number, :villa_number]
-              },
-              :order_items => {
-                :only => [:id, :Quantity, :IsRecurring, :IsReviewed, :status],
-                :include => {
-                  :item => {
-                    :only => [:id, :picture, :name, :price, :discount, :description, :weight, :unit, :short_description]
-                  },
-                  :recurssion_interval =>  {
-                    :only => [:id, :days, :weeks, :label]
-                  },
-                  :item_reviews => {
-                    :only => [:id, :user_id, :item_id, :rating, :comment]
-                  }
-                }
-              }
-            }
-          )
+        @orders = @user.orders.visible.includes(:location, order_items: %w[item recurssion_interval item_reviews])
+        return render json: { Message: 'No Orders found' } if @orders.blank?
+
+        if (params[:pageno] && params[:size]).present?
+          @orders = @orders.limit(params[:size].to_i).offset(params[:pageno].to_i * params[:size].to_i)
         end
+
+        serialized_orders = ActiveModel::Serializer::CollectionSerializer.new(@orders, serializer: OrderIndexSerializer)
+        render json: serialized_orders, include: [:location, order_items: %w[item recurssion_interval item_reviews]]
       end
 
       def admin_orders
@@ -52,250 +30,26 @@ module Api
       end
 
       def show
-        render json: @order.as_json(
-        :only => [:id, :Subtotal, :shipmenttime, :Delivery_Charges, :Vat_Charges, :Total, :Delivery_Date, :Order_Notes, :IsCash, :RedeemPoints, :earned_points, :order_status_flag],
-        :include => {
-          :location => {
-            :only => [:id, :latitude, :longitude, :city, :area, :street, :building_name, :unit_number, :villa_number]
-          },
-          :user => {
-            :only => [:id, :first_name, :last_name, :mobile_number]
-          },
-          :order_items => {
-            :only => [:id, :Quantity, :IsRecurring, :IsReviewed, :status],
-            :include => {
-              :item => {
-                :only => [:id, :picture, :name, :price, :discount, :description, :weight, :unit, :short_description]
-              },
-              :recurssion_interval =>  {
-                :only => [:id, :days, :weeks, :label]
-              },
-              :item_reviews => {
-                :only => [:id, :user_id, :item_id, :rating, :comment]
-              }
-            }
-          },
-          driver: {
-            only: [:id, :name]
-          }
-        }
-      )
-      end
-
-      def re_oder_on_order_id
-        respond_to do |format|
-          @new_order = Order.new(user_id: @user.id, RedeemPoints: 0, TransactionId: params[:TransactionId],
-                                 TransactionDate: params[:TransactionDate], shipmenttime: @order.shipmenttime,
-                                 Subtotal: @order.Subtotal, Delivery_Charges: @order.Delivery_Charges,
-                                 Vat_Charges: @order.Vat_Charges, Total: @order.Total, Order_Status: 1,
-                                 Payment_Status: 1, Delivery_Date: @order.Delivery_Date,
-                                 Order_Notes: @order.Order_Notes, IsCash: params[:IsCash],
-                                 location_id: @order.location_id)
-          if @new_order.save
-            user_redeem_points = RedeemPoint.find_by_user_id(@user.id)
-            discount_per_transaction = OrdersServices::OrderMathService.new(@order.Subtotal, nil, nil).calculate_discount
-            user_redeem_points.update(net_worth: (user_redeem_points +  discount_per_transaction),
-                                      last_net_worth: user_redeem_points, last_reward_type: "Discount Per Transaction",
-                                      last_reward_worth: discount_per_transaction, last_reward_update: Time.now)
-
-            @order.order_items.each do |order_item|
-              @new_order_item = OrderItem.create(IsRecurring: false, order_id: @new_order.id,
-                                                 item_id: order_item.item_id, Quantity: order_item.Quantity,
-                                                 Unit_Price: order_item.Unit_Price, Total_Price: order_item.Total_Price,
-                                                 IsReviewed: false, status: :pending)
-            end
-              format.json do
-                render json: {
-                  Message: 'New Order placed successfully',
-                  status: :created,
-                  OrderDetails: @new_order.as_json(
-                    :only => [:id, :Subtotal, :Delivery_Charges, :Vat_Charges, :Total, :Delivery_Date, :Order_Notes, :IsCash, :shipmenttime],
-                    :include => {
-                      :location => {
-                        :only => [:id, :latitude, :longitude, :city, :area, :street, :building_name, :unit_number, :villa_number]
-                      },
-                      :order_items => {
-                        :only => [:id, :Quantity, :IsRecurring, :IsReviewed],
-                        :include => {
-                          :item => {
-                            :only => [:id, :picture, :name, :price, :discount, :description, :weight, :unit]
-                          },
-                          :recurssion_interval =>  {
-                            :only => [:id, :days, :weeks, :label]
-                          },
-                          :item_reviews => {
-                            :only => [:id, :user_id, :item_id, :rating, :comment]
-                          }
-                        }
-                      }
-                    }
-                  )
-                }
-              end
-          else
-            format.json do
-              render json: {
-                Message: 'Error placing new order.',
-                status: :unprocessable_entity,
-                errors: @new_order.errors
-              }
-            end
-          end
-        end
+        render json: @order, include: [:location, :user, :driver, order_items: %w[item recurssion_interval item_reviews]],
+                             serializer: OrderShowSerializer, adapter: :attributes
       end
 
       def create
         #TODO check for working creating of order
         @order = Api::V1::OrderServices::OrderCreateService.new(@user, @location_id, @user_cart_items, params).order_create
 
-        # isoutofstock = false
-        # @itemsprice = 0
-        # @total_price_without_discount = 0
-        # @discounted_items_amount = 0
-        # discount = ::Api::V1::DiscountDomainService.new(@user.email.dup).dicount_on_email
-        # @is_user_from_company = discount.positive?
-        #
-        # location_id = params['location_attributes'].present? ? new_location_id : params['location_id']
-        # @user_cart_items.each do |cartitem|
-        #   if discount.positive? && cartitem.item.discount.zero? &&
-        #     !(@user.member_type.in?(['silver', 'gold']) && cartitem.item.supplier.in?(["MARS", "NESTLE"])) &&
-        #     @user.email != 'development@urpetslife.com'
-        #     @itemsprice += cartitem.item.price * ((100 - discount).to_f / 100) * cartitem.quantity
-        #   else
-        #     @itemsprice += (cartitem.item.price * cartitem.quantity)
-        #   end
-        #   @total_price_without_discount += (cartitem.item.price * cartitem.quantity)
-        #   if cartitem.item.discount > 0
-        #     @discounted_items_amount += (cartitem.item.price * cartitem.quantity)
-        #   end
-        #   isoutofstock = true if cartitem.item.quantity < cartitem.quantity
-        # end
-        # return render json: { Message: 'Out of Stock', status: :out_of_stock } if isoutofstock == true
-        # # return render json: { Message: 'Out of Stock', status: :out_of_stock } if order
-        #
-        # subTotal = @total_price_without_discount.to_f.round(2)
-        # if @user.email != 'development@urpetslife.com'
-        #   deliveryCharges = (subTotal < 100 ? 20 : 0)
-        # else
-        #   deliveryCharges = 7
-        # end
-        #
-        # company_discount = (@total_price_without_discount - @itemsprice).round(2)
-        # code_discount = ::Api::V1::DiscountCodeService.new(params[:pay_code], @user, subTotal).discount_from_code
-        # vatCharges = ((@total_price_without_discount/100).to_f * 5).round(2)
-        # total = subTotal + deliveryCharges + vatCharges + code_discount - company_discount
-        # user_redeem_points = 0
-        # requested_redeem_points = params[:RedeemPoints].to_i
-        # permitted_redeem_points = 0
-        # if @user.redeem_point.present?
-        #   @user_redeem_point_record = @user.redeem_point
-        # else
-        #   @user_redeem_point_record = RedeemPoint.new(user_id: @user.id, net_worth: 0, last_net_worth: 0,
-        #                                               totalearnedpoints: 0, totalavailedpoints: 0)
-        #   @user_redeem_point_record.save
-        # end
-        # user_redeem_points = @user_redeem_point_record.net_worth
-        #
-        # if requested_redeem_points > 0
-        #   if requested_redeem_points <= user_redeem_points
-        #     permitted_redeem_points = requested_redeem_points
-        #   else
-        #     permitted_redeem_points = user_redeem_points
-        #   end
-        # end
-        #
-        #
-        # if permitted_redeem_points > subTotal
-        #   permitted_redeem_points = subTotal
-        # end
-        #
-        # @order = Order.new(user_id: @user.id, RedeemPoints: permitted_redeem_points,
-        #                    TransactionId: params[:TransactionId],
-        #                    TransactionDate: params[:TransactionDate], Subtotal: @total_price_without_discount,
-        #                    Delivery_Charges: deliveryCharges, shipmenttime: 'with in 7 days', Vat_Charges: vatCharges,
-        #                    Total: total, Order_Status: 1, Delivery_Date: params[:Delivery_Date],
-        #                    Order_Notes: params[:Order_Notes], IsCash: params[:IsCash],
-        #                    location_id: location_id, is_viewed: false, order_status_flag: 'pending',
-        #                    code_discount: code_discount, company_discount: company_discount,
-        #                    is_user_from_company: @is_user_from_company)
-        # if @order.save
-        #   if @order.code_discount != 0
-        #     pay_code_owner = User.find_by(pay_code: params[:pay_code])
-        #     UsedPayCode.create(user_id: pay_code_owner.id, order_id: @order.id, code_user_id: @user.id)
-        #   end
-        #
-        #   if permitted_redeem_points > 0
-        #     @user_redeem_point_record.update(net_worth: (user_redeem_points - permitted_redeem_points),
-        #                                      last_net_worth: user_redeem_points, last_reward_type: 'Order Deduction',
-        #                                      last_reward_worth: permitted_redeem_points, last_reward_update: Time.now,
-        #                                      totalavailedpoints: (@user_redeem_point_record.totalavailedpoints
-        #                                                           + permitted_redeem_points))
-        #   end
-        #   discount_per_transaction = 0
-        #   amount_to_be_awarded = subTotal - permitted_redeem_points - @discounted_items_amount
-        #   if amount_to_be_awarded > 0 && (discount.blank? || discount.zero?) && @user.email != 'development@urpetslife.com'
-        #     discount_per_transaction = OrdersServices::OrderMathService.new(amount_to_be_awarded, nil, nil).calculate_discount
-        #   end
-        #
-        #   @order.update(earned_points: discount_per_transaction)
-        #   is_any_recurring_item = false
-        #   @user_cart_items.each do |cartitem|
-        #     @neworderitemcreate = OrderItem.new(IsRecurring: cartitem.IsRecurring, order_id: @order.id,
-        #                                         item_id: cartitem.item_id, Quantity: cartitem.quantity,
-        #                                         Unit_Price: cartitem.item.price,
-        #                                         Total_Price: (cartitem.item.price * cartitem.quantity),
-        #                                         IsReviewed: false, status: :pending,
-        #                                         isdiscounted: (cartitem.item.discount > 0 ? true : false),
-        #                                         next_recurring_due_date: DateTime.now)
-        #     @neworderitemcreate.save
-        #     item = Item.where(id: cartitem.item_id).first
-        #     item.decrement!(:quantity, cartitem.quantity)
-        #     if item.quantity < 3
-        #       send_inventory_alerts(item.id)
-        #     end
-        #
-        #     if !cartitem.recurssion_interval_id.nil?
-        #       recurrion_interval = cartitem.recurssion_interval
-        #       next_due_date = Time.current + recurrion_interval.days.days
-        #       @neworderitemcreate.update_attributes(next_recurring_due_date: next_due_date,
-        #                                             recurssion_interval_id: cartitem.recurssion_interval_id)
-        #     end
-        #     is_any_recurring_item = true if cartitem.IsRecurring
-        #   end
-        #   @user.shopping_cart_items.destroy_all
-        #
-        #   if @order.IsCash
-        #     set_order_notifcation_email(@order, is_any_recurring_item)
-        #     @user.notifications.create(order: @order, message: 'Your Order has been placed successfully')
-        #   end
         if @order.persisted?
           render json: {
-          Message: 'Order was successfully created.',
-          status: :created,
-          VatPercentage: "5",
-          #EarnedPoints: discount_per_transaction,
-          OrderDetails: @order.as_json(
-            :only => [:id, :Subtotal, :Delivery_Charges, :Vat_Charges, :Total, :Delivery_Date, :Order_Notes, :IsCash, :shipmenttime, :RedeemPoints, :earned_points, :company_discount, :is_user_from_company, :code_discount],
-            :include => {
-              :location => {
-                :only => [:id, :latitude, :longitude, :city, :area, :street, :building_name, :unit_number, :villa_number]
-              },
-              :order_items => {
-                :only => [:id, :Quantity, :IsRecurring, :IsReviewed, :status],
-                :include => {
-                  :item => {
-                    :only => [:id, :picture, :name, :price, :discount, :description, :weight, :unit, :quantity, :short_description]
-                  },
-                  :recurssion_interval =>  {
-                    :only => [:id, :days, :weeks, :label]
-                  },
-                  :item_reviews => {
-                    :only => [:id, :user_id, :item_id, :rating, :comment]
-                  }
-                }
-              }
-            }
-          )}
+            Message: "Order was successfully created.",
+            status: :created,
+            VatPercentage: "5",
+            OrderDetails:
+              ActiveModelSerializers::SerializableResource.new(@order,
+                                                               include: [:location, :user, :driver,
+                                                                         order_items: %w[item recurssion_interval item_reviews]],
+                                                               adapter: :attributes,
+                                                               serializer: OrderCreateSerializer)
+          }
         else
           render json: { Message: 'Error creating order', status: :unprocessable_entity, errors: @order.errors }
         end
@@ -303,39 +57,20 @@ module Api
 
       def update
         @order.update(order_params)
-        # binding.pry
         #TODO set params for correct updating of order
-        #TODO change all json responses to decorator files
+        OrdersServices::OrderStatusUpdateService.new(@order, params["order"]["order_status_flag"], params['TransactionId']).update_order_status
 
-        # OrdersServices::OrderStatusUpdateService.new(@admin_panel_order, params["order"]["order_status_flag"], params['TransactionId']).update_order_status
-        update_status(@order) if params['driver_id'].blank?
-
+        # update_status(@order) if params['driver_id'].blank?
         render json: {
           Message: 'Order was successfully updated.',
           status: :updated,
           VatPercentage: "5",
-          OrderDetails: @order.as_json(
-            only: [:id, :Subtotal, :Delivery_Charges, :Vat_Charges, :Total, :Delivery_Date, :Order_Notes, :IsCash, :shipmenttime, :RedeemPoints, :earned_points, :company_discount, :is_user_from_company, :code_discount, :driver_id],
-            include: {
-              location: {
-                only: [:id, :latitude, :longitude, :city, :area, :street, :building_name, :unit_number, :villa_number]
-              },
-              order_items: {
-                only: [:id, :Quantity, :IsRecurring, :IsReviewed, :status],
-                include: {
-                  item: {
-                    only: [:id, :picture, :name, :price, :discount, :description, :weight, :unit, :quantity, :short_description]
-                  },
-                  recurssion_interval: {
-                    only: [:id, :days, :weeks, :label]
-                  },
-                  item_reviews: {
-                    only: [:id, :user_id, :item_id, :rating, :comment]
-                  }
-                }
-              }
-            }
-          )
+          OrderDetails:
+            ActiveModelSerializers::SerializableResource.new(@order,
+                                                             include: [:location, :user, :driver,
+                                                                       order_items: %w[item recurssion_interval item_reviews]],
+                                                             adapter: :attributes,
+                                                             serializer: OrderUpdateSerializer)
         }
       end
 
@@ -352,22 +87,7 @@ module Api
         end
       end
 
-      # def test_email
-      #   begin
-      #     set_order_notifcation_email
-      #     render json: {
-      #       Messgae: :sent
-      #     }
-      #   rescue => ex
-      #     render json: {
-      #       :Messgae => ex.message
-      #     }
-      #   end
-      # end
-
       private
-
-      #TODO remove unused methods
 
       def set_order
         @order = Order.find_by_id(params[:id])
@@ -375,32 +95,10 @@ module Api
       end
 
       def set_user_cart_items
+        @location_id = params[:location_id].present? ? params[:location_id] : new_location_id
+
         @user_cart_items = @user.shopping_cart_items
         return render json: { Message: 'Cart Empty', status: :unprocessable_entity } if @user_cart_items.blank?
-      end
-
-
-      def check_empty_transactions
-        if (params[:IsCash] == "false" and (params[:TransactionId].blank? or params[:TransactionDate].blank?))
-          return render json: { Message: 'Invalid or empty Transaction reference', status: :unprocessable_entity }
-        end
-      end
-
-      def new_location_id
-        Location.create(order_params[:location_attributes]).id
-      end
-
-      def send_inventory_alerts(itemid)
-        OrderMailer.send_low_inventory_alert(itemid).deliver_later
-      end
-
-      def set_order_notifcation_email(order, is_any_recurring_item)
-        OrderMailer.send_order_notification_email_to_admin(order.id).deliver_later
-        OrderMailer.send_order_placement_notification_to_customer(@user.email, order.id).deliver_later
-        return unless is_any_recurring_item
-
-        OrderMailer.send_recurring_order_notification_email_to_admin(order.id).deliver_later
-        OrderMailer.send_recurring_order_placement_notification_to_customer(@user.email, order.id).deliver_later
       end
 
       def order_params

@@ -120,7 +120,16 @@ module Api
         end
 
         def send_inventory_alerts(item_id)
-          OrderMailer.send_low_inventory_alert(item_id).deliver_later
+          OrderMailer.send_low_inventory_alert(item_id).deliver_now
+        end
+
+        def set_order_notifcation_email(order, is_recurring_item)
+          OrderMailer.send_order_notification_email_to_admin(order.id).deliver_now
+          OrderMailer.send_order_placement_notification_to_customer(user.email, order.id).deliver_now
+          return unless is_recurring_item
+
+          OrderMailer.send_recurring_order_notification_email_to_admin(order.id).deliver_now
+          OrderMailer.send_recurring_order_placement_notification_to_customer(user.email, order.id).deliver_now
         end
       end
     end

@@ -33,6 +33,10 @@ module Api
       @user.update_column(:last_action_at, Time.current) if @user
     end
 
+    def new_location_id
+      Location.create(order_params[:location_attributes]).id
+    end
+
     def render_422(errors)
       render json: { errors: errors }, status: 422
     end

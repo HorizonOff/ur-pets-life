@@ -1,10 +1,10 @@
 module AdminPanel
   class OrdersController < AdminPanelController
     before_action :authorize_super_admin_employee, only: %w[index cancelled_orders_index]
-    before_action :set_admin_panel_order, only: [:show, :order_comments, :edit, :update, :destroy]
+    before_action :set_admin_panel_order, only: %w[show order_comments edit update destroy]
     before_action :view_new_order, only: :show
     before_action :check_for_unregistered_user, only: :create
-    before_action :set_user, only: [:create, :calculating_price]
+    before_action :set_user, only: %w[create calculating_price]
 
   def index
     respond_to do |format|
@@ -194,10 +194,6 @@ module AdminPanel
 
     def set_user
       @user = User.find_by_id(params['user_id'])
-    end
-
-    def new_location_id
-      Location.create(order_params[:location_attributes]).id
     end
 
     def order_params
