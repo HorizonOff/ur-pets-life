@@ -35,7 +35,6 @@ module Api
       end
 
       def create
-        #TODO check for working creating of order
         @order = Api::V1::OrderServices::OrderCreateService.new(@user, @location_id, @user_cart_items, params).order_create
 
         if @order.persisted?
@@ -57,10 +56,8 @@ module Api
 
       def update
         @order.update(order_params)
-        #TODO set params for correct updating of order
-        OrdersServices::OrderStatusUpdateService.new(@order, params["order"]["order_status_flag"], params['TransactionId']).update_order_status
+        OrdersServices::OrderStatusUpdateService.new(@order, params[:order][:order_status_flag], params[:TransactionId]).update_order_status
 
-        # update_status(@order) if params['driver_id'].blank?
         render json: {
           Message: 'Order was successfully updated.',
           status: :updated,
